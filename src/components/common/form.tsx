@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FieldValues, FormProvider, useForm, UseFormProps, UseFormReturn } from 'react-hook-form'
 import { ZodType } from 'zod'
 import { FieldGroup } from '../ui/field'
+import { useImperativeHandle } from 'react'
 
 interface DefaultErrorResponse {
   message: string
@@ -21,9 +22,6 @@ interface XFormProps<T extends FieldValues, K> {
   disabled?: boolean
   children: React.ReactNode
   onSubmit?: (data: T) => Promise<FetcherResponse<K>>
-  onBeforeSubmit?: (data: T) => Promise<{
-    valueHasChanged: boolean
-  }> | void
   onError?: (error: DefaultErrorResponse) => void
   onSuccess?: (response: FetcherResponse<K>) => void
   defaultValues?: UseFormProps<T>['defaultValues']
@@ -37,7 +35,6 @@ interface XFormProps<T extends FieldValues, K> {
 
 const Form = <T extends FieldValues, K>({
   onSubmit,
-  onBeforeSubmit,
   onError,
   onSuccess,
   children,
@@ -47,6 +44,7 @@ const Form = <T extends FieldValues, K>({
   onKeyDown,
   mode = 'onBlur',
   formId,
+  ref,
 }: XFormProps<T, K>) => {
   const methods = useForm<T>({
     mode,
@@ -54,10 +52,11 @@ const Form = <T extends FieldValues, K>({
     defaultValues,
   })
 
+  useImperativeHandle(ref, () => {
+    return methods
+  }, [methods])
+
   const handleSubmitForm = methods.handleSubmit(async (data: T) => {
-    if (onBeforeSubmit) {
-      await onBeforeSubmit(data)
-    }
     try {
       const response = await onSubmit?.(data)
 

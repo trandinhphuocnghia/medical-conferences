@@ -40,7 +40,9 @@ export default function FormField({
       control={control}
       render={({ field, fieldState, formState: { defaultValues } }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={name}>
+            {label} {required && <span className="text-red-500">*</span>}
+          </FieldLabel>
           {children &&
             children(
               { ...field, disabled: fieldDisabled, defaultValue: defaultValues?.[name] },
