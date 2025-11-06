@@ -50,7 +50,7 @@ export const Posts: CollectionConfig<'posts'> = {
     likes: true,
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'startDate', 'endDate', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -75,6 +75,10 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'title',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'description',
+      type: 'textarea',
     },
     {
       type: 'tabs',
@@ -180,7 +184,7 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     {
-      name: 'publishedAt',
+      name: 'startDate',
       type: 'date',
       admin: {
         date: {
@@ -188,15 +192,15 @@ export const Posts: CollectionConfig<'posts'> = {
         },
         position: 'sidebar',
       },
-      hooks: {
-        beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
-              return new Date()
-            }
-            return value
-          },
-        ],
+    },
+    {
+      name: 'endDate',
+      type: 'date',
+      admin: {
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+        position: 'sidebar',
       },
     },
     {

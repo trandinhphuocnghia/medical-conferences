@@ -218,6 +218,7 @@ export interface Page {
 export interface Post {
   id: number;
   title: string;
+  description?: string | null;
   heroImage?: (number | null) | Media;
   topicList?:
     | {
@@ -250,7 +251,8 @@ export interface Post {
     image?: (number | null) | Media;
     description?: string | null;
   };
-  publishedAt?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
   authors?: (number | User)[] | null;
   populatedAuthors?:
     | {
@@ -1166,6 +1168,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  */
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   heroImage?: T;
   topicList?:
     | T
@@ -1183,7 +1186,8 @@ export interface PostsSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
-  publishedAt?: T;
+  startDate?: T;
+  endDate?: T;
   authors?: T;
   populatedAuthors?:
     | T
