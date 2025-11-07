@@ -2,6 +2,8 @@ import type { Block } from 'payload'
 
 import {
   FixedToolbarFeature,
+  HeadingFeature,
+  HorizontalRuleFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
@@ -25,8 +27,16 @@ export const Banner: Block = {
       name: 'content',
       type: 'richText',
       editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
+        features: ({ defaultFeatures }) => {
+          return [
+            ...defaultFeatures,
+            HeadingFeature({
+              enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+            }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+            HorizontalRuleFeature(),
+          ]
         },
       }),
       label: false,

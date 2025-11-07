@@ -1,5 +1,7 @@
-import PageTemplate, { generateMetadata } from './[slug]/page'
+import { generateMetadata } from './[slug]/page'
 
-export default PageTemplate
+export default function Home() {
+  return <div>home</div>
+}
 
 export { generateMetadata }
