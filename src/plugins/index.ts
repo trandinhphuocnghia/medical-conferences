@@ -9,6 +9,7 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 // import { searchFields } from '@/search/fieldOverrides'
 // import { beforeSyncWithSearch } from '@/search/beforeSync'
+// import { r2Storage } from '@payloadcms/storage-r2'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -85,4 +86,10 @@ export const plugins: Plugin[] = [
   //   },
   // }),
   payloadCloudPlugin(),
+  // r2Storage({
+  //   collections: {
+  //     media: true,
+  //   },
+  //   bucket: cloudflare.env.R2,
+  // }),
 ]
