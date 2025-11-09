@@ -20,7 +20,6 @@ import { Topics } from './collections/Topics'
 import { Likes } from './collections/Likes'
 import { Comments } from './collections/Comments'
 import { UserGroups } from './collections/UserGroups'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -103,16 +102,16 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  email: nodemailerAdapter({
-    defaultFromAddress: 'info@payloadcms.com',
-    defaultFromName: 'Payload',
-    transportOptions: {
-      host: process.env.SMTP_HOST,
-      port: 587,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    },
-  }),
+  // email: nodemailerAdapter({
+  //   defaultFromAddress: 'info@payloadcms.com',
+  //   defaultFromName: 'Payload',
+  //   transportOptions: {
+  //     host: process.env.SMTP_HOST,
+  //     port: 587,
+  //     auth: {
+  //       user: process.env.SMTP_USER,
+  //       pass: process.env.SMTP_PASS,
+  //     },
+  //   },
+  // }),
 })

@@ -1,19 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
 import {
-  BlocksFeature,
-  FixedToolbarFeature,
-  HeadingFeature,
-  HorizontalRuleFeature,
-  InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Banner } from '../../blocks/Banner/config'
-import { Code } from '../../blocks/Code/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
@@ -27,6 +19,7 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 import { editorConfig } from '@/utilities/editorConfig'
+import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -36,9 +29,7 @@ export const Posts: CollectionConfig<'posts'> = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
-  // This config controls what's populated by default when a post is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'posts'>
+  
   defaultPopulate: {
     title: true,
     slug: true,
@@ -104,7 +95,8 @@ export const Posts: CollectionConfig<'posts'> = {
                 {
                   name: 'content',
                   type: 'richText',
-                  editor: lexicalEditor(editorConfig),
+                  defaultValue: RICH_TEXT_DEFAULT_VALUES,
+                  editor:lexicalEditor(editorConfig),
                   label: false,
                   required: true,
                 },
@@ -162,7 +154,6 @@ export const Posts: CollectionConfig<'posts'> = {
             PreviewField({
               // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
               // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
@@ -201,7 +192,6 @@ export const Posts: CollectionConfig<'posts'> = {
       admin: {
         position: 'sidebar',
       },
-      // required: true,
     },
     {
       name: 'likes',

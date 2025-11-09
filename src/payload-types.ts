@@ -585,7 +585,16 @@ export interface Like {
  */
 export interface User {
   id: number;
+  first_name: string;
+  last_name: string;
   name?: string | null;
+  is_active?: boolean | null;
+  title?: ('Dr.' | 'Prof.' | 'Mr.' | 'Ms.' | 'Mx.') | null;
+  organization?: string | null;
+  medical_license_number?: string | null;
+  specialization?: string | null;
+  phone_number?: string | null;
+  address?: string | null;
   roles?: ('admin' | 'editor' | 'user')[] | null;
   updatedAt: string;
   createdAt: string;
@@ -594,6 +603,8 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -1257,7 +1268,16 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  first_name?: T;
+  last_name?: T;
   name?: T;
+  is_active?: T;
+  title?: T;
+  organization?: T;
+  medical_license_number?: T;
+  specialization?: T;
+  phone_number?: T;
+  address?: T;
   roles?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1266,6 +1286,8 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  _verified?: T;
+  _verificationToken?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
