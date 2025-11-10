@@ -221,7 +221,6 @@ export interface Post {
   id: number;
   title: string;
   description?: string | null;
-  banner?: (number | null) | Media;
   heroImage?: (number | null) | Media;
   topicList?:
     | {
@@ -1195,7 +1194,6 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  banner?: T;
   heroImage?: T;
   topicList?:
     | T

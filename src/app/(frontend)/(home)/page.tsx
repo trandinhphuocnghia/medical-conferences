@@ -17,13 +17,15 @@ export default async function Home() {
     limit: 12,
     overrideAccess: false,
     select: {
-      banner: true,
       title: true,
       slug: true,
       categories: true,
       meta: true,
+      heroImage: true,
     },
   })
+
+  console.log({ posts })
 
   return (
     <section className="py-12">

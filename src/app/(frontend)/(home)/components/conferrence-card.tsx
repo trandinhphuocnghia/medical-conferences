@@ -8,7 +8,7 @@ interface ConferenceCardProps {
   post: {
     id: number
     title: string
-    banner?: ((number | null) | Media) | undefined
+    heroImage?: ((number | null) | Media) | undefined
     categories?: (number | Category)[] | null | undefined
     meta?:
       | {
@@ -33,7 +33,7 @@ export default function ConferenceCard({ post }: ConferenceCardProps) {
           className="fade-in transition-opacity duration-200 hover:opacity-70"
         >
           <Image
-            src={(post.banner as Media)?.url || '/assets/img/img-placeholder.png'}
+            src={(post.heroImage as Media)?.url || '/assets/img/img-placeholder.png'}
             alt={post.title || 'image'}
             className="w-full h-56 object-cover object-center rounded-t-lg"
             width={400}

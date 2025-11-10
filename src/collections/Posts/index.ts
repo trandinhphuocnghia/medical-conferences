@@ -41,7 +41,7 @@ export const Posts: CollectionConfig<'posts'> = {
     likes: true,
   },
   admin: {
-    defaultColumns: ['banner', 'title', 'form', 'startDate', 'endDate', 'updatedAt'],
+    defaultColumns: ['heroImage', 'title', 'form', 'startDate', 'endDate', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -70,11 +70,6 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'description',
       type: 'textarea',
-    },
-    {
-      name: 'banner',
-      type: 'upload',
-      relationTo: 'media',
     },
     {
       type: 'tabs',
