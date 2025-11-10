@@ -19,13 +19,12 @@ export default async function Home() {
     select: {
       title: true,
       slug: true,
+      description: true,
       categories: true,
       meta: true,
-      heroImage: true,
+      startDate: true,
     },
   })
-
-  console.log({ posts })
 
   return (
     <section className="py-12">

@@ -1,13 +1,23 @@
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Category, Media } from '@/payload-types'
-import { ArrowRight } from 'lucide-react'
-import Image from 'next/image'
+import { formatDateTime } from '@/utilities/formatDateTime'
+import { ArrowRight, Calendar } from 'lucide-react'
 import Link from 'next/link'
 
 interface ConferenceCardProps {
   post: {
     id: number
     title: string
+    description?: string | null | undefined
     heroImage?: ((number | null) | Media) | undefined
     categories?: (number | Category)[] | null | undefined
     meta?:
@@ -17,6 +27,7 @@ interface ConferenceCardProps {
           description?: string | null
         }
       | undefined
+    startDate?: string | null | undefined
     slug?: string | null | undefined
   }
 }
@@ -25,39 +36,36 @@ export default function ConferenceCard({ post }: ConferenceCardProps) {
   return (
     <Card
       key={post.id}
-      className="grid grid-rows-[auto_auto_1fr_auto] overflow-hidden pt-0 cursor-pointer hover:shadow-lg duration-200"
+      className="overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col"
     >
-      <div className="aspect-16/9 w-full">
-        <Link
-          href={`/posts/${post.slug}`}
-          className="fade-in transition-opacity duration-200 hover:opacity-70"
-        >
-          <Image
-            src={(post.heroImage as Media)?.url || '/assets/img/img-placeholder.png'}
-            alt={post.title || 'image'}
-            className="w-full h-56 object-cover object-center rounded-t-lg"
-            width={400}
-            height={200}
-          />
-        </Link>
-      </div>
-      <CardHeader>
-        <h3 className="text-lg font-semibold hover:underline md:text-xl">
-          <Link href={`/posts/${post.slug}`}>{post.title}</Link>
-        </h3>
+      {/* Article Content */}
+      <CardHeader className="flex-1">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex gap-1">
+            {(post.categories as Category[])?.map((category) => (
+              <Badge key={category.id} variant="outline">
+                {category.title}
+              </Badge>
+            ))}
+          </div>
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Calendar size={14} />
+            {formatDateTime(post.startDate || '')}
+          </div>
+        </div>
+        <CardTitle className="text-xl">{post.title}</CardTitle>
+        <CardDescription className="!mt-4 line-clamp-3">{post.description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground">{post.meta?.description}</p>
-      </CardContent>
-      <CardFooter>
-        <Link
-          href={`/posts/${post.slug}`}
-          className="text-foreground flex items-center hover:underline"
-        >
-          Read more
-          <ArrowRight className="ml-2 size-4" />
+
+      {/* Footer CTA */}
+      <CardContent className="pb-4">
+        <Link href={`/posts/${post.slug}`}>
+          <Button variant="ghost" className="px-0 justify-between text-primary hover:bg-primary/5">
+            Read Article
+            <ArrowRight size={16} />
+          </Button>
         </Link>
-      </CardFooter>
+      </CardContent>
     </Card>
   )
 }

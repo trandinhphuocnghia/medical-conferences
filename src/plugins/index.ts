@@ -16,7 +16,7 @@ import { getServerSideURL } from '@/utilities/getURL'
 import { editorConfig } from '@/utilities/editorConfig'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+  return doc?.title ? `${doc.title} | MedConf` : 'MedConf'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
