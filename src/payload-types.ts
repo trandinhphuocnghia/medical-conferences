@@ -207,7 +207,7 @@ export interface Page {
     description?: string | null;
   };
   publishedAt?: string | null;
-  slug?: string | null;
+  slug: string;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -221,6 +221,7 @@ export interface Post {
   id: number;
   title: string;
   description?: string | null;
+  banner?: (number | null) | Media;
   heroImage?: (number | null) | Media;
   topicList?:
     | {
@@ -255,7 +256,7 @@ export interface Post {
   };
   startDate?: string | null;
   endDate?: string | null;
-  slug?: string | null;
+  slug: string;
   slugLock?: boolean | null;
   form?: (number | null) | Form;
   likes?: (number | Like)[] | null;
@@ -362,7 +363,7 @@ export interface Media {
 export interface Category {
   id: number;
   title: string;
-  slug?: string | null;
+  slug: string;
   slugLock?: boolean | null;
   parent?: (number | null) | Category;
   breadcrumbs?:
@@ -1194,6 +1195,7 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
+  banner?: T;
   heroImage?: T;
   topicList?:
     | T

@@ -1,19 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
-import {
-  BlocksFeature,
-  FixedToolbarFeature,
-  HeadingFeature,
-  HorizontalRuleFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Banner } from '../../blocks/Banner/config'
-import { Code } from '../../blocks/Code/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
@@ -51,7 +41,7 @@ export const Posts: CollectionConfig<'posts'> = {
     likes: true,
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'form', 'startDate', 'endDate', 'updatedAt'],
+    defaultColumns: ['banner', 'title', 'form', 'startDate', 'endDate', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -80,6 +70,11 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'description',
       type: 'textarea',
+    },
+    {
+      name: 'banner',
+      type: 'upload',
+      relationTo: 'media',
     },
     {
       type: 'tabs',
@@ -174,6 +169,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'startDate',
       type: 'date',
+      // required: true,
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',
@@ -184,6 +180,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'endDate',
       type: 'date',
+      // required: true,
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',

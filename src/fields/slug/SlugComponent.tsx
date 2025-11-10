@@ -10,28 +10,21 @@ import './index.scss'
 type SlugComponentProps = {
   fieldToUse: string
   checkboxFieldPath: string
+  required?: boolean
 } & TextFieldClientProps
 
 export const SlugComponent: React.FC<SlugComponentProps> = ({
   field,
   fieldToUse,
-  checkboxFieldPath: checkboxFieldPathFromProps,
   path,
-  readOnly: readOnlyFromProps,
+
+  required,
 }) => {
   const { label } = field
 
-  const checkboxFieldPath = path?.includes('.')
-    ? `${path}.${checkboxFieldPathFromProps}`
-    : checkboxFieldPathFromProps
-
   const { value, setValue } = useField<string>({ path: path || field.name })
 
-  const { dispatchFields, getDataByPath } = useForm()
-
-  const isLocked = useFormFields(([fields]) => {
-    return fields[checkboxFieldPath]?.value as string
-  })
+  const { getDataByPath } = useForm()
 
   const handleGenerate = useCallback(
     (e: React.MouseEvent<Element>) => {
@@ -50,38 +43,15 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
     [setValue, value, fieldToUse, getDataByPath],
   )
 
-  const handleLock = useCallback(
-    (e: React.MouseEvent<Element>) => {
-      e.preventDefault()
-
-      dispatchFields({
-        type: 'UPDATE',
-        path: checkboxFieldPath,
-        value: !isLocked,
-      })
-    },
-    [isLocked, checkboxFieldPath, dispatchFields],
-  )
-
   return (
     <div className="field-type slug-field-component">
       <div className="label-wrapper">
-        <FieldLabel htmlFor={`field-${path}`} label={label} />
-        {!isLocked && (
-          <Button className="lock-button" buttonStyle="none" onClick={handleGenerate}>
-            Generate
-          </Button>
-        )}
-        <Button className="lock-button" buttonStyle="none" onClick={handleLock}>
-          {isLocked ? 'Unlock' : 'Lock'}
+        <FieldLabel htmlFor={`field-${path}`} label={label} required={required} />
+        <Button className="lock-button" buttonStyle="none" onClick={handleGenerate}>
+          Generate
         </Button>
       </div>
-      <TextInput
-        value={value}
-        onChange={setValue}
-        path={path || field.name}
-        readOnly={Boolean(readOnlyFromProps || isLocked)}
-      />
+      <TextInput value={value} required={required} onChange={setValue} path={path || field.name} />
     </div>
   )
 }
