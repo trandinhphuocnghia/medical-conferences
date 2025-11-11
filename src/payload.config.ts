@@ -1,25 +1,25 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 
-import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
+import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
+import { defaultLexical } from '@/fields/defaultLexical'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Categories } from './collections/Categories'
+import { Comments } from './collections/Comments'
+import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Topics } from './collections/Topics'
+import { UserGroups } from './collections/UserGroups'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
-import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
-import { Topics } from './collections/Topics'
-import { Likes } from './collections/Likes'
-import { Comments } from './collections/Comments'
-import { UserGroups } from './collections/UserGroups'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

@@ -1,11 +1,11 @@
-import { generateMetadata } from '../[slug]/page'
 import { ArrowRight } from 'lucide-react'
+import { generateMetadata } from '../[slug]/page'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import Link from 'next/link'
+import { getPayload } from 'payload'
 import ConferenceCard from './components/conferrence-card'
 
 export default async function Home() {
