@@ -6,17 +6,15 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { signupSchema, signupSchemaType } from '@/schemas/signup.schema'
 import Link from 'next/link'
-import * as z from 'zod'
 
-const formSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  password: z.string(),
-  confirmPassword: z.string(),
-})
+export async function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const handleRegisterUser = async (_data: signupSchemaType) => {
+    return { success: true, data: undefined }
+  }
 
-export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   return (
     <Card {...props}>
       <CardHeader>
@@ -24,7 +22,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
         <CardDescription>Enter your information below to create your account</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form mode="all" schema={formSchema} className="w-full">
+        <Form mode="all" schema={signupSchema} onSubmit={handleRegisterUser} className="w-full">
           <FormField name="name" label="Full Name" required>
             {(field) => <Input {...field} />}
           </FormField>
@@ -32,17 +30,17 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
             {(field) => <Input {...field} />}
           </FormField>
           <FormField name="password" label="Password" required>
-            {(field) => <Input {...field} />}
+            {(field) => <Input {...field} type="password" />}
           </FormField>
           <FormField name="confirmPassword" label="Confirm Password" required>
-            {(field) => <Input {...field} />}
+            {(field) => <Input {...field} type="password" />}
           </FormField>
           <FieldGroup>
             <Field>
-              <Button type="submit">Create Account</Button>
-              <Button variant="outline" type="button">
-                Sign up with Google
+              <Button type="submit" variant="outline">
+                Create Account
               </Button>
+              <Separator className="my-4" />
               <FieldDescription className="px-6 text-center">
                 Already have an account? <Link href="/admin/login">Sign in</Link>
               </FieldDescription>

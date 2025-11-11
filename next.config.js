@@ -31,6 +31,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  productionBrowserSourceMaps: false,
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

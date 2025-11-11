@@ -39,7 +39,7 @@ export default function FormField({
       name={name}
       control={control}
       render={({ field, fieldState, formState: { defaultValues } }) => (
-        <Field data-invalid={fieldState.invalid}>
+        <Field data-invalid={fieldState.invalid} className="gap-1">
           <FieldLabel htmlFor={name}>
             {label} {required && <span className="text-red-500">*</span>}
           </FieldLabel>

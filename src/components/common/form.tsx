@@ -17,7 +17,7 @@ export interface FetcherResponse<K> {
   success?: boolean
 }
 
-interface XFormProps<T extends FieldValues, K> {
+interface FormProps<T extends FieldValues, K> {
   schema?: ZodType<T>
   disabled?: boolean
   children: React.ReactNode
@@ -42,10 +42,10 @@ const Form = <T extends FieldValues, K>({
   defaultValues,
   className,
   onKeyDown,
-  mode = 'onBlur',
+  mode = 'all',
   formId,
   ref,
-}: XFormProps<T, K>) => {
+}: FormProps<T, K>) => {
   const methods = useForm<T>({
     mode,
     resolver: schema ? zodResolver(schema) : undefined,
@@ -87,7 +87,7 @@ const Form = <T extends FieldValues, K>({
         className={className}
         onKeyDown={handleKeyDown}
       >
-        <FieldGroup>{children}</FieldGroup>
+        <FieldGroup className="gap-5">{children}</FieldGroup>
       </form>
     </FormProvider>
   )

@@ -288,7 +288,7 @@ export interface User {
   specialization?: string | null;
   phone_number?: string | null;
   address?: string | null;
-  roles?: ('admin' | 'editor' | 'user')[] | null;
+  roles?: ('admin' | 'modifier' | 'user')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;

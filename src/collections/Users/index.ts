@@ -1,18 +1,12 @@
 import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
+import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
+import { preventDeleteAdmin } from './hooks/preventDeleteAdmin'
+import { preventCreateAdmin } from './hooks/preventCreateAdmin'
+
 export const Users: CollectionConfig = {
   slug: 'users',
-  // 🔑 COLLECTION HOOKS: Moved ensureFirstUserIsAdmin here to run BEFORE save
-  hooks: {
-    // This hook ensures the first user created is always an admin
-    beforeChange: [],
-    afterLogin: [
-      async ({ user, req, token }) => {
-        // Example logic for after login (can be left empty if not needed yet)
-      },
-    ],
-  },
   access: {
     admin: authenticated,
     // Allows guests to register new users (via the public API)
@@ -39,7 +33,6 @@ export const Users: CollectionConfig = {
       // },
     },
   },
-  timestamps: true,
   // 📝 FIELDS: Mapping the fields from your User interface
   fields: [
     {
@@ -127,11 +120,40 @@ export const Users: CollectionConfig = {
       },
       defaultValue: ['user'],
       hasMany: true,
+      hooks: {
+        beforeChange: [ensureFirstUserIsAdmin, preventCreateAdmin],
+      },
       options: [
-        { label: 'Admin', value: 'admin' },
-        { label: 'Editor', value: 'editor' },
-        { label: 'User', value: 'user' },
+        {
+          label: 'Admin',
+          value: 'admin',
+        },
+        {
+          label: 'Modifier',
+          value: 'modifier',
+        },
+        {
+          label: 'User',
+          value: 'user',
+        },
       ],
     },
   ],
+  hooks: {
+    afterLogin: [
+      // async ({ user, req, token }) => {
+      // You can access:
+      // user → the logged-in user document
+      // req  → the request object
+      // token → the JWT access token
+      // await sendEmail({
+      //   to: user.email,
+      //   subject: 'Welcome back!',
+      //   text: `Hi ${user.firstName || ''}, you just logged in successfully.`,
+      // })
+      // },
+    ],
+    beforeDelete: [preventDeleteAdmin],
+  },
+  timestamps: true,
 }
