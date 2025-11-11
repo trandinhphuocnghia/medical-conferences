@@ -1,10 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
+import { authenticated } from '@/access/authenticated'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
-import { authenticated } from '../../access/authenticated'
 
-export const TopicCategories: CollectionConfig = {
-  slug: 'topic-categories',
+export const Categories: CollectionConfig = {
+  slug: 'categories',
   access: {
     admin: authenticated,
     create: authenticated,
@@ -84,4 +84,5 @@ export const TopicCategories: CollectionConfig = {
     },
   ],
   timestamps: true,
+  trash: true,
 }

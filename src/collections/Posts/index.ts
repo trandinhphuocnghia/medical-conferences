@@ -1,208 +1,259 @@
 import type { CollectionConfig } from 'payload'
 
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
-import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
 import { slugField } from '@/fields/slug'
-import { editorConfig } from '@/utilities/editorConfig'
-import {
-  MetaDescriptionField,
-  MetaImageField,
-  MetaTitleField,
-  OverviewField,
-  PreviewField,
-} from '@payloadcms/plugin-seo/fields'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
+  labels: {
+    plural: 'Conferences',
+    singular: 'Conferences',
+  },
+
+  // --- ACCESS ---
   access: {
     create: authenticated,
     delete: authenticated,
-    read: authenticatedOrPublished,
+    read: authenticatedOrPublished, // Allows published content to be read publicly
     update: authenticated,
   },
 
   defaultPopulate: {
     title: true,
     slug: true,
-    categories: true,
-    meta: {
-      image: true,
-      description: true,
-    },
-    topicList: true,
-    likes: true,
+    topics: true,
+    // meta: {
+    //   image: true,
+    //   description: true,
+    // },
+    // likes: true,
+    host_organization: true,
   },
-  admin: {
-    defaultColumns: ['heroImage', 'title', 'form', 'startDate', 'endDate', 'updatedAt'],
-    livePreview: {
-      url: ({ data, req }) => {
-        const path = generatePreviewPath({
-          slug: typeof data?.slug === 'string' ? data.slug : '',
-          collection: 'posts',
-          req,
-        })
 
-        return path
-      },
-    },
-    preview: (data, { req }) =>
-      generatePreviewPath({
-        slug: typeof data?.slug === 'string' ? data.slug : '',
-        collection: 'posts',
-        req,
-      }),
+  admin: {
+    defaultColumns: ['title', 'slug', 'is_active', 'startDate', 'endDate', 'updatedAt'],
     useAsTitle: 'title',
   },
+
   fields: [
     {
       name: 'title',
       type: 'text',
+      label: 'Conference Title',
+    },
+
+    {
+      name: 'theme',
+      type: 'textarea',
+      label: 'Conference Theme',
+    },
+
+    // 3. IS_ACTIVE (Status Field)
+    {
+      //-> [WORKS]: Cron-job to auto mark as active ?
+      name: 'is_active',
+      type: 'checkbox',
+      label: 'Is Conference Active/Live?',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Set to True when the conference program and registration are public.',
+      },
       required: true,
     },
+
+    // 4. HOST ORGANIZATION
     {
-      name: 'description',
-      type: 'textarea',
+      name: 'host_organization',
+      type: 'relationship',
+      label: 'Host Organization (User Group/Admin)',
+      relationTo: 'user-groups',
+      hasMany: false,
+      required: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Primary host of the conference (e.g., Korean Gastric Cancer Association).',
+        // Optional: Filter to only select users with the 'admin' role
+      },
     },
+
     {
       type: 'tabs',
       tabs: [
         {
-          label: 'Content',
+          label: 'Timing & Content',
           fields: [
+            // 5. VENUE FIELDS (Required Location)
             {
-              name: 'heroImage',
-              type: 'upload',
-              relationTo: 'media',
+              name: 'venue_name',
+              type: 'text',
+              label: 'Venue Name (e.g., Lotte Hotel Seoul)',
+              required: true,
             },
             {
-              name: 'topicList',
-              label: 'Topics',
-              type: 'array',
-              fields: [
-                {
-                  name: 'topic',
-                  type: 'text',
-                },
-                {
-                  name: 'content',
-                  type: 'richText',
-                  defaultValue: RICH_TEXT_DEFAULT_VALUES,
-                  editor: lexicalEditor(editorConfig),
-                  label: false,
-                  required: true,
-                },
-              ],
+              name: 'venue_city',
+              type: 'text',
+              label: 'Venue City',
+              required: true,
+            },
+
+            // 6. TOPICS (Linking to Categories/Topics, assuming the topics_list relationship from AbstractCategories)
+            {
+              name: 'topics',
+              label: 'Content Topics',
+              type: 'relationship',
+              relationTo: 'topics',
+              hasMany: true,
+              admin: {
+                description:
+                  'Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).',
+              },
             },
           ],
         },
+
+        // 7. DEADLINES TAB (Critical Dates)
         {
-          label: 'Meta',
+          label: 'Deadlines',
           fields: [
             {
-              name: 'relatedPosts',
+              name: 'abstract_submission_deadline',
+              type: 'date',
+              label: 'Abstract Submission Deadline',
+              required: true,
+              admin: {
+                date: { pickerAppearance: 'dayAndTime' },
+              },
+            },
+            {
+              name: 'early_registration_deadline',
+              type: 'date',
+              label: 'Early Registration Deadline',
+              required: true,
+              admin: {
+                date: { pickerAppearance: 'dayAndTime' },
+              },
+            },
+            {
+              name: 'notification_of_acceptance_date',
+              type: 'date',
+              label: 'Notification of Acceptance Date',
+              required: true,
+              admin: {
+                date: { pickerAppearance: 'dayAndTime' },
+              },
+            },
+          ],
+        },
+
+        // 8. CONTACTS TAB (Secretariat Information)
+        {
+          label: 'Contact Info',
+          fields: [
+            {
+              name: 'contact_emails',
+              label: 'Secretariat Email Addresses',
+              type: 'array',
+              required: true,
+              minRows: 1,
+              fields: [{ name: 'email', type: 'email', required: true }],
+              admin: {
+                description: 'List of official contact emails (e.g., secretariat@kingca.org)',
+              },
+            },
+            {
+              name: 'contact_phones',
+              label: 'Secretariat Phone Numbers',
+              type: 'array',
+              required: true,
+              minRows: 1,
+              fields: [{ name: 'phone', type: 'text', required: true }],
+            },
+          ],
+        },
+
+        // 9. SEO & RELATED CONTENT TABS (Existing Tabs Retained)
+        {
+          label: 'SEO & Related',
+          fields: [
+            // Existing related Conferences field (Moved from Meta tab)
+            {
+              name: 'relatedConferences',
               type: 'relationship',
               admin: {
                 position: 'sidebar',
               },
               filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
+                return { id: { not_in: [id] } }
               },
               hasMany: true,
-              relationTo: 'posts',
+              relationTo: 'conferences',
             },
-            {
-              name: 'categories',
-              type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              hasMany: true,
-              relationTo: 'categories',
-            },
-          ],
-        },
-        {
-          name: 'meta',
-          label: 'SEO',
-          fields: [
-            OverviewField({
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-              imagePath: 'meta.image',
-            }),
-            MetaTitleField({
-              hasGenerateFn: true,
-            }),
-            MetaImageField({
-              relationTo: 'media',
-            }),
-
-            MetaDescriptionField({}),
-            PreviewField({
-              // if the `generateUrl` function is configured
-              hasGenerateFn: true,
-              // field paths to match the target field for data
-              titlePath: 'meta.title',
-              descriptionPath: 'meta.description',
-            }),
+            // Existing SEO fields
+            // {
+            //   name: 'meta',
+            //   label: 'SEO',
+            //   type: '',
+            //   fields: [
+            //     OverviewField({
+            //       titlePath: 'meta.title',
+            //       descriptionPath: 'meta.description',
+            //       imagePath: 'meta.image',
+            //     }),
+            //     MetaTitleField({
+            //       hasGenerateFn: true,
+            //     }),
+            //     MetaImageField({
+            //       relationTo: 'media',
+            //     }),
+            //     MetaDescriptionField({}),
+            //     PreviewField({
+            //       // if the `generateUrl` function is configured
+            //       hasGenerateFn: true,
+            //       // field paths to match the target field for data
+            //       titlePath: 'meta.title',
+            //       descriptionPath: 'meta.description',
+            //     }),
+            //   ],
+            // },
           ],
         },
       ],
     },
+
+    // 10. TIMING FIELDS (Replaced with Schema names)
     {
-      name: 'startDate',
+      name: 'start_date', // Mapped from startDate
       type: 'date',
-      // required: true,
+      label: 'Start Date & Time',
+      required: true,
       admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
+        date: { pickerAppearance: 'dayAndTime' },
         position: 'sidebar',
       },
     },
     {
-      name: 'endDate',
+      name: 'end_date', // Mapped from endDate
       type: 'date',
-      // required: true,
+      label: 'End Date & Time',
+      required: true,
       admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
+        date: { pickerAppearance: 'dayAndTime' },
         position: 'sidebar',
       },
     },
+
+    // 11. SLUG FIELD (Retained)
     ...slugField(),
-    {
-      name: 'form',
-      label: 'Abstract Form',
-      type: 'relationship',
-      relationTo: 'forms',
-      hasMany: false,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'likes',
-      type: 'relationship',
-      relationTo: 'likes',
-      hasMany: true,
-      admin: {
-        hidden: true,
-      },
-    },
   ],
+
+  timestamps: true,
+  trash: true,
+
   hooks: {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
@@ -210,90 +261,8 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   versions: {
     drafts: {
-      autosave: {
-        interval: 1000,
-      },
       schedulePublish: true,
     },
     maxPerDoc: 50,
   },
 }
-
-/*
-export interface Conference {
-    id: number; // PostgreSQL SERIAL PRIMARY KEY
-    
-    title: string; // E.g., "Korea International Gastric Cancer Week 2026"
-    slug: string; // URL-friendly ID, e.g., "kingca-week-2026"
-    theme: string; // E.g., "Shaping the Future of Gastric Cancer Treatment"
-
-    // Timing and Location : Required.
-    start_date: Date; // TIMESTAMP WITH TIME ZONE
-    end_date: Date;   // TIMESTAMP WITH TIME ZONE
-    venue_name: string; // E.g., "Lotte Hotel Seoul"
-    venue_city: string; 
-
-    // Organization and Status: Required.
-    host_organization: string; <- related to groupUser-id, select grouped.
-    is_active: boolean; // True if the conference is live/visible
-    
-    // Key Deadlines (Critical for Abstracts)
-    abstract_submission_deadline: Date;
-    early_registration_deadline: Date;
-    notification_of_acceptance_date: Date;
-    
-    // Secretariat / Contact Information
-    contact_emails: string[]; -> required.
-    contact_phones: string[]; -> required.
-
-    // Audit Fields
-    created_at: Date;
-    updated_at: Date;
-
-    // Relationships (Virtual or Foreign Keys managed by Payload)
-    topics?: Topic[];
-}
-
-export interface Session {
-    id: number;
-    conference_id: number; // Foreign Key to link back to the parent conference
-
-    // Content Metadata
-    title: string; // E.g., "Symposium 1: ERAS in Gastric Cancer Surgery"
-    session_type: 'plenary' | 'symposium' | 'lecture' | 'oral_presentation' | 'masterclass';
-    
-    // Scheduling
-    date: Date;
-    start_time: string; // E.g., "09:00"
-    end_time: string;   // E.g., "10:30"
-    room_location: string; // E.g., "Crystal Ballroom 1"
-
-    // Relationships (Speakers, Chairs, etc.)
-    chairs?: User[]; // Users responsible for running the session
-    speakers?: User[]; // Users presenting in the session
-    topics?: Topic[]; // Topics presented during the session
-
-    // Audit Fields
-    created_at: Date;
-    updated_at: Date;
-}
-
-
-export interface TopicCategory {
-  id: number
-  
-  name: string // E.g., "Translational Research & Biomarkers"
-  description: string | null
-  is_active: boolean
-  sort_order: number
-
-}
-
-export interface Topic {
-    id: number;
-    category_ids: string[]; 
-    name: string; // E.g., "AI in Endoscopy" or "PIPAC Protocols"
-    description: string | null
-    is_active: boolean;
-}
-*/

@@ -105,7 +105,7 @@ export const Topics: CollectionConfig = {
     {
       name: 'category',
       type: 'relationship',
-      relationTo: 'topic-categories',
+      relationTo: 'categories',
       required: true,
       index: true,
       label: 'Parent Category',

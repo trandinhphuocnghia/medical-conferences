@@ -13,7 +13,6 @@ import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
-import { TopicCategories } from './collections/TopicCategories'
 import { Topics } from './collections/Topics'
 import { UserGroups } from './collections/UserGroups'
 import { Users } from './collections/Users'
@@ -78,7 +77,6 @@ export default buildConfig({
     Media,
     Likes,
     Comments,
-    TopicCategories,
     Conferences,
   ],
   cors: [
