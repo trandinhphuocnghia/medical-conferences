@@ -1,25 +1,27 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
 
-import sharp from 'sharp' // sharp-import
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
+import sharp from 'sharp' // sharp-import
 import { fileURLToPath } from 'url'
 
+import { defaultLexical } from '@/fields/defaultLexical'
 import { Categories } from './collections/Categories'
+import { Comments } from './collections/Comments'
+import { Conferences } from './collections/Conferences'
+import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { TopicCategories } from './collections/TopicCategories'
+import { Topics } from './collections/Topics'
+import { UserGroups } from './collections/UserGroups'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
-import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
-import { Topics } from './collections/Topics'
-import { Likes } from './collections/Likes'
-import { Comments } from './collections/Comments'
-import { UserGroups } from './collections/UserGroups'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -68,7 +70,19 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Topics, Categories, Users, UserGroups, Media, Likes, Comments],
+  collections: [
+    Pages,
+    Posts,
+    Topics,
+    Categories,
+    Users,
+    UserGroups,
+    Media,
+    Likes,
+    Comments,
+    TopicCategories,
+    Conferences,
+  ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),
     'http://localhost:3000',

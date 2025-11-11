@@ -76,6 +76,8 @@ export interface Config {
     media: Media;
     likes: Like;
     comments: Comment;
+    'topic-categories': TopicCategory;
+    conferences: Conference;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -95,6 +97,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
+    'topic-categories': TopicCategoriesSelect<false> | TopicCategoriesSelect<true>;
+    conferences: ConferencesSelect<false> | ConferencesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -791,14 +795,52 @@ export interface FormBlock {
 export interface Topic {
   id: number;
   /**
-   * Topics name
+   * E.g., "AI in Endoscopy" or "PIPAC Protocols". Must be unique within the Parent Category.
    */
-  name?: string | null;
-  /**
-   * Description of the topic
-   */
+  name: string;
   description?: string | null;
-  authors?: (number | User)[] | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Unchecking this soft-deletes the topic (hides it from the frontend).
+   */
+  is_active?: boolean | null;
+  created_by?: (number | null) | User;
+  updated_by?: (number | null) | User;
+  category: number | TopicCategory;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "topic-categories".
+ */
+export interface TopicCategory {
+  id: number;
+  /**
+   * E.g., "Surgical Oncology" or "Translational Research". Must be unique.
+   */
+  name: string;
+  description?: string | null;
+  /**
+   * Unchecking this soft-deletes the category (hides it from the frontend).
+   */
+  is_active?: boolean | null;
+  created_by?: (number | null) | User;
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -826,6 +868,51 @@ export interface Comment {
   content: string;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "conferences".
+ */
+export interface Conference {
+  id: number;
+  title?: string | null;
+  theme?: string | null;
+  /**
+   * Set to True when the conference program and registration are public.
+   */
+  is_active: boolean;
+  /**
+   * Primary host of the conference (e.g., Korean Gastric Cancer Association).
+   */
+  host_organization: number | UserGroup;
+  venue_name: string;
+  venue_city: string;
+  /**
+   * Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).
+   */
+  topics?: (number | Topic)[] | null;
+  abstract_submission_deadline: string;
+  early_registration_deadline: string;
+  notification_of_acceptance_date: string;
+  /**
+   * List of official contact emails (e.g., secretariat@kingca.org)
+   */
+  contact_emails: {
+    email: string;
+    id?: string | null;
+  }[];
+  contact_phones: {
+    phone: string;
+    id?: string | null;
+  }[];
+  relatedConferences?: (number | Conference)[] | null;
+  start_date: string;
+  end_date: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1004,6 +1091,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'comments';
         value: number | Comment;
+      } | null)
+    | ({
+        relationTo: 'topic-categories';
+        value: number | TopicCategory;
+      } | null)
+    | ({
+        relationTo: 'conferences';
+        value: number | Conference;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1239,7 +1334,11 @@ export interface PostsSelect<T extends boolean = true> {
 export interface TopicsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  authors?: T;
+  content?: T;
+  is_active?: T;
+  created_by?: T;
+  updated_by?: T;
+  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1423,6 +1522,55 @@ export interface CommentsSelect<T extends boolean = true> {
   content?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "topic-categories_select".
+ */
+export interface TopicCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  is_active?: T;
+  created_by?: T;
+  updated_by?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "conferences_select".
+ */
+export interface ConferencesSelect<T extends boolean = true> {
+  title?: T;
+  theme?: T;
+  is_active?: T;
+  host_organization?: T;
+  venue_name?: T;
+  venue_city?: T;
+  topics?: T;
+  abstract_submission_deadline?: T;
+  early_registration_deadline?: T;
+  notification_of_acceptance_date?: T;
+  contact_emails?:
+    | T
+    | {
+        email?: T;
+        id?: T;
+      };
+  contact_phones?:
+    | T
+    | {
+        phone?: T;
+        id?: T;
+      };
+  relatedConferences?: T;
+  start_date?: T;
+  end_date?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1791,6 +1939,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'conferences';
+          value: number | Conference;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

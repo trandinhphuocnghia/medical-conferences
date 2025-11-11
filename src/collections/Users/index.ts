@@ -1,5 +1,5 @@
-import type { CollectionConfig } from 'payload'
 import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
+import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -24,6 +24,9 @@ export const Users: CollectionConfig = {
   admin: {
     defaultColumns: ['name', 'email', 'title', 'updatedAt'],
     useAsTitle: 'name',
+    components: {
+      //can we custom password field of the Users collection here ????
+    },
   },
   // 🔒 AUTH CONFIGURATION: Enabled local auth AND email verification
   auth: {

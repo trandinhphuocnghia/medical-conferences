@@ -1,8 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import {
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
@@ -10,6 +8,9 @@ import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
+import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
+import { slugField } from '@/fields/slug'
+import { editorConfig } from '@/utilities/editorConfig'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -17,9 +18,6 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { slugField } from '@/fields/slug'
-import { editorConfig } from '@/utilities/editorConfig'
-import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -29,7 +27,7 @@ export const Posts: CollectionConfig<'posts'> = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
-  
+
   defaultPopulate: {
     title: true,
     slug: true,
@@ -96,7 +94,7 @@ export const Posts: CollectionConfig<'posts'> = {
                   name: 'content',
                   type: 'richText',
                   defaultValue: RICH_TEXT_DEFAULT_VALUES,
-                  editor:lexicalEditor(editorConfig),
+                  editor: lexicalEditor(editorConfig),
                   label: false,
                   required: true,
                 },
@@ -218,3 +216,82 @@ export const Posts: CollectionConfig<'posts'> = {
     maxPerDoc: 50,
   },
 }
+
+/*
+export interface Conference {
+    id: number; // PostgreSQL SERIAL PRIMARY KEY
+    
+    title: string; // E.g., "Korea International Gastric Cancer Week 2026"
+    slug: string; // URL-friendly ID, e.g., "kingca-week-2026"
+    theme: string; // E.g., "Shaping the Future of Gastric Cancer Treatment"
+
+    // Timing and Location : Required.
+    start_date: Date; // TIMESTAMP WITH TIME ZONE
+    end_date: Date;   // TIMESTAMP WITH TIME ZONE
+    venue_name: string; // E.g., "Lotte Hotel Seoul"
+    venue_city: string; 
+
+    // Organization and Status: Required.
+    host_organization: string; <- related to groupUser-id, select grouped.
+    is_active: boolean; // True if the conference is live/visible
+    
+    // Key Deadlines (Critical for Abstracts)
+    abstract_submission_deadline: Date;
+    early_registration_deadline: Date;
+    notification_of_acceptance_date: Date;
+    
+    // Secretariat / Contact Information
+    contact_emails: string[]; -> required.
+    contact_phones: string[]; -> required.
+
+    // Audit Fields
+    created_at: Date;
+    updated_at: Date;
+
+    // Relationships (Virtual or Foreign Keys managed by Payload)
+    topics?: Topic[];
+}
+
+export interface Session {
+    id: number;
+    conference_id: number; // Foreign Key to link back to the parent conference
+
+    // Content Metadata
+    title: string; // E.g., "Symposium 1: ERAS in Gastric Cancer Surgery"
+    session_type: 'plenary' | 'symposium' | 'lecture' | 'oral_presentation' | 'masterclass';
+    
+    // Scheduling
+    date: Date;
+    start_time: string; // E.g., "09:00"
+    end_time: string;   // E.g., "10:30"
+    room_location: string; // E.g., "Crystal Ballroom 1"
+
+    // Relationships (Speakers, Chairs, etc.)
+    chairs?: User[]; // Users responsible for running the session
+    speakers?: User[]; // Users presenting in the session
+    topics?: Topic[]; // Topics presented during the session
+
+    // Audit Fields
+    created_at: Date;
+    updated_at: Date;
+}
+
+
+export interface TopicCategory {
+  id: number
+  
+  name: string // E.g., "Translational Research & Biomarkers"
+  description: string | null
+  is_active: boolean
+  sort_order: number
+
+}
+
+export interface Topic {
+    id: number;
+    category_ids: string[]; 
+    name: string; // E.g., "AI in Endoscopy" or "PIPAC Protocols"
+    description: string | null
+    is_active: boolean;
+}
+*/
