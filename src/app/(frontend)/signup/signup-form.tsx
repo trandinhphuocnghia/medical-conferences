@@ -23,7 +23,10 @@ export async function SignupForm({ ...props }: React.ComponentProps<typeof Card>
       </CardHeader>
       <CardContent>
         <Form mode="all" schema={signupSchema} onSubmit={handleRegisterUser} className="w-full">
-          <FormField name="name" label="Full Name" required>
+          <FormField name="firstName" label="First Name" required>
+            {(field) => <Input {...field} />}
+          </FormField>
+           <FormField name="lastName" label="Last Name" required>
             {(field) => <Input {...field} />}
           </FormField>
           <FormField name="email" label="Email" required>

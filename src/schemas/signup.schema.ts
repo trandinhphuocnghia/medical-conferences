@@ -2,12 +2,19 @@ import * as z from 'zod'
 
 export const signupSchema = z
   .object({
-    name: z
+    firstName: z
       .string({
-        message: 'Name is required',
+        message: 'First Name is required',
       })
       .nonempty({
-        message: 'Name is required',
+        message: 'First is required',
+      }),
+      lastName: z
+      .string({
+        message: 'Last Name is required',
+      })
+      .nonempty({
+        message: 'Last Name is required',
       }),
     email: z
       .string({
