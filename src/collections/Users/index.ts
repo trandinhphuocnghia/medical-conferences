@@ -22,7 +22,7 @@ export const Users: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['name', 'email', 'title', 'updatedAt'],
+    defaultColumns: ['name', 'email', 'title', 'roles', 'createdAt'],
     useAsTitle: 'name',
     components: {
       //can we custom password field of the Users collection here ????
