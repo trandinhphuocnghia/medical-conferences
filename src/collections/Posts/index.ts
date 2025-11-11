@@ -40,7 +40,7 @@ export const Posts: CollectionConfig<'posts'> = {
     likes: true,
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'form', 'startDate', 'endDate', 'updatedAt'],
+    defaultColumns: ['heroImage', 'title', 'form', 'startDate', 'endDate', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({
@@ -163,6 +163,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'startDate',
       type: 'date',
+      // required: true,
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',
@@ -173,6 +174,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'endDate',
       type: 'date',
+      // required: true,
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',

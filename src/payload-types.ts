@@ -211,7 +211,7 @@ export interface Page {
     description?: string | null;
   };
   publishedAt?: string | null;
-  slug?: string | null;
+  slug: string;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -259,7 +259,7 @@ export interface Post {
   };
   startDate?: string | null;
   endDate?: string | null;
-  slug?: string | null;
+  slug: string;
   slugLock?: boolean | null;
   form?: (number | null) | Form;
   likes?: (number | Like)[] | null;
@@ -366,7 +366,7 @@ export interface Media {
 export interface Category {
   id: number;
   title: string;
-  slug?: string | null;
+  slug: string;
   slugLock?: boolean | null;
   parent?: (number | null) | Category;
   breadcrumbs?:
