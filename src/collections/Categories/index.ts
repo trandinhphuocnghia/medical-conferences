@@ -16,7 +16,7 @@ export const Categories: CollectionConfig = {
     beforeChange: [setCurrentInteract],
   },
   admin: {
-    defaultColumns: ['name', 'sort_order', 'is_active', 'updatedAt'],
+    defaultColumns: ['name', 'is_active', 'updatedAt'],
     useAsTitle: 'name',
   },
   fields: [
