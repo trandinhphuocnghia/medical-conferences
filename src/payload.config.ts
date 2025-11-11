@@ -8,7 +8,6 @@ import { fileURLToPath } from 'url'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
-import { Conferences } from './collections/Conferences'
 import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -67,18 +66,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [
-    Pages,
-    Posts,
-    Topics,
-    Categories,
-    Users,
-    UserGroups,
-    Media,
-    Likes,
-    Comments,
-    Conferences,
-  ],
+  collections: [Pages, Posts, Topics, Categories, Users, UserGroups, Media, Likes, Comments],
   cors: [
     ...[getServerSideURL()].filter(Boolean),
     'http://localhost:3000',

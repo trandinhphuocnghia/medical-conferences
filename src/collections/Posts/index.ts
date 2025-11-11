@@ -191,7 +191,7 @@ export const Posts: CollectionConfig<'posts'> = {
                 return { id: { not_in: [id] } }
               },
               hasMany: true,
-              relationTo: 'conferences',
+              relationTo: 'posts',
             },
             // Existing SEO fields
             // {

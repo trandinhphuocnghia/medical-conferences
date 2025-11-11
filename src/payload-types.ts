@@ -76,7 +76,6 @@ export interface Config {
     media: Media;
     likes: Like;
     comments: Comment;
-    conferences: Conference;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,7 +95,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
-    conferences: ConferencesSelect<false> | ConferencesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -251,7 +249,7 @@ export interface Post {
     phone: string;
     id?: string | null;
   }[];
-  relatedConferences?: (number | Conference)[] | null;
+  relatedConferences?: (number | Post)[] | null;
   start_date: string;
   end_date: string;
   slug: string;
@@ -376,51 +374,6 @@ export interface Category {
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "conferences".
- */
-export interface Conference {
-  id: number;
-  title?: string | null;
-  theme?: string | null;
-  /**
-   * Set to True when the conference program and registration are public.
-   */
-  is_active: boolean;
-  /**
-   * Primary host of the conference (e.g., Korean Gastric Cancer Association).
-   */
-  host_organization: number | UserGroup;
-  venue_name: string;
-  venue_city: string;
-  /**
-   * Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).
-   */
-  topics?: (number | Topic)[] | null;
-  abstract_submission_deadline: string;
-  early_registration_deadline: string;
-  notification_of_acceptance_date: string;
-  /**
-   * List of official contact emails (e.g., secretariat@kingca.org)
-   */
-  contact_emails: {
-    email: string;
-    id?: string | null;
-  }[];
-  contact_phones: {
-    phone: string;
-    id?: string | null;
-  }[];
-  relatedConferences?: (number | Conference)[] | null;
-  start_date: string;
-  end_date: string;
-  slug: string;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1076,10 +1029,6 @@ export interface PayloadLockedDocument {
         value: number | Comment;
       } | null)
     | ({
-        relationTo: 'conferences';
-        value: number | Conference;
-      } | null)
-    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1510,42 +1459,6 @@ export interface CommentsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "conferences_select".
- */
-export interface ConferencesSelect<T extends boolean = true> {
-  title?: T;
-  theme?: T;
-  is_active?: T;
-  host_organization?: T;
-  venue_name?: T;
-  venue_city?: T;
-  topics?: T;
-  abstract_submission_deadline?: T;
-  early_registration_deadline?: T;
-  notification_of_acceptance_date?: T;
-  contact_emails?:
-    | T
-    | {
-        email?: T;
-        id?: T;
-      };
-  contact_phones?:
-    | T
-    | {
-        phone?: T;
-        id?: T;
-      };
-  relatedConferences?: T;
-  start_date?: T;
-  end_date?: T;
-  slug?: T;
-  slugLock?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
@@ -1911,10 +1824,6 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
-        } | null)
-      | ({
-          relationTo: 'conferences';
-          value: number | Conference;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
