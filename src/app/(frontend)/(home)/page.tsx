@@ -15,7 +15,6 @@ export default async function Home() {
     collection: 'posts',
     depth: 1,
     limit: 12,
-    overrideAccess: false,
     select: {
       title: true,
       slug: true,
@@ -23,6 +22,11 @@ export default async function Home() {
       categories: true,
       meta: true,
       startDate: true,
+    },
+    where: {
+      is_active: {
+        equals: true,
+      },
     },
   })
 
@@ -46,7 +50,7 @@ export default async function Home() {
           </p>
           <Button variant="link" className="w-full sm:w-auto" asChild>
             <Link href="/posts">
-              View all articles
+              View all
               <ArrowRight className="ml-2 size-4" />
             </Link>
           </Button>

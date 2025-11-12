@@ -1,6 +1,6 @@
 import type { CollectionBeforeDeleteHook } from 'payload'
 
-export const preventDeleteAdmin: CollectionBeforeDeleteHook = async ({ id, req }) => {
+export const preventDeleteAdminOrSelf: CollectionBeforeDeleteHook = async ({ id, req }) => {
   const payload = req.payload
 
   // Get the user being deleted
@@ -11,5 +11,9 @@ export const preventDeleteAdmin: CollectionBeforeDeleteHook = async ({ id, req }
 
   if (userToDelete?.roles?.includes('admin')) {
     throw new Error('Admin accounts cannot be deleted!')
+  }
+
+  if (userToDelete?.id === req.user?.id) {
+    throw new Error('You cannot delete yourself!')
   }
 }

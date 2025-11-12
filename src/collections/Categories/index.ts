@@ -2,15 +2,20 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '@/access/authenticated'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
+import { adminOnly } from '@/access/adminOnly'
+import { adminOrOwner } from '@/access/adminOrOwner'
+import { adminOrModifier } from '@/access/adminOrModifier'
+import { notAdminOrModifierView } from '@/access/collectionView'
+import { anyone } from '@/access/anyone'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
   access: {
     admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    create: adminOrModifier,
+    delete: adminOnly,
+    read: anyone,
+    update: adminOrOwner,
   },
   hooks: {
     beforeChange: [setCurrentInteract],
@@ -18,6 +23,7 @@ export const Categories: CollectionConfig = {
   admin: {
     defaultColumns: ['name', 'is_active', 'updatedAt'],
     useAsTitle: 'name',
+    hidden: notAdminOrModifierView,
   },
   fields: [
     // 1. NAME FIELD (Configured for Global Uniqueness and Indexing)

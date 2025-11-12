@@ -1,12 +1,21 @@
+'use client'
+
 import { Banner } from '@payloadcms/ui/elements/Banner'
 import React from 'react'
 
 import { SeedButton } from './SeedButton'
 import './index.scss'
+import { useAuth } from '@payloadcms/ui'
+import { redirect } from 'next/navigation'
 
 const baseClass = 'before-dashboard'
 
 const BeforeDashboard: React.FC = () => {
+  const { user } = useAuth()
+  if (!user?.roles?.includes('admin')) {
+    redirect('/admin/account')
+  }
+
   return (
     <div className={baseClass}>
       <Banner className={`${baseClass}__banner`} type="success">

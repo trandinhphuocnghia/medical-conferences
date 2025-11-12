@@ -15,6 +15,7 @@ import { draftMode } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { Toaster } from 'sonner'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
@@ -35,7 +36,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
 
           <Header />
-          {children}
+          <Toaster />
+          <div className="min-h-screen">{children}</div>
           <Footer />
         </Providers>
       </body>

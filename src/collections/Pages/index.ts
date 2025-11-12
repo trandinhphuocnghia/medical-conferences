@@ -20,14 +20,18 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { adminOnly } from '@/access/adminOnly'
+import { notAdminView } from '@/access/collectionView'
+import { anyone } from '@/access/anyone'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished,
-    update: authenticated,
+    admin: authenticated,
+    create: adminOnly,
+    delete: adminOnly,
+    read: anyone,
+    update: adminOnly,
   },
   // This config controls what's populated by default when a page is referenced
   // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
@@ -38,6 +42,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
+    hidden: notAdminView,
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

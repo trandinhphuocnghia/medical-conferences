@@ -1,21 +1,25 @@
 import type { CollectionConfig } from 'payload'
 import { adminOrOwner } from '@/access/adminOrOwner'
+import { adminOrModifier } from '@/access/adminOrModifier'
+import { authenticated } from '@/access/authenticated'
+import { notAdminOrModifierView } from '@/access/collectionView'
+import { anyone } from '@/access/anyone'
 
 export const UserGroups: CollectionConfig = {
   slug: 'user-groups',
 
   access: {
-    read: adminOrOwner, // any logged-in user can see groups
-    create: ({ req }) =>
-      req.user?.roles?.includes('admin') || req.user?.roles?.includes('editor') || false,
-    update: ({ req }) =>
-      req.user?.roles?.includes('admin') || req.user?.roles?.includes('editor') || false,
-    delete: ({ req }) => req.user?.roles?.includes('admin') || false,
+    admin: authenticated,
+    read: anyone,
+    create: adminOrModifier,
+    update: adminOrOwner,
+    delete: adminOrOwner,
   },
 
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'users', 'updatedAt'],
+    hidden: notAdminOrModifierView,
   },
 
   fields: [

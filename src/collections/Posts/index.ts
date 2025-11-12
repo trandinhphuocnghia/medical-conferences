@@ -1,11 +1,21 @@
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
 import { slugField } from '@/fields/slug'
+import { adminOrOwner } from '@/access/adminOrOwner'
+import { adminOrModifier } from '@/access/adminOrModifier'
+import { notAdminOrModifierView } from '@/access/collectionView'
+import { anyone } from '@/access/anyone'
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+  OverviewField,
+  PreviewField,
+} from '@payloadcms/plugin-seo/fields'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -16,10 +26,11 @@ export const Posts: CollectionConfig<'posts'> = {
 
   // --- ACCESS ---
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: authenticatedOrPublished, // Allows published content to be read publicly
-    update: authenticated,
+    admin: authenticated,
+    create: adminOrModifier,
+    delete: adminOrOwner,
+    read: anyone,
+    update: adminOrOwner,
   },
 
   defaultPopulate: {
@@ -37,6 +48,7 @@ export const Posts: CollectionConfig<'posts'> = {
   admin: {
     defaultColumns: ['title', 'slug', 'is_active', 'startDate', 'endDate', 'updatedAt'],
     useAsTitle: 'title',
+    hidden: notAdminOrModifierView,
   },
 
   fields: [
@@ -57,7 +69,7 @@ export const Posts: CollectionConfig<'posts'> = {
       //-> [WORKS]: Cron-job to auto mark as active ?
       name: 'is_active',
       type: 'checkbox',
-      label: 'Is Conference Active/Live?',
+      label: 'Active',
       defaultValue: false,
       admin: {
         position: 'sidebar',
@@ -179,8 +191,8 @@ export const Posts: CollectionConfig<'posts'> = {
         // 9. SEO & RELATED CONTENT TABS (Existing Tabs Retained)
         {
           label: 'SEO & Related',
+          name: 'meta',
           fields: [
-            // Existing related Conferences field (Moved from Meta tab)
             {
               name: 'relatedConferences',
               type: 'relationship',
@@ -193,33 +205,23 @@ export const Posts: CollectionConfig<'posts'> = {
               hasMany: true,
               relationTo: 'posts',
             },
-            // Existing SEO fields
-            // {
-            //   name: 'meta',
-            //   label: 'SEO',
-            //   type: '',
-            //   fields: [
-            //     OverviewField({
-            //       titlePath: 'meta.title',
-            //       descriptionPath: 'meta.description',
-            //       imagePath: 'meta.image',
-            //     }),
-            //     MetaTitleField({
-            //       hasGenerateFn: true,
-            //     }),
-            //     MetaImageField({
-            //       relationTo: 'media',
-            //     }),
-            //     MetaDescriptionField({}),
-            //     PreviewField({
-            //       // if the `generateUrl` function is configured
-            //       hasGenerateFn: true,
-            //       // field paths to match the target field for data
-            //       titlePath: 'meta.title',
-            //       descriptionPath: 'meta.description',
-            //     }),
-            //   ],
-            // },
+            OverviewField({
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description',
+              imagePath: 'meta.image',
+            }),
+            MetaTitleField({
+              hasGenerateFn: true,
+            }),
+            MetaImageField({
+              relationTo: 'media',
+            }),
+            MetaDescriptionField({}),
+            PreviewField({
+              hasGenerateFn: true,
+              titlePath: 'meta.title',
+              descriptionPath: 'meta.description',
+            }),
           ],
         },
       ],

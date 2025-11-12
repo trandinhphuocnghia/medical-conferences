@@ -249,7 +249,15 @@ export interface Post {
     phone: string;
     id?: string | null;
   }[];
-  relatedConferences?: (number | Post)[] | null;
+  meta?: {
+    relatedConferences?: (number | Post)[] | null;
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
   start_date: string;
   end_date: string;
   slug: string;
@@ -296,8 +304,6 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
-  _verified?: boolean | null;
-  _verificationToken?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -1248,7 +1254,14 @@ export interface PostsSelect<T extends boolean = true> {
         phone?: T;
         id?: T;
       };
-  relatedConferences?: T;
+  meta?:
+    | T
+    | {
+        relatedConferences?: T;
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   start_date?: T;
   end_date?: T;
   slug?: T;
@@ -1319,8 +1332,6 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
-  _verified?: T;
-  _verificationToken?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:

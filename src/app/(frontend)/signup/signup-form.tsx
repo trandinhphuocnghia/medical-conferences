@@ -1,5 +1,7 @@
 'use client'
 
+import { useTransition } from 'react'
+import { registerUser } from '@/app/actions/registerUser'
 import Form from '@/components/common/form'
 import FormField from '@/components/common/form-field'
 import { Button } from '@/components/ui/button'
@@ -9,10 +11,28 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { signupSchema, signupSchemaType } from '@/schemas/signup.schema'
 import Link from 'next/link'
+import { Spinner } from '@/components/ui/spinner'
+import { toastError, toastSuccess } from '@/utilities/toast'
 
-export async function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
-  const handleRegisterUser = async (_data: signupSchemaType) => {
-    return { success: true, data: undefined }
+export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const [isPending, startTransition] = useTransition()
+
+  const handleRegisterUser = async (data: signupSchemaType) => {
+    startTransition(async () => {
+      const res = await registerUser(data)
+
+      if (res.success) {
+        toastSuccess({
+          message: 'Account created successfully!',
+        })
+      } else {
+        toastError({
+          message: 'Failed to create account.',
+        })
+      }
+    })
+
+    return {}
   }
 
   return (
@@ -26,7 +46,7 @@ export async function SignupForm({ ...props }: React.ComponentProps<typeof Card>
           <FormField name="firstName" label="First Name" required>
             {(field) => <Input {...field} />}
           </FormField>
-           <FormField name="lastName" label="Last Name" required>
+          <FormField name="lastName" label="Last Name" required>
             {(field) => <Input {...field} />}
           </FormField>
           <FormField name="email" label="Email" required>
@@ -40,8 +60,8 @@ export async function SignupForm({ ...props }: React.ComponentProps<typeof Card>
           </FormField>
           <FieldGroup>
             <Field>
-              <Button type="submit" variant="outline">
-                Create Account
+              <Button type="submit" variant="outline" disabled={isPending}>
+                {isPending && <Spinner />} Create Account
               </Button>
               <Separator className="my-4" />
               <FieldDescription className="px-6 text-center">

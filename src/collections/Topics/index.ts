@@ -5,15 +5,19 @@ import { setCurrentInteract } from '@/hooks/getCurrentInteract'
 import { editorConfig } from '@/utilities/editorConfig'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { authenticated } from '../../access/authenticated'
+import { adminOrModifier } from '@/access/adminOrModifier'
+import { adminOrOwner } from '@/access/adminOrOwner'
+import { notAdminOrModifierView } from '@/access/collectionView'
+import { anyone } from '@/access/anyone'
 
 export const Topics: CollectionConfig = {
   slug: 'topics',
   access: {
     admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    create: adminOrModifier,
+    delete: adminOrOwner,
+    read: anyone,
+    update: adminOrOwner,
   },
   hooks: {
     beforeChange: [setCurrentInteract],
@@ -21,6 +25,7 @@ export const Topics: CollectionConfig = {
   admin: {
     defaultColumns: ['name'],
     useAsTitle: 'name',
+    hidden: notAdminOrModifierView,
   },
   fields: [
     //1. Name:
