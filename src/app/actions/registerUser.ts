@@ -27,11 +27,12 @@ export async function registerUser(data: signupSchemaType) {
   // Create user in PayloadCMS
   const user = await payload.create({
     collection: 'users',
-    data: {
-      name: parsed.name,
+    data: {     
       email: parsed.email,
       password: parsed.password, // Payload automatically hashes it
       roles: ['user'], // default role
+      first_name: parsed.firstName,
+      last_name:parsed.lastName,
     },
   })
 
