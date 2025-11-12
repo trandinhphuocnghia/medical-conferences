@@ -38,6 +38,7 @@ export async function registerUser(data: signupSchemaType) {
     })
     return { success: true, user }
   } catch (error) {
+    console.log('Signup error', error)
     return { success: false, error }
   }
 }

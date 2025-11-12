@@ -13,21 +13,23 @@ import { signupSchema, signupSchemaType } from '@/schemas/signup.schema'
 import Link from 'next/link'
 import { Spinner } from '@/components/ui/spinner'
 import { toastError, toastSuccess } from '@/utilities/toast'
+import { useRouter } from 'next/navigation'
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
   const handleRegisterUser = async (data: signupSchemaType) => {
     startTransition(async () => {
       const res = await registerUser(data)
-
       if (res.success) {
         toastSuccess({
           message: 'Account created successfully!',
         })
+        router.push('/admin/login')
       } else {
         toastError({
-          message: 'Failed to create account.',
+          message: (res?.error as any)?.message || 'Failed to create account.',
         })
       }
     })
