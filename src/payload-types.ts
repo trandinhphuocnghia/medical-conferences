@@ -76,6 +76,7 @@ export interface Config {
     media: Media;
     likes: Like;
     comments: Comment;
+    abstracts: Abstract;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -95,6 +96,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
+    abstracts: AbstractsSelect<false> | AbstractsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -858,6 +860,34 @@ export interface Comment {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "abstracts".
+ */
+export interface Abstract {
+  id: number;
+  /**
+   * Which conference this abstract is being submitted to.
+   */
+  conference: number | Post;
+  /**
+   * The specific subject area (e.g., AI in Endoscopy).
+   */
+  topic: number | Topic;
+  /**
+   * Automatically populated with the logged-in user on submission.
+   */
+  submitter?: (number | null) | User;
+  title: string;
+  description: string;
+  keywords?: string | null;
+  /**
+   * Set by Editors/Admins after peer review.
+   */
+  verification_status: 'Pending' | 'Verified' | 'Rejected';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1033,6 +1063,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'comments';
         value: number | Comment;
+      } | null)
+    | ({
+        relationTo: 'abstracts';
+        value: number | Abstract;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1465,6 +1499,21 @@ export interface CommentsSelect<T extends boolean = true> {
   post?: T;
   user?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "abstracts_select".
+ */
+export interface AbstractsSelect<T extends boolean = true> {
+  conference?: T;
+  topic?: T;
+  submitter?: T;
+  title?: T;
+  description?: T;
+  keywords?: T;
+  verification_status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

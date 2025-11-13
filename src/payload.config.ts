@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 
 import { defaultLexical } from '@/fields/defaultLexical'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
 import { Likes } from './collections/Likes'
@@ -67,7 +68,18 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Topics, Categories, Users, UserGroups, Media, Likes, Comments],
+  collections: [
+    Pages,
+    Posts,
+    Topics,
+    Categories,
+    Users,
+    UserGroups,
+    Media,
+    Likes,
+    Comments,
+    Abstracts,
+  ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),
     'http://localhost:3000',
