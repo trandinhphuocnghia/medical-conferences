@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 
-import { setCurrentInteract } from '@/hooks/getCurrentInteract'
 import { userView } from '@/access/collectionView'
 import {
   adminOnly,
@@ -19,65 +18,54 @@ export const Categories: CollectionConfig = {
     read: anyone,
     update: adminOrOwner,
   },
-  hooks: {
-    beforeChange: [setCurrentInteract],
-  },
+  hooks: {},
   admin: {
     defaultColumns: ['name', 'is_active', 'updatedAt'],
     useAsTitle: 'name',
     hidden: userView,
   },
   fields: [
-    // 1. NAME FIELD (Configured for Global Uniqueness and Indexing)
     {
       name: 'name',
       type: 'text',
       required: true,
       label: 'Category Name',
       admin: {
-        // FIX: Description updated to Category context
         description: 'E.g., "Surgical Oncology" or "Translational Research". Must be unique.',
       },
       unique: true,
       index: true,
     },
 
-    // 2. DESCRIPTION FIELD
     {
       name: 'description',
       type: 'textarea',
       label: 'Category Description (Optional)',
     },
 
-    // 3. IS_ACTIVE (Soft Delete)
     {
       name: 'is_active',
       type: 'checkbox',
-      label: 'Is Category Active?', // FIX: Label changed to Category
+      label: 'Active',
       defaultValue: true,
       admin: {
+        position: 'sidebar',
         description: 'Unchecking this soft-deletes the category (hides it from the frontend).',
       },
     },
 
-    //4. created_by & updated_by:
-    //data trace off.
     {
       name: 'created_by',
       type: 'relationship',
       relationTo: 'users',
-      label: 'Created By Admin',
-      admin: {
-        readOnly: true, // Make sure admins can't manually change this
-        position: 'sidebar',
+      label: 'Created By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
       },
-      // Restrict options to only include users with the 'admin' role
-      filterOptions: () => {
-        return {
-          roles: {
-            in: ['admin'],
-          },
-        }
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
       },
     },
     {
@@ -85,8 +73,12 @@ export const Categories: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       label: 'Last Modified By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
       admin: {
         readOnly: true,
+        hidden: true,
         position: 'sidebar',
       },
     },

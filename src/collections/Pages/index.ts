@@ -30,9 +30,6 @@ export const Pages: CollectionConfig<'pages'> = {
     read: anyone,
     update: adminOnly,
   },
-  // This config controls what's populated by default when a page is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'pages'>
   defaultPopulate: {
     title: true,
     slug: true,
@@ -123,6 +120,34 @@ export const Pages: CollectionConfig<'pages'> = {
       },
     },
     ...slugField(),
+    {
+      name: 'created_by',
+      type: 'relationship',
+      relationTo: 'users',
+      label: 'Created By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'updated_by',
+      type: 'relationship',
+      relationTo: 'users',
+      label: 'Last Modified By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
+      },
+    },
   ],
   hooks: {
     afterChange: [revalidatePage],

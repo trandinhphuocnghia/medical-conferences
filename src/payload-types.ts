@@ -211,6 +211,8 @@ export interface Page {
   publishedAt?: string | null;
   slug: string;
   slugLock?: boolean | null;
+  created_by?: (number | null) | User;
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -264,6 +266,8 @@ export interface Post {
   end_date: string;
   slug: string;
   slugLock?: boolean | null;
+  created_by?: (number | null) | User;
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -343,13 +347,10 @@ export interface Topic {
     };
     [k: string]: unknown;
   } | null;
-  /**
-   * Unchecking this soft-deletes the topic (hides it from the frontend).
-   */
   is_active?: boolean | null;
+  category: number | Category;
   created_by?: (number | null) | User;
   updated_by?: (number | null) | User;
-  category: number | Category;
   updatedAt: string;
   createdAt: string;
 }
@@ -370,15 +371,6 @@ export interface Category {
   is_active?: boolean | null;
   created_by?: (number | null) | User;
   updated_by?: (number | null) | User;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -1173,6 +1165,8 @@ export interface PagesSelect<T extends boolean = true> {
   publishedAt?: T;
   slug?: T;
   slugLock?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1300,6 +1294,8 @@ export interface PostsSelect<T extends boolean = true> {
   end_date?: T;
   slug?: T;
   slugLock?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -1314,9 +1310,9 @@ export interface TopicsSelect<T extends boolean = true> {
   description?: T;
   content?: T;
   is_active?: T;
+  category?: T;
   created_by?: T;
   updated_by?: T;
-  category?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1330,15 +1326,6 @@ export interface CategoriesSelect<T extends boolean = true> {
   is_active?: T;
   created_by?: T;
   updated_by?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;

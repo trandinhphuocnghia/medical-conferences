@@ -21,7 +21,6 @@ export const Posts: CollectionConfig<'posts'> = {
     singular: 'Conferences',
   },
 
-  // --- ACCESS ---
   access: {
     admin: authenticated,
     create: adminOrModifier,
@@ -61,9 +60,7 @@ export const Posts: CollectionConfig<'posts'> = {
       label: 'Conference Theme',
     },
 
-    // 3. IS_ACTIVE (Status Field)
     {
-      //-> [WORKS]: Cron-job to auto mark as active ?
       name: 'is_active',
       type: 'checkbox',
       label: 'Active',
@@ -75,7 +72,6 @@ export const Posts: CollectionConfig<'posts'> = {
       required: true,
     },
 
-    // 4. HOST ORGANIZATION
     {
       name: 'host_organization',
       type: 'relationship',
@@ -86,7 +82,6 @@ export const Posts: CollectionConfig<'posts'> = {
       admin: {
         position: 'sidebar',
         description: 'Primary host of the conference (e.g., Korean Gastric Cancer Association).',
-        // Optional: Filter to only select users with the 'admin' role
       },
     },
 
@@ -96,7 +91,6 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           label: 'Timing & Content',
           fields: [
-            // 5. VENUE FIELDS (Required Location)
             {
               name: 'venue_name',
               type: 'text',
@@ -110,7 +104,6 @@ export const Posts: CollectionConfig<'posts'> = {
               required: true,
             },
 
-            // 6. TOPICS (Linking to Categories/Topics, assuming the topics_list relationship from AbstractCategories)
             {
               name: 'topics',
               label: 'Content Topics',
@@ -124,8 +117,6 @@ export const Posts: CollectionConfig<'posts'> = {
             },
           ],
         },
-
-        // 7. DEADLINES TAB (Critical Dates)
         {
           label: 'Deadlines',
           fields: [
@@ -158,8 +149,6 @@ export const Posts: CollectionConfig<'posts'> = {
             },
           ],
         },
-
-        // 8. CONTACTS TAB (Secretariat Information)
         {
           label: 'Contact Info',
           fields: [
@@ -184,8 +173,6 @@ export const Posts: CollectionConfig<'posts'> = {
             },
           ],
         },
-
-        // 9. SEO & RELATED CONTENT TABS (Existing Tabs Retained)
         {
           label: 'SEO & Related',
           name: 'meta',
@@ -223,8 +210,6 @@ export const Posts: CollectionConfig<'posts'> = {
         },
       ],
     },
-
-    // 10. TIMING FIELDS (Replaced with Schema names)
     {
       name: 'start_date', // Mapped from startDate
       type: 'date',
@@ -245,9 +230,35 @@ export const Posts: CollectionConfig<'posts'> = {
         position: 'sidebar',
       },
     },
-
-    // 11. SLUG FIELD (Retained)
     ...slugField(),
+    {
+      name: 'created_by',
+      type: 'relationship',
+      relationTo: 'users',
+      label: 'Created By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'updated_by',
+      type: 'relationship',
+      relationTo: 'users',
+      label: 'Last Modified By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
+      },
+    },
   ],
 
   timestamps: true,

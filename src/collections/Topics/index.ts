@@ -25,70 +25,61 @@ export const Topics: CollectionConfig = {
     hidden: userView,
   },
   fields: [
-    //1. Name:
     {
-      //config:
       name: 'name',
       type: 'text',
       required: true,
       label: 'Topic Name',
-      //access:
       admin: {
         description:
           'E.g., "AI in Endoscopy" or "PIPAC Protocols". Must be unique within the Parent Category.',
       },
-      //optimize:
       unique: true,
       index: true,
     },
-
-    //2. description:
     {
       name: 'description',
       type: 'textarea',
       label: 'Topic Description (Optional)',
     },
-
-    //3. content
     {
       name: 'content',
       type: 'richText',
       editor: lexicalEditor({ ...editorConfig }),
       defaultValue: RICH_TEXT_DEFAULT_VALUES,
     },
-
-    //3. is_active:
-    //soft deletion.
     {
       name: 'is_active',
       type: 'checkbox',
-      label: 'Is Topic Active?',
+      label: 'Active',
       defaultValue: true,
       admin: {
-        description: 'Unchecking this soft-deletes the topic (hides it from the frontend).',
-        // NOTE: Custom confirmation modals must be built using custom React components,
-        // they cannot be configured here with a simple property.
+        position: 'sidebar',
       },
     },
-
-    //4. created_by & updated_by:
-    //data trace off.
+    {
+      name: 'category',
+      type: 'relationship',
+      relationTo: 'categories',
+      required: true,
+      index: true,
+      label: 'Category',
+      admin: {
+        position: 'sidebar',
+      },
+    },
     {
       name: 'created_by',
       type: 'relationship',
       relationTo: 'users',
-      label: 'Created By Admin',
-      admin: {
-        readOnly: true, // Make sure admins can't manually change this
-        position: 'sidebar',
+      label: 'Created By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
       },
-      // Restrict options to only include users with the 'admin' role
-      filterOptions: () => {
-        return {
-          roles: {
-            in: ['admin'],
-          },
-        }
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
       },
     },
     {
@@ -96,21 +87,14 @@ export const Topics: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       label: 'Last Modified By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
       admin: {
         readOnly: true,
+        hidden: true,
         position: 'sidebar',
       },
-    },
-
-    /* ----RELATIONSHIP---- */
-    //1. category
-    {
-      name: 'category',
-      type: 'relationship',
-      relationTo: 'categories',
-      required: true,
-      index: true,
-      label: 'Parent Category',
     },
   ],
   timestamps: true,

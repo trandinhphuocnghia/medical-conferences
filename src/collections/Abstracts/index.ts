@@ -44,6 +44,14 @@ export const Abstracts: CollectionConfig = {
       name: 'topic',
       type: 'relationship',
       relationTo: 'topics',
+      filterOptions: ({ siblingData }: any) => {
+        if (!siblingData?.conference) return false
+        return {
+          conference: {
+            equals: siblingData?.conference,
+          },
+        }
+      },
       required: true,
       hasMany: false,
       label: 'Specific Topic Area',
