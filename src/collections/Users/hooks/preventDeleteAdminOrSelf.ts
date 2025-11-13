@@ -9,7 +9,7 @@ export const preventDeleteAdminOrSelf: CollectionBeforeDeleteHook = async ({ id,
     id,
   })
 
-  if (userToDelete?.roles?.includes('admin')) {
+  if (userToDelete?.role === 'admin') {
     throw new Error('Admin accounts cannot be deleted!')
   }
 

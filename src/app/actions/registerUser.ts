@@ -1,8 +1,8 @@
 'use server'
 
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { signupSchema, signupSchemaType } from '@/schemas/signup.schema'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
 
 export async function registerUser(data: signupSchemaType) {
   try {
@@ -31,7 +31,7 @@ export async function registerUser(data: signupSchemaType) {
       data: {
         email: parsed.email,
         password: parsed.password, // Payload automatically hashes it
-        roles: ['user'], // default role
+
         first_name: parsed.firstName,
         last_name: parsed.lastName,
       },
