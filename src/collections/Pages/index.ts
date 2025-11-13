@@ -18,7 +18,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { adminView } from '@/access/collectionView'
+import { notAdminView } from '@/access/collectionView'
 import { adminOnly, anyone, authenticated } from '@/access/collectionAccess'
 
 export const Pages: CollectionConfig<'pages'> = {
@@ -39,7 +39,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: !adminView,
+    hidden: notAdminView,
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

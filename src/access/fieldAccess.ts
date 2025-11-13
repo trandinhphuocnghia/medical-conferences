@@ -1,3 +1,4 @@
+import { User } from '@/payload-types'
 import type { FieldAccess } from 'payload'
 
 export const adminOnlyFieldAccess: FieldAccess = ({ req: { user } }) => {
@@ -14,6 +15,12 @@ export const modifierOnlyFieldAccess: FieldAccess = ({ req: { user } }) => {
 
 export const userOnlyFieldAccess: FieldAccess = ({ req: { user } }) => {
   if (user) return user.role === 'user'
+
+  return false
+}
+
+export const adminExceptSelfFieldAccess: FieldAccess<User> = ({ req: { user, data } }) => {
+  if (user) return user.role === 'admin' && user.id !== data?.id
 
   return false
 }

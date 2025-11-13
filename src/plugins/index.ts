@@ -14,7 +14,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { editorConfig } from '@/utilities/editorConfig'
-import { notAdminOrModifierView } from '@/access/collectionView'
+import { userView } from '@/access/collectionView'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | MedConf` : 'MedConf'
@@ -48,7 +48,7 @@ export const plugins: Plugin[] = [
         afterChange: [revalidateRedirects],
       },
       admin: {
-        hidden: notAdminOrModifierView,
+        hidden: userView,
       },
     },
   }),
@@ -79,12 +79,12 @@ export const plugins: Plugin[] = [
         })
       },
       admin: {
-        hidden: notAdminOrModifierView,
+        hidden: userView,
       },
     },
     formSubmissionOverrides: {
       admin: {
-        hidden: notAdminOrModifierView,
+        hidden: userView,
       },
     },
   }),

@@ -882,7 +882,7 @@ export interface Abstract {
   /**
    * Set by Editors/Admins after peer review.
    */
-  verification_status: 'Pending' | 'Verified' | 'Rejected';
+  verification_status: 'pending' | 'verified' | 'rejected';
   updatedAt: string;
   createdAt: string;
 }

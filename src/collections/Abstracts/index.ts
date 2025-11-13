@@ -1,5 +1,5 @@
 import { adminOrModifier, authenticated, userOnly } from '@/access/collectionAccess'
-import { userOnlyFieldAccess } from '@/access/fieldAccess'
+import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 
 export const Abstracts: CollectionConfig = {
@@ -9,13 +9,12 @@ export const Abstracts: CollectionConfig = {
     // beforeChange: [setSubmitter],
   },
 
-  // --- ACCESS CONTROL (CRITICAL) ---
   access: {
     admin: authenticated,
     create: userOnly,
     delete: adminOrModifier,
     read: authenticated,
-    update: authenticated, //CHECK again, API need to config to admin can not call.
+    update: authenticated,
   },
 
   admin: {
@@ -23,12 +22,9 @@ export const Abstracts: CollectionConfig = {
     defaultColumns: ['title', 'conference', 'verification_status', 'public_status', 'updatedAt'],
   },
 
-  //Fields
   timestamps: true,
 
-  // --- FIELDS (Mapped from Interface) ---
   fields: [
-    // 1. RELATIONSHIPS (FKs)
     {
       name: 'conference',
       type: 'relationship',
@@ -41,7 +37,6 @@ export const Abstracts: CollectionConfig = {
       },
 
       admin: {
-        position: 'sidebar',
         description: 'Which conference this abstract is being submitted to.',
       },
     },
@@ -52,9 +47,11 @@ export const Abstracts: CollectionConfig = {
       required: true,
       hasMany: false,
       label: 'Specific Topic Area',
+      access: {
+        create: userOnlyFieldAccess,
+      },
 
       admin: {
-        readOnly: true,
         description: 'The specific subject area (e.g., AI in Endoscopy).',
       },
     },
@@ -65,22 +62,23 @@ export const Abstracts: CollectionConfig = {
       required: false,
       hasMany: false,
       label: 'Submitter/Author',
-
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
       admin: {
-        position: 'sidebar',
         readOnly: true,
+        position: 'sidebar',
         description: 'Automatically populated with the logged-in user on submission.',
       },
     },
 
-    // 2. CORE CONTENT
     {
       name: 'title',
       type: 'text',
       required: true,
       label: 'Abstract Title',
-      admin: {
-        readOnly: true,
+      access: {
+        create: userOnlyFieldAccess,
       },
     },
     {
@@ -88,35 +86,34 @@ export const Abstracts: CollectionConfig = {
       type: 'textarea',
       required: true,
       label: 'Abstract Body Text',
-      admin: {
-        readOnly: true,
+      access: {
+        create: userOnlyFieldAccess,
       },
     },
     {
       name: 'keywords',
       type: 'text',
       label: 'Keywords (Comma separated)',
-      admin: {
-        readOnly: true,
+      access: {
+        create: userOnlyFieldAccess,
       },
     },
 
-    // 3. WORKFLOW STATUS FIELDS
     {
       name: 'verification_status',
       type: 'select',
       label: 'Verification Status (Internal)',
       options: [
-        { label: 'Pending Review', value: 'Pending' },
-        { label: 'Verified', value: 'Verified' },
-        { label: 'Rejected', value: 'Rejected' },
+        { label: 'Pending Review', value: 'pending' },
+        { label: 'Verified', value: 'verified' },
+        { label: 'Rejected', value: 'rejected' },
       ],
-      defaultValue: 'Pending',
+      defaultValue: 'pending',
       required: true,
 
       access: {
-        update: ({ req }) => !!adminOrModifier({ req }),
-        create: ({ req }) => !!adminOrModifier({ req }),
+        update: adminOnlyFieldAccess,
+        create: userOnlyFieldAccess,
       },
       admin: {
         position: 'sidebar',

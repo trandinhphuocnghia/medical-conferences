@@ -3,8 +3,8 @@ import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { preventDeleteAdminOrSelf } from './hooks/preventDeleteAdminOrSelf'
 import { preventCreateAdmin } from './hooks/preventCreateAdmin'
 import { adminOnly, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
-import { adminView } from '@/access/collectionView'
-import { adminOnlyFieldAccess } from '@/access/fieldAccess'
+import { notAdminView } from '@/access/collectionView'
+import { adminExceptSelfFieldAccess, adminOnlyFieldAccess } from '@/access/fieldAccess'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -16,9 +16,9 @@ export const Users: CollectionConfig = {
     update: adminOrOwner,
   },
   admin: {
-    defaultColumns: ['name', 'email', 'title', 'roles', 'createdAt'],
+    defaultColumns: ['name', 'email', 'title', 'role', 'createdAt'],
     useAsTitle: 'name',
-    hidden: !adminView,
+    hidden: notAdminView,
   },
   // 🔒 AUTH CONFIGURATION: Enabled local auth AND email verification
   auth: {
@@ -119,7 +119,7 @@ export const Users: CollectionConfig = {
         // Only admins can create/read/update the roles field itself
         create: adminOnlyFieldAccess,
         read: adminOnlyFieldAccess,
-        update: adminOnlyFieldAccess,
+        update: adminExceptSelfFieldAccess,
       },
       defaultValue: 'user',
       hasMany: false,

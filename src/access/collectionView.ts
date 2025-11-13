@@ -6,6 +6,10 @@ export const adminView = ({ user }: { user: ClientUser }) => {
   return user?.role === 'admin'
 }
 
+export const notAdminView = ({ user }: { user: ClientUser }) => {
+  return user?.role !== 'admin'
+}
+
 export const modifierView = ({ user }: { user: ClientUser }) => {
   return user?.role === 'modifier'
 }
