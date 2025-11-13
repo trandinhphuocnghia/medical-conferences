@@ -4,12 +4,9 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { authenticated } from '../access/authenticated'
 import { editorConfig } from '@/utilities/editorConfig'
-import { adminOrModifier } from '@/access/adminOrModifier'
-import { adminOrOwner } from '@/access/adminOrOwner'
-import { notAdminOrModifierView } from '@/access/collectionView'
-import { anyone } from '@/access/anyone'
+import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import { userView } from '@/access/collectionView'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,7 +21,7 @@ export const Media: CollectionConfig = {
     update: adminOrOwner,
   },
   admin: {
-    hidden: notAdminOrModifierView,
+    hidden: userView,
   },
   fields: [
     {

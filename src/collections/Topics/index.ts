@@ -4,11 +4,8 @@ import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
 import { editorConfig } from '@/utilities/editorConfig'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { authenticated } from '../../access/authenticated'
-import { adminOrModifier } from '@/access/adminOrModifier'
-import { adminOrOwner } from '@/access/adminOrOwner'
-import { notAdminOrModifierView } from '@/access/collectionView'
-import { anyone } from '@/access/anyone'
+import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import { userView } from '@/access/collectionView'
 
 export const Topics: CollectionConfig = {
   slug: 'topics',
@@ -25,7 +22,7 @@ export const Topics: CollectionConfig = {
   admin: {
     defaultColumns: ['name'],
     useAsTitle: 'name',
-    hidden: notAdminOrModifierView,
+    hidden: userView,
   },
   fields: [
     //1. Name:

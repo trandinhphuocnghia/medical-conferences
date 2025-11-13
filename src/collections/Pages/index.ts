@@ -1,7 +1,5 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '../../access/authenticated'
-import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
@@ -20,9 +18,8 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { adminOnly } from '@/access/adminOnly'
-import { notAdminView } from '@/access/collectionView'
-import { anyone } from '@/access/anyone'
+import { adminView } from '@/access/collectionView'
+import { adminOnly, anyone, authenticated } from '@/access/collectionAccess'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -42,7 +39,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updatedAt'],
-    hidden: notAdminView,
+    hidden: !adminView,
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

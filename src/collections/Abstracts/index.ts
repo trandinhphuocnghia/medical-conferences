@@ -1,14 +1,11 @@
+import { adminOrModifier, authenticated, userOnly } from '@/access/collectionAccess'
+import { userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
-// import { isSubmitterOrAdmin } from '../../access/accessFunctions' // [CORRECTION: Assuming this import path]
-import { adminOrModifier } from '@/access/adminOrModifier'
-import { userOnly } from '@/access/userOnly'
-import { authenticated } from '../../access/authenticated'
 
 export const Abstracts: CollectionConfig = {
   slug: 'abstracts',
 
   hooks: {
-    // You would integrate your setSubmitter hook here
     // beforeChange: [setSubmitter],
   },
 
@@ -39,9 +36,11 @@ export const Abstracts: CollectionConfig = {
       required: true,
       hasMany: false,
       label: 'Associated Conference',
+      access: {
+        create: userOnlyFieldAccess,
+      },
 
       admin: {
-        readOnly: true,
         position: 'sidebar',
         description: 'Which conference this abstract is being submitted to.',
       },

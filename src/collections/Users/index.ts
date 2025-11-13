@@ -1,13 +1,10 @@
-import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import type { CollectionConfig } from 'payload'
-import { authenticated } from '../../access/authenticated'
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { preventDeleteAdminOrSelf } from './hooks/preventDeleteAdminOrSelf'
 import { preventCreateAdmin } from './hooks/preventCreateAdmin'
-import { adminOnly } from '@/access/adminOnly'
-import { adminOrOwner } from '@/access/adminOrOwner'
-import { anyone } from '@/access/anyone'
-// import { notAdminView } from '@/access/collectionView'
+import { adminOnly, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import { adminView } from '@/access/collectionView'
+import { adminOnlyFieldAccess } from '@/access/fieldAccess'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -21,7 +18,7 @@ export const Users: CollectionConfig = {
   admin: {
     defaultColumns: ['name', 'email', 'title', 'roles', 'createdAt'],
     useAsTitle: 'name',
-    // hidden: notAdminView,
+    hidden: !adminView,
   },
   // 🔒 AUTH CONFIGURATION: Enabled local auth AND email verification
   auth: {
@@ -115,17 +112,17 @@ export const Users: CollectionConfig = {
     },
     // Roles Field (Secure)
     {
-      name: 'roles',
+      name: 'role',
       type: 'select',
-      label: 'User Roles',
+      label: 'User Role',
       access: {
         // Only admins can create/read/update the roles field itself
         create: adminOnlyFieldAccess,
         read: adminOnlyFieldAccess,
         update: adminOnlyFieldAccess,
       },
-      defaultValue: ['user'],
-      hasMany: true,
+      defaultValue: 'user',
+      hasMany: false,
       hooks: {
         beforeChange: [ensureFirstUserIsAdmin, preventCreateAdmin],
       },

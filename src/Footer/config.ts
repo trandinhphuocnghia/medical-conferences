@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 import { link } from '@/fields/link'
 import { revalidateFooter } from './hooks/revalidateFooter'
-import { adminOnly } from '@/access/adminOnly'
+import { adminOnly } from '@/access/collectionAccess'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',

@@ -1,13 +1,15 @@
 import { ClientUser } from 'payload'
 
-export const notAdminView = ({ user }: { user: ClientUser }) => {
-  return !user?.roles.includes('admin')
+// using to show/hide collection in menu
+
+export const adminView = ({ user }: { user: ClientUser }) => {
+  return user?.role === 'admin'
 }
 
-export const notModifierView = ({ user }: { user: ClientUser }) => {
-  return !user?.roles.includes('modifier')
+export const modifierView = ({ user }: { user: ClientUser }) => {
+  return user?.role === 'modifier'
 }
 
-export const notAdminOrModifierView = ({ user }: { user: ClientUser }) => {
-  return !user?.roles.includes('admin') && !user?.roles.includes('modifier')
+export const userView = ({ user }: { user: ClientUser }) => {
+  return user?.role === 'user'
 }

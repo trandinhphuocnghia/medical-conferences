@@ -1,12 +1,14 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '@/access/authenticated'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
-import { adminOnly } from '@/access/adminOnly'
-import { adminOrOwner } from '@/access/adminOrOwner'
-import { adminOrModifier } from '@/access/adminOrModifier'
-import { notAdminOrModifierView } from '@/access/collectionView'
-import { anyone } from '@/access/anyone'
+import { userView } from '@/access/collectionView'
+import {
+  adminOnly,
+  adminOrModifier,
+  adminOrOwner,
+  anyone,
+  authenticated,
+} from '@/access/collectionAccess'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -23,7 +25,7 @@ export const Categories: CollectionConfig = {
   admin: {
     defaultColumns: ['name', 'is_active', 'updatedAt'],
     useAsTitle: 'name',
-    hidden: notAdminOrModifierView,
+    hidden: userView,
   },
   fields: [
     // 1. NAME FIELD (Configured for Global Uniqueness and Indexing)

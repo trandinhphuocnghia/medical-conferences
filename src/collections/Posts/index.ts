@@ -1,14 +1,10 @@
 import type { CollectionConfig } from 'payload'
 
-import { authenticated } from '../../access/authenticated'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
 import { slugField } from '@/fields/slug'
-import { adminOrOwner } from '@/access/adminOrOwner'
-import { adminOrModifier } from '@/access/adminOrModifier'
-import { notAdminOrModifierView } from '@/access/collectionView'
-import { anyone } from '@/access/anyone'
+import { userView } from '@/access/collectionView'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -16,6 +12,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -48,7 +45,7 @@ export const Posts: CollectionConfig<'posts'> = {
   admin: {
     defaultColumns: ['title', 'slug', 'is_active', 'startDate', 'endDate', 'updatedAt'],
     useAsTitle: 'title',
-    hidden: notAdminOrModifierView,
+    hidden: userView,
   },
 
   fields: [

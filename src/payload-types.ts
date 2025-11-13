@@ -298,7 +298,7 @@ export interface User {
   specialization?: string | null;
   phone_number?: string | null;
   address?: string | null;
-  roles?: ('admin' | 'modifier' | 'user')[] | null;
+  role?: ('admin' | 'modifier' | 'user') | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -1358,7 +1358,7 @@ export interface UsersSelect<T extends boolean = true> {
   specialization?: T;
   phone_number?: T;
   address?: T;
-  roles?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

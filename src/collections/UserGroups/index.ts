@@ -1,9 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { adminOrOwner } from '@/access/adminOrOwner'
-import { adminOrModifier } from '@/access/adminOrModifier'
-import { authenticated } from '@/access/authenticated'
-import { notAdminOrModifierView } from '@/access/collectionView'
-import { anyone } from '@/access/anyone'
+import { adminOrOwner, adminOrModifier, anyone, authenticated } from '@/access/collectionAccess'
+import { userView } from '@/access/collectionView'
 
 export const UserGroups: CollectionConfig = {
   slug: 'user-groups',
@@ -19,7 +16,7 @@ export const UserGroups: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'users', 'updatedAt'],
-    hidden: notAdminOrModifierView,
+    hidden: userView,
   },
 
   fields: [
