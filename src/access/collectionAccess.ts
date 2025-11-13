@@ -6,6 +6,8 @@ type isAuthenticated = (args: AccessArgs<User>) => boolean
 
 export const anyone: Access = () => true
 
+export const noone: Access = () => false
+
 export const authenticated: isAuthenticated = ({ req: { user } }) => {
   return Boolean(user)
 }

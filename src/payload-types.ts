@@ -282,7 +282,8 @@ export interface UserGroup {
   name: string;
   description?: string | null;
   users?: (number | User)[] | null;
-  createdBy?: (number | null) | User;
+  created_by?: (number | null) | User;
+  updated_by?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -1371,7 +1372,8 @@ export interface UserGroupsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   users?: T;
-  createdBy?: T;
+  created_by?: T;
+  updated_by?: T;
   updatedAt?: T;
   createdAt?: T;
 }

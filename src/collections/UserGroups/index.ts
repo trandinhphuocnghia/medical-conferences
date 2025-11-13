@@ -35,25 +35,33 @@ export const UserGroups: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       hasMany: true,
-      // filterOptions: () => ({
-      //   roles: {
-      //     in: ['admin', 'editor', 'user'],
-      //   },
-      // }),
     },
     {
-      name: 'createdBy',
+      name: 'created_by',
       type: 'relationship',
       relationTo: 'users',
-      defaultValue: ({ user }) => user?.id,
-      admin: {
-        position: 'sidebar',
-        readOnly: true,
-        allowEdit: false,
+      label: 'Created By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
       },
-      access: {
-        create: () => false, // ✅ cannot be set manually via API
-        update: () => false,
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'updated_by',
+      type: 'relationship',
+      relationTo: 'users',
+      label: 'Last Modified By',
+      defaultValue: ({ req }) => {
+        return req.user?.id
+      },
+      admin: {
+        readOnly: true,
+        hidden: true,
+        position: 'sidebar',
       },
     },
   ],

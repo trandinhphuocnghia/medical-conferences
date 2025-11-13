@@ -1,6 +1,6 @@
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
-import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
+// import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { Plugin } from 'payload'
@@ -14,7 +14,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { editorConfig } from '@/utilities/editorConfig'
-import { userView } from '@/access/collectionView'
+import { notAdminView } from '@/access/collectionView'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | MedConf` : 'MedConf'
@@ -48,7 +48,7 @@ export const plugins: Plugin[] = [
         afterChange: [revalidateRedirects],
       },
       admin: {
-        hidden: userView,
+        hidden: notAdminView,
       },
     },
   }),
@@ -79,12 +79,12 @@ export const plugins: Plugin[] = [
         })
       },
       admin: {
-        hidden: userView,
+        hidden: notAdminView,
       },
     },
     formSubmissionOverrides: {
       admin: {
-        hidden: userView,
+        hidden: notAdminView,
       },
     },
   }),

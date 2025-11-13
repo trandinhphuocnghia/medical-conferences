@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import configPromise from '@payload-config'
 import Link from 'next/link'
 import { getPayload } from 'payload'
-import ConferenceCard from './components/conferrence-card'
+import ConferenceCard from './components/conference-card'
 
 export default async function Home() {
   const payload = await getPayload({ config: configPromise })

@@ -1,4 +1,4 @@
-import { adminOrModifier, authenticated, userOnly } from '@/access/collectionAccess'
+import { adminOrModifier, authenticated, noone, userOnly } from '@/access/collectionAccess'
 import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 
@@ -11,7 +11,13 @@ export const Abstracts: CollectionConfig = {
 
   access: {
     admin: authenticated,
-    create: userOnly,
+    create: ({ req: { user, pathname } }) => {
+      if (!user) return false
+
+      if (pathname.includes('/admin')) return false
+
+      return user.role === 'user'
+    },
     delete: adminOrModifier,
     read: authenticated,
     update: authenticated,
@@ -44,14 +50,6 @@ export const Abstracts: CollectionConfig = {
       name: 'topic',
       type: 'relationship',
       relationTo: 'topics',
-      filterOptions: ({ siblingData }: any) => {
-        if (!siblingData?.conference) return false
-        return {
-          conference: {
-            equals: siblingData?.conference,
-          },
-        }
-      },
       required: true,
       hasMany: false,
       label: 'Specific Topic Area',
