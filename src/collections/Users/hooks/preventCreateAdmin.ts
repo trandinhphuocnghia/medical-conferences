@@ -7,12 +7,12 @@ export const preventCreateAdmin: FieldHook<User> = async ({ operation, req, valu
     const admins = await req.payload.find({
       collection: 'users',
       where: {
-        roles: { equals: 'admin' },
+        role: { equals: 'admin' },
       },
       limit: 1,
     })
 
-    if (admins.totalDocs > 0 && value.roles?.includes('admin')) {
+    if (admins.totalDocs > 0 && value.role === 'admin') {
       throw new Error('Can not create more admin!')
     }
   }

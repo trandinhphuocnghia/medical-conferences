@@ -1,11 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import { userView } from '@/access/collectionView'
 import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
 import { editorConfig } from '@/utilities/editorConfig'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
-import { userView } from '@/access/collectionView'
 
 export const Topics: CollectionConfig = {
   slug: 'topics',

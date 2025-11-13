@@ -1,10 +1,10 @@
-import type { CollectionConfig } from 'payload'
-import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
-import { preventDeleteAdminOrSelf } from './hooks/preventDeleteAdminOrSelf'
-import { preventCreateAdmin } from './hooks/preventCreateAdmin'
 import { adminOnly, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { notAdminView } from '@/access/collectionView'
-import { adminExceptSelfFieldAccess, adminOnlyFieldAccess } from '@/access/fieldAccess'
+import { adminOnlyFieldAccess } from '@/access/fieldAccess'
+import type { CollectionConfig } from 'payload'
+import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
+import { preventCreateAdmin } from './hooks/preventCreateAdmin'
+import { preventDeleteAdminOrSelf } from './hooks/preventDeleteAdminOrSelf'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -115,11 +115,12 @@ export const Users: CollectionConfig = {
       name: 'role',
       type: 'select',
       label: 'User Role',
+
       access: {
         // Only admins can create/read/update the roles field itself
         create: adminOnlyFieldAccess,
         read: adminOnlyFieldAccess,
-        update: adminExceptSelfFieldAccess,
+        update: adminOnlyFieldAccess,
       },
       defaultValue: 'user',
       hasMany: false,
