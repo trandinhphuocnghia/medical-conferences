@@ -1,6 +1,6 @@
 import { adminOnly, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { notAdminView } from '@/access/collectionView'
-import { adminOnlyFieldAccess } from '@/access/fieldAccess'
+import { adminExceptSelfFieldAccess, adminOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { preventCreateAdmin } from './hooks/preventCreateAdmin'
@@ -120,7 +120,7 @@ export const Users: CollectionConfig = {
         // Only admins can create/read/update the roles field itself
         create: adminOnlyFieldAccess,
         read: adminOnlyFieldAccess,
-        update: adminOnlyFieldAccess,
+        update: adminExceptSelfFieldAccess,
       },
       defaultValue: 'user',
       hasMany: false,
