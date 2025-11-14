@@ -20,7 +20,7 @@ export const Categories: CollectionConfig = {
   },
   hooks: {},
   admin: {
-    defaultColumns: ['name', 'active', 'updatedAt'],
+    defaultColumns: ['name', 'active', 'createdBy', 'updatedAt'],
     useAsTitle: 'name',
     hidden: userView,
   },

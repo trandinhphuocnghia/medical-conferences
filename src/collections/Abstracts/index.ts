@@ -25,13 +25,7 @@ export const Abstracts: CollectionConfig = {
 
   admin: {
     useAsTitle: 'title',
-    defaultColumns: [
-      'title',
-      'conference',
-      'verification_status',
-      'public_status',
-      'updatedAt',
-    ],
+    defaultColumns: ['title', 'conference', 'submitter', 'status', 'updatedAt'],
   },
 
   timestamps: true,
@@ -115,7 +109,7 @@ export const Abstracts: CollectionConfig = {
     {
       name: 'status',
       type: 'select',
-      label: 'Verification Status (Internal)',
+      label: 'Verification Status',
       options: [
         { label: 'Pending', value: 'pending' },
         { label: 'Verified', value: 'verified' },

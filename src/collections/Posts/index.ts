@@ -53,6 +53,7 @@ export const Posts: CollectionConfig<'posts'> = {
       'active',
       'startDate',
       'endDate',
+      'createdBy',
       'updatedAt',
     ],
     useAsTitle: 'title',
