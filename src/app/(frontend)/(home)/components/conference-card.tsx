@@ -38,7 +38,7 @@ export default function ConferenceCard({ post }: ConferenceCardProps) {
       {/* Footer CTA */}
       <CardContent className="pb-4">
         <Link href={`/posts/${post.slug}`}>
-          <Button variant="ghost" className="px-0 justify-between text-primary hover:bg-primary/5">
+          <Button variant="link" className="px-0 justify-between text-primary hover:cursor-pointer">
             Read Article
             <ArrowRight size={16} />
           </Button>

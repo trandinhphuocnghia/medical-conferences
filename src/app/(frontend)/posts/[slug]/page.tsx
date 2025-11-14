@@ -1,22 +1,21 @@
 import type { Metadata } from 'next'
 
-import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
+// import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import RichText from '@/components/RichText' // Assuming this is your Rich Text renderer
 
 import type { Post } from '@/payload-types'
 
-import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import PostContent from './components/post-content'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
-  
+
   const posts = await payload.find({
     collection: 'posts',
     draft: false,
@@ -28,10 +27,9 @@ export async function generateStaticParams() {
     },
   })
 
-  
   const params = posts.docs.map((doc) => {
     const slug = String(doc.slug)
-    return { slug } 
+    return { slug }
   })
 
   return params
@@ -46,44 +44,29 @@ type Args = {
 export default async function Post({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
-  
+
   const url = '/posts/' + slug
   const post = await queryPostBySlug({ slug })
 
-  // If no post is found, PayloadRedirects will handle the 404
   if (!post) return <PayloadRedirects url={url} />
 
   return (
     <article className="pt-16 pb-16">
-      
       {/* Allows redirects for valid pages too (optional, depends on use case) */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      <PostHero post={post} />
-
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          
-          {/* ✅ RESTORED: Render the post content */}
-          <RichText className="max-w-[48rem] mx-auto" data={post?.topicList?.[0]?.content} enableGutter={false} /> 
-          
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-            />
-          )}
-        </div>
-      </div>
+      <PostContent post={post} />
     </article>
   )
 }
 
-export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+export async function generateMetadata({
+  params: paramsPromise,
+}: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
-  
+
   const post = await queryPostBySlug({ slug })
 
   return generateMeta({ doc: post })
@@ -105,6 +88,7 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
         equals: slug,
       },
     },
+    depth: 1,
   })
 
   return result.docs?.[0] || null

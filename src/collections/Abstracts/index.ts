@@ -1,4 +1,4 @@
-import { adminOrModifier, authenticated, noone, userOnly } from '@/access/collectionAccess'
+import { adminOrModifier, authenticated } from '@/access/collectionAccess'
 import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 
