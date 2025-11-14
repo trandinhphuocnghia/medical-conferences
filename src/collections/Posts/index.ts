@@ -50,7 +50,7 @@ export const Posts: CollectionConfig<'posts'> = {
     defaultColumns: [
       'title',
       'slug',
-      'is_active',
+      'active',
       'startDate',
       'endDate',
       'updatedAt',

@@ -24,7 +24,7 @@ export default async function Home() {
       startDate: true,
     },
     where: {
-      is_active: {
+      active: {
         equals: true,
       },
     },
@@ -44,9 +44,10 @@ export default async function Home() {
             {/* Explore the latest breakthroughs, clinical guidelines, and evidence-based practices in
             modern medicine. From novel therapeutics to emerging healthcare technology, stay at the
             forefront with insights from leading experts and peer-reviewed analysis. */}
-            Join a community of leading professionals, researchers, and innovators. Discover
-            cutting-edge research, share best practices, and help shape the future of patient care.
-            Browse our articles and find your next essential event.
+            Join a community of leading professionals, researchers, and
+            innovators. Discover cutting-edge research, share best practices,
+            and help shape the future of patient care. Browse our articles and
+            find your next essential event.
           </p>
           <Button variant="link" className="w-full sm:w-auto" asChild>
             <Link href="/posts">
