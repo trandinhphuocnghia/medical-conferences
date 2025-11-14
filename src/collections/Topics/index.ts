@@ -1,6 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import {
+  adminOrModifier,
+  adminOrOwner,
+  anyone,
+  authenticated,
+} from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
 import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
@@ -49,7 +54,7 @@ export const Topics: CollectionConfig = {
       defaultValue: RICH_TEXT_DEFAULT_VALUES,
     },
     {
-      name: 'is_active',
+      name: 'active',
       type: 'checkbox',
       label: 'Active',
       defaultValue: true,
@@ -69,7 +74,7 @@ export const Topics: CollectionConfig = {
       },
     },
     {
-      name: 'created_by',
+      name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Created By',
@@ -83,7 +88,7 @@ export const Topics: CollectionConfig = {
       },
     },
     {
-      name: 'updated_by',
+      name: 'updatedBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Last Modified By',

@@ -11,7 +11,7 @@ export default function PostContent({ post }: { post: Post }) {
       <div className="flex gap-8 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
         <TopicListMenu topics={post?.topics as Topic[]} />
         <article className="flex-1 max-w-4xl">
-          <AuthorTop author={post?.created_by} createdAt={post?.createdAt} />
+          <AuthorTop author={post?.createdBy} createdAt={post?.createdAt} />
           {(post?.topics as Topic[])?.map((topic) => (
             <TopicSection key={topic.id} topic={topic} />
           ))}

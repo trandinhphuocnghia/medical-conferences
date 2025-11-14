@@ -199,7 +199,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -211,8 +211,8 @@ export interface Page {
   publishedAt?: string | null;
   slug: string;
   slugLock?: boolean | null;
-  created_by?: (number | null) | User;
-  updated_by?: (number | null) | User;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -228,28 +228,28 @@ export interface Post {
   /**
    * Set to True when the conference program and registration are public.
    */
-  is_active: boolean;
+  active: boolean;
   /**
    * Primary host of the conference (e.g., Korean Gastric Cancer Association).
    */
-  host_organization: number | UserGroup;
-  venue_name: string;
-  venue_city: string;
+  host: number | UserGroup;
+  venueName: string;
+  venueCity: string;
   /**
    * Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).
    */
   topics?: (number | Topic)[] | null;
-  abstract_submission_deadline: string;
-  early_registration_deadline: string;
-  notification_of_acceptance_date: string;
+  abstractSubmissionDeadline: string;
+  earlyRegistrationDeadline: string;
+  notificationOfAcceptanceDate: string;
   /**
    * List of official contact emails (e.g., secretariat@kingca.org)
    */
-  contact_emails: {
+  contactEmails: {
     email: string;
     id?: string | null;
   }[];
-  contact_phones: {
+  contactPhones: {
     phone: string;
     id?: string | null;
   }[];
@@ -262,12 +262,12 @@ export interface Post {
     image?: (number | null) | Media;
     description?: string | null;
   };
-  start_date: string;
-  end_date: string;
+  startDate: string;
+  endDate: string;
   slug: string;
   slugLock?: boolean | null;
-  created_by?: (number | null) | User;
-  updated_by?: (number | null) | User;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -282,8 +282,8 @@ export interface UserGroup {
   name: string;
   description?: string | null;
   users?: (number | User)[] | null;
-  created_by?: (number | null) | User;
-  updated_by?: (number | null) | User;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -293,15 +293,15 @@ export interface UserGroup {
  */
 export interface User {
   id: number;
-  first_name: string;
-  last_name: string;
-  name?: string | null;
-  is_active?: boolean | null;
+  firstName: string;
+  lastName: string;
+  fullname?: string | null;
+  active?: boolean | null;
   title?: ('Dr.' | 'Prof.' | 'Mr.' | 'Ms.' | 'Mx.') | null;
   organization?: string | null;
-  medical_license_number?: string | null;
+  medicalLicenseNumber?: string | null;
   specialization?: string | null;
-  phone_number?: string | null;
+  phoneNumber?: string | null;
   address?: string | null;
   role?: ('admin' | 'modifier' | 'user') | null;
   updatedAt: string;
@@ -348,10 +348,10 @@ export interface Topic {
     };
     [k: string]: unknown;
   } | null;
-  is_active?: boolean | null;
+  active?: boolean | null;
   category: number | Category;
-  created_by?: (number | null) | User;
-  updated_by?: (number | null) | User;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -369,9 +369,9 @@ export interface Category {
   /**
    * Unchecking this soft-deletes the category (hides it from the frontend).
    */
-  is_active?: boolean | null;
-  created_by?: (number | null) | User;
-  updated_by?: (number | null) | User;
+  active?: boolean | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -575,40 +575,6 @@ export interface MediaBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
- */
-export interface ArchiveBlock {
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (number | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: number | Post;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'archive';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -875,7 +841,7 @@ export interface Abstract {
   /**
    * Set by Editors/Admins after peer review.
    */
-  verification_status: 'pending' | 'verified' | 'rejected';
+  status: 'pending' | 'verified' | 'rejected';
   updatedAt: string;
   createdAt: string;
 }
@@ -1153,7 +1119,6 @@ export interface PagesSelect<T extends boolean = true> {
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
-        archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
       };
   meta?:
@@ -1166,8 +1131,8 @@ export interface PagesSelect<T extends boolean = true> {
   publishedAt?: T;
   slug?: T;
   slugLock?: T;
-  created_by?: T;
-  updated_by?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1233,20 +1198,6 @@ export interface MediaBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock_select".
- */
-export interface ArchiveBlockSelect<T extends boolean = true> {
-  introContent?: T;
-  populateBy?: T;
-  relationTo?: T;
-  categories?: T;
-  limit?: T;
-  selectedDocs?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FormBlock_select".
  */
 export interface FormBlockSelect<T extends boolean = true> {
@@ -1263,21 +1214,21 @@ export interface FormBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   theme?: T;
-  is_active?: T;
-  host_organization?: T;
-  venue_name?: T;
-  venue_city?: T;
+  active?: T;
+  host?: T;
+  venueName?: T;
+  venueCity?: T;
   topics?: T;
-  abstract_submission_deadline?: T;
-  early_registration_deadline?: T;
-  notification_of_acceptance_date?: T;
-  contact_emails?:
+  abstractSubmissionDeadline?: T;
+  earlyRegistrationDeadline?: T;
+  notificationOfAcceptanceDate?: T;
+  contactEmails?:
     | T
     | {
         email?: T;
         id?: T;
       };
-  contact_phones?:
+  contactPhones?:
     | T
     | {
         phone?: T;
@@ -1291,12 +1242,12 @@ export interface PostsSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
-  start_date?: T;
-  end_date?: T;
+  startDate?: T;
+  endDate?: T;
   slug?: T;
   slugLock?: T;
-  created_by?: T;
-  updated_by?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -1310,10 +1261,10 @@ export interface TopicsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   content?: T;
-  is_active?: T;
+  active?: T;
   category?: T;
-  created_by?: T;
-  updated_by?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1324,9 +1275,9 @@ export interface TopicsSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  is_active?: T;
-  created_by?: T;
-  updated_by?: T;
+  active?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -1336,15 +1287,15 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  first_name?: T;
-  last_name?: T;
-  name?: T;
-  is_active?: T;
+  firstName?: T;
+  lastName?: T;
+  fullname?: T;
+  active?: T;
   title?: T;
   organization?: T;
-  medical_license_number?: T;
+  medicalLicenseNumber?: T;
   specialization?: T;
-  phone_number?: T;
+  phoneNumber?: T;
   address?: T;
   role?: T;
   updatedAt?: T;
@@ -1372,8 +1323,8 @@ export interface UserGroupsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
   users?: T;
-  created_by?: T;
-  updated_by?: T;
+  createdBy?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1502,7 +1453,7 @@ export interface AbstractsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   keywords?: T;
-  verification_status?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

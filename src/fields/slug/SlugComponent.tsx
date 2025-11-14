@@ -2,7 +2,13 @@
 import React, { useCallback } from 'react'
 import { TextFieldClientProps } from 'payload'
 
-import { useField, Button, TextInput, FieldLabel, useFormFields, useForm } from '@payloadcms/ui'
+import {
+  useField,
+  Button,
+  TextInput,
+  FieldLabel,
+  useForm,
+} from '@payloadcms/ui'
 
 import { formatSlug } from './formatSlug'
 import './index.scss'
@@ -46,12 +52,25 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
   return (
     <div className="field-type slug-field-component">
       <div className="label-wrapper">
-        <FieldLabel htmlFor={`field-${path}`} label={label} required={required} />
-        <Button className="lock-button" buttonStyle="none" onClick={handleGenerate}>
+        <FieldLabel
+          htmlFor={`field-${path}`}
+          label={label}
+          required={required}
+        />
+        <Button
+          className="lock-button"
+          buttonStyle="none"
+          onClick={handleGenerate}
+        >
           Generate
         </Button>
       </div>
-      <TextInput value={value} required={required} onChange={setValue} path={path || field.name} />
+      <TextInput
+        value={value}
+        required={required}
+        onChange={setValue}
+        path={path || field.name}
+      />
     </div>
   )
 }

@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 
-import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
@@ -35,7 +34,7 @@ export const Pages: CollectionConfig<'pages'> = {
     slug: true,
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'updated_at'],
     hidden: notAdminView,
     livePreview: {
       url: ({ data, req }) => {
@@ -74,7 +73,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [CallToAction, Content, MediaBlock, FormBlock],
               required: true,
               admin: {
                 initCollapsed: true,
@@ -98,13 +97,9 @@ export const Pages: CollectionConfig<'pages'> = {
             MetaImageField({
               relationTo: 'media',
             }),
-
             MetaDescriptionField({}),
             PreviewField({
-              // if the `generateUrl` function is configured
               hasGenerateFn: true,
-
-              // field paths to match the target field for data
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -121,7 +116,7 @@ export const Pages: CollectionConfig<'pages'> = {
     },
     ...slugField(),
     {
-      name: 'created_by',
+      name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Created By',
@@ -135,7 +130,7 @@ export const Pages: CollectionConfig<'pages'> = {
       },
     },
     {
-      name: 'updated_by',
+      name: 'updatedBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Last Modified By',

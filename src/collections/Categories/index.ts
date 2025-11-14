@@ -31,7 +31,8 @@ export const Categories: CollectionConfig = {
       required: true,
       label: 'Category Name',
       admin: {
-        description: 'E.g., "Surgical Oncology" or "Translational Research". Must be unique.',
+        description:
+          'E.g., "Surgical Oncology" or "Translational Research". Must be unique.',
       },
       unique: true,
       index: true,
@@ -44,18 +45,19 @@ export const Categories: CollectionConfig = {
     },
 
     {
-      name: 'is_active',
+      name: 'active',
       type: 'checkbox',
       label: 'Active',
       defaultValue: true,
       admin: {
         position: 'sidebar',
-        description: 'Unchecking this soft-deletes the category (hides it from the frontend).',
+        description:
+          'Unchecking this soft-deletes the category (hides it from the frontend).',
       },
     },
 
     {
-      name: 'created_by',
+      name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Created By',
@@ -69,7 +71,7 @@ export const Categories: CollectionConfig = {
       },
     },
     {
-      name: 'updated_by',
+      name: 'updatedBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Last Modified By',

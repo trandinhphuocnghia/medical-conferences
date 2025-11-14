@@ -1,5 +1,10 @@
 import type { CollectionConfig } from 'payload'
-import { adminOrOwner, adminOrModifier, anyone, authenticated } from '@/access/collectionAccess'
+import {
+  adminOrOwner,
+  adminOrModifier,
+  anyone,
+  authenticated,
+} from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
 
 export const UserGroups: CollectionConfig = {
@@ -37,7 +42,7 @@ export const UserGroups: CollectionConfig = {
       hasMany: true,
     },
     {
-      name: 'created_by',
+      name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Created By',
@@ -51,7 +56,7 @@ export const UserGroups: CollectionConfig = {
       },
     },
     {
-      name: 'updated_by',
+      name: 'updatedBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Last Modified By',

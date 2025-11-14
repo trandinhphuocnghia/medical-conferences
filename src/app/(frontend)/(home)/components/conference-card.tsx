@@ -1,7 +1,13 @@
-import { Badge } from '@/components/ui/badge'
+// import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Category, Post } from '@/payload-types'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Post } from '@/payload-types'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { ArrowRight, Calendar } from 'lucide-react'
 import Link from 'next/link'
@@ -28,17 +34,22 @@ export default function ConferenceCard({ post }: ConferenceCardProps) {
           </div> */}
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Calendar size={14} />
-            {formatDateTime(post.start_date || '')}
+            {formatDateTime(post.startDate || '')}
           </div>
         </div>
         <CardTitle className="text-xl">{post.title}</CardTitle>
-        <CardDescription className="!mt-4 line-clamp-3">{post.theme}</CardDescription>
+        <CardDescription className="!mt-4 line-clamp-3">
+          {post.theme}
+        </CardDescription>
       </CardHeader>
 
       {/* Footer CTA */}
       <CardContent className="pb-4">
         <Link href={`/posts/${post.slug}`}>
-          <Button variant="link" className="px-0 justify-between text-primary hover:cursor-pointer">
+          <Button
+            variant="link"
+            className="px-0 justify-between text-primary hover:cursor-pointer"
+          >
             Read Article
             <ArrowRight size={16} />
           </Button>

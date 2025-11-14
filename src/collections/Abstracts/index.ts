@@ -25,7 +25,13 @@ export const Abstracts: CollectionConfig = {
 
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'conference', 'verification_status', 'public_status', 'updatedAt'],
+    defaultColumns: [
+      'title',
+      'conference',
+      'verification_status',
+      'public_status',
+      'updatedAt',
+    ],
   },
 
   timestamps: true,
@@ -74,7 +80,8 @@ export const Abstracts: CollectionConfig = {
       admin: {
         readOnly: true,
         position: 'sidebar',
-        description: 'Automatically populated with the logged-in user on submission.',
+        description:
+          'Automatically populated with the logged-in user on submission.',
       },
     },
 
@@ -106,11 +113,11 @@ export const Abstracts: CollectionConfig = {
     },
 
     {
-      name: 'verification_status',
+      name: 'status',
       type: 'select',
       label: 'Verification Status (Internal)',
       options: [
-        { label: 'Pending Review', value: 'pending' },
+        { label: 'Pending', value: 'pending' },
         { label: 'Verified', value: 'verified' },
         { label: 'Rejected', value: 'rejected' },
       ],

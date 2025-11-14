@@ -1,6 +1,14 @@
-import { adminOnly, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import {
+  adminOnly,
+  adminOrOwner,
+  anyone,
+  authenticated,
+} from '@/access/collectionAccess'
 import { notAdminView } from '@/access/collectionView'
-import { adminExceptSelfFieldAccess, adminOnlyFieldAccess } from '@/access/fieldAccess'
+import {
+  adminExceptSelfFieldAccess,
+  adminOnlyFieldAccess,
+} from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { preventCreateAdmin } from './hooks/preventCreateAdmin'
@@ -17,7 +25,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     defaultColumns: ['name', 'email', 'title', 'role', 'createdAt'],
-    useAsTitle: 'name',
+    useAsTitle: 'fullname',
     hidden: notAdminView,
   },
   // 🔒 AUTH CONFIGURATION: Enabled local auth AND email verification
@@ -34,7 +42,7 @@ export const Users: CollectionConfig = {
   // 📝 FIELDS: Mapping the fields from your User interface
   fields: [
     {
-      name: 'first_name',
+      name: 'firstName',
       type: 'text',
       required: true,
       label: 'First Name',
@@ -43,7 +51,7 @@ export const Users: CollectionConfig = {
       },
     },
     {
-      name: 'last_name',
+      name: 'lastName',
       type: 'text',
       required: true,
       label: 'Last Name',
@@ -52,7 +60,7 @@ export const Users: CollectionConfig = {
       },
     },
     {
-      name: 'name',
+      name: 'fullname',
       type: 'text',
       label: 'Full Name',
       admin: {
@@ -60,12 +68,14 @@ export const Users: CollectionConfig = {
         hidden: true,
       },
       hooks: {
-        beforeChange: [({ data }) => `${data?.first_name || ''} ${data?.last_name || ''}`],
+        beforeChange: [
+          ({ data }) => `${data?.firstName || ''} ${data?.lastName || ''}`,
+        ],
       },
       index: true,
     },
     {
-      name: 'is_active',
+      name: 'active',
       type: 'checkbox',
       label: 'Active Account',
       defaultValue: true,
@@ -90,7 +100,7 @@ export const Users: CollectionConfig = {
       label: 'Organization / Institution',
     },
     {
-      name: 'medical_license_number',
+      name: 'medicalLicenseNumber',
       type: 'text',
       label: 'Medical License Number',
     },
@@ -101,7 +111,7 @@ export const Users: CollectionConfig = {
     },
     // Contact and Address
     {
-      name: 'phone_number',
+      name: 'phoneNumber',
       type: 'text',
       label: 'Phone Number',
     },

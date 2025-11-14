@@ -12,7 +12,12 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import {
+  adminOrModifier,
+  adminOrOwner,
+  anyone,
+  authenticated,
+} from '@/access/collectionAccess'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -38,11 +43,18 @@ export const Posts: CollectionConfig<'posts'> = {
     //   description: true,
     // },
     // likes: true,
-    host_organization: true,
+    host: true,
   },
 
   admin: {
-    defaultColumns: ['title', 'slug', 'is_active', 'startDate', 'endDate', 'updatedAt'],
+    defaultColumns: [
+      'title',
+      'slug',
+      'is_active',
+      'startDate',
+      'endDate',
+      'updatedAt',
+    ],
     useAsTitle: 'title',
     hidden: userView,
   },
@@ -61,19 +73,20 @@ export const Posts: CollectionConfig<'posts'> = {
     },
 
     {
-      name: 'is_active',
+      name: 'active',
       type: 'checkbox',
       label: 'Active',
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'Set to True when the conference program and registration are public.',
+        description:
+          'Set to True when the conference program and registration are public.',
       },
       required: true,
     },
 
     {
-      name: 'host_organization',
+      name: 'host',
       type: 'relationship',
       label: 'Host Organization (User Group/Admin)',
       relationTo: 'user-groups',
@@ -81,7 +94,8 @@ export const Posts: CollectionConfig<'posts'> = {
       required: true,
       admin: {
         position: 'sidebar',
-        description: 'Primary host of the conference (e.g., Korean Gastric Cancer Association).',
+        description:
+          'Primary host of the conference (e.g., Korean Gastric Cancer Association).',
       },
     },
 
@@ -92,13 +106,13 @@ export const Posts: CollectionConfig<'posts'> = {
           label: 'Timing & Content',
           fields: [
             {
-              name: 'venue_name',
+              name: 'venueName',
               type: 'text',
               label: 'Venue Name (e.g., Lotte Hotel Seoul)',
               required: true,
             },
             {
-              name: 'venue_city',
+              name: 'venueCity',
               type: 'text',
               label: 'Venue City',
               required: true,
@@ -121,7 +135,7 @@ export const Posts: CollectionConfig<'posts'> = {
           label: 'Deadlines',
           fields: [
             {
-              name: 'abstract_submission_deadline',
+              name: 'abstractSubmissionDeadline',
               type: 'date',
               label: 'Abstract Submission Deadline',
               required: true,
@@ -130,7 +144,7 @@ export const Posts: CollectionConfig<'posts'> = {
               },
             },
             {
-              name: 'early_registration_deadline',
+              name: 'earlyRegistrationDeadline',
               type: 'date',
               label: 'Early Registration Deadline',
               required: true,
@@ -139,7 +153,7 @@ export const Posts: CollectionConfig<'posts'> = {
               },
             },
             {
-              name: 'notification_of_acceptance_date',
+              name: 'notificationOfAcceptanceDate',
               type: 'date',
               label: 'Notification of Acceptance Date',
               required: true,
@@ -153,18 +167,19 @@ export const Posts: CollectionConfig<'posts'> = {
           label: 'Contact Info',
           fields: [
             {
-              name: 'contact_emails',
+              name: 'contactEmails',
               label: 'Secretariat Email Addresses',
               type: 'array',
               required: true,
               minRows: 1,
               fields: [{ name: 'email', type: 'email', required: true }],
               admin: {
-                description: 'List of official contact emails (e.g., secretariat@kingca.org)',
+                description:
+                  'List of official contact emails (e.g., secretariat@kingca.org)',
               },
             },
             {
-              name: 'contact_phones',
+              name: 'contactPhones',
               label: 'Secretariat Phone Numbers',
               type: 'array',
               required: true,
@@ -211,7 +226,7 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     {
-      name: 'start_date', // Mapped from startDate
+      name: 'startDate', // Mapped from startDate
       type: 'date',
       label: 'Start Date & Time',
       required: true,
@@ -221,7 +236,7 @@ export const Posts: CollectionConfig<'posts'> = {
       },
     },
     {
-      name: 'end_date', // Mapped from endDate
+      name: 'endDate', // Mapped from endDate
       type: 'date',
       label: 'End Date & Time',
       required: true,
@@ -232,7 +247,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
     ...slugField(),
     {
-      name: 'created_by',
+      name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Created By',
@@ -246,7 +261,7 @@ export const Posts: CollectionConfig<'posts'> = {
       },
     },
     {
-      name: 'updated_by',
+      name: 'updatedBy',
       type: 'relationship',
       relationTo: 'users',
       label: 'Last Modified By',
