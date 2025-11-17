@@ -77,6 +77,7 @@ export interface Config {
     likes: Like;
     comments: Comment;
     abstracts: Abstract;
+    files: File;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -97,6 +98,7 @@ export interface Config {
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
     abstracts: AbstractsSelect<false> | AbstractsSelect<true>;
+    files: FilesSelect<false> | FilesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -827,6 +829,7 @@ export interface Abstract {
    * Which conference this abstract is being submitted to.
    */
   conference: number | Post;
+  files: (number | File)[];
   /**
    * The specific subject area (e.g., AI in Endoscopy).
    */
@@ -844,6 +847,40 @@ export interface Abstract {
   status: 'pending' | 'verified' | 'rejected';
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "files".
+ */
+export interface File {
+  id: number;
+  alt?: string | null;
+  caption?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1026,6 +1063,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'abstracts';
         value: number | Abstract;
+      } | null)
+    | ({
+        relationTo: 'files';
+        value: number | File;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1448,6 +1489,7 @@ export interface CommentsSelect<T extends boolean = true> {
  */
 export interface AbstractsSelect<T extends boolean = true> {
   conference?: T;
+  files?: T;
   topic?: T;
   submitter?: T;
   title?: T;
@@ -1456,6 +1498,25 @@ export interface AbstractsSelect<T extends boolean = true> {
   status?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "files_select".
+ */
+export interface FilesSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

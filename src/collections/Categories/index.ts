@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 
-import { userView } from '@/access/collectionView'
 import {
   adminOnly,
   adminOrModifier,
@@ -8,6 +7,7 @@ import {
   anyone,
   authenticated,
 } from '@/access/collectionAccess'
+import { userView } from '@/access/collectionView'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -20,7 +20,7 @@ export const Categories: CollectionConfig = {
   },
   hooks: {},
   admin: {
-    defaultColumns: ['name', 'is_active', 'updatedAt'],
+    defaultColumns: ['name', 'isActive', 'updatedAt'],
     useAsTitle: 'name',
     hidden: userView,
   },

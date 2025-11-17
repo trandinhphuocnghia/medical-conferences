@@ -3,8 +3,14 @@ import type { CollectionConfig } from 'payload'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
-import { slugField } from '@/fields/slug'
+import {
+  adminOrModifier,
+  adminOrOwner,
+  anyone,
+  authenticated,
+} from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
+import { slugField } from '@/fields/slug'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -12,12 +18,6 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import {
-  adminOrModifier,
-  adminOrOwner,
-  anyone,
-  authenticated,
-} from '@/access/collectionAccess'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -50,7 +50,7 @@ export const Posts: CollectionConfig<'posts'> = {
     defaultColumns: [
       'title',
       'slug',
-      'is_active',
+      'isActive',
       'startDate',
       'endDate',
       'updatedAt',
@@ -140,7 +140,9 @@ export const Posts: CollectionConfig<'posts'> = {
               label: 'Abstract Submission Deadline',
               required: true,
               admin: {
-                date: { pickerAppearance: 'dayAndTime' },
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                },
               },
             },
             {

@@ -11,13 +11,14 @@ export const Abstracts: CollectionConfig = {
 
   access: {
     admin: authenticated,
-    create: ({ req: { user, pathname } }) => {
-      if (!user) return false
+    // create: ({ req: { user, pathname } }) => {
+    //   if (!user) return false
 
-      if (pathname.includes('/admin')) return false
+    //   if (pathname.includes('/admin')) return false
 
-      return user.role === 'user'
-    },
+    //   return user.role === 'user'
+    // },
+    create: authenticated,
     delete: adminOrModifier,
     read: authenticated,
     update: authenticated,
@@ -50,6 +51,18 @@ export const Abstracts: CollectionConfig = {
 
       admin: {
         description: 'Which conference this abstract is being submitted to.',
+      },
+    },
+    {
+      name: 'files',
+      type: 'relationship',
+      relationTo: 'files',
+      required: true,
+      hasMany: true,
+      label: 'Files',
+
+      admin: {
+        description: '',
       },
     },
     {

@@ -11,7 +11,7 @@ import ConferenceCard from './components/conference-card'
 export default async function Home() {
   const payload = await getPayload({ config: configPromise })
 
-  const posts = await payload.find({
+  const posts = await payload?.find({
     collection: 'posts',
     depth: 1,
     limit: 12,
@@ -23,11 +23,11 @@ export default async function Home() {
       meta: true,
       startDate: true,
     },
-    where: {
-      is_active: {
-        equals: true,
-      },
-    },
+    // where: {
+    //   isActive: {
+    //     equals: true,
+    //   },
+    // },
   })
 
   return (
@@ -44,9 +44,10 @@ export default async function Home() {
             {/* Explore the latest breakthroughs, clinical guidelines, and evidence-based practices in
             modern medicine. From novel therapeutics to emerging healthcare technology, stay at the
             forefront with insights from leading experts and peer-reviewed analysis. */}
-            Join a community of leading professionals, researchers, and innovators. Discover
-            cutting-edge research, share best practices, and help shape the future of patient care.
-            Browse our articles and find your next essential event.
+            Join a community of leading professionals, researchers, and
+            innovators. Discover cutting-edge research, share best practices,
+            and help shape the future of patient care. Browse our articles and
+            find your next essential event.
           </p>
           <Button variant="link" className="w-full sm:w-auto" asChild>
             <Link href="/posts">

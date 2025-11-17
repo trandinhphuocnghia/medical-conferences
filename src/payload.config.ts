@@ -10,6 +10,7 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
+import { Files } from './collections/Files'
 import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -79,6 +80,7 @@ export default buildConfig({
     Likes,
     Comments,
     Abstracts,
+    Files,
   ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),

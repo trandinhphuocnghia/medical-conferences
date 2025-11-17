@@ -3,20 +3,18 @@ import type { Metadata } from 'next'
 // import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
+import { getPayload } from 'payload'
+import { cache } from 'react'
 
-import type { Post } from '@/payload-types'
-
-import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { generateMeta } from '@/utilities/generateMeta'
 import PostContent from './components/post-content'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
 
-  const posts = await payload.find({
+  const posts = await payload?.find({
     collection: 'posts',
     draft: false,
     limit: 5,
