@@ -1,21 +1,13 @@
 import type { CollectionConfig } from 'payload'
 
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
-import { fileURLToPath } from 'url'
-
 import { adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
-import { editorConfig } from '@/utilities/editorConfig'
-
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
 
 export const Files: CollectionConfig = {
   slug: 'files',
   access: {
     admin: authenticated,
-    create: anyone, //TODO:
+    create: anyone,
     delete: adminOrOwner,
     read: anyone,
     update: adminOrOwner,
@@ -23,32 +15,23 @@ export const Files: CollectionConfig = {
   admin: {
     hidden: userView,
   },
-  fields: [
-    {
-      name: 'alt',
-      type: 'text',
-      //required: true,
-    },
-    {
-      name: 'caption',
-      type: 'richText',
-      editor: lexicalEditor(editorConfig),
-    },
-  ],
+  fields: [],
   upload: {
-    adapter: 'uploadthing',
+    disableLocalStorage: true,
+
     mimeTypes: ['image/*', 'application/pdf'],
     crop: true,
     displayPreview: true,
   },
-  hooks: {
-    // beforeOperation: [
-    //   ({ req, operation }) => {
-    //     if ((operation === 'create' || operation === 'update') && req.file) {
-    //       console.log({ file: req.file })
-    //       //req.file.name = 'test.jpg'
-    //     }
-    //   },
-    // ],
-  },
+  hooks: {},
 }
+
+/*
+{
+  onChange,
+  files = [],
+}: {
+  files: { url: string }[]
+  onChange: (files: { url: string }[]) => void
+}
+*/

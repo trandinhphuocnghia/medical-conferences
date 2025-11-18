@@ -10,12 +10,9 @@ export async function createAbstract(data: AbstractSchema) {
 
     const abstract = await payload.create({
       collection: 'abstracts',
-      data: { ...data, conference: 1, topic: Number(data?.topic) }, //TODO
-      req: {
-        headers: {
-          Authorization: 'dsdssdsd',
-        },
-      },
+      overrideAccess: false,
+      data: { ...data, conference: 1, topic: Number(data?.topic) },
+      draft: false,
     })
 
     return { success: true, abstract }

@@ -109,6 +109,7 @@ export const plugins: Plugin[] = [
   uploadthingStorage({
     collections: {
       media: true,
+      files: true,
     },
     options: {
       token: process.env.UPLOADTHING_TOKEN,
