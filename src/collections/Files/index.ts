@@ -27,11 +27,5 @@ export const Files: CollectionConfig = {
 }
 
 /*
-{
-  onChange,
-  files = [],
-}: {
-  files: { url: string }[]
-  onChange: (files: { url: string }[]) => void
-}
+
 */
