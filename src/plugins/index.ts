@@ -10,6 +10,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 // import { searchFields } from '@/search/fieldOverrides'
 // import { beforeSyncWithSearch } from '@/search/beforeSync'
 // import { r2Storage } from '@payloadcms/storage-r2'
+import { uploadthingStorage } from '@payloadcms/storage-uploadthing'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -37,7 +38,8 @@ export const plugins: Plugin[] = [
             return {
               ...field,
               admin: {
-                description: 'You will need to rebuild the website when changing this field.',
+                description:
+                  'You will need to rebuild the website when changing this field.',
               },
             }
           }
@@ -104,4 +106,13 @@ export const plugins: Plugin[] = [
   //   },
   //   bucket: cloudflare.env.R2,
   // }),
+  uploadthingStorage({
+    collections: {
+      media: true,
+    },
+    options: {
+      token: process.env.UPLOADTHING_TOKEN,
+      acl: 'public-read',
+    },
+  }),
 ]

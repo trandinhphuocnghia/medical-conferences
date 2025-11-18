@@ -18,6 +18,7 @@ import {
   anyone,
   authenticated,
 } from '@/access/collectionAccess'
+import { afterToday, beforeValidateDate } from './hooks/validation'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -227,22 +228,28 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     {
-      name: 'startDate', // Mapped from startDate
+      name: 'startDate',
       type: 'date',
       label: 'Start Date & Time',
       required: true,
       admin: {
-        date: { pickerAppearance: 'dayAndTime' },
+        date: {
+          pickerAppearance: 'dayAndTime',
+          minDate: afterToday,
+        },
         position: 'sidebar',
       },
     },
     {
-      name: 'endDate', // Mapped from endDate
+      name: 'endDate',
       type: 'date',
       label: 'End Date & Time',
       required: true,
       admin: {
-        date: { pickerAppearance: 'dayAndTime' },
+        date: {
+          pickerAppearance: 'dayAndTime',
+          minDate: afterToday,
+        },
         position: 'sidebar',
       },
     },
@@ -284,6 +291,7 @@ export const Posts: CollectionConfig<'posts'> = {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
+    beforeValidate: [beforeValidateDate],
   },
   versions: {
     drafts: {
