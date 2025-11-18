@@ -14,7 +14,7 @@ export type RelatedPostsProps = {
 }
 
 export const RelatedPosts: React.FC<RelatedPostsProps> = (props) => {
-  const { className, docs, introContent } = props
+  const { className, introContent } = props
 
   return (
     <div className={clsx('lg:container', className)}>

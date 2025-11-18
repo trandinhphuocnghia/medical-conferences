@@ -82,7 +82,7 @@ export default buildConfig({
   ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),
-    'http://localhost:3000',
+    process.env.NEXT_PUBLIC_SERVER_URL,
     'https://studio.apollographql.com', // ✅ allow Apollo Sandbox
   ],
   globals: [Header, Footer],
