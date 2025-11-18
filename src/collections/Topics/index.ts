@@ -25,7 +25,7 @@ export const Topics: CollectionConfig = {
     beforeChange: [setCurrentInteract],
   },
   admin: {
-    defaultColumns: ['name'],
+    defaultColumns: ['name', 'active', 'category', 'createdBy', 'updatedAt'],
     useAsTitle: 'name',
     hidden: userView,
   },

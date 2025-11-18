@@ -19,6 +19,8 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
+import { afterToday, beforeValidateDate } from './hooks/validation'
+
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   labels: {
@@ -50,9 +52,10 @@ export const Posts: CollectionConfig<'posts'> = {
     defaultColumns: [
       'title',
       'slug',
-      'isActive',
+      'active',
       'startDate',
       'endDate',
+      'createdBy',
       'updatedAt',
     ],
     useAsTitle: 'title',
@@ -228,23 +231,31 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     {
-      name: 'startDate', // Mapped from startDate
+      name: 'startDate',
       type: 'date',
       label: 'Start Date & Time',
       required: true,
       admin: {
-        date: { pickerAppearance: 'dayAndTime' },
+        date: {
+          pickerAppearance: 'dayAndTime',
+          minDate: afterToday,
+        },
         position: 'sidebar',
+        description: 'Start date and time of the conference.',
       },
     },
     {
-      name: 'endDate', // Mapped from endDate
+      name: 'endDate',
       type: 'date',
       label: 'End Date & Time',
       required: true,
       admin: {
-        date: { pickerAppearance: 'dayAndTime' },
+        date: {
+          pickerAppearance: 'dayAndTime',
+          minDate: afterToday,
+        },
         position: 'sidebar',
+        description: 'End date and time of the conference.',
       },
     },
     ...slugField(),
@@ -285,6 +296,7 @@ export const Posts: CollectionConfig<'posts'> = {
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
+    beforeValidate: [beforeValidateDate],
   },
   versions: {
     drafts: {

@@ -50,6 +50,9 @@ importers:
       '@payloadcms/storage-r2':
         specifier: 3.61.1
         version: 3.61.1(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.61.1(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
+      '@payloadcms/storage-uploadthing':
+        specifier: 3.61.1
+        version: 3.61.1(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.61.1(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.17)(typescript@5.7.3)
       '@payloadcms/ui':
         specifier: 3.61.1
         version: 3.61.1(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.61.1(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
@@ -548,6 +551,11 @@ packages:
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
+
+  '@effect/platform@0.69.8':
+    resolution: {integrity: sha512-zhBhg0c1MHMMo+grOc/6wC2/3UETLroruwrYNZ89uDtXl6EOcP5alFP+vW3NToKDA2o0hRh22KNqq4aixA7xXg==}
+    peerDependencies:
+      effect: ^3.10.3
 
   '@emnapi/core@1.7.0':
     resolution: {integrity: sha512-pJdKGq/1iquWYtv1RRSljZklxHCOCAJFJrImO5ZLKPJVJlVUcs8yFwNQlqS0Lo8xT1VAXXTCZocF9n26FWEKsw==}
@@ -1530,6 +1538,12 @@ packages:
 
   '@payloadcms/storage-r2@3.61.1':
     resolution: {integrity: sha512-/TwoRzONn1PJOzRKIxSqLVdhSZE5wdijiJsICqphpMt3IzDiUeBAslJgdIfncDoCR+jNUp1wx9oInUhgSTJFbg==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      payload: 3.61.1
+
+  '@payloadcms/storage-uploadthing@3.61.1':
+    resolution: {integrity: sha512-TP8ajU131Vv8zDgWuIlGLWWAAnCp0GoHTkCtSAETMuJ3C8qry6IqLUgF3l1BUXmixglEDfyY3d5e1ih4cW1vZw==}
     engines: {node: ^18.20.2 || >=20.9.0}
     peerDependencies:
       payload: 3.61.1
@@ -2638,6 +2652,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@uploadthing/mime-types@0.3.2':
+    resolution: {integrity: sha512-WP/K75S/649lM0GUcd9jq4RjeTIc/0bO2UmLx4+usTSNy/x0K8gV0JdLWeUUbmTQtJoHd4ZTSvAdG7ZQgcmXvA==}
+
+  '@uploadthing/shared@7.1.1':
+    resolution: {integrity: sha512-Nem3jZ6G9AJEBzzDVvwSKV/wLdpADz8LDg+woo9diJTHj1FOjWNzCwb8wMxpEFLM88TWv5Tq8Z1mQepNmC5WIQ==}
+
   '@vitejs/plugin-react@4.5.2':
     resolution: {integrity: sha512-QNVT3/Lxx99nMQWJWF7K4N6apUEuT0KlZA3mx/mVaoGj3smm/8rc8ezz15J1pcbcjDK0V15rpHetVfya08r76Q==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -3211,6 +3231,9 @@ packages:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
 
+  effect@3.10.3:
+    resolution: {integrity: sha512-+Z5bUhzTeqYlfoPsfXMZG1pYadqLBKARD3xwMIoEAESsOhKFOrUsHHNCy2ZZW3/6oa4wokgT01k1zavA4BAQ4w==}
+
   electron-to-chromium@1.5.250:
     resolution: {integrity: sha512-/5UMj9IiGDMOFBnN4i7/Ry5onJrAGSbOGo3s9FEKmwobGq6xw832ccET0CE3CkkMBZ8GJSlUIesZofpyurqDXw==}
 
@@ -3435,6 +3458,10 @@ packages:
   fast-base64-decode@1.0.0:
     resolution: {integrity: sha512-qwaScUgUGBYeDNRnbc/KyllVU88Jk1pRHPStuF/lO7B0/RTRLj7U0lkdTAutlBblY08rwZDff6tNU9cjv6j//Q==}
 
+  fast-check@3.23.2:
+    resolution: {integrity: sha512-h5+1OzzfCC3Ef7VbtKdcv7zsstUQwUDlYpUTvjeUsJAssPgLn7QzbboPtL5ro04Mq0rPOsMzl7q5hIbRs2wD1A==}
+    engines: {node: '>=8.0.0'}
+
   fast-copy@3.0.2:
     resolution: {integrity: sha512-dl0O9Vhju8IrcLndv2eU4ldt1ftXMqqfgN4H1cpmGV7P6jeB9FwpN9a2c8DPGE1Ys88rNUJVYDHq73CGAGOPfQ==}
 
@@ -3488,6 +3515,9 @@ packages:
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
+
+  find-my-way-ts@0.1.6:
+    resolution: {integrity: sha512-a85L9ZoXtNAey3Y6Z+eBWW658kO/MwR7zIafkIUPUMf3isZG0NCs2pjW2wtjxAKuJPxMAsHUIP4ZPGv0o5gyTA==}
 
   find-node-modules@2.1.3:
     resolution: {integrity: sha512-UC2I2+nx1ZuOBclWVNdcnbDR5dlrOdVb7xNjmT/lHE+LsgztWks3dG7boJ37yTS/venXw84B/mAW9uHVoC5QRg==}
@@ -4251,6 +4281,9 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
+  multipasta@0.2.7:
+    resolution: {integrity: sha512-KPA58d68KgGil15oDqXjkUBEBYc00XvbPj5/X+dyzeo/lWm9Nc25pQRlf1D+gv4OpK7NM0J1odrbu9JNNGvynA==}
+
   nanoid@3.3.11:
     resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -4618,6 +4651,9 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
+  pure-rand@6.1.0:
+    resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
+
   qs-esm@7.0.2:
     resolution: {integrity: sha512-D8NAthKSD7SGn748v+GLaaO6k08Mvpoqroa35PqIQC4gtUa8/Pb/k+r0m0NnGBVbHDP1gKZ2nVywqfMisRhV5A==}
     engines: {node: '>=18'}
@@ -4941,6 +4977,9 @@ packages:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
     engines: {node: '>= 10.x'}
 
+  sqids@0.3.0:
+    resolution: {integrity: sha512-lOQK1ucVg+W6n3FhRwwSeUijxe93b51Bfz5PMRMihVf1iVkl82ePQG7V5vwrhzB11v0NtsR25PSZRGiSomJaJw==}
+
   stable-hash@0.0.5:
     resolution: {integrity: sha512-+L3ccpzibovGXFK+Ap/f8LOS0ahMrHTf3xu7mMLSpEGU0EO9ucaysSylKo9eRDFNhWve/y275iPmIZ4z39a9iA==}
 
@@ -5253,6 +5292,27 @@ packages:
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
+
+  uploadthing@7.3.0:
+    resolution: {integrity: sha512-ALZCOI5m5XyDD9YHCewCrhLFnELeI8xRJfJC4PvGdh9u6PcAyv851UT92JC6BLtJdgB2Fi/o9gPOXMpZkD5pSw==}
+    engines: {node: '>=18.13.0'}
+    peerDependencies:
+      express: '*'
+      fastify: '*'
+      h3: '*'
+      next: '*'
+      tailwindcss: '*'
+    peerDependenciesMeta:
+      express:
+        optional: true
+      fastify:
+        optional: true
+      h3:
+        optional: true
+      next:
+        optional: true
+      tailwindcss:
+        optional: true
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -6279,6 +6339,12 @@ snapshots:
       tslib: 2.8.1
 
   '@drizzle-team/brocli@0.10.2': {}
+
+  '@effect/platform@0.69.8(effect@3.10.3)':
+    dependencies:
+      effect: 3.10.3
+      find-my-way-ts: 0.1.6
+      multipasta: 0.2.7
 
   '@emnapi/core@1.7.0':
     dependencies:
@@ -7307,6 +7373,24 @@ snapshots:
       - react
       - react-dom
       - supports-color
+      - typescript
+
+  '@payloadcms/storage-uploadthing@3.61.1(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.61.1(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.17)(typescript@5.7.3)':
+    dependencies:
+      '@payloadcms/plugin-cloud-storage': 3.61.1(@types/react@19.1.8)(monaco-editor@0.54.0)(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.61.1(graphql@16.12.0)(typescript@5.7.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
+      payload: 3.61.1(graphql@16.12.0)(typescript@5.7.3)
+      uploadthing: 7.3.0(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(tailwindcss@4.1.17)
+    transitivePeerDependencies:
+      - '@types/react'
+      - express
+      - fastify
+      - h3
+      - monaco-editor
+      - next
+      - react
+      - react-dom
+      - supports-color
+      - tailwindcss
       - typescript
 
   '@payloadcms/translations@3.61.1':
@@ -8459,6 +8543,14 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
+  '@uploadthing/mime-types@0.3.2': {}
+
+  '@uploadthing/shared@7.1.1':
+    dependencies:
+      '@uploadthing/mime-types': 0.3.2
+      effect: 3.10.3
+      sqids: 0.3.0
+
   '@vitejs/plugin-react@4.5.2(vite@7.2.2(@types/node@22.5.4)(jiti@2.6.1)(lightningcss@1.30.2)(sass@1.77.4)(tsx@4.20.6))':
     dependencies:
       '@babel/core': 7.28.5
@@ -8992,6 +9084,10 @@ snapshots:
       es-errors: 1.3.0
       gopd: 1.2.0
 
+  effect@3.10.3:
+    dependencies:
+      fast-check: 3.23.2
+
   electron-to-chromium@1.5.250: {}
 
   emoji-regex@8.0.0: {}
@@ -9400,6 +9496,10 @@ snapshots:
 
   fast-base64-decode@1.0.0: {}
 
+  fast-check@3.23.2:
+    dependencies:
+      pure-rand: 6.1.0
+
   fast-copy@3.0.2: {}
 
   fast-deep-equal@3.1.3: {}
@@ -9453,6 +9553,8 @@ snapshots:
   fill-range@7.1.1:
     dependencies:
       to-regex-range: 5.0.1
+
+  find-my-way-ts@0.1.6: {}
 
   find-node-modules@2.1.3:
     dependencies:
@@ -10323,6 +10425,8 @@ snapshots:
 
   ms@2.1.3: {}
 
+  multipasta@0.2.7: {}
+
   nanoid@3.3.11: {}
 
   napi-postinstall@0.3.4: {}
@@ -10721,6 +10825,8 @@ snapshots:
       once: 1.4.0
 
   punycode@2.3.1: {}
+
+  pure-rand@6.1.0: {}
 
   qs-esm@7.0.2: {}
 
@@ -11140,6 +11246,8 @@ snapshots:
 
   split2@4.2.0: {}
 
+  sqids@0.3.0: {}
+
   stable-hash@0.0.5: {}
 
   stackback@0.0.2: {}
@@ -11490,6 +11598,16 @@ snapshots:
       browserslist: 4.28.0
       escalade: 3.2.0
       picocolors: 1.1.1
+
+  uploadthing@7.3.0(next@15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(tailwindcss@4.1.17):
+    dependencies:
+      '@effect/platform': 0.69.8(effect@3.10.3)
+      '@uploadthing/mime-types': 0.3.2
+      '@uploadthing/shared': 7.1.1
+      effect: 3.10.3
+    optionalDependencies:
+      next: 15.4.4(@babel/core@7.28.5)(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
+      tailwindcss: 4.1.17
 
   uri-js@4.4.1:
     dependencies:

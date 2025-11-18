@@ -20,7 +20,7 @@ export const UserGroups: CollectionConfig = {
 
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'users', 'updatedAt'],
+    defaultColumns: ['name', 'users', 'createdBy', 'updatedAt'],
     hidden: userView,
   },
 

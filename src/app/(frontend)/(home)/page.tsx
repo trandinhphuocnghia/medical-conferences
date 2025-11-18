@@ -23,11 +23,11 @@ export default async function Home() {
       meta: true,
       startDate: true,
     },
-    // where: {
-    //   isActive: {
-    //     equals: true,
-    //   },
-    // },
+    where: {
+      active: {
+        equals: true,
+      },
+    },
   })
 
   return (

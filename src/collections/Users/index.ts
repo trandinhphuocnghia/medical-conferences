@@ -25,7 +25,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     defaultColumns: ['name', 'email', 'title', 'role', 'createdAt'],
-    useAsTitle: 'fullname',
+    useAsTitle: 'firstName',
     hidden: notAdminView,
   },
   // 🔒 AUTH CONFIGURATION: Enabled local auth AND email verification
