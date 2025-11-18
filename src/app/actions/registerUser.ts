@@ -32,8 +32,8 @@ export async function registerUser(data: signupSchemaType) {
         email: parsed.email,
         password: parsed.password, // Payload automatically hashes it
 
-        first_name: parsed.firstName,
-        last_name: parsed.lastName,
+        firstName: parsed.firstName,
+        lastName: parsed.lastName,
       },
     })
     return { success: true, user }

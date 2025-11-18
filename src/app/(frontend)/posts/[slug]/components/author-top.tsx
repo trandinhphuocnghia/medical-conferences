@@ -9,7 +9,7 @@ export function AuthorTop({
   author: Post['createdBy']
   createdAt: Post['createdAt']
 }) {
-  const { name, organization, title } = author as User
+  const { fullname, organization, title } = author as User
 
   return (
     <div className="flex items-center gap-4 mb-12 pb-8 border-b">
@@ -19,7 +19,7 @@ export function AuthorTop({
       </Avatar> */}
       <div>
         <h3 className="font-semibold">
-          {title} {name} • {organization}
+          {title} {fullname} • {organization}
         </h3>
         <p className="text-sm text-muted-foreground">
           {formatDateTime(createdAt)}
