@@ -238,6 +238,7 @@ export const Posts: CollectionConfig<'posts'> = {
           minDate: afterToday,
         },
         position: 'sidebar',
+        description: 'Start date and time of the conference.',
       },
     },
     {
@@ -251,6 +252,7 @@ export const Posts: CollectionConfig<'posts'> = {
           minDate: afterToday,
         },
         position: 'sidebar',
+        description: 'End date and time of the conference.',
       },
     },
     ...slugField(),
