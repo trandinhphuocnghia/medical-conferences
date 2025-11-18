@@ -22,6 +22,8 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
 
+import 'dotenv/config'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
