@@ -4,12 +4,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import {
-  adminOrModifier,
-  adminOrOwner,
-  anyone,
-  authenticated,
-} from '@/access/collectionAccess'
+import { adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
 import { editorConfig } from '@/utilities/editorConfig'
 
@@ -20,7 +15,7 @@ export const Files: CollectionConfig = {
   slug: 'files',
   access: {
     admin: authenticated,
-    create: adminOrModifier,
+    create: anyone, //TODO:
     delete: adminOrOwner,
     read: anyone,
     update: adminOrOwner,
@@ -41,7 +36,7 @@ export const Files: CollectionConfig = {
     },
   ],
   upload: {
-    staticDir: path.resolve(dirname, '../../public/media'),
+    adapter: 'uploadthing',
     mimeTypes: ['image/*', 'application/pdf'],
     crop: true,
     displayPreview: true,

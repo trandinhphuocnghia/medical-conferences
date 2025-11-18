@@ -1,5 +1,5 @@
 import { adminOrModifier, authenticated } from '@/access/collectionAccess'
-import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
+import { userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 
 export const Abstracts: CollectionConfig = {
@@ -11,13 +11,6 @@ export const Abstracts: CollectionConfig = {
 
   access: {
     admin: authenticated,
-    // create: ({ req: { user, pathname } }) => {
-    //   if (!user) return false
-
-    //   if (pathname.includes('/admin')) return false
-
-    //   return user.role === 'user'
-    // },
     create: authenticated,
     delete: adminOrModifier,
     read: authenticated,
@@ -41,6 +34,7 @@ export const Abstracts: CollectionConfig = {
       label: 'Associated Conference',
       access: {
         create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
       },
 
       admin: {
@@ -49,14 +43,17 @@ export const Abstracts: CollectionConfig = {
     },
     {
       name: 'files',
-      type: 'relationship',
-      relationTo: 'files',
-      required: true,
-      hasMany: true,
+      type: 'array',
       label: 'Files',
-
-      admin: {
-        description: '',
+      fields: [
+        {
+          name: 'url',
+          type: 'text',
+        },
+      ],
+      access: {
+        create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
       },
     },
     {
@@ -68,8 +65,8 @@ export const Abstracts: CollectionConfig = {
       label: 'Specific Topic Area',
       access: {
         create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
       },
-
       admin: {
         description: 'The specific subject area (e.g., AI in Endoscopy).',
       },
@@ -99,6 +96,7 @@ export const Abstracts: CollectionConfig = {
       label: 'Abstract Title',
       access: {
         create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
       },
     },
     {
@@ -108,6 +106,7 @@ export const Abstracts: CollectionConfig = {
       label: 'Abstract Body Text',
       access: {
         create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
       },
     },
     {
@@ -116,6 +115,7 @@ export const Abstracts: CollectionConfig = {
       label: 'Keywords (Comma separated)',
       access: {
         create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
       },
     },
 
@@ -132,8 +132,8 @@ export const Abstracts: CollectionConfig = {
       required: true,
 
       access: {
-        update: adminOnlyFieldAccess,
         create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
       },
       admin: {
         position: 'sidebar',

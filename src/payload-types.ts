@@ -264,7 +264,13 @@ export interface Post {
     image?: (number | null) | Media;
     description?: string | null;
   };
+  /**
+   * Start date and time of the conference.
+   */
   startDate: string;
+  /**
+   * End date and time of the conference.
+   */
   endDate: string;
   slug: string;
   slugLock?: boolean | null;
@@ -837,7 +843,12 @@ export interface Abstract {
    * Which conference this abstract is being submitted to.
    */
   conference: number | Post;
-  files: (number | File)[];
+  files?:
+    | {
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * The specific subject area (e.g., AI in Endoscopy).
    */
@@ -1505,7 +1516,12 @@ export interface CommentsSelect<T extends boolean = true> {
  */
 export interface AbstractsSelect<T extends boolean = true> {
   conference?: T;
-  files?: T;
+  files?:
+    | T
+    | {
+        url?: T;
+        id?: T;
+      };
   topic?: T;
   submitter?: T;
   title?: T;
