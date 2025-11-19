@@ -19,6 +19,7 @@ import {
   authenticated,
 } from '@/access/collectionAccess'
 import { afterToday, beforeValidateDate } from './hooks/validation'
+import { author } from '@/utilities/collectionAuthor'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -256,34 +257,7 @@ export const Posts: CollectionConfig<'posts'> = {
       },
     },
     ...slugField(),
-    {
-      name: 'createdBy',
-      type: 'relationship',
-      relationTo: 'users',
-      label: 'Created By',
-      defaultValue: ({ req }) => {
-        return req.user?.id
-      },
-      admin: {
-        readOnly: true,
-        hidden: true,
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'updatedBy',
-      type: 'relationship',
-      relationTo: 'users',
-      label: 'Last Modified By',
-      defaultValue: ({ req }) => {
-        return req.user?.id
-      },
-      admin: {
-        readOnly: true,
-        hidden: true,
-        position: 'sidebar',
-      },
-    },
+    ...author,
   ],
 
   timestamps: true,

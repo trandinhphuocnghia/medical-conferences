@@ -262,7 +262,13 @@ export interface Post {
     image?: (number | null) | Media;
     description?: string | null;
   };
+  /**
+   * Start date and time of the conference.
+   */
   startDate: string;
+  /**
+   * End date and time of the conference.
+   */
   endDate: string;
   slug: string;
   slugLock?: boolean | null;

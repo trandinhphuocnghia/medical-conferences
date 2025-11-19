@@ -11,6 +11,7 @@ import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.constants'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
 import { editorConfig } from '@/utilities/editorConfig'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { author } from '@/utilities/collectionAuthor'
 
 export const Topics: CollectionConfig = {
   slug: 'topics',
@@ -73,34 +74,7 @@ export const Topics: CollectionConfig = {
         position: 'sidebar',
       },
     },
-    {
-      name: 'createdBy',
-      type: 'relationship',
-      relationTo: 'users',
-      label: 'Created By',
-      defaultValue: ({ req }) => {
-        return req.user?.id
-      },
-      admin: {
-        readOnly: true,
-        hidden: true,
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'updatedBy',
-      type: 'relationship',
-      relationTo: 'users',
-      label: 'Last Modified By',
-      defaultValue: ({ req }) => {
-        return req.user?.id
-      },
-      admin: {
-        readOnly: true,
-        hidden: true,
-        position: 'sidebar',
-      },
-    },
+    ...author,
   ],
   timestamps: true,
 }

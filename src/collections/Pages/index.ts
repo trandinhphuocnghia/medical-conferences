@@ -19,6 +19,7 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { notAdminView } from '@/access/collectionView'
 import { adminOnly, anyone, authenticated } from '@/access/collectionAccess'
+import { author } from '@/utilities/collectionAuthor'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -115,34 +116,7 @@ export const Pages: CollectionConfig<'pages'> = {
       },
     },
     ...slugField(),
-    {
-      name: 'createdBy',
-      type: 'relationship',
-      relationTo: 'users',
-      label: 'Created By',
-      defaultValue: ({ req }) => {
-        return req.user?.id
-      },
-      admin: {
-        readOnly: true,
-        hidden: true,
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'updatedBy',
-      type: 'relationship',
-      relationTo: 'users',
-      label: 'Last Modified By',
-      defaultValue: ({ req }) => {
-        return req.user?.id
-      },
-      admin: {
-        readOnly: true,
-        hidden: true,
-        position: 'sidebar',
-      },
-    },
+    ...author,
   ],
   hooks: {
     afterChange: [revalidatePage],
