@@ -1,14 +1,17 @@
+'use client'
+
 import { Banner } from '@payloadcms/ui/elements/Banner'
 import React from 'react'
 
 import './index.scss'
 import { redirect } from 'next/navigation'
-import { getMeUser } from '@/utilities/getMeUser'
+// import { getMeUser } from '@/utilities/getMeUser'
+import { useAuth } from '@payloadcms/ui'
 
 const baseClass = 'before-dashboard'
 
-const BeforeDashboard: React.FC = async () => {
-  const { user } = await getMeUser()
+const BeforeDashboard: React.FC = () => {
+  const { user } = useAuth()
   if (user?.role !== 'admin') {
     redirect('/admin/account')
   }
