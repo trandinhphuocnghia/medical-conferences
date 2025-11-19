@@ -6,12 +6,16 @@ import { Button } from '@/components/ui/button'
 import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { Topic } from '@/payload-types'
 import { abstractSchema, AbstractSchema } from '@/schemas/abstract.schema'
 import { toastError } from '@/utilities/toast'
 import { SelectTopic } from './select-topic'
 import { FileUploader } from './upload'
 
-export function CreateAbstractForm() {
+interface Props {
+  topics: Topic[]
+}
+export function CreateAbstractForm({ topics }: Props) {
   const onSubmit = async (data: AbstractSchema) => {
     try {
       const res = await createAbstract(data)
@@ -29,14 +33,18 @@ export function CreateAbstractForm() {
       mode="all"
       schema={abstractSchema}
       onSubmit={onSubmit}
-      className="w-full px-4 md:px-0 md:max-w-1/2 m-auto"
+      className="w-full "
     >
       <FormField name="title" label="Title of your paper" required>
         {(field) => <Input {...field} />}
       </FormField>
       <FormField name="topic" label="Topic" required>
         {(field) => (
-          <SelectTopic onChange={field?.onChange} value={field?.value} />
+          <SelectTopic
+            topics={topics}
+            onChange={field?.onChange}
+            value={field?.value}
+          />
         )}
       </FormField>
       <FormField
