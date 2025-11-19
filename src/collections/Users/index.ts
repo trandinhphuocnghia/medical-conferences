@@ -38,8 +38,8 @@ export const Users: CollectionConfig = {
     //   return `Hey ${user.email}, verify your email by clicking here: ${url}`
     // },
     // },
+    tokenExpiration: 60 * 60 * 24, // 1 day
   },
-  // 📝 FIELDS: Mapping the fields from your User interface
   fields: [
     {
       name: 'firstName',
@@ -83,7 +83,6 @@ export const Users: CollectionConfig = {
         position: 'sidebar',
       },
     },
-    // Professional Fields
     {
       name: 'title',
       type: 'select',
@@ -109,7 +108,6 @@ export const Users: CollectionConfig = {
       type: 'text',
       label: 'Specialization',
     },
-    // Contact and Address
     {
       name: 'phoneNumber',
       type: 'text',
@@ -120,14 +118,12 @@ export const Users: CollectionConfig = {
       type: 'textarea',
       label: 'Mailing Address',
     },
-    // Roles Field (Secure)
     {
       name: 'role',
       type: 'select',
       label: 'User Role',
 
       access: {
-        // Only admins can create/read/update the roles field itself
         create: adminOnlyFieldAccess,
         read: adminOnlyFieldAccess,
         update: adminExceptSelfFieldAccess,
