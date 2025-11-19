@@ -32,6 +32,7 @@ const nextConfig = {
   reactStrictMode: true,
   redirects,
   productionBrowserSourceMaps: false,
+  output: 'standalone',
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })
