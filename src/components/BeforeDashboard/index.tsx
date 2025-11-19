@@ -1,23 +1,15 @@
-'use client'
-
 import { Banner } from '@payloadcms/ui/elements/Banner'
 import React from 'react'
 
 import './index.scss'
-import { redirect } from 'next/navigation'
-// import { getMeUser } from '@/utilities/getMeUser'
-import { useAuth } from '@payloadcms/ui'
+import BeforeDashboardClient from './client'
 
 const baseClass = 'before-dashboard'
 
-const BeforeDashboard: React.FC = () => {
-  const { user } = useAuth()
-  if (user?.role !== 'admin') {
-    redirect('/admin/account')
-  }
-
+const BeforeDashboard: React.FC = async () => {
   return (
     <div className={baseClass}>
+      <BeforeDashboardClient />
       <Banner className={`${baseClass}__banner`} type="success">
         <h4>Welcome to your dashboard!</h4>
       </Banner>
