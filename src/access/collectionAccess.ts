@@ -9,7 +9,6 @@ export const anyone: Access = () => true
 export const noone: Access = () => false
 
 export const authenticated: isAuthenticated = ({ req: { user } }) => {
-  console.log('===============', { user })
   return Boolean(user?.id)
 }
 

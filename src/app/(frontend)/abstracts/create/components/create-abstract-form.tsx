@@ -14,16 +14,12 @@ import { FileUploader } from './upload'
 export function CreateAbstractForm() {
   const onSubmit = async (data: AbstractSchema) => {
     try {
-      console.log(JSON.stringify({ ...data }))
-
       const res = await createAbstract(data)
 
       if (!res.success) {
         toastError(res?.error)
       }
-    } catch (err) {
-      console.log({ err })
-    }
+    } catch {}
 
     return {}
   }

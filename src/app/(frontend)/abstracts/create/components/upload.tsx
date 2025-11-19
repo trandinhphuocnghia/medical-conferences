@@ -38,7 +38,6 @@ export const FileUploader = ({
 
     for (const file of selectedFiles) {
       try {
-        console.log({ file })
         const res = await uploadFile(file)
 
         if (res?.success && res?.res?.url) {
