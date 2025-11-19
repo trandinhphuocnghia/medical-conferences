@@ -112,16 +112,16 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  // email: nodemailerAdapter({
-  //   defaultFromAddress: 'info@payloadcms.com',
-  //   defaultFromName: 'Payload',
-  //   transportOptions: {
-  //     host: process.env.SMTP_HOST,
-  //     port: 587,
-  //     auth: {
-  //       user: process.env.SMTP_USER,
-  //       pass: process.env.SMTP_PASS,
-  //     },
-  //   },
-  // }),
+  email: nodemailerAdapter({
+    defaultFromAddress: 'admin@medconf.com',
+    defaultFromName: 'MedConf',
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: 587,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
 })
