@@ -1,71 +1,77 @@
-# To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.js file.
-# From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
-
+# -------------------------------
+# Base image (shared across all stages)
+# -------------------------------
 FROM node:22.17.0-alpine AS base
 
-# Install dependencies only when needed
-FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+# ---------------------------------------------------
+# Build-time arguments (Railway automatically injects)
+# Defined ONCE so all stages inherit them
+# ---------------------------------------------------
+ARG PAYLOAD_SECRET
+ARG SMTP_HOST
+ARG SMTP_PORT
+ARG SMTP_USER
+ARG SMTP_PASS
+ARG DATABASE_URI
+ARG CRON_SECRET
+ARG NEXT_PUBLIC_SERVER_URL
+ARG PREVIEW_SECRET
+ARG UPLOADTHING_TOKEN
 
+# Export as ENV for all stages
+ENV PAYLOAD_SECRET=$PAYLOAD_SECRET \
+    SMTP_HOST=$SMTP_HOST \
+    SMTP_PORT=$SMTP_PORT \
+    SMTP_USER=$SMTP_USER \
+    SMTP_PASS=$SMTP_PASS \
+    DATABASE_URI=$DATABASE_URI \
+    CRON_SECRET=$CRON_SECRET \
+    NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL \
+    PREVIEW_SECRET=$PREVIEW_SECRET \
+    UPLOADTHING_TOKEN=$UPLOADTHING_TOKEN \
+    NODE_ENV=production \
+    PORT=3000
 
-# Rebuild the source code only when needed
+# -------------------------------
+# Dependencies (PNPM only)
+# -------------------------------
+FROM base AS deps
+
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
+
+# -------------------------------
+# Builder
+# -------------------------------
 FROM base AS builder
+
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
+RUN corepack enable pnpm && pnpm run build
 
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-# Production image, copy all the files and run next
+# -------------------------------
+# Runtime (now inherits env from BASE)
+# -------------------------------
 FROM base AS runner
+
 WORKDIR /app
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs \
+    && adduser --system --uid 1001 nextjs
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Remove this line if you do not have this folder
 COPY --from=builder /app/public ./public
+RUN mkdir .next && chown nextjs:nodejs .next
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 3000
-
-ENV PORT 3000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD ["node", "server.js"]

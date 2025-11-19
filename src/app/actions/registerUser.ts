@@ -30,6 +30,7 @@ export async function registerUser(data: signupSchemaType) {
       data: {
         email: parsed.email,
         password: parsed.password, // Payload automatically hashes it
+
         firstName: parsed.firstName,
         lastName: parsed.lastName,
       },

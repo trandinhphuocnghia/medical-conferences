@@ -23,6 +23,8 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
 
+import 'dotenv/config'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -84,7 +86,7 @@ export default buildConfig({
   ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),
-    'http://localhost:3000',
+    process.env.NEXT_PUBLIC_SERVER_URL,
     'https://studio.apollographql.com', // ✅ allow Apollo Sandbox
   ],
   globals: [Header, Footer],
@@ -113,8 +115,8 @@ export default buildConfig({
     disablePlaygroundInProduction: true,
   },
   email: nodemailerAdapter({
-    defaultFromAddress: 'info@payloadcms.com',
-    defaultFromName: 'Payload',
+    defaultFromAddress: 'admin@medconf.com',
+    defaultFromName: 'MedConf',
     transportOptions: {
       host: process.env.SMTP_HOST,
       port: 587,
