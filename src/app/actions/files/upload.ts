@@ -8,7 +8,6 @@ export async function uploadFile(file: File) {
 
     const arrayBuffer = await file.arrayBuffer()
 
-    // 2. Convert the ArrayBuffer into a Node.js Buffer
     const fileBuffer = Buffer.from(arrayBuffer)
 
     const res = await payload.create({
@@ -21,9 +20,7 @@ export async function uploadFile(file: File) {
         size: file.size,
       },
       draft: false,
-      data: {
-        filename: file.name,
-      },
+      data: {},
     })
 
     return { success: true, res }

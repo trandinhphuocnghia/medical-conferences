@@ -52,8 +52,10 @@ export const SelectTopic = ({
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {options?.map((item) => (
-            <SelectItem value={item?.value}>{item?.label}</SelectItem>
+          {options?.map((item, index) => (
+            <SelectItem key={index} value={item?.value}>
+              {item?.label}
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>

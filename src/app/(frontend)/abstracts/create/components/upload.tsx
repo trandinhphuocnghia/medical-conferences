@@ -1,5 +1,7 @@
 import { uploadFile } from '@/app/actions/files/upload'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
+import { Trash, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 
 export const FileUploader = ({
@@ -9,60 +11,65 @@ export const FileUploader = ({
   files: { url: string }[]
   onChange: (files: { url: string }[]) => void
 }) => {
-  const [file, setFile] = useState<File | null>(null)
-  const [status, setStatus] = useState('')
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
   const [isDragging, setIsDragging] = useState(false)
-  const fileInputRef = useRef(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files
-      ? e.target.files[0]
-      : e.dataTransfer.files[0]
+  const handleFileChange = (e: any) => {
+    const newFiles: File[] = e.target.files
+      ? Array.from(e.target.files)
+      : Array.from(e.dataTransfer.files)
 
-    if (selectedFile) {
-      setFile(selectedFile)
-      setStatus(`File selected: ${selectedFile.name}. Click Upload to proceed.`)
+    if (newFiles.length > 0) {
+      setSelectedFiles(newFiles)
+    } else {
+      setSelectedFiles([])
     }
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
-    if (!file) {
-      setStatus('Please select a file.')
+    if (selectedFiles.length === 0) {
       return
     }
 
-    setStatus('Uploading...')
+    const successfulUploads = []
+    let hasFailed = false
 
-    try {
-      const res = await uploadFile(file)
+    for (const file of selectedFiles) {
+      try {
+        console.log({ file })
+        const res = await uploadFile(file)
 
-      if (res?.success && res?.res?.url) {
-        const updatedFiles = [...files, { url: res.res.url }]
-        onChange(updatedFiles)
-        setStatus(`Success! Uploaded: ${file.name}`)
-      } else {
-        setStatus(`Upload Failed: ${res.error || 'Unknown error occurred.'}`)
+        if (res?.success && res?.res?.url) {
+          successfulUploads.push({ url: res.res.url })
+        } else {
+          hasFailed = true
+          console.error(`Failed to upload ${file.name}:`, res.error)
+        }
+      } catch (err) {
+        hasFailed = true
+        console.error(err)
       }
-    } catch (err) {
-      console.error(err)
-      setStatus(`Upload Failed: Network or server error.`)
-    } finally {
-      setFile(null)
     }
+
+    const updatedFiles = [...files, ...successfulUploads]
+    onChange(updatedFiles)
+
+    setSelectedFiles([])
   }
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: any) => {
     e.preventDefault()
     setIsDragging(true)
   }
 
-  const handleDragLeave = (e) => {
+  const handleDragLeave = (e: any) => {
     e.preventDefault()
     setIsDragging(false)
   }
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: any) => {
     e.preventDefault()
     setIsDragging(false)
     handleFileChange(e)
@@ -70,43 +77,29 @@ export const FileUploader = ({
 
   const dropzoneClasses = cn(
     'p-10 border-2 rounded-lg text-center cursor-pointer transition-colors duration-200',
-    'font-sans',
     isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-50',
-    { 'border-dashed': true },
+    'border-dashed',
   )
 
   const buttonClasses = cn(
-    'py-3 px-5 text-white font-bold border-none rounded-lg w-full transition-colors',
-    !file || status.includes('Uploading')
+    'py-3 px-5 text-white border-none rounded-lg w-full transition-colors',
+    selectedFiles.length === 0
       ? 'bg-gray-400 cursor-not-allowed'
       : 'bg-blue-600 hover:bg-blue-700 cursor-pointer',
   )
 
-  const statusClasses = cn(
-    'mt-4 pt-4 border-t border-dashed',
-    status.includes('Success')
-      ? 'text-green-600'
-      : status.includes('Failed')
-        ? 'text-red-600'
-        : 'text-gray-600',
-  )
-
-  const statusMessageColor = cn(
-    'font-bold mb-1',
-    status.includes('Success')
-      ? 'text-green-600'
-      : status.includes('Failed')
-        ? 'text-red-600'
-        : 'text-gray-900',
-  )
+  const filesListMsg =
+    selectedFiles.length > 0
+      ? `Selected ${selectedFiles.length} file(s)`
+      : 'Drag & Drop File, or Click to Select'
 
   return (
-    <div className=" mx-auto my-5 font-sans p-4  shadow-lg">
+    <div className="">
       <input
         type="file"
         multiple
         ref={fileInputRef}
-        accept="image/*, application/pdf"
+        accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         onChange={handleFileChange}
         className="hidden"
       />
@@ -124,48 +117,70 @@ export const FileUploader = ({
             isDragging ? 'text-blue-600' : 'text-gray-800',
           )}
         >
-          {isDragging
-            ? 'Drop file here!'
-            : 'Drag & Drop File, or Click to Select'}
+          {isDragging ? 'Drop file(s) here!' : filesListMsg}
         </p>
         <p className="text-sm text-gray-500 mt-1">
-          Accepted formats: Images and PDFs
+          Accepted formats: PDFs, .doc, and .docx (Multiple files and folder
+          uploads supported)
         </p>
 
-        {file && (
+        {selectedFiles.length > 0 && (
           <p className="mt-2 text-green-600 font-bold text-sm">
-            Selected: {file.name} ({Math.round(file.size / 1024)} KB)
+            Ready to upload: {selectedFiles.length} file(s)
           </p>
         )}
       </div>
 
       <div className="mt-4">
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!file || status.includes('Uploading')}
+        <Button
+          disabled={selectedFiles.length === 0 || status.includes('Uploading')}
           className={buttonClasses}
+          onClick={handleSubmit}
         >
           {status.includes('Uploading')
             ? 'Processing Upload...'
             : 'Upload File to Payload'}
-        </button>
-      </div>
-
-      <div className={statusClasses}>
-        <p className={statusMessageColor}>Status:</p>
-        <p className="text-sm">{status || 'Awaiting action...'}</p>
+        </Button>
       </div>
 
       {files && files.length > 0 && (
         <div className="mt-4 pt-4 border-t border-gray-200">
-          <h4 className="text-md font-semibold mb-2">
-            Successfully Uploaded Files:
-          </h4>
+          <div className="flex gap-4 items-center">
+            <h4 className="text-md font-semibold">
+              Successfully Uploaded Files:
+            </h4>
+
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={() => {
+                onChange([])
+                setSelectedFiles([])
+              }}
+            >
+              <Trash />
+            </Button>
+          </div>
           <ul className="list-disc pl-5 space-y-1">
             {files.map((f, index) => (
               <li key={index} className="text-sm break-all text-gray-700">
-                {f.url.length > 50 ? `${f.url.substring(0, 50)}...` : f.url}
+                <div className="items-center flex gap-4">
+                  <p>
+                    {f.url.length > 50 ? `${f.url.substring(0, 50)}...` : f.url}
+                  </p>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => {
+                      onChange(files?.filter((_, i) => i !== index))
+                      setSelectedFiles(
+                        selectedFiles.filter((_, i) => i !== index),
+                      )
+                    }}
+                  >
+                    <X />
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>

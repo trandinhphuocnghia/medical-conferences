@@ -18,14 +18,14 @@ export const Files: CollectionConfig = {
   fields: [],
   upload: {
     disableLocalStorage: true,
-
-    mimeTypes: ['image/*', 'application/pdf'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+    ],
+    bulkUpload: true,
     crop: true,
     displayPreview: true,
   },
   hooks: {},
 }
-
-/*
-
-*/
