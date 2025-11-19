@@ -25,7 +25,6 @@ export async function registerUser(data: signupSchemaType) {
       throw new Error('A user with this email already exists')
     }
 
-    // Create user in PayloadCMS
     const user = await payload.create({
       collection: 'users',
       data: {

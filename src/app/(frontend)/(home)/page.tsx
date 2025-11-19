@@ -11,7 +11,7 @@ import ConferenceCard from './components/conference-card'
 export default async function Home() {
   const payload = await getPayload({ config: configPromise })
 
-  const posts = await payload.find({
+  const posts = await payload?.find({
     collection: 'posts',
     depth: 1,
     limit: 12,

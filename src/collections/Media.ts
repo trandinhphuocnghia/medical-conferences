@@ -4,9 +4,14 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { editorConfig } from '@/utilities/editorConfig'
-import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
+import {
+  adminOrModifier,
+  adminOrOwner,
+  anyone,
+  authenticated,
+} from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
+import { editorConfig } from '@/utilities/editorConfig'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -37,7 +42,7 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
-    staticDir: path.resolve(dirname, '../../public/media'),
+    adapter: 'uploadthing',
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     imageSizes: [

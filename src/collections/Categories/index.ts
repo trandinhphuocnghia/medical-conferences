@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 
-import { userView } from '@/access/collectionView'
 import {
   adminOnly,
   adminOrModifier,
@@ -8,6 +7,7 @@ import {
   anyone,
   authenticated,
 } from '@/access/collectionAccess'
+import { userView } from '@/access/collectionView'
 import { author } from '@/utilities/collectionAuthor'
 
 export const Categories: CollectionConfig = {

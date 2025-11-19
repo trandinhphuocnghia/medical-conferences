@@ -15,7 +15,9 @@ interface FieldChildrenProps {
   disabled?: boolean
   error?: FieldError
   invalid?: boolean
-  defaultValue?: never
+  defaultValue?: any
+  onChange?: any
+  value?: any
 }
 
 interface FormFieldProps {
@@ -57,6 +59,8 @@ export default function FormField({
                 ...field,
                 disabled: fieldDisabled,
                 defaultValue: defaultValues?.[name],
+                value: field.value,
+                onChange: field.onChange,
               },
               fieldState,
             )}

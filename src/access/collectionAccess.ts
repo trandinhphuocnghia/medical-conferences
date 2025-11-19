@@ -9,7 +9,7 @@ export const anyone: Access = () => true
 export const noone: Access = () => false
 
 export const authenticated: isAuthenticated = ({ req: { user } }) => {
-  return Boolean(user)
+  return Boolean(user?.id)
 }
 
 export const authenticatedOrPublished: Access = ({ req: { user } }) => {
