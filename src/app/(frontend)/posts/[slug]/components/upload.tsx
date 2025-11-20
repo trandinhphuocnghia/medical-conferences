@@ -132,14 +132,10 @@ export const FileUploader = ({
 
       <div className="mt-4">
         <Button
-          disabled={selectedFiles.length === 0 || status.includes('Uploading')}
+          disabled={selectedFiles.length === 0}
           className={buttonClasses}
           onClick={handleSubmit}
-        >
-          {status.includes('Uploading')
-            ? 'Processing Upload...'
-            : 'Upload File to Payload'}
-        </Button>
+        ></Button>
       </div>
 
       {files && files.length > 0 && (

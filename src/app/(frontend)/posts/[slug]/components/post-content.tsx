@@ -19,7 +19,10 @@ export default function PostContent({ post }: { post: Post }) {
 
       <div className="flex flex-col border-t gap-8 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
         <p className="font-bold">Call for an abstract</p>
-        <CreateAbstractForm topics={(post.topics as Topic[]) || []} />
+        <CreateAbstractForm
+          conferenceId={post.id}
+          topics={(post.topics as Topic[]) || []}
+        />
       </div>
     </main>
   )
