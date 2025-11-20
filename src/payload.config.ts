@@ -95,6 +95,11 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  logger: {
+    options: {
+      level: 'debug',
+    },
+  },
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {
