@@ -14,7 +14,7 @@ export default function PostContent({
 }) {
   return (
     <main className="min-h-screen bg-background">
-      <div className="flex gap-8 mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex gap-8 mx-auto max-w-7xl px-4 py-12">
         <TopicListMenu topics={post?.topics as Topic[]} />
         <article className="flex-1 max-w-4xl">
           <AuthorTop author={post?.createdBy} createdAt={post?.createdAt} />

@@ -856,7 +856,7 @@ export interface Abstract {
   /**
    * Automatically populated with the logged-in user on submission.
    */
-  submitter?: (number | null) | User;
+  submitter: number | User;
   title: string;
   description: string;
   keywords?: string | null;

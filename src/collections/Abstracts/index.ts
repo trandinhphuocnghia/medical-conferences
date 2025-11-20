@@ -72,7 +72,7 @@ export const Abstracts: CollectionConfig = {
       name: 'submitter',
       type: 'relationship',
       relationTo: 'users',
-      required: false,
+      required: true,
       hasMany: false,
       label: 'Submitter/Author',
       defaultValue: ({ req }) => {
