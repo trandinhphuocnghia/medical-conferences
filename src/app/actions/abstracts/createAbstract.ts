@@ -21,6 +21,7 @@ export async function createAbstract(conference: number, data: AbstractSchema) {
         conference: Number(conference),
         topic: Number(data.topic),
         status: 'pending',
+        submitter: user.id,
       },
       draft: false,
 

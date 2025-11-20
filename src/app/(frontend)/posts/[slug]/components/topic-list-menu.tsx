@@ -1,5 +1,6 @@
 'use client'
 
+import { Separator } from '@/components/ui/separator'
 import { Topic } from '@/payload-types'
 import ScrollSpy from 'react-scrollspy-navigation'
 
@@ -10,7 +11,7 @@ export default function TopicListMenu({ topics = [] }: { topics: Topic[] }) {
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">
           On this page
         </p>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
           <ScrollSpy
             offsetTop={80}
             rootMargin="-60px 0px 0px 0px"
@@ -25,6 +26,14 @@ export default function TopicListMenu({ topics = [] }: { topics: Topic[] }) {
                 {topic.name}
               </a>
             ))}
+            <Separator />
+            <a
+              key="abstract-form"
+              className={`w-full cursor-pointer text-left text-sm py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground`}
+              href="#abstract-form"
+            >
+              Call for an abstract
+            </a>
           </ScrollSpy>
         </div>
       </nav>

@@ -1,13 +1,10 @@
 import { adminOrModifier, authenticated } from '@/access/collectionAccess'
 import { userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
+import { checkExistAbstract } from './hooks/checkExistAbstract'
 
 export const Abstracts: CollectionConfig = {
   slug: 'abstracts',
-
-  hooks: {
-    // beforeChange: [setSubmitter],
-  },
 
   access: {
     admin: authenticated,
@@ -141,4 +138,8 @@ export const Abstracts: CollectionConfig = {
       },
     },
   ],
+
+  hooks: {
+    beforeChange: [checkExistAbstract],
+  },
 }

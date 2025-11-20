@@ -21,16 +21,18 @@ export default function PostContent({
           {(post?.topics as Topic[])?.map((topic) => (
             <TopicSection key={topic.id} topic={topic} />
           ))}
+          <div
+            id="abstract-form"
+            className="flex flex-col border-t gap-8 mx-auto max-w-6xl py-12"
+          >
+            <h2 className="font-bold text-2xl">Call for an abstract</h2>
+            <CreateAbstractForm
+              conferenceId={post.id}
+              topics={(post.topics as Topic[]) || []}
+            />
+          </div>
         </article>
         <TopicAbstractList abstracts={abstracts as Abstract[]} />
-      </div>
-
-      <div className="flex flex-col border-t gap-8 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
-        <p className="font-bold">Call for an abstract</p>
-        <CreateAbstractForm
-          conferenceId={post.id}
-          topics={(post.topics as Topic[]) || []}
-        />
       </div>
     </main>
   )
