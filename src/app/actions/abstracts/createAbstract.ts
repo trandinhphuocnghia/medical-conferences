@@ -4,14 +4,19 @@ import { getPayload } from 'payload'
 
 import { AbstractSchema } from '@/schemas/abstract.schema'
 
-export async function createAbstract(data: AbstractSchema) {
+export async function createAbstract(conference: number, data: AbstractSchema) {
   try {
     const payload = await getPayload({ config: configPromise })
 
     const abstract = await payload.create({
       collection: 'abstracts',
       overrideAccess: false,
-      data: { ...data, conference: 1, topic: Number(data?.topic),status:'pending' },
+      data: {
+        ...data,
+        conference,
+        topic: Number(data.topic),
+        status: 'pending',
+      },
       draft: false,
     })
 

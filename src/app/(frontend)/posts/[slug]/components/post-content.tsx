@@ -4,7 +4,13 @@ import { CreateAbstractForm } from './create-abstract-form'
 import TopicListMenu from './topic-list-menu'
 import { TopicSection } from './topic-section'
 
-export default function PostContent({ post,abstracts }: { post: Post,abstracts:Abstract[] }) {
+export default function PostContent({
+  post,
+  abstracts,
+}: {
+  post: Post
+  abstracts: Abstract[]
+}) {
   return (
     <main className="min-h-screen bg-background">
       <div className="flex gap-8 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
@@ -18,13 +24,17 @@ export default function PostContent({ post,abstracts }: { post: Post,abstracts:A
       </div>
 
       <div className="flex flex-col border-t gap-8 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12">
-        {!!abstracts?.length?
-        <>
-        <p className="font-bold">Call for an abstract</p>
-        <CreateAbstractForm topics={(post.topics as Topic[]) || []} />
-        </>
-        :<>Abstract list...</>
-}
+        {!!abstracts?.length ? (
+          <>
+            <p className="font-bold">Call for an abstract</p>
+            <CreateAbstractForm
+              conferenceId={post.id}
+              topics={(post.topics as Topic[]) || []}
+            />
+          </>
+        ) : (
+          <>Abstract list...</>
+        )}
       </div>
     </main>
   )

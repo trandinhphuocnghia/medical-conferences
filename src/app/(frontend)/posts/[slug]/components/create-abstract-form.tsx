@@ -14,14 +14,18 @@ import { FileUploader } from './upload'
 
 interface Props {
   topics: Topic[]
+  conferenceId: number
 }
-export function CreateAbstractForm({ topics }: Props) {
+export function CreateAbstractForm({ topics, conferenceId }: Props) {
   const onSubmit = async (data: AbstractSchema) => {
     try {
-      const res = await createAbstract(data)
+      const res = await createAbstract(conferenceId, data)
 
       if (!res.success) {
-        toastError(res?.error)
+        toastError({
+          message:
+            (res?.error as Error)?.message || 'Failed to create an abstract.',
+        })
       }
     } catch {}
 
