@@ -7,11 +7,10 @@ import { draftMode } from 'next/headers'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
+import { getConferenceAbstracts } from '@/app/actions/abstracts/getConferenceAbstracts'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { generateMeta } from '@/utilities/generateMeta'
 import PostContent from './components/post-content'
-import { getConferenceAbstracts } from '@/app/actions/abstracts/getConferenceAbstracts'
-import { Abstract } from '@/payload-types'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -47,9 +46,9 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   const url = '/posts/' + slug
   const post = await queryPostBySlug({ slug })
+
   const abstractRes = await getConferenceAbstracts({
-    conferenceId: '1',
-    submitterId: '2',
+    conferenceId: post.id,
   })
 
   if (!post) return <PayloadRedirects url={url} />
@@ -61,7 +60,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <PostContent post={post} abstracts={abstractRes?.abstracts ||[]} />
+      <PostContent post={post} abstracts={abstractRes?.abstracts || []} />
     </article>
   )
 }
