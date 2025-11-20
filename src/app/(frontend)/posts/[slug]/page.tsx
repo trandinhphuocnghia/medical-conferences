@@ -7,6 +7,7 @@ import { draftMode } from 'next/headers'
 import { getPayload } from 'payload'
 import { cache } from 'react'
 
+import { getConferenceAbstracts } from '@/app/actions/abstracts/getConferenceAbstracts'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { generateMeta } from '@/utilities/generateMeta'
 import PostContent from './components/post-content'
@@ -46,6 +47,10 @@ export default async function Post({ params: paramsPromise }: Args) {
   const url = '/posts/' + slug
   const post = await queryPostBySlug({ slug })
 
+  const abstractRes = await getConferenceAbstracts({
+    conferenceId: post.id,
+  })
+
   if (!post) return <PayloadRedirects url={url} />
 
   return (
@@ -55,7 +60,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <PostContent post={post} />
+      <PostContent post={post} abstracts={abstractRes?.abstracts || []} />
     </article>
   )
 }
