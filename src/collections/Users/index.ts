@@ -28,7 +28,6 @@ export const Users: CollectionConfig = {
     useAsTitle: 'firstName',
     hidden: notAdminView,
   },
-  // 🔒 AUTH CONFIGURATION: Enabled local auth AND email verification
   auth: {
     // Enables email login, password hashing, and token handling
     // verify: {
@@ -91,6 +90,24 @@ export const Users: CollectionConfig = {
       hasMany: false,
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'avatar',
+      label: 'Avatar',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        position: 'sidebar',
+      },
+      filterOptions: ({ user }) => {
+        if (!user) return false
+        if (user.role === 'admin') return true
+        return {
+          createdBy: {
+            equals: user.id,
+          },
+        }
       },
     },
     {
