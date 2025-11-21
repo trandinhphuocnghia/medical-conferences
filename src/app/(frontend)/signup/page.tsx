@@ -1,8 +1,10 @@
-import { getMeUser } from '@/utilities/getMeUser'
+'use client'
+
 import { SignupForm } from './signup-form'
 import { redirect } from 'next/navigation'
-export default async function Page() {
-  const { user } = await getMeUser()
+import { useAuth } from '@payloadcms/ui'
+export default function Page() {
+  const { user } = useAuth()
 
   if (user) {
     redirect('/admin/account')
