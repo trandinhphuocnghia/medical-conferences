@@ -71,13 +71,13 @@ export interface Config {
     posts: Post;
     topics: Topic;
     categories: Category;
+    abstracts: Abstract;
     users: User;
     'user-groups': UserGroup;
     media: Media;
+    files: File;
     likes: Like;
     comments: Comment;
-    abstracts: Abstract;
-    files: File;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -92,13 +92,13 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     topics: TopicsSelect<false> | TopicsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    abstracts: AbstractsSelect<false> | AbstractsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'user-groups': UserGroupsSelect<false> | UserGroupsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    files: FilesSelect<false> | FilesSelect<true>;
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
-    abstracts: AbstractsSelect<false> | AbstractsSelect<true>;
-    files: FilesSelect<false> | FilesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -750,29 +750,6 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "likes".
- */
-export interface Like {
-  id: number;
-  user: number | User;
-  post: number | Post;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "comments".
- */
-export interface Comment {
-  id: number;
-  post: number | Post;
-  user: number | User;
-  content: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "abstracts".
  */
 export interface Abstract {
@@ -823,6 +800,29 @@ export interface File {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "likes".
+ */
+export interface Like {
+  id: number;
+  user: number | User;
+  post: number | Post;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments".
+ */
+export interface Comment {
+  id: number;
+  post: number | Post;
+  user: number | User;
+  content: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -983,6 +983,10 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'abstracts';
+        value: number | Abstract;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -995,20 +999,16 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'files';
+        value: number | File;
+      } | null)
+    | ({
         relationTo: 'likes';
         value: number | Like;
       } | null)
     | ({
         relationTo: 'comments';
         value: number | Comment;
-      } | null)
-    | ({
-        relationTo: 'abstracts';
-        value: number | Abstract;
-      } | null)
-    | ({
-        relationTo: 'files';
-        value: number | File;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1267,6 +1267,27 @@ export interface CategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "abstracts_select".
+ */
+export interface AbstractsSelect<T extends boolean = true> {
+  conference?: T;
+  topic?: T;
+  submitter?: T;
+  title?: T;
+  description?: T;
+  keywords?: T;
+  files?:
+    | T
+    | {
+        url?: T;
+        id?: T;
+      };
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -1336,6 +1357,24 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "files_select".
+ */
+export interface FilesSelect<T extends boolean = true> {
+  _key?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "likes_select".
  */
 export interface LikesSelect<T extends boolean = true> {
@@ -1354,45 +1393,6 @@ export interface CommentsSelect<T extends boolean = true> {
   content?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "abstracts_select".
- */
-export interface AbstractsSelect<T extends boolean = true> {
-  conference?: T;
-  topic?: T;
-  submitter?: T;
-  title?: T;
-  description?: T;
-  keywords?: T;
-  files?:
-    | T
-    | {
-        url?: T;
-        id?: T;
-      };
-  status?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "files_select".
- */
-export interface FilesSelect<T extends boolean = true> {
-  _key?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
