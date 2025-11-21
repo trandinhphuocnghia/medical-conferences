@@ -6,7 +6,7 @@ import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { defaultLexical } from '@/fields/defaultLexical'
-// import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
@@ -29,6 +29,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
   admin: {
     avatar: {
       Component: '@/components/UserAvatar',
@@ -75,13 +76,13 @@ export default buildConfig({
     Posts,
     Topics,
     Categories,
+    Abstracts,
     Users,
     UserGroups,
     Media,
+    Files,
     Likes,
     Comments,
-    Abstracts,
-    Files,
   ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),
@@ -118,16 +119,16 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  // email: nodemailerAdapter({
-  //   defaultFromAddress: 'admin@medconf.com',
-  //   defaultFromName: 'MedConf',
-  //   transportOptions: {
-  //     host: process.env.SMTP_HOST,
-  //     port: 587,
-  //     auth: {
-  //       user: process.env.SMTP_USER,
-  //       pass: process.env.SMTP_PASS,
-  //     },
-  //   },
-  // }),
+  email: nodemailerAdapter({
+    defaultFromAddress: 'admin@medconf.com',
+    defaultFromName: 'MedConf',
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: 587,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
 })
