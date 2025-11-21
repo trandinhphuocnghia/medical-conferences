@@ -6,7 +6,7 @@ import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { defaultLexical } from '@/fields/defaultLexical'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+// import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
@@ -22,6 +22,7 @@ import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
+import { resendAdapter } from '@payloadcms/email-resend'
 
 import 'dotenv/config'
 
@@ -119,16 +120,9 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  email: nodemailerAdapter({
+  email: resendAdapter({
     defaultFromAddress: 'admin@medconf.com',
     defaultFromName: 'MedConf',
-    transportOptions: {
-      host: process.env.SMTP_HOST,
-      port: 587,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    },
+    apiKey: process.env.RESEND_API_KEY || '',
   }),
 })
