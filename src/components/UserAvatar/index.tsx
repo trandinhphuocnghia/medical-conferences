@@ -1,15 +1,13 @@
-import { Media } from '@/payload-types'
-import { getMeUser } from '@/utilities/getMeUser'
+import { Media, User } from '@/payload-types'
 import Image from 'next/image'
 
-const UserAvatar = async () => {
-  const {
-    user: { avatar, fullname },
-  } = await getMeUser()
+const UserAvatar = ({ user }: { user: User }) => {
+  const avatar = user.avatar as Media
+
   return (
     <Image
-      src={(avatar as Media)?.url || '/assets/img/default-avatar.jpg'}
-      alt={fullname || 'alt'}
+      src={avatar?.url || '/assets/img/default-avatar.jpg'}
+      alt={avatar?.alt || user.fullname || 'alt'}
       width={36}
       height={36}
       style={{

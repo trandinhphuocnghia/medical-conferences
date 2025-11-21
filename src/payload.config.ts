@@ -30,9 +30,9 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    // avatar: {
-    //   Component: '@/components/UserAvatar',
-    // },
+    avatar: {
+      Component: '@/components/UserAvatar',
+    },
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
