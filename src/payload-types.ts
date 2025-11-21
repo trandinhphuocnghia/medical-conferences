@@ -781,12 +781,6 @@ export interface Abstract {
    * Which conference this abstract is being submitted to.
    */
   conference: number | Post;
-  files?:
-    | {
-        url?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   /**
    * The specific subject area (e.g., AI in Endoscopy).
    */
@@ -798,6 +792,12 @@ export interface Abstract {
   title: string;
   description: string;
   keywords?: string | null;
+  files?:
+    | {
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Set by Editors/Admins after peer review.
    */
@@ -1361,17 +1361,17 @@ export interface CommentsSelect<T extends boolean = true> {
  */
 export interface AbstractsSelect<T extends boolean = true> {
   conference?: T;
+  topic?: T;
+  submitter?: T;
+  title?: T;
+  description?: T;
+  keywords?: T;
   files?:
     | T
     | {
         url?: T;
         id?: T;
       };
-  topic?: T;
-  submitter?: T;
-  title?: T;
-  description?: T;
-  keywords?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;

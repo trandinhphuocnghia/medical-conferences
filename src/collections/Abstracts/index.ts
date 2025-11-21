@@ -1,5 +1,9 @@
-import { adminOrModifier, authenticated } from '@/access/collectionAccess'
-import { userOnlyFieldAccess } from '@/access/fieldAccess'
+import {
+  adminOnly,
+  adminOrOwner,
+  authenticated,
+} from '@/access/collectionAccess'
+import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
 
@@ -8,10 +12,16 @@ export const Abstracts: CollectionConfig = {
 
   access: {
     admin: authenticated,
-    create: authenticated,
-    delete: adminOrModifier,
-    read: authenticated,
-    update: authenticated,
+    create: ({ req: { user, pathname } }) => {
+      if (!user) return false
+
+      if (pathname.includes('/admin')) return false
+
+      return user.role === 'user'
+    },
+    delete: adminOnly,
+    read: adminOrOwner,
+    update: adminOrOwner,
   },
 
   admin: {
@@ -38,21 +48,7 @@ export const Abstracts: CollectionConfig = {
         description: 'Which conference this abstract is being submitted to.',
       },
     },
-    {
-      name: 'files',
-      type: 'array',
-      label: 'Files',
-      fields: [
-        {
-          name: 'url',
-          type: 'text',
-        },
-      ],
-      access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
-      },
-    },
+
     {
       name: 'topic',
       type: 'relationship',
@@ -115,7 +111,21 @@ export const Abstracts: CollectionConfig = {
         update: userOnlyFieldAccess,
       },
     },
-
+    {
+      name: 'files',
+      type: 'array',
+      label: 'Files',
+      fields: [
+        {
+          name: 'url',
+          type: 'text',
+        },
+      ],
+      access: {
+        create: userOnlyFieldAccess,
+        update: userOnlyFieldAccess,
+      },
+    },
     {
       name: 'status',
       type: 'select',
@@ -129,8 +139,8 @@ export const Abstracts: CollectionConfig = {
       required: true,
 
       access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
+        create: adminOnlyFieldAccess,
+        update: adminOnlyFieldAccess,
       },
       admin: {
         position: 'sidebar',
