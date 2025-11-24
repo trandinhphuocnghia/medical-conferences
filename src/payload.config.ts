@@ -21,8 +21,7 @@ import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
-import nodemailer from 'nodemailer'
+// import { resendAdapter } from '@payloadcms/email-resend'
 
 import 'dotenv/config'
 
@@ -120,18 +119,9 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  email: nodemailerAdapter({
-    defaultFromAddress: 'zdenho30@gmail.com',
-    defaultFromName: 'Medconf',
-    transport: nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: 'zdenho30@gmail.com',
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-      },
-    }),
-  }),
+  // email: resendAdapter({
+  //   defaultFromAddress: process.env.MAIL_HOST || '',
+  //   defaultFromName: 'Medconf',
+  //   apiKey: process.env.RESEND_API_KEY || '',
+  // }),
 })
