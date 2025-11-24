@@ -6,7 +6,6 @@ import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { defaultLexical } from '@/fields/defaultLexical'
-// import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
@@ -22,7 +21,8 @@ import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
-import { resendAdapter } from '@payloadcms/email-resend'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import nodemailer from 'nodemailer'
 
 import 'dotenv/config'
 
@@ -120,9 +120,18 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  email: resendAdapter({
-    defaultFromAddress: 'admin@medconf.com',
-    defaultFromName: 'MedConf',
-    apiKey: process.env.RESEND_API_KEY || '',
+  email: nodemailerAdapter({
+    defaultFromAddress: 'zdenho30@gmail.com',
+    defaultFromName: 'Medconf',
+    transport: nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'zdenho30@gmail.com',
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+      },
+    }),
   }),
 })
