@@ -5,7 +5,10 @@ import { getCurrentUser } from '@/hooks/getCurrentUser'
 export default async function Page() {
   const user = await getCurrentUser()
   if (user) {
-    redirect('/admin/account')
+    if (user.role === 'admin') {
+      redirect('/dashboard')
+    }
+    redirect('/dashboard/account')
   }
 
   return (

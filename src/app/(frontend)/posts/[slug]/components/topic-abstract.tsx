@@ -39,7 +39,7 @@ export default function TopicAbstractList({
 
                 <Link
                   title="go to detail"
-                  href={`/admin/collections/abstracts/${abstract.id}`}
+                  href={`/dashboard/collections/abstracts/${abstract.id}`}
                 >
                   <ChevronRight className="w-6" />
                 </Link>

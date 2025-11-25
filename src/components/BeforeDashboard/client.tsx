@@ -7,7 +7,7 @@ import React from 'react'
 export default function BeforeDashboardClient() {
   const { user } = useAuth()
   if (user?.role !== 'admin') {
-    redirect('/admin/account')
+    redirect('/dashboard/account')
   }
   return <React.Fragment />
 }

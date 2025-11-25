@@ -30,6 +30,9 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
+  routes: {
+    admin: '/dashboard',
+  },
   admin: {
     avatar: {
       Component: '@/components/UserAvatar',
