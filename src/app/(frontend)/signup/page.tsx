@@ -1,4 +1,4 @@
-import { SignupForm } from './signup-form'
+import { SignupForm } from './components/signup-form'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/hooks/getCurrentUser'
 

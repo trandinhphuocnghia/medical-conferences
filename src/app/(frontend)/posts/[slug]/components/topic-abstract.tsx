@@ -18,7 +18,7 @@ export default function TopicAbstractList({
         </p>
         <div className="flex flex-col gap-1">
           <ScrollSpy
-            offsetTop={80}
+            offsetTop={20}
             rootMargin="-60px 0px 0px 0px"
             activeClass="bg-primary/10 text-primary font-medium"
           >

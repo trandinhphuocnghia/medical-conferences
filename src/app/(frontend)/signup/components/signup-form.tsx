@@ -30,9 +30,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       const res = await registerUser(data)
       if (res.success) {
         toastSuccess({
-          message: 'Account created successfully!',
+          message:
+            'Account created successfully! Please check your email to verify your account.',
         })
-        router.push('/admin/login')
+        setTimeout(() => {
+          router.push('/admin/login')
+        }, 3000)
       } else {
         toastError({
           message:
