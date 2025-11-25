@@ -5,8 +5,8 @@ const gmailAdapter: EmailAdapter = ({ payload }: { payload: BasePayload }) => {
   return {
     name: 'Gmail API Adapter',
     defaultFromAddress: process.env.MAIL_HOST || '',
-    defaultFromName: 'Payload CMS',
-    sendEmail: async ({ to, subject, text, html, from }) => {
+    defaultFromName: 'Medconf',
+    sendEmail: async ({ from, to, subject, text, html }) => {
       const oauth2Client = new google.auth.OAuth2(
         process.env.GOOGLE_CLIENT_ID,
         process.env.GOOGLE_CLIENT_SECRET,
