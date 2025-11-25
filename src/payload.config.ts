@@ -24,6 +24,7 @@ import { getServerSideURL } from './utilities/getURL'
 // import { resendAdapter } from '@payloadcms/email-resend'
 
 import 'dotenv/config'
+import gmailAdapter from './services/emailAdapter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -119,9 +120,5 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  // email: resendAdapter({
-  //   defaultFromAddress: process.env.MAIL_HOST || '',
-  //   defaultFromName: 'Medconf',
-  //   apiKey: process.env.RESEND_API_KEY || '',
-  // }),
+  email: gmailAdapter,
 })
