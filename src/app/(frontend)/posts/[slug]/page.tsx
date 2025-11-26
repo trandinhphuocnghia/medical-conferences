@@ -12,9 +12,6 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { generateMeta } from '@/utilities/generateMeta'
 import PostContent from './components/post-content'
 
-export const dynamic = 'force-static'
-export const revalidate = 600
-
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
 
