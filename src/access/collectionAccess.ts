@@ -1,4 +1,4 @@
-import type { Access, AccessArgs } from 'payload'
+import type { Access, AccessArgs, Where } from 'payload'
 
 import { User } from '@/payload-types'
 
@@ -53,6 +53,23 @@ export const adminOrOwner: Access = ({ req: { user } }) => {
         equals: user.id,
       },
     }
+  }
+
+  return false
+}
+
+// For collections with a 'submitter' field (like Abstracts)
+export const adminOrSubmitter: Access = ({ req: { user } }) => {
+  if (user && user.role === 'admin') {
+    return true
+  }
+
+  if (user?.id) {
+    return {
+      submitter: {
+        equals: user.id,
+      },
+    } as Where
   }
 
   return false

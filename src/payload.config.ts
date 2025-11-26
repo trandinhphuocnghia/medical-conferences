@@ -47,6 +47,24 @@ export default buildConfig({
     meta: {
       titleSuffix: '',
       description: 'Medconf',
+      icons: [
+        // TODO: favicon
+        // {
+        //   rel: 'icon',
+        //   type: 'image/png',
+        //   url: '/favicon.png',
+        // },
+      ],
+      openGraph: {
+        siteName: 'Medconf',
+        description: 'Medconf',
+        type: 'website',
+      },
+      twitter: {
+        site: '@Medconf',
+        title: 'Medconf',
+        description: 'Medconf',
+      },
     },
     user: Users.slug,
     livePreview: {

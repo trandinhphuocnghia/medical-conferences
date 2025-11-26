@@ -85,7 +85,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               <Separator className="my-4" />
               <FieldDescription className="px-6 text-center">
                 Already have an account?{' '}
-                <Link href="/admin/login">Sign in</Link>
+                <Link href="/dashboard/login">Sign in</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

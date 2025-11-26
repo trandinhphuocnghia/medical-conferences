@@ -1,11 +1,12 @@
 import {
   adminOnly,
-  adminOrOwner,
+  adminOrSubmitter,
   authenticated,
 } from '@/access/collectionAccess'
 import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
+import { sendAbstractEmail } from './hooks/sendAbstractEmail'
 
 export const Abstracts: CollectionConfig = {
   slug: 'abstracts',
@@ -15,13 +16,13 @@ export const Abstracts: CollectionConfig = {
     create: ({ req: { user, pathname } }) => {
       if (!user) return false
 
-      if (pathname.includes('/admin')) return false
+      if (pathname.includes('/dashboard')) return false
 
       return user.role === 'user'
     },
     delete: adminOnly,
-    read: adminOrOwner,
-    update: adminOrOwner,
+    read: adminOrSubmitter,
+    update: adminOrSubmitter,
   },
 
   admin: {
@@ -173,5 +174,6 @@ export const Abstracts: CollectionConfig = {
 
   hooks: {
     beforeChange: [checkExistAbstract],
+    afterChange: [sendAbstractEmail],
   },
 }

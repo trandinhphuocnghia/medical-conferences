@@ -1,7 +1,11 @@
 import { google } from 'googleapis'
 import { BasePayload, EmailAdapter } from 'payload'
 
-const gmailAdapter: EmailAdapter = ({ payload }: { payload: BasePayload }) => {
+const gmailAdapter: EmailAdapter = ({
+  payload: _payload,
+}: {
+  payload: BasePayload
+}) => {
   return {
     name: 'Gmail API Adapter',
     defaultFromAddress: process.env.MAIL_HOST || '',
@@ -21,7 +25,10 @@ const gmailAdapter: EmailAdapter = ({ payload }: { payload: BasePayload }) => {
 
       // Build email content
       const emailLines = []
-      emailLines.push(`From: ${from || process.env.MAIL_HOST}`)
+      // Format: "Sender Name" <email@example.com>
+      const fromAddress = from || process.env.MAIL_HOST || ''
+      const fromName = 'MedConf'
+      emailLines.push(`From: "${fromName}" <${fromAddress}>`)
       emailLines.push(`To: ${to}`)
       emailLines.push(`Subject: ${subject}`)
       emailLines.push('Content-Type: text/html; charset=UTF-8')
