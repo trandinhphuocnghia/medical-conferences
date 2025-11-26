@@ -1,6 +1,5 @@
-import { Abstract, User } from '@/payload-types'
-import { CollectionAfterChangeHook, getPayload } from 'payload'
-import configPromise from '@payload-config'
+import { Abstract } from '@/payload-types'
+import { CollectionAfterChangeHook } from 'payload'
 import { abstractCreateMail } from '@/services/email/mail-templates/abstract-create'
 import { abstractApprovedMail } from '@/services/email/mail-templates/abstract-approved'
 import { abstractRejectedMail } from '@/services/email/mail-templates/abstract-rejected'
@@ -9,40 +8,50 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
   data,
   doc,
   operation,
+  req,
 }) => {
-  const payload = await getPayload({ config: configPromise })
+  const populatedDoc = await req.payload.findByID({
+    collection: 'abstracts',
+    id: doc.id,
+    depth: 2,
+  })
+
+  const currentAbstract = {
+    ...populatedDoc,
+    ...doc,
+    submitter: populatedDoc.submitter,
+    conference: populatedDoc.conference,
+  }
+
+  const submitter = currentAbstract.submitter
+  if (!submitter || typeof submitter !== 'object' || !submitter.email) {
+    console.error('No email found for submitter')
+    return
+  }
+
   if (operation === 'create') {
-    payload.sendEmail({
-      defaultFromName: 'MedConf',
-      to: (doc.submitter as User).email,
+    req.payload.sendEmail({
+      to: submitter.email,
       subject: 'MedConf - Abstract Submitted',
-      html: abstractCreateMail(doc),
+      html: abstractCreateMail(currentAbstract),
     })
     return
   }
 
   if (data.status === 'verified') {
-    payload.sendEmail({
-      to: (doc.submitter as User).email,
-      subject: 'Abstract Verified',
-      text: abstractApprovedMail({
-        userName: (doc.submitter as User).firstName,
-        abstractTitle: doc.title,
-        abstractLink: `${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/abstracts/${doc.id}`,
-      }),
+    req.payload.sendEmail({
+      to: submitter.email,
+      subject: 'MedConf - Abstract Verified',
+      html: abstractApprovedMail(currentAbstract),
     })
     return
   }
 
   if (data.status === 'rejected') {
-    payload.sendEmail({
-      to: (doc.submitter as User).email,
-      subject: 'Abstract Rejected',
-      text: abstractRejectedMail({
-        userName: (doc.submitter as User).firstName,
-        abstractTitle: doc.title,
-        rejectionReason: doc.reason || '',
-      }),
+    req.payload.sendEmail({
+      to: submitter.email,
+      subject: 'MedConf - Abstract Rejected',
+      html: abstractRejectedMail(currentAbstract),
     })
     return
   }

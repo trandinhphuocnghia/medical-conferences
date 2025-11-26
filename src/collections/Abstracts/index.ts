@@ -24,7 +24,6 @@ export const Abstracts: CollectionConfig = {
     read: adminOrSubmitter,
     update: adminOrSubmitter,
   },
-
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'conference', 'submitter', 'status', 'updatedAt'],

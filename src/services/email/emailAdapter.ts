@@ -25,7 +25,6 @@ const gmailAdapter: EmailAdapter = ({
 
       // Build email content
       const emailLines = []
-      // Format: "Sender Name" <email@example.com>
       const fromAddress = from || process.env.MAIL_HOST || ''
       const fromName = 'MedConf'
       emailLines.push(`From: "${fromName}" <${fromAddress}>`)
