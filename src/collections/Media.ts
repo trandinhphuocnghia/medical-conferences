@@ -1,10 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-
 import { adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
-import { editorConfig } from '@/utilities/editorConfig'
 import { author } from '@/utilities/collectionAuthor'
 
 export const Media: CollectionConfig = {
@@ -23,11 +20,6 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-    },
-    {
-      name: 'caption',
-      type: 'richText',
-      editor: lexicalEditor(editorConfig),
     },
     ...author,
   ],

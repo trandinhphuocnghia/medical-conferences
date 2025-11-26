@@ -340,21 +340,6 @@ export interface User {
 export interface Media {
   id: number;
   alt?: string | null;
-  caption?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
   createdBy?: (number | null) | User;
   updatedBy?: (number | null) | User;
   _key?: string | null;
@@ -1343,7 +1328,6 @@ export interface UserGroupsSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
-  caption?: T;
   createdBy?: T;
   updatedBy?: T;
   _key?: T;
