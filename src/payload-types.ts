@@ -766,6 +766,10 @@ export interface Abstract {
    * Set by Editors/Admins after peer review.
    */
   status: 'pending' | 'verified' | 'rejected';
+  /**
+   * Set by Editors/Admins after peer review.
+   */
+  reason?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1270,6 +1274,7 @@ export interface AbstractsSelect<T extends boolean = true> {
         id?: T;
       };
   status?: T;
+  reason?: T;
   updatedAt?: T;
   createdAt?: T;
 }

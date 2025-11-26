@@ -21,9 +21,9 @@ import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
-import gmailAdapter from './services/emailAdapter'
 
 import 'dotenv/config'
+import gmailAdapter from './services/email/emailAdapter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

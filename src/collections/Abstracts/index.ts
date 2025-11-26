@@ -140,11 +140,33 @@ export const Abstracts: CollectionConfig = {
 
       access: {
         create: adminOnlyFieldAccess,
-        update: adminOnlyFieldAccess,
+        update: ({ req, doc }) => {
+          if (!req.user) return false
+          if (req.user.role === 'user') return false
+          return doc?.status === 'pending'
+        },
       },
       admin: {
         position: 'sidebar',
         description: 'Set by Editors/Admins after peer review.',
+      },
+    },
+    {
+      name: 'reason',
+      type: 'textarea',
+      label: 'Reason for Rejection',
+      access: {
+        create: adminOnlyFieldAccess,
+        update: ({ req, doc }) => {
+          if (!req.user) return false
+          if (req.user.role === 'user') return false
+          return doc?.status === 'pending'
+        },
+      },
+      admin: {
+        position: 'sidebar',
+        description: 'Set by Editors/Admins after peer review.',
+        condition: ({ status }) => status === 'rejected',
       },
     },
   ],
