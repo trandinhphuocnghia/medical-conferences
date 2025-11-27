@@ -1,5 +1,5 @@
-import { Topic } from '@/payload-types'
 import RichText from '@/components/RichText'
+import { Topic } from '@/payload-types'
 
 export function TopicSection({ topic }: { topic: Topic }) {
   return (
