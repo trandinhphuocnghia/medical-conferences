@@ -1,0 +1,16 @@
+.back-to-frontend {
+  margin: 20px 0;
+
+  a {
+    display: block;
+    color: var(--theme-elevation-500);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--theme-elevation-800);
+      text-decoration: underline;
+    }
+  }
+}

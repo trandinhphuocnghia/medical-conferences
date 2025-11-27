@@ -1,15 +1,9 @@
 import { z } from 'zod'
 
-export const abstractSchema = z.object({
+// Form schema that accepts File objects
+export const abstractFormSchema = z.object({
   files: z
-    .array(
-      z.object({
-        url: z
-          .string({ message: 'URL cannot be empty.' })
-          .min(1, 'URL cannot be empty.'),
-      }),
-      { message: 'Files cannot be empty.' },
-    )
+    .array(z.instanceof(File), { message: 'Files cannot be empty.' })
     .min(1, 'Files cannot be empty.'),
 
   title: z
@@ -28,5 +22,4 @@ export const abstractSchema = z.object({
   keywords: z.string().optional(),
 })
 
-// A Zod type representing the structure of an Abstract document
-export type AbstractSchema = z.infer<typeof abstractSchema>
+export type AbstractFormSchema = z.infer<typeof abstractFormSchema>

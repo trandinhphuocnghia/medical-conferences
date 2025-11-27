@@ -35,7 +35,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       className="relative z-20 shadow-md"
       {...(theme ? { 'data-theme': theme } : {})}
     >
-      <div className="container py-6 flex justify-between mx-auto ">
+      <div className="container py-6 sm:px-4 flex justify-between mx-auto ">
         <Link href="/">
           <Logo
             loading="eager"

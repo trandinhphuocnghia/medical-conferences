@@ -7,27 +7,44 @@ import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Topic } from '@/payload-types'
-import { abstractSchema, AbstractSchema } from '@/schemas/abstract.schema'
-import { toastError } from '@/utilities/toast'
+import {
+  AbstractFormSchema,
+  abstractFormSchema,
+} from '@/schemas/abstract.schema'
+import { toastError, toastSuccess } from '@/utilities/toast'
 import { SelectTopic } from './select-topic'
 import { FileUploader } from './upload'
+import { useTransition } from 'react'
+import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
   topics: Topic[]
   conferenceId: number
 }
 export function CreateAbstractForm({ topics, conferenceId }: Props) {
-  const onSubmit = async (data: AbstractSchema) => {
-    try {
-      const res = await createAbstract(conferenceId, data)
+  const [isPending, startTransition] = useTransition()
 
-      if (!res.success) {
+  const onSubmit = async (data: AbstractFormSchema) => {
+    startTransition(async () => {
+      try {
+        const res = await createAbstract(conferenceId, data)
+
+        if (!res.success) {
+          toastError({
+            message:
+              (res?.error as Error)?.message || 'Failed to create an abstract.',
+          })
+        } else {
+          toastSuccess({
+            message: 'Abstract submitted successfully!',
+          })
+        }
+      } catch (_error) {
         toastError({
-          message:
-            (res?.error as Error)?.message || 'Failed to create an abstract.',
+          message: 'An error occurred while submitting the abstract.',
         })
       }
-    } catch {}
+    })
 
     return {}
   }
@@ -35,7 +52,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
   return (
     <Form
       mode="all"
-      schema={abstractSchema}
+      schema={abstractFormSchema}
       onSubmit={onSubmit}
       className="w-full "
     >
@@ -71,7 +88,8 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
       </FormField>
 
       <Field className="border-t py-8">
-        <Button className="md:w-full m-auto" type="submit">
+        <Button className="md:w-full m-auto" type="submit" disabled={isPending}>
+          {isPending && <Spinner />}
           Submit
         </Button>
       </Field>

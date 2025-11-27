@@ -40,6 +40,7 @@ export default buildConfig({
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
+      beforeNavLinks: ['@/components/BackToFrontend'],
     },
     importMap: {
       baseDir: path.resolve(dirname),

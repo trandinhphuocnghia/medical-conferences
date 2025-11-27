@@ -86,10 +86,6 @@ export const extractCustomStyles = (
 
       if (styleDefinition && styleDefinition.css) {
         Object.assign(styles, styleDefinition.css)
-        console.log(
-          `Applied style for group '${stateGroupKey}': ${styleVariantKey}`,
-          styleDefinition.css,
-        )
       } else {
         console.warn(
           `Could not find style definition for group '${stateGroupKey}' with key: ${styleVariantKey}`,
@@ -110,7 +106,6 @@ export const textConverter: JSXConverters<SerializedTextNode> = {
       text = <strong style={styles}>{text}</strong>
     }
     if (node.format & IS_ITALIC) {
-      console.log({ styles })
       text = <em style={styles}>{text}</em>
     }
     if (node.format & IS_STRIKETHROUGH) {
