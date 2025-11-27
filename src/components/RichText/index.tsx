@@ -1,4 +1,3 @@
-import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
@@ -6,21 +5,24 @@ import {
   type DefaultTypedEditorState,
 } from '@payloadcms/richtext-lexical'
 import {
+  RichText as ConvertRichText,
   JSXConvertersFunction,
   LinkJSXConverter,
-  RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
 
+import { BannerBlock } from '@/blocks/Banner/Component'
+import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
   MediaBlock as MediaBlockProps,
 } from '@/payload-types'
-import { BannerBlock } from '@/blocks/Banner/Component'
-import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { cn } from '@/utilities/ui'
+import { textConverter, uploadConverter } from './converters'
+import { listConverter } from './converters/list-converter'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -37,11 +39,18 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   return relationTo === 'posts' ? `/posts/${slug}` : `/${slug}`
 }
 
+const customConverter = {
+  ...textConverter,
+  ...listConverter,
+  ...uploadConverter,
+}
+
 const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
   defaultConverters,
 }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
+  ...customConverter,
   blocks: {
     banner: ({ node }) => (
       <BannerBlock className="col-start-2 mb-4" {...node.fields} />
