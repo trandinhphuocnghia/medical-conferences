@@ -1,9 +1,14 @@
 'use client'
 
-import { Abstract, Topic } from '@/payload-types'
-import { CheckCircle, ChevronRight, CircleDashed, XCircle } from 'lucide-react'
+import { Abstract } from '@/payload-types'
+import { CheckCircle, CircleDashed, XCircle } from 'lucide-react'
 import Link from 'next/link'
-import ScrollSpy from 'react-scrollspy-navigation'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import InfoIcon from '@/components/common/info-icon'
 
 export default function TopicAbstractList({
   abstracts = [],
@@ -11,41 +16,37 @@ export default function TopicAbstractList({
   abstracts: Abstract[]
 }) {
   return (
-    <aside className="shrink-0 hidden lg:block">
-      <nav className="sticky top-8 space-y-2">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">
-          All your paper
-        </p>
+    <aside className="shrink-0 hidden lg:block w-60">
+      <nav className="sticky top-12 space-y-2">
+        <div className="flex items-center gap-2 text-muted-foreground tracking-wide mb-4">
+          <p className="uppercase text-xs font-semibold">All your paper</p>{' '}
+          <InfoIcon content="All your paper submitted to this conference" />
+        </div>
         <div className="flex flex-col gap-1">
-          <ScrollSpy
-            offsetTop={20}
-            rootMargin="-60px 0px 0px 0px"
-            activeClass="bg-primary/10 text-primary font-medium"
-          >
-            {abstracts.map((abstract) => (
+          {abstracts.map((abstract) => (
+            <div className="w-full items-center flex" key={abstract.id}>
               <div
-                className="w-full items-center gap-2 min-w-56 flex"
-                key={abstract.id}
+                className={`w-full cursor-pointer text-left text-sm py-2 rounded-md transition-colors text-muted-foreground hover:text-foreground`}
               >
-                <a
-                  className={`w-full cursor-pointer text-left text-sm py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground`}
-                  href={`#${(abstract.topic as Topic)?.id?.toString()}`}
-                >
-                  <div className="flex w-full items-center justify-between">
-                    <p>{abstract.title}</p>
-                    <AbstractStatus status={abstract.status} />
-                  </div>
-                </a>
-
                 <Link
-                  title="go to detail"
+                  title="Submition detail"
                   href={`/dashboard/collections/abstracts/${abstract.id}`}
+                  className="flex w-full items-center justify-between gap-1"
+                  target="_blank"
                 >
-                  <ChevronRight className="w-6" />
+                  <p>{abstract.title}</p>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <AbstractStatus status={abstract.status} />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="capitalize">{abstract.status}</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </Link>
               </div>
-            ))}
-          </ScrollSpy>
+            </div>
+          ))}
         </div>
       </nav>
     </aside>
@@ -55,12 +56,12 @@ export default function TopicAbstractList({
 //status: 'pending' | 'verified' | 'rejected';
 const AbstractStatus = ({ status }: { status: string }) => {
   if (status === 'verified') {
-    return <CheckCircle color="green" />
+    return <CheckCircle color="green" className="size-5" />
   }
 
   if (status === 'rejected') {
-    return <XCircle color="red" />
+    return <XCircle color="red" className="size-5" />
   }
 
-  return <CircleDashed color="yellow" />
+  return <CircleDashed color="yellow" className="size-5" />
 }

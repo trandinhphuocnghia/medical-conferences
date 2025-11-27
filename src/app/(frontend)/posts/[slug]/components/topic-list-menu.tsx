@@ -6,8 +6,8 @@ import ScrollSpy from 'react-scrollspy-navigation'
 
 export default function TopicListMenu({ topics = [] }: { topics: Topic[] }) {
   return (
-    <aside className="w-56 shrink-0 hidden lg:block">
-      <nav className="sticky top-8 space-y-2">
+    <aside className="w-60 shrink-0 hidden lg:block">
+      <nav className="sticky top-12 space-y-2">
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">
           On this page
         </p>
