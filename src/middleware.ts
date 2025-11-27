@@ -4,6 +4,11 @@ import type { NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Redirect default Payload login to custom signin page
+  if (pathname === '/dashboard/login') {
+    return NextResponse.redirect(new URL('/signin', request.url))
+  }
+
   // Get the payload-token cookie
   const token = request.cookies.get('payload-token')?.value
 
