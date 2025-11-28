@@ -1,6 +1,5 @@
 import type { Metadata } from 'next/types'
 
-// import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
@@ -27,7 +26,7 @@ export default async function Page() {
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-24 pb-24 px-4">
       <PageClient />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
@@ -44,8 +43,6 @@ export default async function Page() {
         />
       </div>
 
-      {/* <CollectionArchive posts={posts.docs} /> */}
-
       <div className="container">
         {posts.totalPages > 1 && posts.page && (
           <Pagination page={posts.page} totalPages={posts.totalPages} />
@@ -57,6 +54,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `MedConf - All Events`,
+    title: `All Events - MedConf`,
   }
 }

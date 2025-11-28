@@ -15,12 +15,17 @@ export async function middleware(request: NextRequest) {
   // If there's a token, check the user's auth status
   if (token) {
     try {
-      // Call the /api/users/me endpoint to get user info
-      const baseUrl = request.nextUrl.origin
+      // Use environment variable for production, fallback to origin for local
+      const baseUrl =
+        process.env.NEXT_PUBLIC_SERVER_URL || request.nextUrl.origin
+
       const response = await fetch(`${baseUrl}/api/users/me`, {
         headers: {
           Authorization: `JWT ${token}`,
         },
+        // Add timeout and cache options for production
+        next: { revalidate: 0 },
+        signal: AbortSignal.timeout(5000), // 5 second timeout
       })
 
       if (response.ok) {
