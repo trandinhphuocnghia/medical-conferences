@@ -28,14 +28,10 @@ export const SelectTopic = ({
     [topics],
   )
 
-  const selected = useMemo(() => {
-    return options?.find((item) => item.value.toString() === value?.toString())
-  }, [value, options])
-
   return (
-    <Select onValueChange={(value) => onChange(value)}>
+    <Select value={value} onValueChange={(value) => onChange(value)}>
       <SelectTrigger>
-        <SelectValue>{selected?.label}</SelectValue>
+        <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

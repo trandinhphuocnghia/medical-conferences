@@ -5,6 +5,7 @@ import FormField from '@/components/common/form-field'
 import { Button } from '@/components/ui/button'
 import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
 import { Topic } from '@/payload-types'
 import {
@@ -12,10 +13,10 @@ import {
   abstractFormSchema,
 } from '@/schemas/abstract.schema'
 import { toastError, toastSuccess } from '@/utilities/toast'
+import { useRef, useTransition } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import { SelectTopic } from './select-topic'
 import { FileUploader } from './upload'
-import { useTransition } from 'react'
-import { Spinner } from '@/components/ui/spinner'
 
 interface Props {
   topics: Topic[]
@@ -23,6 +24,8 @@ interface Props {
 }
 export function CreateAbstractForm({ topics, conferenceId }: Props) {
   const [isPending, startTransition] = useTransition()
+
+  const formRef = useRef<UseFormReturn<AbstractFormSchema>>(null)
 
   const onSubmit = async (data: AbstractFormSchema) => {
     startTransition(async () => {
@@ -38,6 +41,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
           toastSuccess({
             message: 'Abstract submitted successfully!',
           })
+          formRef?.current?.reset()
         }
       } catch (_error) {
         toastError({
@@ -51,6 +55,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
 
   return (
     <Form
+      ref={formRef}
       mode="all"
       schema={abstractFormSchema}
       onSubmit={onSubmit}
