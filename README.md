@@ -6,13 +6,8 @@
 
 ## 🚀 Features
 
-- 🧩 **Payload CMS Core**
-  - Full TypeScript support
-  - Secure admin dashboard
-  - REST and GraphQL APIs out of the box
-
-- 📝 **Meeting System**
-  - Post categories, tags, and authors
+- 📝 **Conference System**
+  - Conference, topic, category
   - Rich-text editor with media upload
   - Automatic slug generation and published date
   - SEO fields (title, description, Open Graph image)
@@ -21,9 +16,11 @@
   - Authentication via Payload built-in auth
   - Role-based access control (Admin, User)
 
+- � **User Abstract Management**
+  - User abstract
+
 - 🗂️ **Media Library**
   - Upload, optimize, and reuse images or videos
-  - Cloud storage integration (e.g. S3, Cloudflare R2, GCS)
 
 - 🌐 **API Ready**
   - Access your content via REST or GraphQL
@@ -34,10 +31,10 @@
 ## 🧱 Tech Stack
 
 - **Backend:** [Payload CMS](https://payloadcms.com)
-- **Database:** MongoDB or PostgreSQL
-- **Frontend (optional):** Next.js or any client that consumes the API
+- **Database:** PostgreSQL
+- **Frontend:** Next.js
 - **Auth:** Built-in Payload Auth
-- **Storage:** Local, Cloudflare R2, AWS S3, or GCP Storage
+- **Storage:** Uploadthing
 
 ---
 
@@ -64,10 +61,7 @@ Create a .env file at the root with:
 
 ```bash
 # Database connection string
-DATABASE_URI=mongodb://127.0.0.1/your-database-name
-
-# Or use a PG connection string
-#DATABASE_URI=postgresql://127.0.0.1:5432/your-database-name
+DATABASE_URI=postgresql://127.0.0.1:5432/your-database-name
 
 # Used to encrypt JWT tokens
 PAYLOAD_SECRET=YOUR_SECRET_HERE
@@ -91,3 +85,11 @@ yarn dev
 ```
 
 ## 📦 Deployment
+
+Production URL: https://medconf.up.railway.app
+
+Hosting: [Railway](https://railway.com/project/f0b5f24d-ae75-40cf-b349-232e51245e99/service/5ecf6060-0d4f-410a-8ad5-19ea3017f956?environmentId=bd0d9ab5-c951-4b15-9545-770492e43b4d)
+
+Database: [Neon](https://console.neon.tech/app/projects/mute-base-22100622/branches/br-orange-mouse-a11lhl19)
+
+Grafana: TBD
