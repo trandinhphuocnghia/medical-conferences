@@ -11,6 +11,7 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { UserStoreInitializer } from '@/components/UserStoreInitializer'
+import { getCurrentUser } from '@/hooks/getCurrentUser'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -22,6 +23,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const user = await getCurrentUser()
+
   return (
     <html
       className={cn(GeistSans.variable, GeistMono.variable)}
@@ -33,14 +36,12 @@ export default async function RootLayout({
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Providers>
-          <UserStoreInitializer />
+          <UserStoreInitializer user={user} />
           <Header />
           <Toaster />
-          <TooltipProvider delayDuration={100}>
-            <div className="min-h-screen">{children}</div>
-          </TooltipProvider>
+          <TooltipProvider delayDuration={100}>{children}</TooltipProvider>
           <Footer />
         </Providers>
       </body>

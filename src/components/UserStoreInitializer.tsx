@@ -1,14 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useRef } from 'react'
 import { useUserStore } from '@/stores/userStore'
+import type { User } from '@/payload-types'
 
-export function UserStoreInitializer() {
-  const fetchUser = useUserStore((state) => state.fetchUser)
+export function UserStoreInitializer({ user }: { user: User | null }) {
+  const initialized = useRef(false)
 
-  useEffect(() => {
-    fetchUser()
-  }, [fetchUser])
+  if (!initialized.current) {
+    useUserStore.setState({ user })
+    initialized.current = true
+  }
 
   return null
 }

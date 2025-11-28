@@ -31,7 +31,7 @@ export default async function Page() {
       <PageClient />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
+          <h1>All Events</h1>
         </div>
       </div>
 
@@ -57,6 +57,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `MedConf Posts`,
+    title: `MedConf - All Events`,
   }
 }
