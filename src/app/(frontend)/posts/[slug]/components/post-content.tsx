@@ -39,7 +39,10 @@ export default function PostContent({
             ) : (
               <p>
                 Please{' '}
-                <Link href="/signin" className="underline">
+                <Link
+                  href={`/signin?redirect=/post/${post.slug}`}
+                  className="underline"
+                >
                   login
                 </Link>{' '}
                 to submit an abstract

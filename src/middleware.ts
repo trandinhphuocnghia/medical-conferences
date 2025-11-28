@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
         const { user } = await response.json()
 
         // If user is authenticated and on signup/login pages, redirect to dashboard
-        if (user && (pathname === '/signup' || pathname === '/login')) {
+        if (user && (pathname === '/signup' || pathname === '/signin')) {
           if (user.role === 'admin') {
             return NextResponse.redirect(new URL('/dashboard', request.url))
           }

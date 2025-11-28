@@ -25,15 +25,24 @@ const gmailAdapter: EmailAdapter = ({
 
       // Build email content
       const emailLines = []
-      const fromAddress = from || process.env.MAIL_HOST || ''
-      const fromName = 'MedConf'
-      emailLines.push(`From: "${fromName}" <${fromAddress}>`)
+
+      // Extract just the email address to ensure we can force the Display Name
+      let fromAddress = from || process.env.MAIL_HOST || ''
+      const emailMatch = fromAddress.match(/<([^>]+)>/)
+      if (emailMatch) {
+        fromAddress = emailMatch[1]
+      }
+
+      emailLines.push(`From: "MedConf" <${fromAddress.trim()}>`)
       emailLines.push(`To: ${to}`)
       emailLines.push(`Subject: ${subject}`)
+      emailLines.push('MIME-Version: 1.0')
       emailLines.push('Content-Type: text/html; charset=UTF-8')
       emailLines.push('')
       emailLines.push(html || text || '')
-      const email = emailLines.join('\n')
+
+      // Join with CRLF as per MIME standard
+      const email = emailLines.join('\r\n')
 
       // Base64 encode the message
       const encodedMessage = Buffer.from(email)

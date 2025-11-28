@@ -1,5 +1,3 @@
-'use client'
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +13,6 @@ import { useRouter } from 'next/navigation'
 export const UserMenu = () => {
   const { user, setUser } = useUserStore((state) => state)
   const router = useRouter()
-
-  if (!user) {
-    return null
-  }
 
   const handleLogout = () => {
     setUser(null)

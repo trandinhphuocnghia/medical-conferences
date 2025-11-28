@@ -9,6 +9,7 @@ import type { Header } from '@/payload-types'
 import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
 import { UserMenu } from './UserMenu'
+import { useUserStore } from '@/stores/userStore'
 
 interface HeaderClientProps {
   data: Header
@@ -19,6 +20,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
+  const { user } = useUserStore((state) => state)
 
   useEffect(() => {
     setHeaderTheme(null)
@@ -44,7 +46,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           />
         </Link>
         <HeaderNav data={data} />
-        <UserMenu />
+        {user ? <UserMenu /> : <Link href="/signin">Sign In</Link>}
       </div>
     </header>
   )
