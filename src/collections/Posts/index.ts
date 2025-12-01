@@ -19,8 +19,8 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
-import { afterToday, beforeValidateDate } from './hooks/validation'
 import { author } from '@/utilities/collectionAuthor'
+import { afterToday, beforeValidateDate } from './hooks/validation'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -41,11 +41,6 @@ export const Posts: CollectionConfig<'posts'> = {
     title: true,
     slug: true,
     topics: true,
-    // meta: {
-    //   image: true,
-    //   description: true,
-    // },
-    // likes: true,
     host: true,
   },
 
@@ -138,6 +133,7 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           label: 'Deadlines',
           fields: [
+            // 1. Abstract Submission Deadline (First Event)
             {
               name: 'abstractSubmissionDeadline',
               type: 'date',
@@ -149,19 +145,21 @@ export const Posts: CollectionConfig<'posts'> = {
                 },
               },
             },
+            // 2. Notification of Acceptance Date
             {
-              name: 'earlyRegistrationDeadline',
+              name: 'notificationOfAcceptanceDate',
               type: 'date',
-              label: 'Early Registration Deadline',
+              label: 'Notification of Acceptance Date',
               required: true,
               admin: {
                 date: { pickerAppearance: 'dayAndTime' },
               },
             },
+            // 3. Early Registration Deadline (Last Deadline)
             {
-              name: 'notificationOfAcceptanceDate',
+              name: 'earlyRegistrationDeadline',
               type: 'date',
-              label: 'Notification of Acceptance Date',
+              label: 'Early Registration Deadline',
               required: true,
               admin: {
                 date: { pickerAppearance: 'dayAndTime' },
@@ -231,6 +229,7 @@ export const Posts: CollectionConfig<'posts'> = {
         },
       ],
     },
+    // 4. Start Date & Time (Sidebar, before End Date)
     {
       name: 'startDate',
       type: 'date',
@@ -245,6 +244,7 @@ export const Posts: CollectionConfig<'posts'> = {
         description: 'Start date and time of the conference.',
       },
     },
+    // 5. End Date & Time (Sidebar, after Start Date)
     {
       name: 'endDate',
       type: 'date',

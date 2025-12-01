@@ -11,12 +11,10 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
   const start = new Date(data.startDate)
   const end = new Date(data.endDate)
 
-  // tomorrow at 00:00
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
   tomorrow.setHours(0, 0, 0, 0)
 
-  // rule 1: startDate must be >= tomorrow
   if (start < tomorrow) {
     throw new ValidationError({
       collection: 'posts',
@@ -29,7 +27,6 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
     })
   }
 
-  // rule 2: endDate must be >= tomorrow
   if (end < tomorrow) {
     throw new ValidationError({
       collection: 'posts',
@@ -42,7 +39,6 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
     })
   }
 
-  // rule 3: endDate must be >= startDate
   if (end <= start) {
     throw new ValidationError({
       collection: 'posts',
@@ -54,6 +50,79 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
         {
           path: 'endDate',
           message: 'End date cannot be earlier than start date.',
+        },
+      ],
+    })
+  }
+
+  const submission = data.abstractSubmissionDeadline
+    ? new Date(data.abstractSubmissionDeadline)
+    : null
+  const notification = data.notificationOfAcceptanceDate
+    ? new Date(data.notificationOfAcceptanceDate)
+    : null
+  const registration = data.earlyRegistrationDeadline
+    ? new Date(data.earlyRegistrationDeadline)
+    : null
+
+  if (submission && notification && notification <= submission) {
+    throw new ValidationError({
+      collection: 'posts',
+      errors: [
+        {
+          path: 'notificationOfAcceptanceDate',
+          message:
+            'Notification date must be strictly after the Abstract Submission Deadline.',
+        },
+      ],
+    })
+  }
+
+  if (notification && registration && registration <= notification) {
+    throw new ValidationError({
+      collection: 'posts',
+      errors: [
+        {
+          path: 'earlyRegistrationDeadline',
+          message:
+            'Early Registration deadline must be strictly after the Notification of Acceptance Date.',
+        },
+      ],
+    })
+  }
+
+  if (submission && submission >= start) {
+    throw new ValidationError({
+      collection: 'posts',
+      errors: [
+        {
+          path: 'abstractSubmissionDeadline',
+          message:
+            'Abstract Submission Deadline must be before the Conference Start Date.',
+        },
+      ],
+    })
+  }
+  if (notification && notification >= start) {
+    throw new ValidationError({
+      collection: 'posts',
+      errors: [
+        {
+          path: 'notificationOfAcceptanceDate',
+          message:
+            'Notification Date must be before the Conference Start Date.',
+        },
+      ],
+    })
+  }
+  if (registration && registration >= start) {
+    throw new ValidationError({
+      collection: 'posts',
+      errors: [
+        {
+          path: 'earlyRegistrationDeadline',
+          message:
+            'Early Registration Deadline must be before the Conference Start Date.',
         },
       ],
     })

@@ -242,8 +242,8 @@ export interface Post {
    */
   topics?: (number | Topic)[] | null;
   abstractSubmissionDeadline: string;
-  earlyRegistrationDeadline: string;
   notificationOfAcceptanceDate: string;
+  earlyRegistrationDeadline: string;
   /**
    * List of official contact emails (e.g., secretariat@kingca.org)
    */
@@ -1194,8 +1194,8 @@ export interface PostsSelect<T extends boolean = true> {
   venueCity?: T;
   topics?: T;
   abstractSubmissionDeadline?: T;
-  earlyRegistrationDeadline?: T;
   notificationOfAcceptanceDate?: T;
+  earlyRegistrationDeadline?: T;
   contactEmails?:
     | T
     | {
