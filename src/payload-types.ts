@@ -245,6 +245,14 @@ export interface Post {
   notificationOfAcceptanceDate: string;
   earlyRegistrationDeadline: string;
   /**
+   * Start date and time of the conference.
+   */
+  startDate: string;
+  /**
+   * End date and time of the conference.
+   */
+  endDate: string;
+  /**
    * List of official contact emails (e.g., secretariat@kingca.org)
    */
   contactEmails: {
@@ -264,14 +272,6 @@ export interface Post {
     image?: (number | null) | Media;
     description?: string | null;
   };
-  /**
-   * Start date and time of the conference.
-   */
-  startDate: string;
-  /**
-   * End date and time of the conference.
-   */
-  endDate: string;
   slug: string;
   slugLock?: boolean | null;
   createdBy?: (number | null) | User;
@@ -1196,6 +1196,8 @@ export interface PostsSelect<T extends boolean = true> {
   abstractSubmissionDeadline?: T;
   notificationOfAcceptanceDate?: T;
   earlyRegistrationDeadline?: T;
+  startDate?: T;
+  endDate?: T;
   contactEmails?:
     | T
     | {
@@ -1216,8 +1218,6 @@ export interface PostsSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
-  startDate?: T;
-  endDate?: T;
   slug?: T;
   slugLock?: T;
   createdBy?: T;

@@ -131,7 +131,7 @@ export const Posts: CollectionConfig<'posts'> = {
           ],
         },
         {
-          label: 'Deadlines',
+          label: 'Schedule',
           fields: [
             // 1. Abstract Submission Deadline (First Event)
             {
@@ -142,6 +142,7 @@ export const Posts: CollectionConfig<'posts'> = {
               admin: {
                 date: {
                   pickerAppearance: 'dayAndTime',
+                  minDate: afterToday,
                 },
               },
             },
@@ -152,7 +153,7 @@ export const Posts: CollectionConfig<'posts'> = {
               label: 'Notification of Acceptance Date',
               required: true,
               admin: {
-                date: { pickerAppearance: 'dayAndTime' },
+                date: { pickerAppearance: 'dayAndTime', minDate: afterToday },
               },
             },
             // 3. Early Registration Deadline (Last Deadline)
@@ -162,7 +163,37 @@ export const Posts: CollectionConfig<'posts'> = {
               label: 'Early Registration Deadline',
               required: true,
               admin: {
-                date: { pickerAppearance: 'dayAndTime' },
+                date: { pickerAppearance: 'dayAndTime', minDate: afterToday },
+              },
+            },
+            // 4. Start Date & Time (Sidebar, before End Date)
+            {
+              name: 'startDate',
+              type: 'date',
+              label: 'Start Date & Time',
+              required: true,
+              admin: {
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                  minDate: afterToday,
+                },
+                position: 'sidebar',
+                description: 'Start date and time of the conference.',
+              },
+            },
+            // 5. End Date & Time (Sidebar, after Start Date)
+            {
+              name: 'endDate',
+              type: 'date',
+              label: 'End Date & Time',
+              required: true,
+              admin: {
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                  minDate: afterToday,
+                },
+                position: 'sidebar',
+                description: 'End date and time of the conference.',
               },
             },
           ],
@@ -228,36 +259,6 @@ export const Posts: CollectionConfig<'posts'> = {
           ],
         },
       ],
-    },
-    // 4. Start Date & Time (Sidebar, before End Date)
-    {
-      name: 'startDate',
-      type: 'date',
-      label: 'Start Date & Time',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-          minDate: afterToday,
-        },
-        position: 'sidebar',
-        description: 'Start date and time of the conference.',
-      },
-    },
-    // 5. End Date & Time (Sidebar, after Start Date)
-    {
-      name: 'endDate',
-      type: 'date',
-      label: 'End Date & Time',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-          minDate: afterToday,
-        },
-        position: 'sidebar',
-        description: 'End date and time of the conference.',
-      },
     },
     ...slugField(),
     ...author,
