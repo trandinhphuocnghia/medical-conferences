@@ -4,7 +4,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { Post } from '@/payload-types'
-import React from 'react'
+import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert'
+import { Play } from 'lucide-react'
 
 interface DateInfo {
   date: string
@@ -71,7 +72,7 @@ const EventTimeline: React.FC<Post> = ({
 
   return (
     <div className="flex py-12 flex-col gap-8">
-      <div className="relative w-full flex justify-between">
+      <div className="grid grid-cols-5">
         {timelineMarkers.map((item, index) => {
           const colorSet = colors[index % colors.length]
           const isPast = item.date.getTime() < today.getTime()
@@ -95,10 +96,7 @@ const EventTimeline: React.FC<Post> = ({
           const textColor = isPast ? 'text-gray-600' : `${colorSet.text}`
 
           return (
-            <div
-              key={index}
-              className="flex flex-col items-center w-[22%] sm:w-[20%]"
-            >
+            <div key={index} className="flex flex-col items-center w-full">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
@@ -121,7 +119,7 @@ const EventTimeline: React.FC<Post> = ({
                 className={`w-1 h-6 ${isPast ? 'bg-gray-400' : 'bg-gray-300'} my-1`}
               ></div>
 
-              <div className="mt-2 text-sm text-gray-700 font-medium whitespace-normal text-center">
+              <div className="mt-2 text-sm text-gray-700 font-medium whitespace-normal text-center w-20">
                 {item.label}
               </div>
             </div>
@@ -129,35 +127,46 @@ const EventTimeline: React.FC<Post> = ({
         })}
       </div>
 
-      <div className="py-4 px-4 bg-indigo-50 border-l-4 border-indigo-400 text-indigo-800 rounded-lg">
-        {isBeforeStart && (
-          <p className="font-medium">
-            The event has **not yet started**. Today is **
-            {(
-              (sortedDates[0].date.getTime() - today.getTime()) /
-              (1000 * 60 * 60 * 24)
-            ).toFixed(0)}
-            days** before the start date.
-          </p>
-        )}
-        {isAfterEnd && (
-          <p className="font-medium">
-            The event has **concluded**. It ended **
-            {(
-              (today.getTime() -
-                sortedDates[sortedDates.length - 1].date.getTime()) /
-              (1000 * 60 * 60 * 24)
-            ).toFixed(0)}
-            days** ago.
-          </p>
-        )}
-        {!isBeforeStart && !isAfterEnd && (
-          <p className="font-medium">
-            The event is currently **in progress**. Today falls within the key
-            dates of the conference.
-          </p>
-        )}
-      </div>
+      <Alert variant="info" appearance="light">
+        <AlertIcon>
+          <Play />
+        </AlertIcon>
+        <AlertTitle>
+          {isBeforeStart && (
+            <p className="font-medium">
+              The event has <b>not yet started</b>. Today is{' '}
+              <b>
+                {(
+                  (sortedDates[0].date.getTime() - today.getTime()) /
+                  (1000 * 60 * 60 * 24)
+                ).toFixed(0)}
+                days
+              </b>{' '}
+              before the start date.
+            </p>
+          )}
+          {isAfterEnd && (
+            <p className="font-medium">
+              The event has <b>concluded</b>. It ended{' '}
+              <b>
+                {(
+                  (today.getTime() -
+                    sortedDates[sortedDates.length - 1].date.getTime()) /
+                  (1000 * 60 * 60 * 24)
+                ).toFixed(0)}
+                days
+              </b>{' '}
+              ago.
+            </p>
+          )}
+          {!isBeforeStart && !isAfterEnd && (
+            <p className="font-medium">
+              The event is currently <b>in progress</b>. Today falls within the
+              key dates of the conference.
+            </p>
+          )}
+        </AlertTitle>
+      </Alert>
     </div>
   )
 }

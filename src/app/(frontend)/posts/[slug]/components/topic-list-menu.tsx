@@ -17,13 +17,6 @@ export default function TopicListMenu({ topics = [] }: { topics: Topic[] }) {
             rootMargin="-60px 0px 0px 0px"
             activeClass="bg-primary/10 text-primary font-medium"
           >
-            <a
-              key="abstract-overview"
-              className={`w-full cursor-pointer text-left text-sm py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground`}
-              href="#abstract-overview"
-            >
-              Overview
-            </a>
             {topics.map((topic) => (
               <a
                 key={topic.id}
@@ -35,11 +28,18 @@ export default function TopicListMenu({ topics = [] }: { topics: Topic[] }) {
             ))}
             <Separator />
             <a
+              key="abstract-overview"
+              className={`w-full cursor-pointer text-left text-sm py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground`}
+              href="#abstract-overview"
+            >
+              Timeline
+            </a>
+            <a
               key="abstract-form"
               className={`w-full cursor-pointer text-left text-sm py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground`}
               href="#abstract-form"
             >
-              Call for an abstract
+              Call for abstract
             </a>
           </ScrollSpy>
         </div>

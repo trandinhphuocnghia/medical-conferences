@@ -28,7 +28,7 @@ const ConferenceOverview = ({ post }: { post: Post }) => {
       className=" bg-white rounded-xl border-gray-100 max-w-4xl mx-auto"
     >
       <h1 className="text-3xl font-bold mb-6 pb-2 text-gray-800 border-b-2 border-indigo-500">
-        Overview
+        Timeline
       </h1>
       <dl className="divide-y divide-gray-200">
         {data.map((item, index) => (

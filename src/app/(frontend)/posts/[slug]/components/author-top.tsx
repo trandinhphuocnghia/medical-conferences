@@ -12,7 +12,7 @@ export function AuthorTop({
   const { fullname, organization, title } = author as User
 
   return (
-    <div className="flex items-center gap-4 mb-6 pb-8 border-b">
+    <div className="flex items-center gap-4">
       {/* <Avatar className="h-12 w-12">
         <AvatarImage src={avatar || '/placeholder.svg'} alt={name} />
         <AvatarFallback>{author.initials}</AvatarFallback>
