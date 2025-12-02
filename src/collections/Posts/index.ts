@@ -19,8 +19,8 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
-import { afterToday, beforeValidateDate } from './hooks/validation'
 import { author } from '@/utilities/collectionAuthor'
+import { afterToday, beforeValidateDate } from './hooks/validation'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -41,11 +41,6 @@ export const Posts: CollectionConfig<'posts'> = {
     title: true,
     slug: true,
     topics: true,
-    // meta: {
-    //   image: true,
-    //   description: true,
-    // },
-    // likes: true,
     host: true,
   },
 
@@ -136,8 +131,9 @@ export const Posts: CollectionConfig<'posts'> = {
           ],
         },
         {
-          label: 'Deadlines',
+          label: 'Schedule',
           fields: [
+            // 1. Abstract Submission Deadline (First Event)
             {
               name: 'abstractSubmissionDeadline',
               type: 'date',
@@ -146,25 +142,58 @@ export const Posts: CollectionConfig<'posts'> = {
               admin: {
                 date: {
                   pickerAppearance: 'dayAndTime',
+                  minDate: afterToday,
                 },
               },
             },
-            {
-              name: 'earlyRegistrationDeadline',
-              type: 'date',
-              label: 'Early Registration Deadline',
-              required: true,
-              admin: {
-                date: { pickerAppearance: 'dayAndTime' },
-              },
-            },
+            // 2. Notification of Acceptance Date
             {
               name: 'notificationOfAcceptanceDate',
               type: 'date',
               label: 'Notification of Acceptance Date',
               required: true,
               admin: {
-                date: { pickerAppearance: 'dayAndTime' },
+                date: { pickerAppearance: 'dayAndTime', minDate: afterToday },
+              },
+            },
+            // 3. Early Registration Deadline (Last Deadline)
+            {
+              name: 'earlyRegistrationDeadline',
+              type: 'date',
+              label: 'Early Registration Deadline',
+              required: true,
+              admin: {
+                date: { pickerAppearance: 'dayAndTime', minDate: afterToday },
+              },
+            },
+            // 4. Start Date & Time (Sidebar, before End Date)
+            {
+              name: 'startDate',
+              type: 'date',
+              label: 'Start Date & Time',
+              required: true,
+              admin: {
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                  minDate: afterToday,
+                },
+                position: 'sidebar',
+                description: 'Start date and time of the conference.',
+              },
+            },
+            // 5. End Date & Time (Sidebar, after Start Date)
+            {
+              name: 'endDate',
+              type: 'date',
+              label: 'End Date & Time',
+              required: true,
+              admin: {
+                date: {
+                  pickerAppearance: 'dayAndTime',
+                  minDate: afterToday,
+                },
+                position: 'sidebar',
+                description: 'End date and time of the conference.',
               },
             },
           ],
@@ -230,34 +259,6 @@ export const Posts: CollectionConfig<'posts'> = {
           ],
         },
       ],
-    },
-    {
-      name: 'startDate',
-      type: 'date',
-      label: 'Start Date & Time',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-          minDate: afterToday,
-        },
-        position: 'sidebar',
-        description: 'Start date and time of the conference.',
-      },
-    },
-    {
-      name: 'endDate',
-      type: 'date',
-      label: 'End Date & Time',
-      required: true,
-      admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-          minDate: afterToday,
-        },
-        position: 'sidebar',
-        description: 'End date and time of the conference.',
-      },
     },
     ...slugField(),
     ...author,
