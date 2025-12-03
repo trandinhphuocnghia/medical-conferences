@@ -32,7 +32,7 @@ export default function TopicListMenu({ topics = [] }: { topics: Topic[] }) {
               className={`w-full cursor-pointer text-left text-sm py-2 px-3 rounded-md transition-colors text-muted-foreground hover:text-foreground`}
               href="#abstract-overview"
             >
-              Timeline
+              Overview
             </a>
             <a
               key="abstract-form"

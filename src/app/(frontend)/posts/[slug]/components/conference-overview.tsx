@@ -1,11 +1,16 @@
 'use client'
 import { Post, UserGroup } from '@/payload-types'
+import { formatDateTime } from '@/utilities/formatDateTime'
 
 const ConferenceOverview = ({ post }: { post: Post }) => {
   const { title, theme, host, venueCity, venueName, contactEmails } = post
   const data = [
     { label: 'Title', value: title },
-    { label: 'When', value: '-' },
+    {
+      label: 'When',
+      value:
+        formatDateTime(post.startDate) + ' - ' + formatDateTime(post.endDate),
+    },
     { label: 'Venue', value: [venueCity, venueName]?.toString()?.split(', ') },
     { label: 'Theme', value: theme },
     { label: 'Host', value: (host as UserGroup)?.name || '-' },
@@ -28,7 +33,7 @@ const ConferenceOverview = ({ post }: { post: Post }) => {
       className=" bg-white rounded-xl border-gray-100 max-w-4xl mx-auto"
     >
       <h1 className="text-3xl font-bold mb-6 pb-2 text-gray-800 border-b-2 border-indigo-500">
-        Timeline
+        Overview
       </h1>
       <dl className="divide-y divide-gray-200">
         {data.map((item, index) => (

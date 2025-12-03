@@ -2,14 +2,7 @@ import Link from 'next/link'
 import { CreateAbstractForm } from './create-abstract-form'
 import { useUserStore } from '@/stores/userStore'
 import { Post, Topic } from '@/payload-types'
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  AlertToolbar,
-} from '@/components/ui/alert'
-import { Button } from '@payloadcms/ui'
+import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert'
 import { CircleAlert } from 'lucide-react'
 
 export const CallAbstractSection = ({ post }: { post: Post }) => {
@@ -52,9 +45,9 @@ export const CallAbstractSection = ({ post }: { post: Post }) => {
           </AlertIcon>
           <AlertTitle>
             The abstract submission period has closed as of{' '}
-            {submissionDeadline?.toLocaleDateString()}
+            <b>{submissionDeadline?.toLocaleDateString()}</b>
             {' at '}
-            {submissionDeadline?.toLocaleTimeString()}
+            <b>{submissionDeadline?.toLocaleTimeString()}</b>
           </AlertTitle>
         </Alert>
       )}
