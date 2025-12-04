@@ -1,33 +1,20 @@
 import { ArrowRight } from 'lucide-react'
 import { generateMetadata } from '../[slug]/page'
 
+import { getConferences } from '@/app/actions/conferences/getConferences'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import configPromise from '@payload-config'
 import Link from 'next/link'
-import { getPayload } from 'payload'
 import ConferenceCard from './components/conference-card'
 
-export default async function Home() {
-  const payload = await getPayload({ config: configPromise })
-
-  const posts = await payload?.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    select: {
-      title: true,
-      slug: true,
-      description: true,
-      categories: true,
-      meta: true,
-      startDate: true,
-    },
-    where: {
-      active: {
-        equals: true,
-      },
-    },
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string }>
+}) {
+  const searchParamsValues = await searchParams
+  const { docs: posts } = await getConferences({
+    search: searchParamsValues?.search,
   })
 
   return (
@@ -41,9 +28,6 @@ export default async function Home() {
             Upcoming Conferences
           </h2>
           <p className="text-muted-foreground mb-8 md:text-base lg:max-w-2xl lg:text-lg">
-            {/* Explore the latest breakthroughs, clinical guidelines, and evidence-based practices in
-            modern medicine. From novel therapeutics to emerging healthcare technology, stay at the
-            forefront with insights from leading experts and peer-reviewed analysis. */}
             Join a community of leading professionals, researchers, and
             innovators. Discover cutting-edge research, share best practices,
             and help shape the future of patient care. Browse our articles and
@@ -57,7 +41,7 @@ export default async function Home() {
           </Button>
         </div>
         <div className="w-full grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {posts.docs.map((post) => (
+          {posts.map((post) => (
             <ConferenceCard key={post.id} post={post} />
           ))}
         </div>
