@@ -1,10 +1,7 @@
-import {
-  adminOnly,
-  adminOrSubmitter,
-  authenticated,
-} from '@/access/collectionAccess'
+import { adminOrSubmitter, authenticated } from '@/access/collectionAccess'
 import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
+import { beforeDelete } from './hooks/beforeDelete'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { sendAbstractEmail } from './hooks/sendAbstractEmail'
 
@@ -20,7 +17,6 @@ export const Abstracts: CollectionConfig = {
 
       return user.role === 'user'
     },
-    delete: adminOnly,
     read: adminOrSubmitter,
     update: adminOrSubmitter,
   },
@@ -174,5 +170,6 @@ export const Abstracts: CollectionConfig = {
   hooks: {
     beforeChange: [checkExistAbstract],
     afterChange: [sendAbstractEmail],
+    beforeDelete: [beforeDelete],
   },
 }
