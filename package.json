@@ -26,6 +26,7 @@
     "@grafana/faro-web-tracing": "^1.19.0",
     "@hookform/resolvers": "3.10.0",
     "@payloadcms/db-postgres": "3.61.1",
+    "@payloadcms/email-resend": "^3.61.1",
     "@payloadcms/live-preview-react": "3.61.1",
     "@payloadcms/next": "3.61.1",
     "@payloadcms/payload-cloud": "3.61.1",

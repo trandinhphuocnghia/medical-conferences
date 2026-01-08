@@ -30,7 +30,7 @@ export default function ConferenceCard({ post }: ConferenceCardProps) {
           </div>
         </div>
         <CardTitle className="text-xl">{post.title}</CardTitle>
-        <CardDescription className="!mt-4 line-clamp-3">
+        <CardDescription className="mt-4! line-clamp-3">
           {post.theme}
         </CardDescription>
       </CardHeader>
