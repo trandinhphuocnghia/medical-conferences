@@ -1,8 +1,8 @@
 import { resendAdapter } from '@payloadcms/email-resend'
 
 const emailWithResendAdapter = resendAdapter({
-  defaultFromAddress: 'dev@payloadcms.com', //TODO: need to created.
-  defaultFromName: 'Medconf',
+  defaultFromAddress: 'onboarding@resend.dev',
+  defaultFromName: 'onboarding',
   apiKey: process.env.RESEND_API_KEY || '',
 })
 

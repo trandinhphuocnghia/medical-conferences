@@ -23,7 +23,7 @@ import { plugins } from './plugins'
 import { getServerSideURL } from './utilities/getURL'
 
 import 'dotenv/config'
-import emailWithResendAdapter from './services/email/resendAdapter'
+import gmailAdapter from './services/email/emailAdapter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -140,5 +140,5 @@ export default buildConfig({
   graphQL: {
     disablePlaygroundInProduction: true,
   },
-  email: emailWithResendAdapter,
+  email: gmailAdapter,
 })
