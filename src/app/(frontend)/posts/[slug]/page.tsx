@@ -1,16 +1,11 @@
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
-import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
-import { getPayload } from 'payload'
-import { cache } from 'react'
 
 import { getConferenceAbstracts } from '@/app/actions/abstracts/getConferenceAbstracts'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { generateMeta } from '@/utilities/generateMeta'
 import PostContent from './components/post-content'
-import { getConferences } from '@/app/actions/conferences/getConferences'
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 
 type Args = {
