@@ -6,7 +6,7 @@ export async function getConferenceBySlug({ slug }: { slug?: string }) {
   try {
     const payload = await getPayload({ config: configPromise })
 
-    let defaultQuery: Where = {
+    const defaultQuery: Where = {
       active: {
         equals: true,
       },
