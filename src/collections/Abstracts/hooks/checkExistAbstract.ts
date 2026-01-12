@@ -22,6 +22,7 @@ export const checkExistAbstract: CollectionBeforeChangeHook<Abstract> = async ({
         { conference: { equals: conference } },
         { topic: { equals: topic } },
         { submitter: { equals: currentUser } },
+        { status: { in: ['pending', 'verified'] } },
       ],
     },
     limit: 1,

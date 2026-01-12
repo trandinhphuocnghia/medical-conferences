@@ -116,15 +116,6 @@ export const Abstracts: CollectionConfig = {
           name: 'url',
           type: 'text',
         },
-        // {
-        //   name: 'preview',
-        //   type: 'ui',
-        //   admin: {
-        //     components: {
-        //       Field: '@/components/FilePreview#FilePreview',
-        //     },
-        //   },
-        // },
       ],
       access: {
         create: userOnlyFieldAccess,
