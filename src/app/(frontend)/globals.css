@@ -176,3 +176,22 @@
     cursor: revert;
   }
 }
+
+.aurora-bg {
+  background:
+    radial-gradient(
+      ellipse 80% 80% at 50% -20%,
+      rgba(37, 99, 235, 0.3),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 50% at 80% 50%,
+      rgba(249, 115, 22, 0.15),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 50% at 20% 80%,
+      rgba(59, 130, 246, 0.2),
+      transparent
+    );
+}
