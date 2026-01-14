@@ -18,7 +18,7 @@ export async function getConferenceBySlug({ slug }: { slug?: string }) {
     const res = await payload?.find({
       collection: 'posts',
       draft: false,
-      depth: 1,
+      depth: 2,
       where: defaultQuery,
       sort: '-createdAt',
       limit: 10,

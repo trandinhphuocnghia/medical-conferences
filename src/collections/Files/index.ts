@@ -18,6 +18,7 @@ export const Files: CollectionConfig = {
   fields: [],
   upload: {
     disableLocalStorage: true,
+    adapter: 'uploadthing',
     mimeTypes: [
       'application/pdf',
       'application/msword',

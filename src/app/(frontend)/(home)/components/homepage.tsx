@@ -1,3 +1,4 @@
+import { Post } from '@/payload-types'
 import React from 'react'
 import { Contact } from './contact'
 import { Doctors } from './doctors'
@@ -37,7 +38,7 @@ const Hero: React.FC = () => (
   </section>
 )
 
-export const Homepage: React.FC = () => (
+export const Homepage = ({ conferences }: { conferences: Post[] }) => (
   <>
     <div className="bg-background-light dark:bg-background-dark font-display">
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
@@ -46,8 +47,8 @@ export const Homepage: React.FC = () => (
             <div className="layout-content-container flex flex-col max-w-5xl flex-1 w-full">
               <Hero />
               <Features />
+              <Events conferences={conferences} />
               <Doctors />
-              <Events />
               <Sponsors />
               <Contact />
             </div>
