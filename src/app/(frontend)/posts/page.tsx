@@ -1,29 +1,16 @@
-import type { Metadata } from 'next/types'
-
+import { getConferences } from '@/app/actions/conferences/getConferences'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import ConferenceCard from '../(home)/components/conference-card'
 import PageClient from './page.client'
 
-export const dynamic = 'force-static'
-export const revalidate = 600
-
-export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
-
-  const posts = await payload?.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-    },
-  })
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string }>
+}) {
+  const searchParamsValues = await searchParams
+  const posts = await getConferences({ search: searchParamsValues?.search })
 
   return (
     <div className="pt-24 pb-24 px-4">
@@ -34,12 +21,18 @@ export default async function Page() {
         </div>
       </div>
 
+      <div className="w-full grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {posts.docs.map((post) => (
+          <ConferenceCard key={post.id} post={post} />
+        ))}
+      </div>
+
       <div className="container mb-8">
         <PageRange
           collection="posts"
-          currentPage={posts.page}
+          currentPage={posts?.page}
           limit={12}
-          totalDocs={posts.totalDocs}
+          totalDocs={posts?.totalDocs}
         />
       </div>
 
@@ -50,10 +43,4 @@ export default async function Page() {
       </div>
     </div>
   )
-}
-
-export function generateMetadata(): Metadata {
-  return {
-    title: `All Events - MedConf`,
-  }
 }

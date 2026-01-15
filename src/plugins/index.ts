@@ -90,22 +90,9 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  // searchPlugin({
-  //   collections: ['posts'],
-  //   beforeSync: beforeSyncWithSearch,
-  //   searchOverrides: {
-  //     fields: ({ defaultFields }) => {
-  //       return [...defaultFields, ...searchFields]
-  //     },
-  //   },
-  // }),
+
   payloadCloudPlugin(),
-  // r2Storage({
-  //   collections: {
-  //     media: true,
-  //   },
-  //   bucket: cloudflare.env.R2,
-  // }),
+
   uploadthingStorage({
     collections: {
       media: true,

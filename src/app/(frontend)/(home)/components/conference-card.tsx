@@ -1,4 +1,3 @@
-// import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -25,20 +24,13 @@ export default function ConferenceCard({ post }: ConferenceCardProps) {
       {/* Article Content */}
       <CardHeader className="flex-1">
         <div className="flex items-center justify-between mb-3">
-          {/* <div className="flex gap-1">
-            {(post.category as Category[])?.map((category) => (
-              <Badge key={category.id} variant="outline">
-                {category.title}
-              </Badge>
-            ))}
-          </div> */}
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Calendar size={14} />
             {formatDateTime(post.startDate || '')}
           </div>
         </div>
         <CardTitle className="text-xl">{post.title}</CardTitle>
-        <CardDescription className="!mt-4 line-clamp-3">
+        <CardDescription className="mt-4! line-clamp-3">
           {post.theme}
         </CardDescription>
       </CardHeader>

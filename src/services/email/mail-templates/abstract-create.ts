@@ -45,7 +45,7 @@ export const abstractCreateMail = (abstract: Abstract) => `
               </table>
 
               <p style="text-align:center; margin:20px;">
-                <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/abstracts/${abstract.id}" style="background:#0b57b7; color:#ffffff; padding:10px 16px; text-decoration:none; border-radius:6px; font-weight:bold; font-family:Arial;">View Submission</a>
+                <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/collections/abstracts/${abstract.id}" style="background:#0b57b7; color:#ffffff; padding:10px 16px; text-decoration:none; border-radius:6px; font-weight:bold; font-family:Arial;">View Submission</a>
               </p>
 
               <p style="font-size:13px; color:#556b8a;">Questions? Contact: 

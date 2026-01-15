@@ -1,6 +1,12 @@
 import { google } from 'googleapis'
 import { BasePayload, EmailAdapter } from 'payload'
 
+/**
+ *
+googleapis cons:
+- rate limiting: google will block if send more than 50 emails in one second.
+- working alongside other services is difficult.
+ */
 const gmailAdapter: EmailAdapter = ({
   payload: _payload,
 }: {

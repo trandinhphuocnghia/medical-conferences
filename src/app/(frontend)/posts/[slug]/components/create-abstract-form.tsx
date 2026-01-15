@@ -41,7 +41,13 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
           toastSuccess({
             message: 'Abstract submitted successfully!',
           })
-          formRef?.current?.reset()
+          formRef?.current?.reset({
+            description: '',
+            files: [],
+            title: '',
+            topic: '',
+            keywords: '',
+          })
         }
       } catch (_error) {
         toastError({
