@@ -1,54 +1,16 @@
+import {
+  CONNECTION_STATUS,
+  ConnectionStatus,
+  MESSAGE_TYPES,
+  UseWebSocketProps,
+  WS_CONFIG,
+} from '@/types'
 import { useEffect, useRef, useState } from 'react'
-
-/**
- * WebSocket configuration constants
- */
-export const WS_CONFIG = {
-  URL: 'ws://localhost:8081',
-  MAX_RETRIES: 5,
-  RETRY_DELAY: 2000, // 2 seconds
-} as const
-
-/**
- * Message types for WebSocket communication
- */
-export const MESSAGE_TYPES = {
-  FETCH_COLLECTION: 'FETCH_COLLECTION',
-  COLLECTION_DATA: 'COLLECTION_DATA',
-  COLLECTION_CHANGED: 'COLLECTION_CHANGED',
-} as const
-
-/**
- * Connection status messages
- */
-export const CONNECTION_STATUS = {
-  CONNECTING: 'Connecting...',
-  CONNECTED: 'Connected',
-  DISCONNECTED: 'Disconnected',
-  FAILED: 'Failed to connect',
-  ERROR: 'Error',
-} as const
-
-/**
- * Represents a WebSocket message structure for real-time updates
- */
-export type WSMessage<T> = {
-  type: string
-  collection: string
-  operation: 'create' | 'update' | 'delete'
-  doc: T
-}
-
-export type ConnectionStatus =
-  (typeof CONNECTION_STATUS)[keyof typeof CONNECTION_STATUS]
-type UseWebSocketProps<T> = {
-  collection: string
-  onMessage: (data: T) => void
-}
 
 export function useWebSocket<T>({
   collection,
   onMessage,
+  token,
 }: UseWebSocketProps<T>) {
   const [status, setStatus] = useState<ConnectionStatus>(
     CONNECTION_STATUS.CONNECTING,
@@ -65,15 +27,16 @@ export function useWebSocket<T>({
         // Initialize Payload if needed
         // await initPayload() <- TODO: CHECK THIS.
 
-        wsRef.current = new WebSocket(WS_CONFIG.URL)
+        wsRef.current = new WebSocket(`${WS_CONFIG.URL}?token=${token}`)
 
         wsRef.current.onopen = () => {
           setStatus(CONNECTION_STATUS.CONNECTED)
           retryCount = 0
           wsRef.current?.send(
             JSON.stringify({
-              type: 'TOUCHING',
+              type: MESSAGE_TYPES.TOUCHING,
               collection,
+              token,
             }),
           )
         }

@@ -1,6 +1,8 @@
-// src/plugins/websocketServer.ts
+import { MESSAGE_TYPES } from '@/types'
+import { jwtVerify } from 'jose'
 import type { Config } from 'payload'
 import { CollectionSlug } from 'payload'
+import { parse } from 'url'
 import ws, { WebSocketServer } from 'ws'
 
 /**
@@ -15,6 +17,7 @@ interface PluginTypes {
 
 /** Global WebSocket server instance */
 let wss: WebSocketServer
+const clients = new Map() // Key: userId, Value: WebSocket object
 
 /**
  * Payload CMS plugin that adds real-time functionality through WebSockets
@@ -57,7 +60,7 @@ export const websocketServerPlugin =
               async ({ doc }) => {
                 if (wss) {
                   const message = JSON.stringify({
-                    type: 'COLLECTION_CHANGED',
+                    type: MESSAGE_TYPES.COLLECTION_CHANGED,
                     collection: collection.slug,
                     operation: 'delete',
                     doc,
@@ -86,7 +89,7 @@ export const websocketServerPlugin =
                   })
 
                   const message = JSON.stringify({
-                    type: 'COLLECTION_CHANGED',
+                    type: MESSAGE_TYPES.COLLECTION_CHANGED,
                     collection: collection.slug,
                     operation,
                     doc: populatedDoc.docs[0],
@@ -113,7 +116,34 @@ export const websocketServerPlugin =
     config.onInit = async (payload) => {
       if (incomingConfig.onInit) await incomingConfig.onInit(payload)
 
-      wss = new WebSocketServer({ port: pluginOptions.port || 8081 })
+      wss = new WebSocketServer({
+        port: pluginOptions.port || 8081,
+
+        //authentication
+        verifyClient: async (info, callback) => {
+          try {
+            const { query } = parse(info.req.url || '', true)
+            const token = query.token as string
+
+            if (!token) {
+              return callback(false, 401, 'Unauthorized')
+            }
+
+            // Verify the token against Payload's secret
+            const secret = new TextEncoder().encode(payload.secret)
+            const { payload: user } = await jwtVerify(token, secret)
+
+            if (!user) {
+              console.log('ERROR:', { user })
+              return callback(false, 401, 'Invalid Token')
+            }
+
+            callback(true) // User is authenticated!
+          } catch (err) {
+            callback(false, 401, 'Forbidden')
+          }
+        },
+      })
 
       wss.on('connection', (ws) => {
         ws.on('message', async (message) => {
@@ -121,17 +151,30 @@ export const websocketServerPlugin =
             const data = JSON.parse(message.toString())
 
             switch (data.type) {
-              case 'TOUCHING':
-                ws.send(JSON.stringify({ type: 'COLLECTION_DATA', data: [] }))
-                break
-              case 'FETCH_COLLECTION':
-                const results = await payload.find({
-                  collection: data.collection,
-                  depth: 2,
-                  limit: data.limit || 10,
-                })
+              case MESSAGE_TYPES.TOUCHING:
+                //send to client:
                 ws.send(
-                  JSON.stringify({ type: 'COLLECTION_DATA', data: results }),
+                  JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }),
+                )
+
+                const secret = new TextEncoder().encode(payload.secret)
+                const { payload: user } = await jwtVerify(data.token, secret)
+
+                //broadcast to all clients:
+                wss.clients.forEach((client) => {
+                  console.log({ client })
+                  if (client.readyState === ws.OPEN) {
+                    client.send(
+                      JSON.stringify({
+                        type: MESSAGE_TYPES.CLIENT_LIST_UPDATE,
+                        data: [],
+                      }),
+                    )
+                  }
+                })
+
+                ws.send(
+                  JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }),
                 )
                 break
             }

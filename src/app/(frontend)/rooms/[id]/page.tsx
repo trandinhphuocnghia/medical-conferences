@@ -1,4 +1,5 @@
 import { getSeatsByRoomId } from '@/app/actions/seats/getSeatsByRoomId'
+import { cookies } from 'next/headers'
 import { Seats } from './components/Seats'
 
 type Args = {
@@ -12,11 +13,14 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const seats = await getSeatsByRoomId({ id })
 
+  const cookieStore = await cookies()
+  const token = cookieStore.get('payload-token')?.value
+
   if (!seats) return <>WTF</>
 
   return (
     <>
-      <Seats seats={seats?.docs} />
+      <Seats seats={seats?.docs} token={token || null} />
     </>
   )
 }
