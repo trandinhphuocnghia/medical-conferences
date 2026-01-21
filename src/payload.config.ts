@@ -14,6 +14,9 @@ import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Reservations } from './collections/Reservations'
+import { Rooms } from './collections/Rooms'
+import { Seats } from './collections/Seats'
 import { Topics } from './collections/Topics'
 import { UserGroups } from './collections/UserGroups'
 import { Users } from './collections/Users'
@@ -109,6 +112,9 @@ export default buildConfig({
     Files,
     Likes,
     Comments,
+    Rooms,
+    Seats,
+    Reservations,
   ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),

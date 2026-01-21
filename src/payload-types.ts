@@ -78,6 +78,9 @@ export interface Config {
     files: File;
     likes: Like;
     comments: Comment;
+    rooms: Room;
+    seats: Seat;
+    reservations: Reservation;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -99,6 +102,9 @@ export interface Config {
     files: FilesSelect<false> | FilesSelect<true>;
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
+    rooms: RoomsSelect<false> | RoomsSelect<true>;
+    seats: SeatsSelect<false> | SeatsSelect<true>;
+    reservations: ReservationsSelect<false> | ReservationsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -815,6 +821,42 @@ export interface Comment {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rooms".
+ */
+export interface Room {
+  id: number;
+  name: string;
+  totalSeat: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seats".
+ */
+export interface Seat {
+  id: number;
+  type?: ('VIP' | 'MIDDLE' | 'FREE') | null;
+  room?: (number | null) | Room;
+  status?: ('AVAILABLE' | 'ON_HOLD' | 'SOLD') | null;
+  label?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reservations".
+ */
+export interface Reservation {
+  id: number;
+  seat?: (number | null) | Seat;
+  user?: (number | null) | User;
+  status?: ('PENDING' | 'CONFIRMED' | 'CANCELLED') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -998,6 +1040,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'comments';
         value: number | Comment;
+      } | null)
+    | ({
+        relationTo: 'rooms';
+        value: number | Room;
+      } | null)
+    | ({
+        relationTo: 'seats';
+        value: number | Seat;
+      } | null)
+    | ({
+        relationTo: 'reservations';
+        value: number | Reservation;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1380,6 +1434,39 @@ export interface CommentsSelect<T extends boolean = true> {
   post?: T;
   user?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rooms_select".
+ */
+export interface RoomsSelect<T extends boolean = true> {
+  name?: T;
+  totalSeat?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "seats_select".
+ */
+export interface SeatsSelect<T extends boolean = true> {
+  type?: T;
+  room?: T;
+  status?: T;
+  label?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reservations_select".
+ */
+export interface ReservationsSelect<T extends boolean = true> {
+  seat?: T;
+  user?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -1,21 +1,17 @@
+import { notAdminView } from '@/access/collectionView'
+import { revalidateRedirects } from '@/hooks/revalidateRedirects'
+import { Page, Post } from '@/payload-types'
+import { editorConfig } from '@/utilities/editorConfig'
+import { getServerSideURL } from '@/utilities/getURL'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
-// import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
-import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { Plugin } from 'payload'
-// import { searchFields } from '@/search/fieldOverrides'
-// import { beforeSyncWithSearch } from '@/search/beforeSync'
-// import { r2Storage } from '@payloadcms/storage-r2'
 import { uploadthingStorage } from '@payloadcms/storage-uploadthing'
-
-import { notAdminView } from '@/access/collectionView'
-import { Page, Post } from '@/payload-types'
-import { editorConfig } from '@/utilities/editorConfig'
-import { getServerSideURL } from '@/utilities/getURL'
+import { Plugin } from 'payload'
+import { websocketServerPlugin } from './websocketPlugin'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | MedConf` : 'MedConf'
@@ -54,10 +50,6 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  // nestedDocsPlugin({
-  //   collections: ['categories'],
-  //   generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
-  // }),
   seoPlugin({
     generateTitle,
     generateURL,
@@ -89,6 +81,10 @@ export const plugins: Plugin[] = [
         hidden: notAdminView,
       },
     },
+  }),
+
+  websocketServerPlugin({
+    collections: ['reservations'],
   }),
 
   payloadCloudPlugin(),
