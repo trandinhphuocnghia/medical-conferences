@@ -5,11 +5,17 @@ export const afterToday = new Date(new Date().setDate(new Date().getDate() + 1))
 
 export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
   data = {},
+  originalDoc,
 }) => {
-  if (!data.startDate || !data.endDate) return data
+  const rawStart = data?.startDate || originalDoc?.startDate
+  const rawEnd = data?.endDate || originalDoc?.endDate
 
-  const start = new Date(data.startDate)
-  const end = new Date(data.endDate)
+  if (!rawStart || !rawEnd) return data
+
+  const start = new Date(rawStart)
+  const end = new Date(rawEnd)
+
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return data
 
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
