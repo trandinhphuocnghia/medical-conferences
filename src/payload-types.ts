@@ -89,7 +89,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    topics: {
+      conference: 'posts';
+    };
+  };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
@@ -387,6 +391,11 @@ export interface Topic {
   } | null;
   active?: boolean | null;
   category: number | Category;
+  conference?: {
+    docs?: (number | Post)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   createdBy?: (number | null) | User;
   updatedBy?: (number | null) | User;
   updatedAt: string;
@@ -745,35 +754,39 @@ export interface Form {
  */
 export interface Abstract {
   id: number;
-  /**
-   * Which conference this abstract is being submitted to.
-   */
+  title: string;
   conference: number | Post;
-  /**
-   * The specific subject area (e.g., AI in Endoscopy).
-   */
   topic: number | Topic;
   /**
-   * Automatically populated with the logged-in user on submission.
+   * Structure: Introduction, Methods, Results, Conclusion.
    */
-  submitter: number | User;
-  title: string;
-  description: string;
-  keywords?: string | null;
-  files?:
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Add up to 5 keywords for indexing.
+   */
+  keywords?:
     | {
-        url?: string | null;
+        word?: string | null;
         id?: string | null;
       }[]
     | null;
-  /**
-   * Set by Editors/Admins after peer review.
-   */
-  status: 'pending' | 'verified' | 'rejected';
-  /**
-   * Set by Editors/Admins after peer review.
-   */
-  reason?: string | null;
+  files?: (number | Media)[] | null;
+  submitter?: (number | null) | User;
+  status?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1289,6 +1302,7 @@ export interface TopicsSelect<T extends boolean = true> {
   content?: T;
   active?: T;
   category?: T;
+  conference?: T;
   createdBy?: T;
   updatedBy?: T;
   updatedAt?: T;
@@ -1313,20 +1327,19 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "abstracts_select".
  */
 export interface AbstractsSelect<T extends boolean = true> {
+  title?: T;
   conference?: T;
   topic?: T;
-  submitter?: T;
-  title?: T;
   description?: T;
-  keywords?: T;
-  files?:
+  keywords?:
     | T
     | {
-        url?: T;
+        word?: T;
         id?: T;
       };
+  files?: T;
+  submitter?: T;
   status?: T;
-  reason?: T;
   updatedAt?: T;
   createdAt?: T;
 }

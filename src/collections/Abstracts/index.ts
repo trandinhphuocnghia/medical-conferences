@@ -1,6 +1,6 @@
 import { adminOrSubmitter, authenticated } from '@/access/collectionAccess'
-import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
-import type { CollectionConfig } from 'payload'
+import { adminOnlyFieldAccess } from '@/access/fieldAccess'
+import type { CollectionConfig, Where } from 'payload'
 import { beforeDelete } from './hooks/beforeDelete'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { sendAbstractEmail } from './hooks/sendAbstractEmail'
@@ -10,10 +10,8 @@ export const Abstracts: CollectionConfig = {
 
   access: {
     admin: authenticated,
-    create: ({ req: { user, pathname } }) => {
+    create: ({ req: { user } }) => {
       if (!user) return false
-
-      if (pathname.includes('/dashboard')) return false
 
       return user.role === 'user'
     },
@@ -24,146 +22,132 @@ export const Abstracts: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'conference', 'submitter', 'status', 'updatedAt'],
   },
-
   timestamps: true,
 
   fields: [
     {
-      name: 'conference',
-      type: 'relationship',
-      relationTo: 'posts',
-      required: true,
-      hasMany: false,
-      label: 'Associated Conference',
-      access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
-      },
+      type: 'tabs',
+      tabs: [
+        // TAB 1: CORE DETAILS
+        {
+          label: '1. Submission Info',
+          fields: [
+            {
+              name: 'submitterProfilePreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/components/Abstracts/Submitter',
+                },
+                condition: (_, __, { user }) => user?.role === 'admin',
+              },
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                  admin: {
+                    width: '100%',
+                    readOnly: !Boolean(adminOnlyFieldAccess),
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'conference',
+                  type: 'relationship',
+                  relationTo: 'posts',
+                  required: true,
+                  admin: {
+                    width: '50%',
+                    readOnly: !Boolean(adminOnlyFieldAccess),
+                  },
+                },
+                {
+                  name: 'topic',
+                  type: 'relationship',
+                  relationTo: 'topics',
+                  required: true,
+                  admin: {
+                    width: '50%',
+                    readOnly: !Boolean(adminOnlyFieldAccess),
+                  },
+                  filterOptions: ({ data }): Where => {
+                    return {
+                      conference: {
+                        in: data.conference ? [data.conference] : [-1],
+                      },
+                      active: { equals: true },
+                    } as Where
+                  },
+                },
+              ],
+            },
+          ],
+        },
 
-      admin: {
-        description: 'Which conference this abstract is being submitted to.',
-      },
+        // TAB 2: SCIENTIFIC CONTENT
+        {
+          label: '2. Abstract Body',
+          fields: [
+            {
+              name: 'description',
+              type: 'richText', // As discussed, use Lexical for italics/superscripts
+              required: true,
+              label: 'Main Content',
+              admin: {
+                description:
+                  'Structure: Introduction, Methods, Results, Conclusion.',
+              },
+            },
+            {
+              name: 'keywords',
+              type: 'array',
+              label: 'Keywords',
+              minRows: 1,
+              maxRows: 5,
+              fields: [{ name: 'word', type: 'text' }],
+              admin: { description: 'Add up to 5 keywords for indexing.' },
+            },
+          ],
+        },
+
+        // TAB 3: SUPPLEMENTARY
+        {
+          label: '3. Figures & Files',
+          fields: [
+            {
+              name: 'files',
+              type: 'upload', // Better than 'text' URL - link to Media collection
+              relationTo: 'media',
+              hasMany: true,
+              label: 'Supporting Images/Charts',
+            },
+          ],
+        },
+      ],
     },
 
-    {
-      name: 'topic',
-      type: 'relationship',
-      relationTo: 'topics',
-      required: true,
-      hasMany: false,
-      label: 'Specific Topic Area',
-      access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
-      },
-      admin: {
-        description: 'The specific subject area (e.g., AI in Endoscopy).',
-      },
-    },
+    // SIDEBAR FIELDS (The metadata)
     {
       name: 'submitter',
       type: 'relationship',
       relationTo: 'users',
-      required: true,
-      hasMany: false,
-      label: 'Submitter/Author',
-      defaultValue: ({ req }) => {
-        return req.user?.id
-      },
-      admin: {
-        readOnly: true,
-        position: 'sidebar',
-        description:
-          'Automatically populated with the logged-in user on submission.',
-      },
-    },
-
-    {
-      name: 'title',
-      type: 'text',
-      required: true,
-      label: 'Abstract Title',
-      access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
-      },
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      required: true,
-      label: 'Abstract Body Text',
-      access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
-      },
-    },
-    {
-      name: 'keywords',
-      type: 'text',
-      label: 'Keywords (Comma separated)',
-      access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
-      },
-    },
-    {
-      name: 'files',
-      type: 'array',
-      label: 'Files',
-      fields: [
-        {
-          name: 'url',
-          type: 'text',
-        },
-      ],
-      access: {
-        create: userOnlyFieldAccess,
-        update: userOnlyFieldAccess,
-      },
+      admin: { position: 'sidebar', readOnly: true },
     },
     {
       name: 'status',
       type: 'select',
-      label: 'Verification Status',
       options: [
-        { label: 'Pending', value: 'pending' },
-        { label: 'Verified', value: 'verified' },
-        { label: 'Rejected', value: 'rejected' },
+        /* your options */
       ],
-      defaultValue: 'pending',
-      required: true,
-
-      access: {
-        create: adminOnlyFieldAccess,
-        update: ({ req, doc }) => {
-          if (!req.user) return false
-          if (req.user.role === 'user') return false
-          return doc?.status === 'pending'
-        },
-      },
-      admin: {
-        position: 'sidebar',
-        description: 'Set by Editors/Admins after peer review.',
-      },
-    },
-    {
-      name: 'reason',
-      type: 'textarea',
-      label: 'Reason for Rejection',
-      access: {
-        create: adminOnlyFieldAccess,
-        update: ({ req, doc }) => {
-          if (!req.user) return false
-          if (req.user.role === 'user') return false
-          return doc?.status === 'pending'
-        },
-      },
-      admin: {
-        position: 'sidebar',
-        description: 'Set by Editors/Admins after peer review.',
-        condition: ({ status }) => status === 'rejected',
-      },
+      admin: { position: 'sidebar' },
     },
   ],
 

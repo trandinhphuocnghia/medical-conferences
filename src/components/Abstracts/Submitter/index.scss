@@ -1,0 +1,80 @@
+.submitter-profile-card {
+  background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-150);
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  font-family: var(--font-body);
+
+  .card-header {
+    background: var(--theme-elevation-100);
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--theme-elevation-150);
+
+    .badge {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      color: var(--theme-elevation-500);
+    }
+  }
+
+  .card-body {
+    padding: 20px;
+
+    .user-main {
+      margin-bottom: 20px;
+      border-bottom: 1px dashed var(--theme-elevation-200);
+      padding-bottom: 15px;
+
+      .user-name {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--theme-elevation-900);
+      }
+      .user-email {
+        margin: 4px 0 0;
+        font-size: 14px;
+        color: var(--theme-elevation-500);
+      }
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-size: 11px;
+          text-transform: uppercase;
+          color: var(--theme-elevation-400);
+          margin-bottom: 4px;
+          font-weight: 600;
+        }
+
+        span {
+          font-size: 14px;
+          color: var(--theme-elevation-800);
+          font-weight: 500;
+
+          &.mono {
+            font-family: var(--font-mono);
+            letter-spacing: -0.5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.profile-preview-loading {
+  padding: 20px;
+  text-align: center;
+  font-style: italic;
+  color: var(--theme-elevation-400);
+}
