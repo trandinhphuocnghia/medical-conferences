@@ -1,14 +1,14 @@
 'use client'
 
-import { Abstract } from '@/payload-types'
-import { CheckCircle, CircleDashed, XCircle } from 'lucide-react'
-import Link from 'next/link'
+import InfoIcon from '@/components/common/info-icon'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import InfoIcon from '@/components/common/info-icon'
+import { Abstract } from '@/payload-types'
+import { CheckCircle, CircleDashed, XCircle } from 'lucide-react'
+import Link from 'next/link'
 
 export default function TopicAbstractList({
   abstracts = [],
@@ -37,7 +37,7 @@ export default function TopicAbstractList({
                   <p>{abstract.title}</p>
                   <Tooltip>
                     <TooltipTrigger>
-                      <AbstractStatus status={abstract.status} />
+                      {/* <AbstractStatus status={abstract.status} /> */}
                     </TooltipTrigger>
                     <TooltipContent>
                       <p className="capitalize">{abstract.status}</p>

@@ -35,7 +35,7 @@ export const abstractRejectedMail = (abstract: Abstract) => `
               <table role="presentation" width="100%" style="background:#fff6f6; border:1px solid #ffecec; border-radius:8px; padding:14px;">
                 <tr>
                   <td style="color:#8a1b22; font-family:Arial; font-size:15px; padding:10px">
-                    <strong>Reason:</strong> ${abstract.reason}
+                    <strong>Reason:</strong> REASON:.....
                   </td>
                 </tr>
               </table>

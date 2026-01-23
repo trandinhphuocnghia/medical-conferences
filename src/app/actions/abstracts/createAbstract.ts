@@ -30,27 +30,30 @@ export async function createAbstract(
       }
     }
 
-    const abstract = await payload.create({
-      collection: 'abstracts',
+    //TODO:
 
-      data: {
-        ...data,
-        files: uploadedFiles,
-        conference: Number(conference),
-        topic: Number(data.topic),
-        status: 'pending',
-        submitter: user.id,
-      },
-      draft: false,
+    // const abstract = await payload.create({
+    //   collection: 'abstracts',
 
-      overrideAccess: false,
-      req: {
-        headers,
-        user,
-      },
-    })
+    //   data: {
+    //     ...data,
+    //     files: [] as File[],
+    //     description: '',
+    //     conference: Number(conference),
+    //     topic: Number(data.topic),
+    //     status: 'pending',
+    //     submitter: user.id,
+    //   },
+    //   draft: false,
 
-    return { success: true, abstract }
+    //   overrideAccess: false,
+    //   req: {
+    //     headers,
+    //     user,
+    //   },
+    // })
+
+    return { success: true, undefined }
   } catch (error) {
     console.error('Create abstract error:', error)
     return { success: false, error }
