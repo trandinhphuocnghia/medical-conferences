@@ -79,7 +79,6 @@ export function DetailHeader({
 
   return (
     <header className="relative overflow-hidden">
-      {/* Background Pattern */}
       <div className="absolute inset-0 bg-[#0F172A]">
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 400 400">

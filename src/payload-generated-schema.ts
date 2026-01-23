@@ -105,6 +105,7 @@ export const enum__posts_v_version_status = pgEnum(
   'enum__posts_v_version_status',
   ['draft', 'published'],
 )
+export const enum_abstracts_status = pgEnum('enum_abstracts_status', [])
 export const enum_users_title = pgEnum('enum_users_title', [
   'Dr.',
   'Prof.',
@@ -117,10 +118,20 @@ export const enum_users_role = pgEnum('enum_users_role', [
   'modifier',
   'user',
 ])
-export const enum_abstracts_status = pgEnum('enum_abstracts_status', [
-  'pending',
-  'verified',
-  'rejected',
+export const enum_seats_type = pgEnum('enum_seats_type', [
+  'VIP',
+  'MIDDLE',
+  'FREE',
+])
+export const enum_seats_status = pgEnum('enum_seats_status', [
+  'AVAILABLE',
+  'ON_HOLD',
+  'SOLD',
+])
+export const enum_reservations_status = pgEnum('enum_reservations_status', [
+  'PENDING',
+  'CONFIRMED',
+  'CANCELLED',
 ])
 export const enum_redirects_to_type = pgEnum('enum_redirects_to_type', [
   'reference',
@@ -807,21 +818,16 @@ export const posts = pgTable(
       withTimezone: true,
       precision: 3,
     }),
-    earlyRegistrationDeadline: timestamp('early_registration_deadline', {
-      mode: 'string',
-      withTimezone: true,
-      precision: 3,
-    }),
     notificationOfAcceptanceDate: timestamp('notification_of_acceptance_date', {
       mode: 'string',
       withTimezone: true,
       precision: 3,
     }),
-    meta_title: varchar('meta_title'),
-    meta_image: integer('meta_image_id').references(() => media.id, {
-      onDelete: 'set null',
+    earlyRegistrationDeadline: timestamp('early_registration_deadline', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
     }),
-    meta_description: varchar('meta_description'),
     startDate: timestamp('start_date', {
       mode: 'string',
       withTimezone: true,
@@ -832,6 +838,11 @@ export const posts = pgTable(
       withTimezone: true,
       precision: 3,
     }),
+    meta_title: varchar('meta_title'),
+    meta_image: integer('meta_image_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
+    meta_description: varchar('meta_description'),
     slug: varchar('slug'),
     slugLock: boolean('slug_lock').default(true),
     createdBy: integer('created_by_id').references(() => users.id, {
@@ -971,22 +982,14 @@ export const _posts_v = pgTable(
       'version_abstract_submission_deadline',
       { mode: 'string', withTimezone: true, precision: 3 },
     ),
-    version_earlyRegistrationDeadline: timestamp(
-      'version_early_registration_deadline',
-      { mode: 'string', withTimezone: true, precision: 3 },
-    ),
     version_notificationOfAcceptanceDate: timestamp(
       'version_notification_of_acceptance_date',
       { mode: 'string', withTimezone: true, precision: 3 },
     ),
-    version_meta_title: varchar('version_meta_title'),
-    version_meta_image: integer('version_meta_image_id').references(
-      () => media.id,
-      {
-        onDelete: 'set null',
-      },
+    version_earlyRegistrationDeadline: timestamp(
+      'version_early_registration_deadline',
+      { mode: 'string', withTimezone: true, precision: 3 },
     ),
-    version_meta_description: varchar('version_meta_description'),
     version_startDate: timestamp('version_start_date', {
       mode: 'string',
       withTimezone: true,
@@ -997,6 +1000,14 @@ export const _posts_v = pgTable(
       withTimezone: true,
       precision: 3,
     }),
+    version_meta_title: varchar('version_meta_title'),
+    version_meta_image: integer('version_meta_image_id').references(
+      () => media.id,
+      {
+        onDelete: 'set null',
+      },
+    ),
+    version_meta_description: varchar('version_meta_description'),
     version_slug: varchar('version_slug'),
     version_slugLock: boolean('version_slug_lock').default(true),
     version_createdBy: integer('version_created_by_id').references(
@@ -1153,6 +1164,33 @@ export const topics = pgTable(
   ],
 )
 
+export const topics_rels = pgTable(
+  'topics_rels',
+  {
+    id: serial('id').primaryKey(),
+    order: integer('order'),
+    parent: integer('parent_id').notNull(),
+    path: varchar('path').notNull(),
+    postsID: integer('posts_id'),
+  },
+  (columns) => [
+    index('topics_rels_order_idx').on(columns.order),
+    index('topics_rels_parent_idx').on(columns.parent),
+    index('topics_rels_path_idx').on(columns.path),
+    index('topics_rels_posts_id_idx').on(columns.postsID),
+    foreignKey({
+      columns: [columns['parent']],
+      foreignColumns: [topics.id],
+      name: 'topics_rels_parent_fk',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [columns['postsID']],
+      foreignColumns: [posts.id],
+      name: 'topics_rels_posts_fk',
+    }).onDelete('cascade'),
+  ],
+)
+
 export const categories = pgTable(
   'categories',
   {
@@ -1196,6 +1234,96 @@ export const categories = pgTable(
   ],
 )
 
+export const abstracts_keywords = pgTable(
+  'abstracts_keywords',
+  {
+    _order: integer('_order').notNull(),
+    _parentID: integer('_parent_id').notNull(),
+    id: varchar('id').primaryKey(),
+    word: varchar('word'),
+  },
+  (columns) => [
+    index('abstracts_keywords_order_idx').on(columns._order),
+    index('abstracts_keywords_parent_id_idx').on(columns._parentID),
+    foreignKey({
+      columns: [columns['_parentID']],
+      foreignColumns: [abstracts.id],
+      name: 'abstracts_keywords_parent_id_fk',
+    }).onDelete('cascade'),
+  ],
+)
+
+export const abstracts = pgTable(
+  'abstracts',
+  {
+    id: serial('id').primaryKey(),
+    title: varchar('title').notNull(),
+    conference: integer('conference_id')
+      .notNull()
+      .references(() => posts.id, {
+        onDelete: 'set null',
+      }),
+    topic: integer('topic_id')
+      .notNull()
+      .references(() => topics.id, {
+        onDelete: 'set null',
+      }),
+    description: jsonb('description').notNull(),
+    submitter: integer('submitter_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    status: enum_abstracts_status('status'),
+    updatedAt: timestamp('updated_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp('created_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
+  },
+  (columns) => [
+    index('abstracts_conference_idx').on(columns.conference),
+    index('abstracts_topic_idx').on(columns.topic),
+    index('abstracts_submitter_idx').on(columns.submitter),
+    index('abstracts_updated_at_idx').on(columns.updatedAt),
+    index('abstracts_created_at_idx').on(columns.createdAt),
+  ],
+)
+
+export const abstracts_rels = pgTable(
+  'abstracts_rels',
+  {
+    id: serial('id').primaryKey(),
+    order: integer('order'),
+    parent: integer('parent_id').notNull(),
+    path: varchar('path').notNull(),
+    mediaID: integer('media_id'),
+  },
+  (columns) => [
+    index('abstracts_rels_order_idx').on(columns.order),
+    index('abstracts_rels_parent_idx').on(columns.parent),
+    index('abstracts_rels_path_idx').on(columns.path),
+    index('abstracts_rels_media_id_idx').on(columns.mediaID),
+    foreignKey({
+      columns: [columns['parent']],
+      foreignColumns: [abstracts.id],
+      name: 'abstracts_rels_parent_fk',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [columns['mediaID']],
+      foreignColumns: [media.id],
+      name: 'abstracts_rels_media_fk',
+    }).onDelete('cascade'),
+  ],
+)
+
 export const users_sessions = pgTable(
   'users_sessions',
   {
@@ -1233,6 +1361,9 @@ export const users = pgTable(
     fullname: varchar('fullname'),
     active: boolean('active').default(true),
     title: enum_users_title('title'),
+    avatar: integer('avatar_id').references(() => media.id, {
+      onDelete: 'set null',
+    }),
     organization: varchar('organization'),
     medicalLicenseNumber: varchar('medical_license_number'),
     specialization: varchar('specialization'),
@@ -1262,7 +1393,7 @@ export const users = pgTable(
     }),
     salt: varchar('salt'),
     hash: varchar('hash'),
-    loginAttempts: numeric('login_attempts', { mode: 'number' }).default(0),
+    loginAttempts: numeric('login_attempts', { mode: 'number' }).default('0'),
     lockUntil: timestamp('lock_until', {
       mode: 'string',
       withTimezone: true,
@@ -1271,6 +1402,7 @@ export const users = pgTable(
   },
   (columns) => [
     index('users_fullname_idx').on(columns.fullname),
+    index('users_avatar_idx').on(columns.avatar),
     index('users_updated_at_idx').on(columns.updatedAt),
     index('users_created_at_idx').on(columns.createdAt),
     uniqueIndex('users_email_idx').on(columns.email),
@@ -1344,7 +1476,12 @@ export const media = pgTable(
   {
     id: serial('id').primaryKey(),
     alt: varchar('alt'),
-    caption: jsonb('caption'),
+    createdBy: integer('created_by_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    updatedBy: integer('updated_by_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
     _key: varchar('_key'),
     updatedAt: timestamp('updated_at', {
       mode: 'string',
@@ -1369,83 +1506,49 @@ export const media = pgTable(
     height: numeric('height', { mode: 'number' }),
     focalX: numeric('focal_x', { mode: 'number' }),
     focalY: numeric('focal_y', { mode: 'number' }),
-    sizes_thumbnail__key: varchar('sizes_thumbnail__key'),
-    sizes_thumbnail_url: varchar('sizes_thumbnail_url'),
-    sizes_thumbnail_width: numeric('sizes_thumbnail_width', { mode: 'number' }),
-    sizes_thumbnail_height: numeric('sizes_thumbnail_height', {
-      mode: 'number',
-    }),
-    sizes_thumbnail_mimeType: varchar('sizes_thumbnail_mime_type'),
-    sizes_thumbnail_filesize: numeric('sizes_thumbnail_filesize', {
-      mode: 'number',
-    }),
-    sizes_thumbnail_filename: varchar('sizes_thumbnail_filename'),
-    sizes_square__key: varchar('sizes_square__key'),
-    sizes_square_url: varchar('sizes_square_url'),
-    sizes_square_width: numeric('sizes_square_width', { mode: 'number' }),
-    sizes_square_height: numeric('sizes_square_height', { mode: 'number' }),
-    sizes_square_mimeType: varchar('sizes_square_mime_type'),
-    sizes_square_filesize: numeric('sizes_square_filesize', { mode: 'number' }),
-    sizes_square_filename: varchar('sizes_square_filename'),
-    sizes_small__key: varchar('sizes_small__key'),
-    sizes_small_url: varchar('sizes_small_url'),
-    sizes_small_width: numeric('sizes_small_width', { mode: 'number' }),
-    sizes_small_height: numeric('sizes_small_height', { mode: 'number' }),
-    sizes_small_mimeType: varchar('sizes_small_mime_type'),
-    sizes_small_filesize: numeric('sizes_small_filesize', { mode: 'number' }),
-    sizes_small_filename: varchar('sizes_small_filename'),
-    sizes_medium__key: varchar('sizes_medium__key'),
-    sizes_medium_url: varchar('sizes_medium_url'),
-    sizes_medium_width: numeric('sizes_medium_width', { mode: 'number' }),
-    sizes_medium_height: numeric('sizes_medium_height', { mode: 'number' }),
-    sizes_medium_mimeType: varchar('sizes_medium_mime_type'),
-    sizes_medium_filesize: numeric('sizes_medium_filesize', { mode: 'number' }),
-    sizes_medium_filename: varchar('sizes_medium_filename'),
-    sizes_large__key: varchar('sizes_large__key'),
-    sizes_large_url: varchar('sizes_large_url'),
-    sizes_large_width: numeric('sizes_large_width', { mode: 'number' }),
-    sizes_large_height: numeric('sizes_large_height', { mode: 'number' }),
-    sizes_large_mimeType: varchar('sizes_large_mime_type'),
-    sizes_large_filesize: numeric('sizes_large_filesize', { mode: 'number' }),
-    sizes_large_filename: varchar('sizes_large_filename'),
-    sizes_xlarge__key: varchar('sizes_xlarge__key'),
-    sizes_xlarge_url: varchar('sizes_xlarge_url'),
-    sizes_xlarge_width: numeric('sizes_xlarge_width', { mode: 'number' }),
-    sizes_xlarge_height: numeric('sizes_xlarge_height', { mode: 'number' }),
-    sizes_xlarge_mimeType: varchar('sizes_xlarge_mime_type'),
-    sizes_xlarge_filesize: numeric('sizes_xlarge_filesize', { mode: 'number' }),
-    sizes_xlarge_filename: varchar('sizes_xlarge_filename'),
-    sizes_og__key: varchar('sizes_og__key'),
-    sizes_og_url: varchar('sizes_og_url'),
-    sizes_og_width: numeric('sizes_og_width', { mode: 'number' }),
-    sizes_og_height: numeric('sizes_og_height', { mode: 'number' }),
-    sizes_og_mimeType: varchar('sizes_og_mime_type'),
-    sizes_og_filesize: numeric('sizes_og_filesize', { mode: 'number' }),
-    sizes_og_filename: varchar('sizes_og_filename'),
   },
   (columns) => [
+    index('media_created_by_idx').on(columns.createdBy),
+    index('media_updated_by_idx').on(columns.updatedBy),
     index('media_updated_at_idx').on(columns.updatedAt),
     index('media_created_at_idx').on(columns.createdAt),
     uniqueIndex('media_filename_idx').on(columns.filename),
-    index('media_sizes_thumbnail_sizes_thumbnail_filename_idx').on(
-      columns.sizes_thumbnail_filename,
-    ),
-    index('media_sizes_square_sizes_square_filename_idx').on(
-      columns.sizes_square_filename,
-    ),
-    index('media_sizes_small_sizes_small_filename_idx').on(
-      columns.sizes_small_filename,
-    ),
-    index('media_sizes_medium_sizes_medium_filename_idx').on(
-      columns.sizes_medium_filename,
-    ),
-    index('media_sizes_large_sizes_large_filename_idx').on(
-      columns.sizes_large_filename,
-    ),
-    index('media_sizes_xlarge_sizes_xlarge_filename_idx').on(
-      columns.sizes_xlarge_filename,
-    ),
-    index('media_sizes_og_sizes_og_filename_idx').on(columns.sizes_og_filename),
+  ],
+)
+
+export const files = pgTable(
+  'files',
+  {
+    id: serial('id').primaryKey(),
+    _key: varchar('_key'),
+    updatedAt: timestamp('updated_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp('created_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
+    url: varchar('url'),
+    thumbnailURL: varchar('thumbnail_u_r_l'),
+    filename: varchar('filename'),
+    mimeType: varchar('mime_type'),
+    filesize: numeric('filesize', { mode: 'number' }),
+    width: numeric('width', { mode: 'number' }),
+    height: numeric('height', { mode: 'number' }),
+    focalX: numeric('focal_x', { mode: 'number' }),
+    focalY: numeric('focal_y', { mode: 'number' }),
+  },
+  (columns) => [
+    index('files_updated_at_idx').on(columns.updatedAt),
+    index('files_created_at_idx').on(columns.createdAt),
+    uniqueIndex('files_filename_idx').on(columns.filename),
   ],
 )
 
@@ -1524,46 +1627,43 @@ export const comments = pgTable(
   ],
 )
 
-export const abstracts_files = pgTable(
-  'abstracts_files',
+export const rooms = pgTable(
+  'rooms',
   {
-    _order: integer('_order').notNull(),
-    _parentID: integer('_parent_id').notNull(),
-    id: varchar('id').primaryKey(),
-    url: varchar('url'),
+    id: serial('id').primaryKey(),
+    name: varchar('name').notNull(),
+    totalSeat: numeric('total_seat', { mode: 'number' }).notNull(),
+    updatedAt: timestamp('updated_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp('created_at', {
+      mode: 'string',
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
   },
   (columns) => [
-    index('abstracts_files_order_idx').on(columns._order),
-    index('abstracts_files_parent_id_idx').on(columns._parentID),
-    foreignKey({
-      columns: [columns['_parentID']],
-      foreignColumns: [abstracts.id],
-      name: 'abstracts_files_parent_id_fk',
-    }).onDelete('cascade'),
+    index('rooms_updated_at_idx').on(columns.updatedAt),
+    index('rooms_created_at_idx').on(columns.createdAt),
   ],
 )
 
-export const abstracts = pgTable(
-  'abstracts',
+export const seats = pgTable(
+  'seats',
   {
     id: serial('id').primaryKey(),
-    conference: integer('conference_id')
-      .notNull()
-      .references(() => posts.id, {
-        onDelete: 'set null',
-      }),
-    topic: integer('topic_id')
-      .notNull()
-      .references(() => topics.id, {
-        onDelete: 'set null',
-      }),
-    submitter: integer('submitter_id').references(() => users.id, {
+    type: enum_seats_type('type'),
+    room: integer('room_id').references(() => rooms.id, {
       onDelete: 'set null',
     }),
-    title: varchar('title').notNull(),
-    description: varchar('description').notNull(),
-    keywords: varchar('keywords'),
-    status: enum_abstracts_status('status').notNull().default('pending'),
+    status: enum_seats_status('status'),
+    label: varchar('label'),
     updatedAt: timestamp('updated_at', {
       mode: 'string',
       withTimezone: true,
@@ -1580,19 +1680,27 @@ export const abstracts = pgTable(
       .notNull(),
   },
   (columns) => [
-    index('abstracts_conference_idx').on(columns.conference),
-    index('abstracts_topic_idx').on(columns.topic),
-    index('abstracts_submitter_idx').on(columns.submitter),
-    index('abstracts_updated_at_idx').on(columns.updatedAt),
-    index('abstracts_created_at_idx').on(columns.createdAt),
+    index('seats_type_idx').on(columns.type),
+    index('seats_room_idx').on(columns.room),
+    index('seats_status_idx').on(columns.status),
+    index('seats_label_idx').on(columns.label),
+    index('seats_updated_at_idx').on(columns.updatedAt),
+    index('seats_created_at_idx').on(columns.createdAt),
+    uniqueIndex('label_room_idx').on(columns.label, columns.room),
   ],
 )
 
-export const files = pgTable(
-  'files',
+export const reservations = pgTable(
+  'reservations',
   {
     id: serial('id').primaryKey(),
-    _key: varchar('_key'),
+    seat: integer('seat_id').references(() => seats.id, {
+      onDelete: 'set null',
+    }),
+    user: integer('user_id').references(() => users.id, {
+      onDelete: 'set null',
+    }),
+    status: enum_reservations_status('status'),
     updatedAt: timestamp('updated_at', {
       mode: 'string',
       withTimezone: true,
@@ -1607,20 +1715,12 @@ export const files = pgTable(
     })
       .defaultNow()
       .notNull(),
-    url: varchar('url'),
-    thumbnailURL: varchar('thumbnail_u_r_l'),
-    filename: varchar('filename'),
-    mimeType: varchar('mime_type'),
-    filesize: numeric('filesize', { mode: 'number' }),
-    width: numeric('width', { mode: 'number' }),
-    height: numeric('height', { mode: 'number' }),
-    focalX: numeric('focal_x', { mode: 'number' }),
-    focalY: numeric('focal_y', { mode: 'number' }),
   },
   (columns) => [
-    index('files_updated_at_idx').on(columns.updatedAt),
-    index('files_created_at_idx').on(columns.createdAt),
-    uniqueIndex('files_filename_idx').on(columns.filename),
+    index('reservations_seat_idx').on(columns.seat),
+    index('reservations_user_idx').on(columns.user),
+    index('reservations_updated_at_idx').on(columns.updatedAt),
+    index('reservations_created_at_idx').on(columns.createdAt),
   ],
 )
 
@@ -2141,7 +2241,7 @@ export const payload_jobs = pgTable(
       withTimezone: true,
       precision: 3,
     }),
-    totalTried: numeric('total_tried', { mode: 'number' }).default(0),
+    totalTried: numeric('total_tried', { mode: 'number' }).default('0'),
     hasError: boolean('has_error').default(false),
     error: jsonb('error'),
     taskSlug: enum_payload_jobs_task_slug('task_slug'),
@@ -2218,13 +2318,16 @@ export const payload_locked_documents_rels = pgTable(
     postsID: integer('posts_id'),
     topicsID: integer('topics_id'),
     categoriesID: integer('categories_id'),
+    abstractsID: integer('abstracts_id'),
     usersID: integer('users_id'),
     'user-groupsID': integer('user_groups_id'),
     mediaID: integer('media_id'),
+    filesID: integer('files_id'),
     likesID: integer('likes_id'),
     commentsID: integer('comments_id'),
-    abstractsID: integer('abstracts_id'),
-    filesID: integer('files_id'),
+    roomsID: integer('rooms_id'),
+    seatsID: integer('seats_id'),
+    reservationsID: integer('reservations_id'),
     redirectsID: integer('redirects_id'),
     formsID: integer('forms_id'),
     'form-submissionsID': integer('form_submissions_id'),
@@ -2240,19 +2343,24 @@ export const payload_locked_documents_rels = pgTable(
     index('payload_locked_documents_rels_categories_id_idx').on(
       columns.categoriesID,
     ),
+    index('payload_locked_documents_rels_abstracts_id_idx').on(
+      columns.abstractsID,
+    ),
     index('payload_locked_documents_rels_users_id_idx').on(columns.usersID),
     index('payload_locked_documents_rels_user_groups_id_idx').on(
       columns['user-groupsID'],
     ),
     index('payload_locked_documents_rels_media_id_idx').on(columns.mediaID),
+    index('payload_locked_documents_rels_files_id_idx').on(columns.filesID),
     index('payload_locked_documents_rels_likes_id_idx').on(columns.likesID),
     index('payload_locked_documents_rels_comments_id_idx').on(
       columns.commentsID,
     ),
-    index('payload_locked_documents_rels_abstracts_id_idx').on(
-      columns.abstractsID,
+    index('payload_locked_documents_rels_rooms_id_idx').on(columns.roomsID),
+    index('payload_locked_documents_rels_seats_id_idx').on(columns.seatsID),
+    index('payload_locked_documents_rels_reservations_id_idx').on(
+      columns.reservationsID,
     ),
-    index('payload_locked_documents_rels_files_id_idx').on(columns.filesID),
     index('payload_locked_documents_rels_redirects_id_idx').on(
       columns.redirectsID,
     ),
@@ -2289,6 +2397,11 @@ export const payload_locked_documents_rels = pgTable(
       name: 'payload_locked_documents_rels_categories_fk',
     }).onDelete('cascade'),
     foreignKey({
+      columns: [columns['abstractsID']],
+      foreignColumns: [abstracts.id],
+      name: 'payload_locked_documents_rels_abstracts_fk',
+    }).onDelete('cascade'),
+    foreignKey({
       columns: [columns['usersID']],
       foreignColumns: [users.id],
       name: 'payload_locked_documents_rels_users_fk',
@@ -2304,6 +2417,11 @@ export const payload_locked_documents_rels = pgTable(
       name: 'payload_locked_documents_rels_media_fk',
     }).onDelete('cascade'),
     foreignKey({
+      columns: [columns['filesID']],
+      foreignColumns: [files.id],
+      name: 'payload_locked_documents_rels_files_fk',
+    }).onDelete('cascade'),
+    foreignKey({
       columns: [columns['likesID']],
       foreignColumns: [likes.id],
       name: 'payload_locked_documents_rels_likes_fk',
@@ -2314,14 +2432,19 @@ export const payload_locked_documents_rels = pgTable(
       name: 'payload_locked_documents_rels_comments_fk',
     }).onDelete('cascade'),
     foreignKey({
-      columns: [columns['abstractsID']],
-      foreignColumns: [abstracts.id],
-      name: 'payload_locked_documents_rels_abstracts_fk',
+      columns: [columns['roomsID']],
+      foreignColumns: [rooms.id],
+      name: 'payload_locked_documents_rels_rooms_fk',
     }).onDelete('cascade'),
     foreignKey({
-      columns: [columns['filesID']],
-      foreignColumns: [files.id],
-      name: 'payload_locked_documents_rels_files_fk',
+      columns: [columns['seatsID']],
+      foreignColumns: [seats.id],
+      name: 'payload_locked_documents_rels_seats_fk',
+    }).onDelete('cascade'),
+    foreignKey({
+      columns: [columns['reservationsID']],
+      foreignColumns: [reservations.id],
+      name: 'payload_locked_documents_rels_reservations_fk',
     }).onDelete('cascade'),
     foreignKey({
       columns: [columns['redirectsID']],
@@ -3002,7 +3125,19 @@ export const relations__posts_v = relations(_posts_v, ({ one, many }) => ({
     relationName: '_rels',
   }),
 }))
-export const relations_topics = relations(topics, ({ one }) => ({
+export const relations_topics_rels = relations(topics_rels, ({ one }) => ({
+  parent: one(topics, {
+    fields: [topics_rels.parent],
+    references: [topics.id],
+    relationName: '_rels',
+  }),
+  postsID: one(posts, {
+    fields: [topics_rels.postsID],
+    references: [posts.id],
+    relationName: 'posts',
+  }),
+}))
+export const relations_topics = relations(topics, ({ one, many }) => ({
   category: one(categories, {
     fields: [topics.category],
     references: [categories.id],
@@ -3018,6 +3153,9 @@ export const relations_topics = relations(topics, ({ one }) => ({
     references: [users.id],
     relationName: 'updatedBy',
   }),
+  _rels: many(topics_rels, {
+    relationName: '_rels',
+  }),
 }))
 export const relations_categories = relations(categories, ({ one }) => ({
   createdBy: one(users, {
@@ -3031,6 +3169,54 @@ export const relations_categories = relations(categories, ({ one }) => ({
     relationName: 'updatedBy',
   }),
 }))
+export const relations_abstracts_keywords = relations(
+  abstracts_keywords,
+  ({ one }) => ({
+    _parentID: one(abstracts, {
+      fields: [abstracts_keywords._parentID],
+      references: [abstracts.id],
+      relationName: 'keywords',
+    }),
+  }),
+)
+export const relations_abstracts_rels = relations(
+  abstracts_rels,
+  ({ one }) => ({
+    parent: one(abstracts, {
+      fields: [abstracts_rels.parent],
+      references: [abstracts.id],
+      relationName: '_rels',
+    }),
+    mediaID: one(media, {
+      fields: [abstracts_rels.mediaID],
+      references: [media.id],
+      relationName: 'media',
+    }),
+  }),
+)
+export const relations_abstracts = relations(abstracts, ({ one, many }) => ({
+  conference: one(posts, {
+    fields: [abstracts.conference],
+    references: [posts.id],
+    relationName: 'conference',
+  }),
+  topic: one(topics, {
+    fields: [abstracts.topic],
+    references: [topics.id],
+    relationName: 'topic',
+  }),
+  keywords: many(abstracts_keywords, {
+    relationName: 'keywords',
+  }),
+  submitter: one(users, {
+    fields: [abstracts.submitter],
+    references: [users.id],
+    relationName: 'submitter',
+  }),
+  _rels: many(abstracts_rels, {
+    relationName: '_rels',
+  }),
+}))
 export const relations_users_sessions = relations(
   users_sessions,
   ({ one }) => ({
@@ -3041,7 +3227,12 @@ export const relations_users_sessions = relations(
     }),
   }),
 )
-export const relations_users = relations(users, ({ many }) => ({
+export const relations_users = relations(users, ({ one, many }) => ({
+  avatar: one(media, {
+    fields: [users.avatar],
+    references: [media.id],
+    relationName: 'avatar',
+  }),
   sessions: many(users_sessions, {
     relationName: 'sessions',
   }),
@@ -3079,7 +3270,19 @@ export const relations_user_groups = relations(
     }),
   }),
 )
-export const relations_media = relations(media, () => ({}))
+export const relations_media = relations(media, ({ one }) => ({
+  createdBy: one(users, {
+    fields: [media.createdBy],
+    references: [users.id],
+    relationName: 'createdBy',
+  }),
+  updatedBy: one(users, {
+    fields: [media.updatedBy],
+    references: [users.id],
+    relationName: 'updatedBy',
+  }),
+}))
+export const relations_files = relations(files, () => ({}))
 export const relations_likes = relations(likes, ({ one }) => ({
   user: one(users, {
     fields: [likes.user],
@@ -3104,37 +3307,26 @@ export const relations_comments = relations(comments, ({ one }) => ({
     relationName: 'user',
   }),
 }))
-export const relations_abstracts_files = relations(
-  abstracts_files,
-  ({ one }) => ({
-    _parentID: one(abstracts, {
-      fields: [abstracts_files._parentID],
-      references: [abstracts.id],
-      relationName: 'files',
-    }),
-  }),
-)
-export const relations_abstracts = relations(abstracts, ({ one, many }) => ({
-  conference: one(posts, {
-    fields: [abstracts.conference],
-    references: [posts.id],
-    relationName: 'conference',
-  }),
-  files: many(abstracts_files, {
-    relationName: 'files',
-  }),
-  topic: one(topics, {
-    fields: [abstracts.topic],
-    references: [topics.id],
-    relationName: 'topic',
-  }),
-  submitter: one(users, {
-    fields: [abstracts.submitter],
-    references: [users.id],
-    relationName: 'submitter',
+export const relations_rooms = relations(rooms, () => ({}))
+export const relations_seats = relations(seats, ({ one }) => ({
+  room: one(rooms, {
+    fields: [seats.room],
+    references: [rooms.id],
+    relationName: 'room',
   }),
 }))
-export const relations_files = relations(files, () => ({}))
+export const relations_reservations = relations(reservations, ({ one }) => ({
+  seat: one(seats, {
+    fields: [reservations.seat],
+    references: [seats.id],
+    relationName: 'seat',
+  }),
+  user: one(users, {
+    fields: [reservations.user],
+    references: [users.id],
+    relationName: 'user',
+  }),
+}))
 export const relations_redirects_rels = relations(
   redirects_rels,
   ({ one }) => ({
@@ -3394,6 +3586,11 @@ export const relations_payload_locked_documents_rels = relations(
       references: [categories.id],
       relationName: 'categories',
     }),
+    abstractsID: one(abstracts, {
+      fields: [payload_locked_documents_rels.abstractsID],
+      references: [abstracts.id],
+      relationName: 'abstracts',
+    }),
     usersID: one(users, {
       fields: [payload_locked_documents_rels.usersID],
       references: [users.id],
@@ -3409,6 +3606,11 @@ export const relations_payload_locked_documents_rels = relations(
       references: [media.id],
       relationName: 'media',
     }),
+    filesID: one(files, {
+      fields: [payload_locked_documents_rels.filesID],
+      references: [files.id],
+      relationName: 'files',
+    }),
     likesID: one(likes, {
       fields: [payload_locked_documents_rels.likesID],
       references: [likes.id],
@@ -3419,15 +3621,20 @@ export const relations_payload_locked_documents_rels = relations(
       references: [comments.id],
       relationName: 'comments',
     }),
-    abstractsID: one(abstracts, {
-      fields: [payload_locked_documents_rels.abstractsID],
-      references: [abstracts.id],
-      relationName: 'abstracts',
+    roomsID: one(rooms, {
+      fields: [payload_locked_documents_rels.roomsID],
+      references: [rooms.id],
+      relationName: 'rooms',
     }),
-    filesID: one(files, {
-      fields: [payload_locked_documents_rels.filesID],
-      references: [files.id],
-      relationName: 'files',
+    seatsID: one(seats, {
+      fields: [payload_locked_documents_rels.seatsID],
+      references: [seats.id],
+      relationName: 'seats',
+    }),
+    reservationsID: one(reservations, {
+      fields: [payload_locked_documents_rels.reservationsID],
+      references: [reservations.id],
+      relationName: 'reservations',
     }),
     redirectsID: one(redirects, {
       fields: [payload_locked_documents_rels.redirectsID],
@@ -3578,9 +3785,12 @@ type DatabaseSchema = {
   enum__pages_v_version_status: typeof enum__pages_v_version_status
   enum_posts_status: typeof enum_posts_status
   enum__posts_v_version_status: typeof enum__posts_v_version_status
+  enum_abstracts_status: typeof enum_abstracts_status
   enum_users_title: typeof enum_users_title
   enum_users_role: typeof enum_users_role
-  enum_abstracts_status: typeof enum_abstracts_status
+  enum_seats_type: typeof enum_seats_type
+  enum_seats_status: typeof enum_seats_status
+  enum_reservations_status: typeof enum_reservations_status
   enum_redirects_to_type: typeof enum_redirects_to_type
   enum_forms_confirmation_type: typeof enum_forms_confirmation_type
   enum_payload_jobs_log_task_slug: typeof enum_payload_jobs_log_task_slug
@@ -3615,17 +3825,22 @@ type DatabaseSchema = {
   _posts_v: typeof _posts_v
   _posts_v_rels: typeof _posts_v_rels
   topics: typeof topics
+  topics_rels: typeof topics_rels
   categories: typeof categories
+  abstracts_keywords: typeof abstracts_keywords
+  abstracts: typeof abstracts
+  abstracts_rels: typeof abstracts_rels
   users_sessions: typeof users_sessions
   users: typeof users
   user_groups: typeof user_groups
   user_groups_rels: typeof user_groups_rels
   media: typeof media
+  files: typeof files
   likes: typeof likes
   comments: typeof comments
-  abstracts_files: typeof abstracts_files
-  abstracts: typeof abstracts
-  files: typeof files
+  rooms: typeof rooms
+  seats: typeof seats
+  reservations: typeof reservations
   redirects: typeof redirects
   redirects_rels: typeof redirects_rels
   forms_blocks_checkbox: typeof forms_blocks_checkbox
@@ -3683,18 +3898,23 @@ type DatabaseSchema = {
   relations__posts_v_version_contact_phones: typeof relations__posts_v_version_contact_phones
   relations__posts_v_rels: typeof relations__posts_v_rels
   relations__posts_v: typeof relations__posts_v
+  relations_topics_rels: typeof relations_topics_rels
   relations_topics: typeof relations_topics
   relations_categories: typeof relations_categories
+  relations_abstracts_keywords: typeof relations_abstracts_keywords
+  relations_abstracts_rels: typeof relations_abstracts_rels
+  relations_abstracts: typeof relations_abstracts
   relations_users_sessions: typeof relations_users_sessions
   relations_users: typeof relations_users
   relations_user_groups_rels: typeof relations_user_groups_rels
   relations_user_groups: typeof relations_user_groups
   relations_media: typeof relations_media
+  relations_files: typeof relations_files
   relations_likes: typeof relations_likes
   relations_comments: typeof relations_comments
-  relations_abstracts_files: typeof relations_abstracts_files
-  relations_abstracts: typeof relations_abstracts
-  relations_files: typeof relations_files
+  relations_rooms: typeof relations_rooms
+  relations_seats: typeof relations_seats
+  relations_reservations: typeof relations_reservations
   relations_redirects_rels: typeof relations_redirects_rels
   relations_redirects: typeof relations_redirects
   relations_forms_blocks_checkbox: typeof relations_forms_blocks_checkbox

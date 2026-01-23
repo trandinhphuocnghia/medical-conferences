@@ -9,9 +9,9 @@ import {
 import { userView } from '@/access/collectionView'
 import { RICH_TEXT_DEFAULT_VALUES } from '@/constants/fields.const'
 import { setCurrentInteract } from '@/hooks/getCurrentInteract'
+import { author } from '@/utilities/collectionAuthor'
 import { editorConfig } from '@/utilities/editorConfig'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { author } from '@/utilities/collectionAuthor'
 
 export const Topics: CollectionConfig = {
   slug: 'topics',
@@ -72,6 +72,17 @@ export const Topics: CollectionConfig = {
       label: 'Category',
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'conference',
+      type: 'join',
+      collection: 'posts',
+      hasMany: true,
+      on: 'topics',
+      admin: {
+        position: 'sidebar',
+        hidden: true,
       },
     },
     ...author,
