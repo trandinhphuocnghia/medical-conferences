@@ -42,7 +42,7 @@ export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>Login to MedConf</CardTitle>
+        <CardTitle>Login to HIGF</CardTitle>
         <CardDescription>Enter your information below to signin your account</CardDescription>
       </CardHeader>
       <CardContent>

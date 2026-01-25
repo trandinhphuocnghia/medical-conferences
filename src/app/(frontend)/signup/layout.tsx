@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'MedConf - Sign Up',
-  description: 'Create a new account for MedConf',
+  title: 'HIGF - Sign Up',
+  description: 'Create a new account for HIGF',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

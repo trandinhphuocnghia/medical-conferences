@@ -33,7 +33,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <UserStoreInitializer user={user} />
           <Header />
           <Toaster />
-          <TooltipProvider delayDuration={100}>{children}</TooltipProvider>
+          <main className="flex-1 pt-16">
+            <TooltipProvider delayDuration={100}>{children}</TooltipProvider>
+          </main>
           <Footer />
         </Providers>
       </body>

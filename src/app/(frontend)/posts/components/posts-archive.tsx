@@ -123,7 +123,7 @@ export function PostsArchive({ initialPosts }: PostsArchiveProps) {
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#06B6D4]/10">
                 <Microscope className="h-4 w-4 text-[#06B6D4]" />
               </div>
-              <span className="font-semibold text-[#0F172A]">MedCon</span>
+              <span className="font-semibold text-[#0F172A]">HIGF</span>
             </div>
 
             <div className="flex items-center gap-3">
