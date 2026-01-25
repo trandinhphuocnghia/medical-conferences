@@ -9,6 +9,7 @@ import {
   SuperscriptFeature,
   UnderlineFeature,
   UnorderedListFeature,
+  UploadFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
 import { defaultLexical } from './defaultLexical'
@@ -47,6 +48,19 @@ export const scientificLexical = lexicalEditor({
             required: true,
           },
         ]
+      },
+    }),
+    UploadFeature({
+      collections: {
+        media: {
+          fields: [
+            {
+              name: 'caption',
+              type: 'richText',
+              editor: lexicalEditor(),
+            },
+          ],
+        },
       },
     }),
   ],
