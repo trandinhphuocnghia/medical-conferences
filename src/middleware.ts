@@ -16,8 +16,7 @@ export async function middleware(request: NextRequest) {
   if (token) {
     try {
       // Use environment variable for production, fallback to origin for local
-      const baseUrl =
-        process.env.NEXT_PUBLIC_SERVER_URL || request.nextUrl.origin
+      const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || request.nextUrl.origin
 
       const response = await fetch(`${baseUrl}/api/users/me`, {
         headers: {
@@ -36,9 +35,7 @@ export async function middleware(request: NextRequest) {
           if (user.role === 'admin') {
             return NextResponse.redirect(new URL('/dashboard', request.url))
           }
-          return NextResponse.redirect(
-            new URL('/dashboard/account', request.url),
-          )
+          return NextResponse.redirect(new URL('/dashboard/account', request.url))
         }
       }
     } catch (error) {

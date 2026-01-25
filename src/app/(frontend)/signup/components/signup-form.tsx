@@ -5,13 +5,7 @@ import { registerUser } from '@/app/actions/registerUser'
 import Form from '@/components/common/form'
 import FormField from '@/components/common/form-field'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
@@ -30,16 +24,14 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       const res = await registerUser(data)
       if (res.success) {
         toastSuccess({
-          message:
-            'Account created successfully! Please check your email to verify your account.',
+          message: 'Account created successfully! Please check your email to verify your account.',
         })
         setTimeout(() => {
           router.push('/dashboard/login')
         }, 3000)
       } else {
         toastError({
-          message:
-            (res?.error as Error)?.message || 'Failed to create account.',
+          message: (res?.error as Error)?.message || 'Failed to create account.',
         })
       }
     })
@@ -51,17 +43,10 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     <Card {...props}>
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
-        <CardDescription>
-          Enter your information below to create your account
-        </CardDescription>
+        <CardDescription>Enter your information below to create your account</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form
-          mode="all"
-          schema={signupSchema}
-          onSubmit={handleRegisterUser}
-          className="w-full"
-        >
+        <Form mode="all" schema={signupSchema} onSubmit={handleRegisterUser} className="w-full">
           <FormField name="firstName" label="First Name" required>
             {(field) => <Input {...field} />}
           </FormField>
@@ -84,8 +69,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               </Button>
               <Separator className="my-4" />
               <FieldDescription className="px-6 text-center">
-                Already have an account?{' '}
-                <Link href="/dashboard/login">Sign in</Link>
+                Already have an account? <Link href="/dashboard/login">Sign in</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

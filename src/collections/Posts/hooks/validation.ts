@@ -77,8 +77,7 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
       errors: [
         {
           path: 'notificationOfAcceptanceDate',
-          message:
-            'Notification date must be strictly after the Abstract Submission Deadline.',
+          message: 'Notification date must be strictly after the Abstract Submission Deadline.',
         },
       ],
     })
@@ -103,8 +102,7 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
       errors: [
         {
           path: 'abstractSubmissionDeadline',
-          message:
-            'Abstract Submission Deadline must be before the Conference Start Date.',
+          message: 'Abstract Submission Deadline must be before the Conference Start Date.',
         },
       ],
     })
@@ -115,8 +113,7 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
       errors: [
         {
           path: 'notificationOfAcceptanceDate',
-          message:
-            'Notification Date must be before the Conference Start Date.',
+          message: 'Notification Date must be before the Conference Start Date.',
         },
       ],
     })
@@ -127,8 +124,7 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
       errors: [
         {
           path: 'earlyRegistrationDeadline',
-          message:
-            'Early Registration Deadline must be before the Conference Start Date.',
+          message: 'Early Registration Deadline must be before the Conference Start Date.',
         },
       ],
     })

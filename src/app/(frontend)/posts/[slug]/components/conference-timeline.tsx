@@ -1,8 +1,4 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Post } from '@/payload-types'
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert'
 import { Play } from 'lucide-react'
@@ -67,8 +63,7 @@ const EventTimeline: React.FC<Post> = ({
   ]
 
   const isBeforeStart = today.getTime() < sortedDates[0].date.getTime()
-  const isAfterEnd =
-    today.getTime() > sortedDates[sortedDates.length - 1].date.getTime()
+  const isAfterEnd = today.getTime() > sortedDates[sortedDates.length - 1].date.getTime()
 
   return (
     <div className="flex py-12 flex-col gap-8">
@@ -84,9 +79,7 @@ const EventTimeline: React.FC<Post> = ({
               ? 'ring-gray-400 border-gray-400'
               : `${colorSet.ring} `
 
-          const month = item.date
-            .toLocaleString('en-US', { month: 'short' })
-            .toUpperCase()
+          const month = item.date.toLocaleString('en-US', { month: 'short' }).toUpperCase()
           const day = item.date.getDate()
           const weekday = item.date.toLocaleString('en-US', {
             weekday: 'short',
@@ -109,15 +102,11 @@ const EventTimeline: React.FC<Post> = ({
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-sm font-bold">{item.label}</div>
-                  <div className="text-xs text-gray-300">
-                    {item.date.toLocaleDateString()}
-                  </div>
+                  <div className="text-xs text-gray-300">{item.date.toLocaleDateString()}</div>
                 </TooltipContent>
               </Tooltip>
 
-              <div
-                className={`w-1 h-6 ${isPast ? 'bg-gray-400' : 'bg-gray-300'} my-1`}
-              ></div>
+              <div className={`w-1 h-6 ${isPast ? 'bg-gray-400' : 'bg-gray-300'} my-1`}></div>
 
               <div className="mt-2 text-sm text-gray-700 font-medium whitespace-normal text-center w-20">
                 {item.label}
@@ -150,8 +139,7 @@ const EventTimeline: React.FC<Post> = ({
               The event has <b>concluded</b>. It ended{' '}
               <b>
                 {(
-                  (today.getTime() -
-                    sortedDates[sortedDates.length - 1].date.getTime()) /
+                  (today.getTime() - sortedDates[sortedDates.length - 1].date.getTime()) /
                   (1000 * 60 * 60 * 24)
                 ).toFixed(0)}
                 days
@@ -161,8 +149,8 @@ const EventTimeline: React.FC<Post> = ({
           )}
           {!isBeforeStart && !isAfterEnd && (
             <p className="font-medium">
-              The event is currently <b>in progress</b>. Today falls within the
-              key dates of the conference.
+              The event is currently <b>in progress</b>. Today falls within the key dates of the
+              conference.
             </p>
           )}
         </AlertTitle>

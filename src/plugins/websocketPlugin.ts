@@ -45,8 +45,7 @@ export const websocketServerPlugin =
 
     if (pluginOptions.collections) {
       config.collections = (config.collections || []).map((collection) => {
-        if (!pluginOptions.collections?.includes(collection.slug))
-          return collection
+        if (!pluginOptions.collections?.includes(collection.slug)) return collection
 
         return {
           ...collection,
@@ -153,9 +152,7 @@ export const websocketServerPlugin =
             switch (data.type) {
               case MESSAGE_TYPES.TOUCHING:
                 //send to client:
-                ws.send(
-                  JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }),
-                )
+                ws.send(JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }))
 
                 const secret = new TextEncoder().encode(payload.secret)
                 const { payload: user } = await jwtVerify(data.token, secret)
@@ -173,9 +170,7 @@ export const websocketServerPlugin =
                   }
                 })
 
-                ws.send(
-                  JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }),
-                )
+                ws.send(JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }))
                 break
             }
           } catch (error) {

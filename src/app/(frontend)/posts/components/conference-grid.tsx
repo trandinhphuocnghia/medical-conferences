@@ -8,10 +8,7 @@ interface ConferenceGridProps {
   isLoading?: boolean
 }
 
-export function ConferenceGrid({
-  conferences,
-  isLoading,
-}: ConferenceGridProps) {
+export function ConferenceGrid({ conferences, isLoading }: ConferenceGridProps) {
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -49,12 +46,8 @@ export function ConferenceGrid({
         <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] mb-4">
           <Calendar className="h-8 w-8 text-[#0F172A]/30" />
         </div>
-        <h3 className="text-lg font-semibold text-[#0F172A]/70 mb-1">
-          No conferences found
-        </h3>
-        <p className="text-sm text-[#0F172A]/50">
-          Try adjusting your filters or search query
-        </p>
+        <h3 className="text-lg font-semibold text-[#0F172A]/70 mb-1">No conferences found</h3>
+        <p className="text-sm text-[#0F172A]/50">Try adjusting your filters or search query</p>
       </div>
     )
   }

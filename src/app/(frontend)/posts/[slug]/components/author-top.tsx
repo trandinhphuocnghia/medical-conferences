@@ -21,9 +21,7 @@ export function AuthorTop({
         <h3 className="font-semibold">
           {title} {fullname} • {organization}
         </h3>
-        <p className="text-sm text-muted-foreground">
-          {formatDateTime(createdAt)}
-        </p>
+        <p className="text-sm text-muted-foreground">{formatDateTime(createdAt)}</p>
       </div>
     </div>
   )

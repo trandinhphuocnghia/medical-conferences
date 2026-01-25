@@ -1,12 +1,7 @@
-import {
-  SerializedListItemNode,
-  SerializedListNode,
-} from '@payloadcms/richtext-lexical'
+import { SerializedListItemNode, SerializedListNode } from '@payloadcms/richtext-lexical'
 import { JSXConverters } from '@payloadcms/richtext-lexical/react'
 
-export const listConverter: JSXConverters<
-  SerializedListNode | SerializedListItemNode
-> = {
+export const listConverter: JSXConverters<SerializedListNode | SerializedListItemNode> = {
   list: ({ node, nodesToJSX }) => {
     const text = nodesToJSX({
       nodes: node.children,

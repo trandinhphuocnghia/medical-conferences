@@ -4,13 +4,7 @@ import { useTransition } from 'react'
 import Form from '@/components/common/form'
 import FormField from '@/components/common/form-field'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
@@ -49,17 +43,10 @@ export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
     <Card {...props}>
       <CardHeader>
         <CardTitle>Login to MedConf</CardTitle>
-        <CardDescription>
-          Enter your information below to signin your account
-        </CardDescription>
+        <CardDescription>Enter your information below to signin your account</CardDescription>
       </CardHeader>
       <CardContent>
-        <Form
-          mode="all"
-          schema={signinSchema}
-          onSubmit={handleLogin}
-          className="w-full"
-        >
+        <Form mode="all" schema={signinSchema} onSubmit={handleLogin} className="w-full">
           <FormField name="email" label="Email" required>
             {(field) => <Input {...field} />}
           </FormField>
@@ -76,8 +63,7 @@ export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
                 {"Don't"} have an account? <Link href="/signup">Sign up</Link>
               </FieldDescription>
               <FieldDescription className="px-6 text-center">
-                Forgot Password?{' '}
-                <Link href="/forgot-password">Forgot Password</Link>
+                Forgot Password? <Link href="/forgot-password">Forgot Password</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

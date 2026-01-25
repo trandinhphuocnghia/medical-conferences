@@ -8,8 +8,7 @@ const ConferenceOverview = ({ post }: { post: Post }) => {
     { label: 'Title', value: title },
     {
       label: 'When',
-      value:
-        formatDateTime(post.startDate) + ' - ' + formatDateTime(post.endDate),
+      value: formatDateTime(post.startDate) + ' - ' + formatDateTime(post.endDate),
     },
     { label: 'Venue', value: [venueCity, venueName]?.toString()?.split(', ') },
     { label: 'Theme', value: theme },
@@ -28,25 +27,17 @@ const ConferenceOverview = ({ post }: { post: Post }) => {
   ]
 
   return (
-    <div
-      id="abstract-overview"
-      className=" bg-white rounded-xl border-gray-100 max-w-4xl mx-auto"
-    >
+    <div id="abstract-overview" className=" bg-white rounded-xl border-gray-100 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 pb-2 text-gray-800 border-b-2 border-indigo-500">
         Overview
       </h1>
       <dl className="divide-y divide-gray-200">
         {data.map((item, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4"
-          >
+          <div key={index} className="grid grid-cols-1 sm:grid-cols-3 gap-4 py-4">
             <dt className="text-sm font-medium text-gray-700 bg-gray-50 sm:bg-transparent p-2 sm:p-0 rounded-md">
               {item.label}
             </dt>
-            <dd className="text-sm text-gray-900 sm:col-span-2 p-2 sm:p-0">
-              {item?.value}
-            </dd>
+            <dd className="text-sm text-gray-900 sm:col-span-2 p-2 sm:p-0">{item?.value}</dd>
           </div>
         ))}
       </dl>

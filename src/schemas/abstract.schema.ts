@@ -6,13 +6,9 @@ export const abstractFormSchema = z.object({
     .array(z.instanceof(File), { message: 'Files cannot be empty.' })
     .min(1, 'Files cannot be empty.'),
 
-  title: z
-    .string({ message: 'Title cannot be empty.' })
-    .min(1, 'Title cannot be empty.'),
+  title: z.string({ message: 'Title cannot be empty.' }).min(1, 'Title cannot be empty.'),
 
-  topic: z
-    .string({ message: 'Select at lease 1 topic.' })
-    .min(1, 'Select at lease 1 topic.'),
+  topic: z.string({ message: 'Select at lease 1 topic.' }).min(1, 'Select at lease 1 topic.'),
 
   description: z
     .string({ message: 'Description cannot be empty.' })

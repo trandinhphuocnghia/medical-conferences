@@ -7,14 +7,8 @@ import {
 } from '@/types'
 import { useEffect, useRef, useState } from 'react'
 
-export function useWebSocket<T>({
-  collection,
-  onMessage,
-  token,
-}: UseWebSocketProps<T>) {
-  const [status, setStatus] = useState<ConnectionStatus>(
-    CONNECTION_STATUS.CONNECTING,
-  )
+export function useWebSocket<T>({ collection, onMessage, token }: UseWebSocketProps<T>) {
+  const [status, setStatus] = useState<ConnectionStatus>(CONNECTION_STATUS.CONNECTING)
   const wsRef = useRef<WebSocket | null>(null)
 
   useEffect(() => {

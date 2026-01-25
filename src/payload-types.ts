@@ -322,6 +322,10 @@ export interface User {
   specialization?: string | null;
   phoneNumber?: string | null;
   address?: string | null;
+  /**
+   * Select medical topics you are interested in.
+   */
+  interests?: (number | Topic)[] | null;
   role?: ('admin' | 'modifier' | 'user') | null;
   updatedAt: string;
   createdAt: string;
@@ -786,7 +790,10 @@ export interface Abstract {
     | null;
   files?: (number | Media)[] | null;
   submitter?: (number | null) | User;
-  status?: string | null;
+  /**
+   * Current status of the abstract.
+   */
+  status?: ('draft' | 'pending' | 'accepted' | 'rejected' | 'verified') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1359,6 +1366,7 @@ export interface UsersSelect<T extends boolean = true> {
   specialization?: T;
   phoneNumber?: T;
   address?: T;
+  interests?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -9,14 +9,7 @@ interface EventCardProps {
   actionText: string
 }
 
-const EventCard = ({
-  date,
-  title,
-  description,
-  imageStyle,
-  link,
-  actionText,
-}: EventCardProps) => (
+const EventCard = ({ date, title, description, imageStyle, link, actionText }: EventCardProps) => (
   <div className="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
     <div
       className="h-40 bg-cover bg-center"
@@ -25,16 +18,9 @@ const EventCard = ({
     ></div>
     <div className="p-6 flex flex-col gap-3 grow">
       <p className="text-sm font-medium text-primary">{date}</p>
-      <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">
-        {title}
-      </h3>
-      <p className="text-sm text-slate-600 dark:text-slate-400 grow">
-        {description}
-      </p>
-      <a
-        className="mt-4 text-sm font-bold text-primary hover:underline"
-        href={link}
-      >
+      <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50">{title}</h3>
+      <p className="text-sm text-slate-600 dark:text-slate-400 grow">{description}</p>
+      <a className="mt-4 text-sm font-bold text-primary hover:underline" href={link}>
         {actionText}
       </a>
     </div>

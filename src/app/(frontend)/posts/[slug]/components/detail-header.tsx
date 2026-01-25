@@ -3,15 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { isCategory, isTopic, isUserGroup } from '@/helpers'
 import type { Post } from '@/payload-types'
-import {
-  ArrowLeft,
-  Award,
-  Bookmark,
-  Calendar,
-  MapPin,
-  Share2,
-  Users,
-} from 'lucide-react'
+import { ArrowLeft, Award, Bookmark, Calendar, MapPin, Share2, Users } from 'lucide-react'
 import Link from 'next/link'
 
 interface DetailHeaderProps {
@@ -22,21 +14,8 @@ interface DetailHeaderProps {
   cmeCredits?: number
 }
 
-export function DetailHeader({
-  conference,
-  attendees = 1000,
-  cmeCredits = 20,
-}: DetailHeaderProps) {
-  const {
-    title,
-    theme,
-    startDate,
-    endDate,
-    venueName,
-    venueCity,
-    topics,
-    host,
-  } = conference
+export function DetailHeader({ conference, attendees = 1000, cmeCredits = 20 }: DetailHeaderProps) {
+  const { title, theme, startDate, endDate, venueName, venueCity, topics, host } = conference
 
   // Get primary specialty from first topic's category
   const getSpecialty = (): string => {
@@ -96,38 +75,10 @@ export function DetailHeader({
                 <circle cx="80" cy="30" r="1" fill="#06B6D4" />
                 <circle cx="30" cy="80" r="1.5" fill="#06B6D4" />
                 <circle cx="70" cy="70" r="1" fill="#06B6D4" />
-                <line
-                  x1="50"
-                  y1="50"
-                  x2="20"
-                  y2="20"
-                  stroke="#06B6D4"
-                  strokeWidth="0.5"
-                />
-                <line
-                  x1="50"
-                  y1="50"
-                  x2="80"
-                  y2="30"
-                  stroke="#06B6D4"
-                  strokeWidth="0.5"
-                />
-                <line
-                  x1="50"
-                  y1="50"
-                  x2="30"
-                  y2="80"
-                  stroke="#06B6D4"
-                  strokeWidth="0.5"
-                />
-                <line
-                  x1="50"
-                  y1="50"
-                  x2="70"
-                  y2="70"
-                  stroke="#06B6D4"
-                  strokeWidth="0.5"
-                />
+                <line x1="50" y1="50" x2="20" y2="20" stroke="#06B6D4" strokeWidth="0.5" />
+                <line x1="50" y1="50" x2="80" y2="30" stroke="#06B6D4" strokeWidth="0.5" />
+                <line x1="50" y1="50" x2="30" y2="80" stroke="#06B6D4" strokeWidth="0.5" />
+                <line x1="50" y1="50" x2="70" y2="70" stroke="#06B6D4" strokeWidth="0.5" />
               </pattern>
             </defs>
             <rect width="400" height="400" fill="url(#header-molecules)" />
@@ -144,9 +95,7 @@ export function DetailHeader({
             className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors group"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-            <span className="text-sm font-medium hidden sm:inline">
-              Back to Conferences
-            </span>
+            <span className="text-sm font-medium hidden sm:inline">Back to Conferences</span>
             <span className="text-sm font-medium sm:hidden">Back</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -190,8 +139,7 @@ export function DetailHeader({
           {/* Host */}
           {hostName && (
             <p className="text-sm text-slate-400 mb-6 sm:mb-8">
-              Hosted by{' '}
-              <span className="text-white font-medium">{hostName}</span>
+              Hosted by <span className="text-white font-medium">{hostName}</span>
             </p>
           )}
 
@@ -212,9 +160,7 @@ export function DetailHeader({
                 <MapPin className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
                 LOCATION
               </div>
-              <div className="text-white font-semibold text-sm sm:text-base">
-                {location}
-              </div>
+              <div className="text-white font-semibold text-sm sm:text-base">{location}</div>
             </div>
 
             <div className="p-3 sm:p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10">

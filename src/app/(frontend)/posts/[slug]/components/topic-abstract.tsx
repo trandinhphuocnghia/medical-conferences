@@ -1,20 +1,12 @@
 'use client'
 
 import InfoIcon from '@/components/common/info-icon'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Abstract } from '@/payload-types'
 import { CheckCircle, CircleDashed, XCircle } from 'lucide-react'
 import Link from 'next/link'
 
-export default function TopicAbstractList({
-  abstracts = [],
-}: {
-  abstracts: Abstract[]
-}) {
+export default function TopicAbstractList({ abstracts = [] }: { abstracts: Abstract[] }) {
   return (
     <aside className="shrink-0 hidden lg:block w-60">
       <nav className="sticky top-12 space-y-2">

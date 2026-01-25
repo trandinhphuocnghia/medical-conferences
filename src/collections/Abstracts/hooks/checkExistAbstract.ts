@@ -1,10 +1,7 @@
 import { Abstract } from '@/payload-types'
 import { CollectionBeforeChangeHook } from 'payload'
 
-export const checkExistAbstract: CollectionBeforeChangeHook<Abstract> = async ({
-  data,
-  req,
-}) => {
+export const checkExistAbstract: CollectionBeforeChangeHook<Abstract> = async ({ data, req }) => {
   const payload = req.payload
 
   const conference = data.conference

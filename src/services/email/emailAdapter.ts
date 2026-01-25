@@ -7,11 +7,7 @@ googleapis cons:
 - rate limiting: google will block if send more than 50 emails in one second.
 - working alongside other services is difficult.
  */
-const gmailAdapter: EmailAdapter = ({
-  payload: _payload,
-}: {
-  payload: BasePayload
-}) => {
+const gmailAdapter: EmailAdapter = ({ payload: _payload }: { payload: BasePayload }) => {
   return {
     name: 'Gmail API Adapter',
     defaultFromAddress: process.env.MAIL_HOST || '',

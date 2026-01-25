@@ -20,17 +20,14 @@ export function CTASection() {
               Secure Your Spot at MedCon 2026
             </h2>
             <p className="mt-4 text-lg text-primary-foreground/80 text-pretty">
-              Early bird registration ends August 1st. Join thousands of
-              healthcare professionals advancing the future of medicine.
+              Early bird registration ends August 1st. Join thousands of healthcare professionals
+              advancing the future of medicine.
             </p>
 
             {/* Benefits */}
             <ul className="mt-8 space-y-3">
               {benefits.map((benefit) => (
-                <li
-                  key={benefit}
-                  className="flex items-center gap-3 text-primary-foreground/90"
-                >
+                <li key={benefit} className="flex items-center gap-3 text-primary-foreground/90">
                   <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-accent-foreground" />
                   </div>
@@ -47,14 +44,10 @@ export function CTASection() {
                 Early Bird Pricing
               </p>
               <div className="mt-4">
-                <span className="text-5xl font-bold text-card-foreground">
-                  $899
-                </span>
+                <span className="text-5xl font-bold text-card-foreground">$899</span>
                 <span className="text-muted-foreground ml-2">USD</span>
               </div>
-              <p className="mt-2 text-sm text-accent font-medium">
-                Save $300 before August 1st
-              </p>
+              <p className="mt-2 text-sm text-accent font-medium">Save $300 before August 1st</p>
             </div>
 
             <div className="mt-8 space-y-4">

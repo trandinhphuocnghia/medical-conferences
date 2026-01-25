@@ -25,19 +25,15 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
   const getCategoryColor = (categoryName: string): string => {
     const colorMap: Record<string, string> = {
       'Surgical Oncology': 'bg-cyan-500/10 text-cyan-600 border-cyan-500/20',
-      'Translational Research':
-        'bg-violet-500/10 text-violet-600 border-violet-500/20',
-      'Clinical Research':
-        'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+      'Translational Research': 'bg-violet-500/10 text-violet-600 border-violet-500/20',
+      'Clinical Research': 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
       'Basic Science': 'bg-amber-500/10 text-amber-600 border-amber-500/20',
       Technology: 'bg-rose-500/10 text-rose-600 border-rose-500/20',
       'Public Health': 'bg-blue-500/10 text-blue-600 border-blue-500/20',
       Diagnostics: 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20',
       Therapeutics: 'bg-teal-500/10 text-teal-600 border-teal-500/20',
     }
-    return (
-      colorMap[categoryName] || 'bg-slate-100 text-slate-600 border-slate-200'
-    )
+    return colorMap[categoryName] || 'bg-slate-100 text-slate-600 border-slate-200'
   }
 
   // Extract text content from Payload rich text
@@ -51,9 +47,7 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
   if (!topics || topics.length === 0) {
     return (
       <section className="py-8 sm:py-12">
-        <div className="text-center text-slate-500">
-          No topics available for this conference.
-        </div>
+        <div className="text-center text-slate-500">No topics available for this conference.</div>
       </section>
     )
   }
@@ -97,9 +91,7 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
                     key={topic.id}
                     onClick={() => setActiveTopic(topic)}
                     className={`w-full text-left p-2.5 sm:p-3 rounded-lg sm:rounded-xl mb-1 transition-all duration-200 group ${
-                      isActive
-                        ? 'bg-[#0F172A] text-white'
-                        : 'hover:bg-slate-100'
+                      isActive ? 'bg-[#0F172A] text-white' : 'hover:bg-slate-100'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -161,9 +153,7 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
                 style={{ fontFamily: 'Georgia, serif' }}
               >
                 {activeTopic.description && (
-                  <p className="mb-4 font-medium text-slate-800">
-                    {activeTopic.description}
-                  </p>
+                  <p className="mb-4 font-medium text-slate-800">{activeTopic.description}</p>
                 )}
                 {getTopicContent(activeTopic)
                   .split('\n\n')
@@ -184,9 +174,7 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
               <Button className="bg-[#06B6D4] hover:bg-[#0891B2] text-white gap-2 w-full sm:w-auto text-sm">
                 <Send className="h-4 w-4" />
                 <span className="sm:hidden">Submit Abstract</span>
-                <span className="hidden sm:inline">
-                  Submit Abstract for this Topic
-                </span>
+                <span className="hidden sm:inline">Submit Abstract for this Topic</span>
               </Button>
             </div>
           </div>

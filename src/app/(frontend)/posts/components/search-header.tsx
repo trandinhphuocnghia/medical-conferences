@@ -8,19 +8,14 @@ interface SearchHeaderProps {
   onSearchChange: (query: string) => void
 }
 
-export function SearchHeader({
-  searchQuery,
-  onSearchChange,
-}: SearchHeaderProps) {
+export function SearchHeader({ searchQuery, onSearchChange }: SearchHeaderProps) {
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
-        const searchInput = document.getElementById(
-          'conference-search',
-        ) as HTMLInputElement
+        const searchInput = document.getElementById('conference-search') as HTMLInputElement
         searchInput?.focus()
       }
     }
@@ -39,8 +34,7 @@ export function SearchHeader({
               Discover Medical Conferences
             </h1>
             <p className="text-[#0F172A]/60 text-lg">
-              Browse upcoming conferences, workshops, and CME opportunities
-              worldwide
+              Browse upcoming conferences, workshops, and CME opportunities worldwide
             </p>
           </div>
 

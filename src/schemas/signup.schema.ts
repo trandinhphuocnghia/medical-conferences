@@ -9,7 +9,7 @@ export const signupSchema = z
       .nonempty({
         message: 'First is required',
       }),
-      lastName: z
+    lastName: z
       .string({
         message: 'Last Name is required',
       })

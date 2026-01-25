@@ -18,19 +18,11 @@ import { getServerSideURL } from '@/utilities/getURL'
 import { Toaster } from 'sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser()
 
   return (
-    <html
-      className={cn(GeistSans.variable, GeistMono.variable)}
-      lang="en"
-      suppressHydrationWarning
-    >
+    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

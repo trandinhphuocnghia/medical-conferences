@@ -1,12 +1,5 @@
 import { Button } from '@/components/ui/button'
-import {
-  ArrowRight,
-  Award,
-  BookOpen,
-  FlaskConical,
-  Globe,
-  Mic2,
-} from 'lucide-react'
+import { ArrowRight, Award, BookOpen, FlaskConical, Globe, Mic2 } from 'lucide-react'
 import React from 'react'
 
 interface BentoCardProps {
@@ -87,9 +80,8 @@ export function BentoGrid() {
             Why Attend MedCon 2026
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Four days of cutting-edge medical research, networking
-            opportunities, and hands-on workshops designed for healthcare
-            professionals.
+            Four days of cutting-edge medical research, networking opportunities, and hands-on
+            workshops designed for healthcare professionals.
           </p>
         </div>
 
@@ -146,10 +138,7 @@ export function BentoGrid() {
 
         {/* CTA */}
         <div className="mt-12 text-center">
-          <Button
-            size="lg"
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
+          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
             Explore Full Program
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>

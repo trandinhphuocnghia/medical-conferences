@@ -4,6 +4,10 @@ import type { CollectionConfig, Where } from 'payload'
 import { beforeDelete } from './hooks/beforeDelete'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { sendAbstractEmail } from './hooks/sendAbstractEmail'
+import { checkDeadline } from './hooks/checkDeadline'
+import { checkValidStatus } from './hooks/checkValidStatus'
+
+import { scientificLexical } from '@/fields/scientificLexical'
 
 export const Abstracts: CollectionConfig = {
   slug: 'abstracts',
@@ -64,6 +68,7 @@ export const Abstracts: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'posts',
                   required: true,
+                  index: true,
                   admin: {
                     width: '50%',
                     readOnly: !Boolean(adminOnlyFieldAccess),
@@ -74,6 +79,7 @@ export const Abstracts: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'topics',
                   required: true,
+                  index: true,
                   admin: {
                     width: '50%',
                     readOnly: !Boolean(adminOnlyFieldAccess),
@@ -81,7 +87,7 @@ export const Abstracts: CollectionConfig = {
                   filterOptions: ({ data }): Where => {
                     return {
                       conference: {
-                        in: data.conference ? [data.conference] : [-1],
+                        in: data.conference ? [data.conference] : [-1],//<- query to no 
                       },
                       active: { equals: true },
                     } as Where
@@ -98,12 +104,12 @@ export const Abstracts: CollectionConfig = {
           fields: [
             {
               name: 'description',
-              type: 'richText', // As discussed, use Lexical for italics/superscripts
+              type: 'richText',
+              editor: scientificLexical,
               required: true,
               label: 'Main Content',
               admin: {
-                description:
-                  'Structure: Introduction, Methods, Results, Conclusion.',
+                description: 'Structure: Introduction, Methods, Results, Conclusion.',
               },
             },
             {
@@ -139,20 +145,40 @@ export const Abstracts: CollectionConfig = {
       name: 'submitter',
       type: 'relationship',
       relationTo: 'users',
-      admin: { position: 'sidebar', readOnly: true },
+      index: true,
+      defaultValue: ({ req }) => req.user?.id,
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+      },
+      access: {
+        update: () => false,
+      },
     },
     {
       name: 'status',
       type: 'select',
+      defaultValue: 'draft',
       options: [
-        /* your options */
+        { label: 'Draft', value: 'draft' },
+        { label: 'Summit for Review', value: 'pending' },
+        { label: 'Accepted', value: 'accepted' },
+        { label: 'Rejected', value: 'rejected' },
+        { label: 'Verified', value: 'verified' },
       ],
-      admin: { position: 'sidebar' },
+      index: true,
+      hooks: {
+        beforeChange: [checkValidStatus],
+      },
+      admin: {
+        position: 'sidebar',
+        description: 'Current status of the abstract.',
+      },
     },
   ],
 
   hooks: {
-    beforeChange: [checkExistAbstract],
+    beforeChange: [checkDeadline, checkExistAbstract],
     afterChange: [sendAbstractEmail],
     beforeDelete: [beforeDelete],
   },

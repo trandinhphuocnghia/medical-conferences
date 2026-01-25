@@ -1,10 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import {
-  adminOrOwner,
-  adminOrModifier,
-  anyone,
-  authenticated,
-} from '@/access/collectionAccess'
+import { adminOrOwner, adminOrModifier, anyone, authenticated } from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
 import { author } from '@/utilities/collectionAuthor'
 

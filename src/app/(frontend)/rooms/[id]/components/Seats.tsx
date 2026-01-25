@@ -62,9 +62,7 @@ export const Seats = ({ seats = [], token }: Props) => {
       <Alert
         size="sm"
         className="w-2 aspect-square rounded-full"
-        variant={
-          connectStatus === CONNECTION_STATUS.CONNECTED ? 'success' : 'warning'
-        }
+        variant={connectStatus === CONNECTION_STATUS.CONNECTED ? 'success' : 'warning'}
       />
       <div className="py-10 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto w-full">
         {seats.map((seat) => {
@@ -78,9 +76,7 @@ export const Seats = ({ seats = [], token }: Props) => {
               key={seat.id}
               disabled={!isAvailable}
               style={{
-                backgroundColor: isAvailable
-                  ? SEAT_STYLES[seat.type].bg
-                  : '#e2e8f0',
+                backgroundColor: isAvailable ? SEAT_STYLES[seat.type].bg : '#e2e8f0',
                 color: SEAT_STYLES[seat.type].text,
               }}
               className={cn(

@@ -3,11 +3,7 @@ import configPromise from '@payload-config'
 import { headers as nextHeaders } from 'next/headers'
 import { getPayload } from 'payload'
 
-export async function getConferenceAbstracts({
-  conferenceId,
-}: {
-  conferenceId: number
-}) {
+export async function getConferenceAbstracts({ conferenceId }: { conferenceId: number }) {
   try {
     const payload = await getPayload({ config: configPromise })
 

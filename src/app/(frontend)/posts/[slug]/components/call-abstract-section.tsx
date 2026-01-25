@@ -13,25 +13,16 @@ export const CallAbstractSection = ({ post }: { post: Post }) => {
 
   const isSubmissionOpen = submissionDeadline && new Date() < submissionDeadline
   return (
-    <div
-      id="abstract-form"
-      className="flex flex-col border-t gap-8 mx-auto max-w-6xl pt-12"
-    >
+    <div id="abstract-form" className="flex flex-col border-t gap-8 mx-auto max-w-6xl pt-12">
       <h2 className="font-bold text-2xl">Call for abstract</h2>
       {isSubmissionOpen ? (
         <>
           {user ? (
-            <CreateAbstractForm
-              conferenceId={post.id}
-              topics={(post.topics as Topic[]) || []}
-            />
+            <CreateAbstractForm conferenceId={post.id} topics={(post.topics as Topic[]) || []} />
           ) : (
             <p>
               Please
-              <Link
-                href={`/signin?redirect=/post/${post.slug}`}
-                className="underline"
-              >
+              <Link href={`/signin?redirect=/post/${post.slug}`} className="underline">
                 login
               </Link>
               to submit an abstract

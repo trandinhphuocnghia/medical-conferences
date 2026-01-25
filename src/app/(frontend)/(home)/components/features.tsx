@@ -25,9 +25,8 @@ export const Features = () => (
           About Our Organization
         </h2>
         <p className="text-slate-700 dark:text-slate-300 text-base font-normal leading-normal max-w-[720px]">
-          We are dedicated to fostering innovation and collaboration within the
-          medical community. Discover our core values and commitment to
-          excellence.
+          We are dedicated to fostering innovation and collaboration within the medical community.
+          Discover our core values and commitment to excellence.
         </p>
       </div>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 p-0">

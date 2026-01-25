@@ -26,8 +26,8 @@ export const Contact = () => (
           Get In Touch
         </h2>
         <p className="text-slate-700 dark:text-slate-300 text-base font-normal leading-normal max-w-2xl mx-auto">
-          We&apos;re here to answer any questions you may have. Reach out to us
-          and we&apos;ll respond as soon as we can.
+          We&apos;re here to answer any questions you may have. Reach out to us and we&apos;ll
+          respond as soon as we can.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto w-full">
@@ -37,16 +37,8 @@ export const Contact = () => (
             title="Address"
             content="123 Health St, Medville, USA 45678"
           />
-          <ContactInfoItem
-            iconName="mail"
-            title="Email"
-            content="contact@mediorg.com"
-          />
-          <ContactInfoItem
-            iconName="call"
-            title="Phone"
-            content="(555) 123-4567"
-          />
+          <ContactInfoItem iconName="mail" title="Email" content="contact@mediorg.com" />
+          <ContactInfoItem iconName="call" title="Phone" content="(555) 123-4567" />
         </div>
         <form className="flex flex-col gap-4">
           <Input placeholder="Your Name" type="text" />

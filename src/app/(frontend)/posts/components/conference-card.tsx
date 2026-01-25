@@ -37,8 +37,7 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
     text: 'text-[#06B6D4]',
   }
 
-  const seatPercentage =
-    (conference.seatsAvailable / conference.totalSeats) * 100
+  const seatPercentage = (conference.seatsAvailable / conference.totalSeats) * 100
   const isLowSeats = seatPercentage < 20
 
   return (
@@ -64,37 +63,12 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
               <circle cx="10" cy="10" r="2" fill="#0F172A" />
               <circle cx="40" cy="40" r="2" fill="#0F172A" />
               <circle cx="25" cy="25" r="3" fill="#06B6D4" />
-              <line
-                x1="10"
-                y1="10"
-                x2="25"
-                y2="25"
-                stroke="#0F172A"
-                strokeWidth="0.5"
-              />
-              <line
-                x1="25"
-                y1="25"
-                x2="40"
-                y2="40"
-                stroke="#0F172A"
-                strokeWidth="0.5"
-              />
+              <line x1="10" y1="10" x2="25" y2="25" stroke="#0F172A" strokeWidth="0.5" />
+              <line x1="25" y1="25" x2="40" y2="40" stroke="#0F172A" strokeWidth="0.5" />
               <circle cx="40" cy="10" r="1.5" fill="#0F172A" />
-              <line
-                x1="25"
-                y1="25"
-                x2="40"
-                y2="10"
-                stroke="#06B6D4"
-                strokeWidth="0.3"
-              />
+              <line x1="25" y1="25" x2="40" y2="10" stroke="#06B6D4" strokeWidth="0.3" />
             </pattern>
-            <rect
-              width="100%"
-              height="100%"
-              fill={`url(#molecular-${conference.id})`}
-            />
+            <rect width="100%" height="100%" fill={`url(#molecular-${conference.id})`} />
           </svg>
         </div>
 
@@ -115,11 +89,7 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
             <div
               className={`
                 flex items-center gap-1.5 rounded-full px-3 py-1.5
-                ${
-                  isLowSeats
-                    ? 'bg-rose-50 text-rose-600'
-                    : 'bg-[#06B6D4]/10 text-[#06B6D4]'
-                }
+                ${isLowSeats ? 'bg-rose-50 text-rose-600' : 'bg-[#06B6D4]/10 text-[#06B6D4]'}
               `}
             >
               <Users className="h-3.5 w-3.5" />
@@ -141,9 +111,7 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0]">
                 <Calendar className="h-4 w-4 text-[#0F172A]/60" />
               </div>
-              <span className="font-mono text-sm text-[#0F172A]/70">
-                {conference.dateDisplay}
-              </span>
+              <span className="font-mono text-sm text-[#0F172A]/70">{conference.dateDisplay}</span>
             </div>
 
             {/* Location */}

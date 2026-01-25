@@ -51,8 +51,8 @@ export function SpeakersSection() {
               Featured Speakers
             </h2>
             <p className="mt-4 text-muted-foreground max-w-xl text-pretty">
-              Learn from world-renowned experts who are pioneering breakthroughs
-              in medical research and clinical practice.
+              Learn from world-renowned experts who are pioneering breakthroughs in medical research
+              and clinical practice.
             </p>
           </div>
           <Button
@@ -85,12 +85,8 @@ export function SpeakersSection() {
               <h3 className="text-lg font-semibold text-card-foreground group-hover:text-accent transition-colors">
                 {speaker.name}
               </h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                {speaker.institution}
-              </p>
-              <p className="text-sm text-accent font-medium mt-2">
-                {speaker.specialty}
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">{speaker.institution}</p>
+              <p className="text-sm text-accent font-medium mt-2">{speaker.specialty}</p>
             </div>
           ))}
         </div>

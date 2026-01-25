@@ -51,9 +51,7 @@ export const FileUploader = ({
   )
 
   const filesListMsg =
-    files.length > 0
-      ? `${files.length} file(s) selected`
-      : 'Drag & Drop File, or Click to Select'
+    files.length > 0 ? `${files.length} file(s) selected` : 'Drag & Drop File, or Click to Select'
 
   return (
     <div className="">
@@ -73,17 +71,11 @@ export const FileUploader = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <p
-          className={cn(
-            'm-0 font-bold text-lg',
-            isDragging ? 'text-blue-600' : 'text-gray-800',
-          )}
-        >
+        <p className={cn('m-0 font-bold text-lg', isDragging ? 'text-blue-600' : 'text-gray-800')}>
           {isDragging ? 'Drop file(s) here!' : filesListMsg}
         </p>
         <p className="text-sm text-gray-500 mt-1">
-          Accepted formats: PDFs, .doc, and .docx (Multiple files and folder
-          uploads supported)
+          Accepted formats: PDFs, .doc, and .docx (Multiple files and folder uploads supported)
         </p>
 
         {files.length > 0 && (
@@ -103,11 +95,7 @@ export const FileUploader = ({
                   <p className="flex-1 truncate">
                     {file.name} ({(file.size / 1024).toFixed(2)} KB)
                   </p>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => removeFile(index)}
-                  >
+                  <Button size="icon" variant="outline" onClick={() => removeFile(index)}>
                     <X />
                   </Button>
                 </div>
