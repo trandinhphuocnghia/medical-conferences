@@ -32,7 +32,7 @@ export const FooterClient = () => {
               <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center">
                 <Stethoscope className="w-5 h-5 text-accent-foreground" />
               </div>
-              <span className="font-semibold text-lg">MedCon 2026</span>
+              <span className="font-semibold text-lg">HIGF 2026</span>
             </Link>
             <p className="mt-4 text-background/70 text-sm max-w-sm leading-relaxed">
               The premier international medical conference bringing together
@@ -44,7 +44,7 @@ export const FooterClient = () => {
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-3 text-sm text-background/70">
                 <Mail className="w-4 h-4" />
-                <span>info@medcon2026.org</span>
+                <span>info@higf2026.org</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-background/70">
                 <Phone className="w-4 h-4" />
@@ -82,7 +82,7 @@ export const FooterClient = () => {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-background/50">
-            2026 MedCon. All rights reserved.
+            2026 HIGF. All rights reserved.
           </p>
           <p className="text-sm text-background/50">
             Organized by International Medical Conference Association

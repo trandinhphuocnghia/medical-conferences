@@ -60,14 +60,20 @@ export default buildConfig({
         // },
       ],
       openGraph: {
-        siteName: 'Medconf',
-        description: 'Medconf',
+        siteName: 'HIGF',
+        description: 'HIGF',
         type: 'website',
+        images: [
+          {
+            url: '/thumbnail.jpg',
+          },
+        ],
       },
       twitter: {
-        site: '@Medconf',
-        title: 'Medconf',
-        description: 'Medconf',
+        card: 'summary_large_image',
+        site: '@HIGF',
+        title: 'HIGF',
+        description: 'HIGF',
       },
     },
     user: Users.slug,

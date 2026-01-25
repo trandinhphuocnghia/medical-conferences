@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'MedConf - Forgot Password',
+  title: 'HIGF - Forgot Password',
   description: 'Forgot Password',
 }
 

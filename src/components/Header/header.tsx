@@ -29,7 +29,7 @@ export const HeaderClient = ({ data }: { data: Header }) => {
               <Stethoscope className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="font-semibold text-lg text-foreground">
-              MedCon 2026
+              HIGF 2026
             </span>
           </Link>
 
