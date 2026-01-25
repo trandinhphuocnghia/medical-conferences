@@ -41,7 +41,7 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
   const isLowSeats = seatPercentage < 20
 
   return (
-    <Link href={`/conferences/${conference.id}`} className="group block">
+    <Link href={`/posts/${conference.id}`} className="group block">
       <div
         className={`
           relative overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white/80 backdrop-blur-sm

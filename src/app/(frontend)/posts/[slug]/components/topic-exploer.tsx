@@ -1,7 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { extractTextFromContent, isCategory } from '@/helpers'
+import { isCategory } from '@/helpers'
+import { RichTextParser } from '@/components/RichTextParser'
 import type { Category, Topic } from '@/payload-types'
 import { ChevronRight, FileText, Send } from 'lucide-react'
 import { useState } from 'react'
@@ -36,13 +37,7 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
     return colorMap[categoryName] || 'bg-slate-100 text-slate-600 border-slate-200'
   }
 
-  // Extract text content from Payload rich text
-  const getTopicContent = (topic: Topic): string => {
-    if (topic.content) {
-      return extractTextFromContent(topic.content)
-    }
-    return topic.description || 'No content available for this topic.'
-  }
+
 
   if (!topics || topics.length === 0) {
     return (
@@ -146,6 +141,8 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
             </div>
           </div>
 
+
+
           <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
             <article className="prose prose-slate max-w-none prose-headings:text-[#0F172A] prose-p:text-slate-600 prose-p:leading-relaxed">
               <div
@@ -155,13 +152,12 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
                 {activeTopic.description && (
                   <p className="mb-4 font-medium text-slate-800">{activeTopic.description}</p>
                 )}
-                {getTopicContent(activeTopic)
-                  .split('\n\n')
-                  .map((paragraph, idx) => (
-                    <p key={idx} className="mb-3 sm:mb-4">
-                      {paragraph}
-                    </p>
-                  ))}
+                
+                {activeTopic.content ? (
+                   <RichTextParser content={activeTopic.content} />
+                ) : (
+                   <div className="text-slate-500 italic">No content available for this topic.</div>
+                )}
               </div>
             </article>
           </div>
