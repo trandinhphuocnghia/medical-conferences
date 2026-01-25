@@ -4,12 +4,7 @@ import {
   FieldError as FieldErrorText,
   FieldLabel,
 } from '@/components/ui/field'
-import {
-  Controller,
-  ControllerFieldState,
-  FieldError,
-  useFormContext,
-} from 'react-hook-form'
+import { Controller, ControllerFieldState, FieldError, useFormContext } from 'react-hook-form'
 
 interface FieldChildrenProps {
   disabled?: boolean
@@ -21,10 +16,7 @@ interface FieldChildrenProps {
 }
 
 interface FormFieldProps {
-  children?: (
-    field: FieldChildrenProps,
-    fieldState: ControllerFieldState,
-  ) => React.ReactNode
+  children?: (field: FieldChildrenProps, fieldState: ControllerFieldState) => React.ReactNode
   label: string
   helperText?: string
   required?: boolean
@@ -65,9 +57,7 @@ export default function FormField({
               fieldState,
             )}
           {helperText && <FieldDescription>{helperText}</FieldDescription>}
-          {fieldState.invalid && !hideError && (
-            <FieldErrorText errors={[fieldState.error]} />
-          )}
+          {fieldState.invalid && !hideError && <FieldErrorText errors={[fieldState.error]} />}
         </Field>
       )}
     />

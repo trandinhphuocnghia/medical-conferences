@@ -8,10 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'
 import { Textarea } from '@/components/ui/textarea'
 import { Topic } from '@/payload-types'
-import {
-  AbstractFormSchema,
-  abstractFormSchema,
-} from '@/schemas/abstract.schema'
+import { AbstractFormSchema, abstractFormSchema } from '@/schemas/abstract.schema'
 import { toastError, toastSuccess } from '@/utilities/toast'
 import { useRef, useTransition } from 'react'
 import { UseFormReturn } from 'react-hook-form'
@@ -34,8 +31,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
 
         if (!res.success) {
           toastError({
-            message:
-              (res?.error as Error)?.message || 'Failed to create an abstract.',
+            message: (res?.error as Error)?.message || 'Failed to create an abstract.',
           })
         } else {
           toastSuccess({
@@ -71,13 +67,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
         {(field) => <Input {...field} />}
       </FormField>
       <FormField name="topic" label="Topic" required>
-        {(field) => (
-          <SelectTopic
-            topics={topics}
-            onChange={field?.onChange}
-            value={field?.value}
-          />
-        )}
+        {(field) => <SelectTopic topics={topics} onChange={field?.onChange} value={field?.value} />}
       </FormField>
       <FormField
         name="description"
@@ -93,9 +83,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
         helperText="File upload supports pdf, doc, docx, txt, & rtf formats. lf you choose to submit your abstract in file format, please include your name, title, summary and full abstract in the file."
         required
       >
-        {(field) => (
-          <FileUploader files={field?.value} onChange={field.onChange} />
-        )}
+        {(field) => <FileUploader files={field?.value} onChange={field.onChange} />}
       </FormField>
 
       <Field className="border-t py-8">

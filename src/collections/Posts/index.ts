@@ -3,12 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
-import {
-  adminOrModifier,
-  adminOrOwner,
-  anyone,
-  authenticated,
-} from '@/access/collectionAccess'
+import { adminOrModifier, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { userView } from '@/access/collectionView'
 import { slugField } from '@/fields/slug'
 import {
@@ -45,15 +40,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
 
   admin: {
-    defaultColumns: [
-      'title',
-      'slug',
-      'active',
-      'startDate',
-      'endDate',
-      'createdBy',
-      'updatedAt',
-    ],
+    defaultColumns: ['title', 'slug', 'active', 'startDate', 'endDate', 'createdBy', 'updatedAt'],
     useAsTitle: 'title',
     hidden: userView,
   },
@@ -78,8 +65,7 @@ export const Posts: CollectionConfig<'posts'> = {
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description:
-          'Set to True when the conference program and registration are public.',
+        description: 'Set to True when the conference program and registration are public.',
       },
       required: true,
     },
@@ -93,8 +79,7 @@ export const Posts: CollectionConfig<'posts'> = {
       required: true,
       admin: {
         position: 'sidebar',
-        description:
-          'Primary host of the conference (e.g., Korean Gastric Cancer Association).',
+        description: 'Primary host of the conference (e.g., Korean Gastric Cancer Association).',
       },
     },
 
@@ -209,8 +194,7 @@ export const Posts: CollectionConfig<'posts'> = {
               minRows: 1,
               fields: [{ name: 'email', type: 'email', required: true }],
               admin: {
-                description:
-                  'List of official contact emails (e.g., secretariat@kingca.org)',
+                description: 'List of official contact emails (e.g., secretariat@kingca.org)',
               },
             },
             {

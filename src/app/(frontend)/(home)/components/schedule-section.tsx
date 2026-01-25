@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Clock, MapPin } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 
 interface Session {
@@ -152,8 +153,8 @@ export function ScheduleSection() {
             Conference Schedule
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Four packed days of keynotes, workshops, research presentations, and
-            networking opportunities.
+            Four packed days of keynotes, workshops, research presentations, and networking
+            opportunities.
           </p>
         </div>
 
@@ -170,9 +171,7 @@ export function ScheduleSection() {
               }`}
             >
               {day}
-              <span className="hidden sm:inline ml-1 opacity-70">
-                - Sept {15 + index}
-              </span>
+              <span className="hidden sm:inline ml-1 opacity-70">- Sept {15 + index}</span>
             </button>
           ))}
         </div>
@@ -200,12 +199,8 @@ export function ScheduleSection() {
                       {session.track}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-card-foreground">
-                    {session.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {session.speaker}
-                  </p>
+                  <h3 className="text-lg font-semibold text-card-foreground">{session.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-1">{session.speaker}</p>
                 </div>
 
                 {/* Location */}
@@ -220,13 +215,13 @@ export function ScheduleSection() {
 
         {/* CTA */}
         <div className="mt-12 text-center">
-          <Button
-            size="lg"
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
+          <Link
+            href="/posts"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 h-11 rounded-md px-8 bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            Download Full Schedule
+            All Conferences
             <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
+          </Link>
         </div>
       </div>
     </section>

@@ -2,10 +2,7 @@
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import {
-  forgotPasswordSchema,
-  forgotPasswordSchemaType,
-} from '@/schemas/forgot-password.schema'
+import { forgotPasswordSchema, forgotPasswordSchemaType } from '@/schemas/forgot-password.schema'
 
 export async function forgotPassword(data: forgotPasswordSchemaType) {
   try {

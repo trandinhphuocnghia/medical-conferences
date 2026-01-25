@@ -27,10 +27,7 @@ const SubmitterProfilePreview: React.FC = () => {
   }, [userId])
 
   if (!userId) return null
-  if (loading)
-    return (
-      <div className="profile-preview-loading">Loading Submitter Data...</div>
-    )
+  if (loading) return <div className="profile-preview-loading">Loading Submitter Data...</div>
   if (!userData) return null
 
   return (
@@ -58,9 +55,7 @@ const SubmitterProfilePreview: React.FC = () => {
           </div>
           <div className="detail-item">
             <label>License Number</label>
-            <span className="mono">
-              {userData.medicalLicenseNumber || 'N/A'}
-            </span>
+            <span className="mono">{userData.medicalLicenseNumber || 'N/A'}</span>
           </div>
           <div className="detail-item">
             <label>Phone</label>

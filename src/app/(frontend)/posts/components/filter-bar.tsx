@@ -2,14 +2,7 @@
 
 import React from 'react'
 
-import {
-  Award,
-  ChevronDown,
-  Filter,
-  MapPin,
-  Stethoscope,
-  X,
-} from 'lucide-react'
+import { Award, ChevronDown, Filter, MapPin, Stethoscope, X } from 'lucide-react'
 import { useState } from 'react'
 
 interface FilterBarProps {
@@ -81,9 +74,7 @@ export function FilterBar({ filters, onFilterChange }: FilterBarProps) {
             value={filters.specialty}
             options={specialties}
             isOpen={openDropdown === 'specialty'}
-            onToggle={() =>
-              setOpenDropdown(openDropdown === 'specialty' ? null : 'specialty')
-            }
+            onToggle={() => setOpenDropdown(openDropdown === 'specialty' ? null : 'specialty')}
             onChange={(value) => {
               onFilterChange('specialty', value)
               setOpenDropdown(null)
@@ -97,9 +88,7 @@ export function FilterBar({ filters, onFilterChange }: FilterBarProps) {
             value={filters.location}
             options={locations}
             isOpen={openDropdown === 'location'}
-            onToggle={() =>
-              setOpenDropdown(openDropdown === 'location' ? null : 'location')
-            }
+            onToggle={() => setOpenDropdown(openDropdown === 'location' ? null : 'location')}
             onChange={(value) => {
               onFilterChange('location', value)
               setOpenDropdown(null)
@@ -113,11 +102,7 @@ export function FilterBar({ filters, onFilterChange }: FilterBarProps) {
             value={filters.cmeCredits}
             options={cmeOptions}
             isOpen={openDropdown === 'cmeCredits'}
-            onToggle={() =>
-              setOpenDropdown(
-                openDropdown === 'cmeCredits' ? null : 'cmeCredits',
-              )
-            }
+            onToggle={() => setOpenDropdown(openDropdown === 'cmeCredits' ? null : 'cmeCredits')}
             onChange={(value) => {
               onFilterChange('cmeCredits', value)
               setOpenDropdown(null)
@@ -176,9 +161,7 @@ function FilterDropdown({
         {icon}
         <span className="hidden sm:inline">{label}:</span>
         <span className="font-medium">{value}</span>
-        <ChevronDown
-          className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-        />
+        <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (

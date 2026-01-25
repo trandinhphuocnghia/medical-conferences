@@ -7,9 +7,7 @@ import { TopicExplorer } from './components/topic-exploer'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
-  return conference.topics.filter(
-    (t): t is Topic => typeof t === 'object' && t !== null,
-  )
+  return conference.topics.filter((t): t is Topic => typeof t === 'object' && t !== null)
 }
 
 type Args = {
@@ -18,9 +16,7 @@ type Args = {
   }>
 }
 
-export default async function ConferenceDetailPage({
-  params: paramsPromise,
-}: Args) {
+export default async function ConferenceDetailPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
 
   const posts = await getConferenceBySlug({ slug })
@@ -43,9 +39,7 @@ export default async function ConferenceDetailPage({
 
         <ScientificTimeline
           abstractSubmissionDeadline={conferenceData.abstractSubmissionDeadline}
-          notificationOfAcceptanceDate={
-            conferenceData.notificationOfAcceptanceDate
-          }
+          notificationOfAcceptanceDate={conferenceData.notificationOfAcceptanceDate}
           earlyRegistrationDeadline={conferenceData.earlyRegistrationDeadline}
           startDate={conferenceData.startDate}
           endDate={conferenceData.endDate}

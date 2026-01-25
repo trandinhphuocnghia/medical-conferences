@@ -28,14 +28,10 @@ export const UserMenu = () => {
       <DropdownMenuContent align="end" sideOffset={10} className="min-w-40">
         <DropdownMenuLabel className="px-4 py-2">
           <p className="text-sm font-semibold text-center">{user?.fullname}</p>
-          <p className="text-xs text-center text-muted-foreground">
-            {user?.email}
-          </p>
+          <p className="text-xs text-center text-muted-foreground">{user?.email}</p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => router.push('/dashboard')}>
-          Dashboard
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push('/dashboard')}>Dashboard</DropdownMenuItem>
         <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

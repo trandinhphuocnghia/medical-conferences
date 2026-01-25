@@ -10,11 +10,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 export const editorConfig = {
-  features: ({
-    defaultFeatures,
-  }: {
-    defaultFeatures: FeatureProviderServer[]
-  }) => {
+  features: ({ defaultFeatures }: { defaultFeatures: FeatureProviderServer[] }) => {
     return [
       ...defaultFeatures,
       TextStateFeature({

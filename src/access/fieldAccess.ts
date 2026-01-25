@@ -19,9 +19,7 @@ export const userOnlyFieldAccess: FieldAccess = ({ req: { user } }) => {
   return false
 }
 
-export const adminExceptSelfFieldAccess: FieldAccess<User> = ({
-  req: { user, data },
-}) => {
+export const adminExceptSelfFieldAccess: FieldAccess<User> = ({ req: { user, data } }) => {
   if (user) return user.role === 'admin' && user.id !== data?.id
 
   return false

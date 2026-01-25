@@ -10,11 +10,7 @@ interface LogisticsBentoProps {
   floorPlanUrl?: string
 }
 
-export function LogisticsBento({
-  conference,
-  venueAddress,
-  floorPlanUrl,
-}: LogisticsBentoProps) {
+export function LogisticsBento({ conference, venueAddress, floorPlanUrl }: LogisticsBentoProps) {
   const { venueName, venueCity, contactEmails, contactPhones } = conference
 
   // Extract email strings from the contactEmails array
@@ -91,20 +87,14 @@ export function LogisticsBento({
               {/* Stats Row */}
               <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-[#E2E8F0]">
                 <div className="text-center p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-50">
-                  <div className="font-mono text-xl sm:text-2xl font-bold text-[#0F172A]">
-                    12
-                  </div>
-                  <div className="text-[10px] sm:text-xs text-slate-500">
-                    Session Halls
-                  </div>
+                  <div className="font-mono text-xl sm:text-2xl font-bold text-[#0F172A]">12</div>
+                  <div className="text-[10px] sm:text-xs text-slate-500">Session Halls</div>
                 </div>
                 <div className="text-center p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-50">
                   <div className="font-mono text-xl sm:text-2xl font-bold text-[#0F172A]">
                     5000+
                   </div>
-                  <div className="text-[10px] sm:text-xs text-slate-500">
-                    Capacity
-                  </div>
+                  <div className="text-[10px] sm:text-xs text-slate-500">Capacity</div>
                 </div>
               </div>
             </div>

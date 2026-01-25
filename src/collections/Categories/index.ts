@@ -32,8 +32,7 @@ export const Categories: CollectionConfig = {
       required: true,
       label: 'Category Name',
       admin: {
-        description:
-          'E.g., "Surgical Oncology" or "Translational Research". Must be unique.',
+        description: 'E.g., "Surgical Oncology" or "Translational Research". Must be unique.',
       },
       unique: true,
       index: true,
@@ -52,8 +51,7 @@ export const Categories: CollectionConfig = {
       defaultValue: true,
       admin: {
         position: 'sidebar',
-        description:
-          'Unchecking this soft-deletes the category (hides it from the frontend).',
+        description: 'Unchecking this soft-deletes the category (hides it from the frontend).',
       },
     },
     ...author,

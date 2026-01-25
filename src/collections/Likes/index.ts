@@ -20,12 +20,14 @@ export const Likes: CollectionConfig<'likes'> = {
       type: 'relationship',
       relationTo: 'users',
       required: true,
+      index: true,
     },
     {
       name: 'post',
       type: 'relationship',
       relationTo: 'posts',
       required: true,
+      index: true,
     },
   ],
   hooks: {

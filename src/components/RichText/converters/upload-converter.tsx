@@ -10,8 +10,7 @@ export const uploadConverter: JSXConverters<SerializedUploadNode> = {
     if (!media || !media.url) {
       return (
         <div className="text-red-500 border border-red-500 p-2 my-4 bg-red-50 dark:bg-red-950 dark:text-red-300 rounded-lg">
-          [Error: Media asset not found or URL missing for ID:{' '}
-          {media?.id || 'N/A'}]
+          [Error: Media asset not found or URL missing for ID: {media?.id || 'N/A'}]
         </div>
       )
     }

@@ -6,10 +6,7 @@ import { getPayload } from 'payload'
 import { AbstractFormSchema } from '@/schemas/abstract.schema'
 import { uploadFile } from '../files/upload'
 
-export async function createAbstract(
-  conference: number,
-  data: AbstractFormSchema,
-) {
+export async function createAbstract(conference: number, data: AbstractFormSchema) {
   try {
     const payload = await getPayload({ config: configPromise })
 

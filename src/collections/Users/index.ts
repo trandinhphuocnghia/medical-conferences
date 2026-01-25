@@ -1,14 +1,6 @@
-import {
-  adminOnly,
-  adminOrOwner,
-  anyone,
-  authenticated,
-} from '@/access/collectionAccess'
+import { adminOnly, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { notAdminView } from '@/access/collectionView'
-import {
-  adminExceptSelfFieldAccess,
-  adminOnlyFieldAccess,
-} from '@/access/fieldAccess'
+import { adminExceptSelfFieldAccess, adminOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig } from 'payload'
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { preventCreateAdmin } from './hooks/preventCreateAdmin'
@@ -68,9 +60,7 @@ export const Users: CollectionConfig = {
         hidden: true,
       },
       hooks: {
-        beforeChange: [
-          ({ data }) => `${data?.firstName || ''} ${data?.lastName || ''}`,
-        ],
+        beforeChange: [({ data }) => `${data?.firstName || ''} ${data?.lastName || ''}`],
       },
       index: true,
     },
@@ -137,8 +127,21 @@ export const Users: CollectionConfig = {
       label: 'Mailing Address',
     },
     {
+      name: 'interests',
+      type: 'relationship',
+      relationTo: 'topics',
+      hasMany: true,
+      label: 'Areas of Interest',
+      admin: {
+        position: 'sidebar',
+        description: 'Select medical topics you are interested in.',
+        hidden: true,
+      },
+    },
+    {
       name: 'role',
       type: 'select',
+      index: true,
       label: 'User Role',
 
       access: {

@@ -1,12 +1,7 @@
 import { SvgText } from '@/components/ui/svg-text'
 
 const SVGText = () => (
-  <svg
-    width="400"
-    height="200"
-    viewBox="0 0 400 200"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="liquidGradient" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#3b82f6" />

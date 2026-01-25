@@ -65,9 +65,7 @@ const IS_CODE = 16
 const IS_SUBSCRIPT = 32
 const IS_SUPERSCRIPT = 64
 
-export const extractCustomStyles = (
-  node: SerializedTextNode,
-): CSSProperties => {
+export const extractCustomStyles = (node: SerializedTextNode): CSSProperties => {
   const styles: CSSProperties = {}
 
   if (!node.$) {
@@ -109,16 +107,10 @@ export const textConverter: JSXConverters<SerializedTextNode> = {
       text = <em style={styles}>{text}</em>
     }
     if (node.format & IS_STRIKETHROUGH) {
-      text = (
-        <span style={{ ...styles, textDecoration: 'line-through' }}>
-          {text}
-        </span>
-      )
+      text = <span style={{ ...styles, textDecoration: 'line-through' }}>{text}</span>
     }
     if (node.format & IS_UNDERLINE) {
-      text = (
-        <span style={{ ...styles, textDecoration: 'underline' }}>{text}</span>
-      )
+      text = <span style={{ ...styles, textDecoration: 'underline' }}>{text}</span>
     }
     if (node.format & IS_CODE) {
       text = <code style={styles}>{text}</code>

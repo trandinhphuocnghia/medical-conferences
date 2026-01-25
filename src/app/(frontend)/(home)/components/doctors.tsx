@@ -26,10 +26,7 @@ const DoctorCard = ({ imageStyle, name, specialty, alt }: DoctorCardProps) => (
 )
 
 export const Doctors = () => (
-  <section
-    className="w-full bg-white dark:bg-slate-900 py-10 sm:py-16"
-    id="doctors"
-  >
+  <section className="w-full bg-white dark:bg-slate-900 py-10 sm:py-16" id="doctors">
     <div className="flex flex-col max-w-5xl mx-auto px-4 sm:px-6 lg:px-4">
       <h2 className="text-slate-900 dark:text-slate-50 text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-5 pt-5 text-center">
         Meet Our Doctors

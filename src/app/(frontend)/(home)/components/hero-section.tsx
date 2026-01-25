@@ -24,9 +24,9 @@ export function HeroSection() {
 
         {/* Subtitle */}
         <p className="mt-6 text-lg sm:text-xl text-primary-foreground/80 max-w-2xl mx-auto leading-relaxed text-pretty">
-          Join 5,000+ healthcare professionals at the premier international
-          medical conference. Discover breakthrough research, connect with
-          global experts, and shape the future of healthcare.
+          Join 5,000+ healthcare professionals at the premier international medical conference.
+          Discover breakthrough research, connect with global experts, and shape the future of
+          healthcare.
         </p>
 
         {/* Event Details */}
@@ -37,9 +37,7 @@ export function HeroSection() {
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-5 h-5 text-accent" />
-            <span className="text-sm font-medium">
-              Boston Convention Center
-            </span>
+            <span className="text-sm font-medium">Boston Convention Center</span>
           </div>
         </div>
 

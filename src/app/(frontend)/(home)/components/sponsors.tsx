@@ -30,10 +30,7 @@ const SPONSORS = [
 ] as const
 
 export const Sponsors = () => (
-  <section
-    className="w-full bg-white dark:bg-slate-900 py-10 sm:py-16"
-    id="sponsors"
-  >
+  <section className="w-full bg-white dark:bg-slate-900 py-10 sm:py-16" id="sponsors">
     <div className="flex flex-col max-w-5xl mx-auto px-4 sm:px-6 lg:px-4 items-center">
       <h2 className="text-slate-900 dark:text-slate-50 text-[22px] font-bold leading-tight tracking-[-0.015em] pb-8">
         Our Sponsors

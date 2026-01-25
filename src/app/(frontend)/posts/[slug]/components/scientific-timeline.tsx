@@ -103,10 +103,7 @@ export function ScientificTimeline({
               const past = isPast(milestone.date)
 
               return (
-                <div
-                  key={index}
-                  className="relative flex flex-col items-center"
-                >
+                <div key={index} className="relative flex flex-col items-center">
                   {/* Icon Node */}
                   <div
                     className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center mb-4 border-2 transition-all ${
@@ -148,18 +145,14 @@ export function ScientificTimeline({
                     <div className="font-mono text-center mb-3">
                       <div
                         className={`text-3xl font-bold ${
-                          milestone.type === 'event'
-                            ? 'text-white'
-                            : 'text-[#0F172A]'
+                          milestone.type === 'event' ? 'text-white' : 'text-[#0F172A]'
                         }`}
                       >
                         {dateFormatted.day}
                       </div>
                       <div
                         className={`text-sm uppercase tracking-wider ${
-                          milestone.type === 'event'
-                            ? 'text-cyan-300'
-                            : 'text-[#06B6D4]'
+                          milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
                         }`}
                       >
                         {dateFormatted.month} {dateFormatted.year}
@@ -169,18 +162,14 @@ export function ScientificTimeline({
                     {/* Label & Description */}
                     <h3
                       className={`font-semibold text-sm mb-1 ${
-                        milestone.type === 'event'
-                          ? 'text-white'
-                          : 'text-[#0F172A]'
+                        milestone.type === 'event' ? 'text-white' : 'text-[#0F172A]'
                       }`}
                     >
                       {milestone.label}
                     </h3>
                     <p
                       className={`text-xs leading-relaxed ${
-                        milestone.type === 'event'
-                          ? 'text-slate-300'
-                          : 'text-slate-500'
+                        milestone.type === 'event' ? 'text-slate-300' : 'text-slate-500'
                       }`}
                     >
                       {milestone.description}
@@ -245,22 +234,17 @@ export function ScientificTimeline({
                 </h3>
                 <p
                   className={`text-[11px] sm:text-xs mb-1.5 sm:mb-2 leading-relaxed ${
-                    milestone.type === 'event'
-                      ? 'text-slate-300'
-                      : 'text-slate-500'
+                    milestone.type === 'event' ? 'text-slate-300' : 'text-slate-500'
                   }`}
                 >
                   {milestone.description}
                 </p>
                 <div
                   className={`font-mono text-xs sm:text-sm font-medium ${
-                    milestone.type === 'event'
-                      ? 'text-cyan-300'
-                      : 'text-[#06B6D4]'
+                    milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
                   }`}
                 >
-                  {dateFormatted.month} {dateFormatted.day},{' '}
-                  {dateFormatted.year}
+                  {dateFormatted.month} {dateFormatted.day}, {dateFormatted.year}
                 </div>
               </div>
             </div>
