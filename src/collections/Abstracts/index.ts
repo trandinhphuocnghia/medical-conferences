@@ -1,11 +1,11 @@
 import { adminOrSubmitter, authenticated } from '@/access/collectionAccess'
-import { adminOnlyFieldAccess } from '@/access/fieldAccess'
+import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig, Where } from 'payload'
 import { beforeDelete } from './hooks/beforeDelete'
-import { checkExistAbstract } from './hooks/checkExistAbstract'
-import { sendAbstractEmail } from './hooks/sendAbstractEmail'
 import { checkDeadline } from './hooks/checkDeadline'
+import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { checkValidStatus } from './hooks/checkValidStatus'
+import { sendAbstractEmail } from './hooks/sendAbstractEmail'
 
 import { scientificLexical } from '@/fields/scientificLexical'
 
@@ -53,6 +53,10 @@ export const Abstracts: CollectionConfig = {
                   name: 'title',
                   type: 'text',
                   required: true,
+                  access: {
+                    update: userOnlyFieldAccess,
+                    create: userOnlyFieldAccess,
+                  },
                   admin: {
                     width: '100%',
                     readOnly: !Boolean(adminOnlyFieldAccess),
@@ -69,6 +73,10 @@ export const Abstracts: CollectionConfig = {
                   relationTo: 'posts',
                   required: true,
                   index: true,
+                  access: {
+                    update: userOnlyFieldAccess,
+                    create: userOnlyFieldAccess,
+                  },
                   admin: {
                     width: '50%',
                     readOnly: !Boolean(adminOnlyFieldAccess),
@@ -80,6 +88,10 @@ export const Abstracts: CollectionConfig = {
                   relationTo: 'topics',
                   required: true,
                   index: true,
+                  access: {
+                    update: userOnlyFieldAccess,
+                    create: userOnlyFieldAccess,
+                  },
                   admin: {
                     width: '50%',
                     readOnly: !Boolean(adminOnlyFieldAccess),
@@ -87,7 +99,7 @@ export const Abstracts: CollectionConfig = {
                   filterOptions: ({ data }): Where => {
                     return {
                       conference: {
-                        in: data.conference ? [data.conference] : [-1],//<- query to no 
+                        in: data.conference ? [data.conference] : [-1], //<- query to no
                       },
                       active: { equals: true },
                     } as Where
@@ -108,6 +120,10 @@ export const Abstracts: CollectionConfig = {
               editor: scientificLexical,
               required: true,
               label: 'Main Content',
+              access: {
+                update: userOnlyFieldAccess,
+                create: userOnlyFieldAccess,
+              },
               admin: {
                 description: 'Structure: Introduction, Methods, Results, Conclusion.',
               },
@@ -118,6 +134,10 @@ export const Abstracts: CollectionConfig = {
               label: 'Keywords',
               minRows: 1,
               maxRows: 5,
+              access: {
+                update: userOnlyFieldAccess,
+                create: userOnlyFieldAccess,
+              },
               fields: [{ name: 'word', type: 'text' }],
               admin: { description: 'Add up to 5 keywords for indexing.' },
             },
@@ -130,10 +150,14 @@ export const Abstracts: CollectionConfig = {
           fields: [
             {
               name: 'files',
-              type: 'upload', // Better than 'text' URL - link to Media collection
-              relationTo: 'media',
+              type: 'upload',
+              relationTo: 'files',
               hasMany: true,
               label: 'Supporting Images/Charts',
+              access: {
+                update: userOnlyFieldAccess,
+                create: userOnlyFieldAccess,
+              },
             },
           ],
         },
