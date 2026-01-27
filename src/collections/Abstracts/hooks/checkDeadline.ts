@@ -1,11 +1,7 @@
-import type { CollectionBeforeChangeHook } from 'payload'
 import { Abstract, Post } from '@/payload-types'
+import { APIError, type CollectionBeforeChangeHook } from 'payload'
 
-export const checkDeadline: CollectionBeforeChangeHook<Abstract> = async ({
-  data,
-  req,
-  operation,
-}) => {
+export const checkDeadline: CollectionBeforeChangeHook<Abstract> = async ({ data, req }) => {
   // Admins can bypass deadline
   if (req.user?.role === 'admin') return data
 
@@ -26,7 +22,12 @@ export const checkDeadline: CollectionBeforeChangeHook<Abstract> = async ({
   const now = new Date()
 
   if (now > deadline) {
-    throw new Error('Abstract submission deadline has passed for this conference.')
+    throw new APIError(
+      'Abstract submission deadline has passed for this conference.',
+      400,
+      null,
+      true,
+    )
   }
 
   return data

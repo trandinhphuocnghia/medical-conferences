@@ -808,7 +808,7 @@ export interface Abstract {
         id?: string | null;
       }[]
     | null;
-  files?: (number | Media)[] | null;
+  files?: (number | File)[] | null;
   submitter?: (number | null) | User;
   /**
    * Current status of the abstract.
