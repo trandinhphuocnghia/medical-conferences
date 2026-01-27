@@ -3,6 +3,7 @@ import * as migration_20260122_081808_init from './20260122_081808_init';
 import * as migration_20260122_085903_reset_schema from './20260122_085903_reset_schema';
 import * as migration_20260123_074442_fix_schema from './20260123_074442_fix_schema';
 import * as migration_20260125_041610_add_indexes_and_fixes from './20260125_041610_add_indexes_and_fixes';
+import * as migration_20260127_032534_add_media_sizes from './20260127_032534_add_media_sizes';
 
 export const migrations = [
   {
@@ -28,6 +29,11 @@ export const migrations = [
   {
     up: migration_20260125_041610_add_indexes_and_fixes.up,
     down: migration_20260125_041610_add_indexes_and_fixes.down,
-    name: '20260125_041610_add_indexes_and_fixes'
+    name: '20260125_041610_add_indexes_and_fixes',
+  },
+  {
+    up: migration_20260127_032534_add_media_sizes.up,
+    down: migration_20260127_032534_add_media_sizes.down,
+    name: '20260127_032534_add_media_sizes'
   },
 ];

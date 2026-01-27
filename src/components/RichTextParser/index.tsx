@@ -1,8 +1,8 @@
 'use client'
 
-import React, { Fragment } from 'react'
 import { Media } from '@/payload-types'
 import Image from 'next/image'
+import React, { Fragment } from 'react'
 
 type Node = {
   type: string
@@ -41,7 +41,7 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
           if (node.format & 16) {
             text = <code>{text}</code>
           }
-          
+
           return <React.Fragment key={i}>{text}</React.Fragment>
         }
 
@@ -62,7 +62,10 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
           case 'list':
             const ListTag = node.tag as React.ElementType
             return (
-              <ListTag key={i} className={`mb-4 pl-6 ${node.tag === 'ol' ? 'list-decimal' : 'list-disc'}`}>
+              <ListTag
+                key={i}
+                className={`mb-4 pl-6 ${node.tag === 'ol' ? 'list-decimal' : 'list-disc'}`}
+              >
                 <Serialize nodes={node.children} />
               </ListTag>
             )
@@ -74,7 +77,10 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
             )
           case 'quote':
             return (
-              <blockquote key={i} className="border-l-4 border-cyan-500 pl-4 italic text-slate-600 my-4">
+              <blockquote
+                key={i}
+                className="border-l-4 border-cyan-500 pl-4 italic text-slate-600 my-4"
+              >
                 <Serialize nodes={node.children} />
               </blockquote>
             )
@@ -93,29 +99,29 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
           case 'upload':
             const media = node.value as Media
             if (!media?.url) return null
-            
+
             return (
-              <div key={i} className="my-6 rounded-xl overflow-hidden shadow-sm">
-                {/* Ensure URL is absolute if needed, or rely on Next/Image loader */}
-                <img 
-                    src={media.url} 
-                    alt={media.alt || 'Content image'} 
-                    className="w-full h-auto object-cover"
+              <div key={i} className="my-6 w-fit rounded-xl overflow-hidden shadow-sm">
+                <Image
+                  src={media.url}
+                  alt={media?.alt || 'Content image'}
+                  width={media?.width || 0}
+                  height={media?.height || 0}
                 />
                 {node.fields?.caption && (
-                   <div className="text-center text-sm text-slate-500 mt-2 italic">
-                     {/* Recursively render rich text caption if structure matches, otherwise simple render */}
-                      {/* Caption is usually a rich text editorState, so we might need another Serialize if complex */}
-                   </div>
+                  <div className="text-center text-sm text-slate-500 mt-2 italic">
+                    {/* Recursively render rich text caption if structure matches, otherwise simple render */}
+                    {/* Caption is usually a rich text editorState, so we might need another Serialize if complex */}
+                  </div>
                 )}
               </div>
             )
-            
+
           default:
             return (
               <div key={i}>
-                 {/* Fallback for unknown nodes, try to render children */}
-                 {node.children && <Serialize nodes={node.children} />}
+                {/* Fallback for unknown nodes, try to render children */}
+                {node.children && <Serialize nodes={node.children} />}
               </div>
             )
         }
@@ -140,5 +146,5 @@ const escapeHTML = (str: string) =>
         '>': '&gt;',
         "'": '&#39;',
         '"': '&quot;',
-      }[tag] || tag),
+      })[tag] || tag,
   )
