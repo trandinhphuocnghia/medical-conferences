@@ -12,7 +12,6 @@ import {
   UploadFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import { defaultLexical } from './defaultLexical'
 
 export const scientificLexical = lexicalEditor({
   features: [
@@ -26,7 +25,7 @@ export const scientificLexical = lexicalEditor({
     SuperscriptFeature(),
     SubscriptFeature(),
     // reuse the link feature config from default if possible, or re-declare
-    // Since defaultLexical is an object, we can't easily extract the feature *config* 
+    // Since defaultLexical is an object, we can't easily extract the feature *config*
     // without inspecting it. It's safer to re-declare the LinkFeature with the same config
     LinkFeature({
       enabledCollections: ['pages', 'posts'],

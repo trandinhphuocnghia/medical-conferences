@@ -25,10 +25,26 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     adapter: 'uploadthing',
+    disableLocalStorage: true,
+
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     crop: true,
     displayPreview: true,
-    disableLocalStorage: true,
+
+    imageSizes: [
+      {
+        name: 'thumbnail',
+        width: 400,
+        height: 300,
+        position: 'centre',
+      },
+      {
+        name: 'preview',
+        width: 1024,
+        // height is auto-calculated if omitted to maintain aspect ratio
+      },
+    ],
+    mimeTypes: ['image/jpeg', 'image/png'],
   },
 }
