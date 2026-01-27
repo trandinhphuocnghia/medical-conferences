@@ -30,12 +30,12 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
     <div className="min-h-screen bg-[#F8FAFC]">
       <DetailHeader
         conference={conferenceData}
-        attendees={2500} //TODO
-        cmeCredits={24} //TODO
+        attendees={0} //TODO
+        cmeCredits={0} //TODO
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {topics.length > 0 && <TopicExplorer topics={topics} />}
+        {topics.length > 0 && <TopicExplorer conferenceId={conferenceData.id} topics={topics} />}
 
         <ScientificTimeline
           abstractSubmissionDeadline={conferenceData.abstractSubmissionDeadline}

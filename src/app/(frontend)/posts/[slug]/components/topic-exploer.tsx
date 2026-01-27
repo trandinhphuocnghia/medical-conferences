@@ -1,18 +1,39 @@
 'use client'
 
+import { RichTextParser } from '@/components/RichTextParser'
 import { Button } from '@/components/ui/button'
 import { isCategory } from '@/helpers'
-import { RichTextParser } from '@/components/RichTextParser'
 import type { Category, Topic } from '@/payload-types'
+import { isObject } from '@/utilities/deepMerge'
 import { ChevronRight, FileText, Send } from 'lucide-react'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCallback, useState } from 'react'
 
 interface TopicExplorerProps {
   topics: Topic[]
+  conferenceId: number
 }
 
-export function TopicExplorer({ topics }: TopicExplorerProps) {
+export function TopicExplorer({ topics, conferenceId }: TopicExplorerProps) {
   const [activeTopic, setActiveTopic] = useState(topics[0])
+  const router = useRouter()
+
+  const onSubmitAbstract = useCallback(() => {
+    const allRelatedConferences = activeTopic.conference?.docs
+
+    if (!allRelatedConferences?.length) return
+
+    const relatedConferenceIds = allRelatedConferences.map((item) =>
+      isObject(item) ? item?.id || -1 : item,
+    )
+    if (!relatedConferenceIds.length) return
+
+    if (!relatedConferenceIds.includes(conferenceId)) return
+
+    return router.push(
+      `/dashboard/collections/abstracts?conference=${conferenceId}&topic=${activeTopic.id}`,
+    )
+  }, [activeTopic, conferenceId])
 
   // Get category name from topic
   const getCategoryName = (category: number | Category): string => {
@@ -36,8 +57,6 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
     }
     return colorMap[categoryName] || 'bg-slate-100 text-slate-600 border-slate-200'
   }
-
-
 
   if (!topics || topics.length === 0) {
     return (
@@ -123,7 +142,7 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
 
         {/* Research Pane */}
         <div className="flex-1 rounded-xl sm:rounded-2xl border border-[#E2E8F0] bg-white/80 backdrop-blur-sm overflow-hidden flex flex-col">
-          <div className="p-4 sm:p-6 border-b border-[#E2E8F0] bg-gradient-to-r from-slate-50/80 to-white">
+          <div className="p-4 sm:p-6 border-b border-[#E2E8F0] bg-linear-to-r from-slate-50/80 to-white">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
               <div>
                 <span
@@ -141,8 +160,6 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
             </div>
           </div>
 
-
-
           <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
             <article className="prose prose-slate max-w-none prose-headings:text-[#0F172A] prose-p:text-slate-600 prose-p:leading-relaxed">
               <div
@@ -152,22 +169,25 @@ export function TopicExplorer({ topics }: TopicExplorerProps) {
                 {activeTopic.description && (
                   <p className="mb-4 font-medium text-slate-800">{activeTopic.description}</p>
                 )}
-                
+
                 {activeTopic.content ? (
-                   <RichTextParser content={activeTopic.content} />
+                  <RichTextParser content={activeTopic.content} />
                 ) : (
-                   <div className="text-slate-500 italic">No content available for this topic.</div>
+                  <div className="text-slate-500 italic">No content available for this topic.</div>
                 )}
               </div>
             </article>
           </div>
 
-          <div className="p-3 sm:p-4 border-t border-[#E2E8F0] bg-gradient-to-r from-cyan-50/50 to-white">
+          <div className="p-3 sm:p-4 border-t border-[#E2E8F0] bg-linear-to-r from-cyan-50/50 to-white">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Interested in presenting your research on this topic?
               </p>
-              <Button className="bg-[#06B6D4] hover:bg-[#0891B2] text-white gap-2 w-full sm:w-auto text-sm">
+              <Button
+                onClick={onSubmitAbstract}
+                className="bg-[#06B6D4] hover:bg-[#0891B2] text-white gap-2 w-full sm:w-auto text-sm"
+              >
                 <Send className="h-4 w-4" />
                 <span className="sm:hidden">Submit Abstract</span>
                 <span className="hidden sm:inline">Submit Abstract for this Topic</span>
