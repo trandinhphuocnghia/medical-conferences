@@ -9,6 +9,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
+import { MailLogs } from './collections/EmailLogs'
 import { Files } from './collections/Files'
 import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
@@ -121,6 +122,7 @@ export default buildConfig({
     Rooms,
     Seats,
     Reservations,
+    MailLogs,
   ],
   cors: [
     ...[getServerSideURL()].filter(Boolean),

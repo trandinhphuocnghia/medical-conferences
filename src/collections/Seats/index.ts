@@ -39,7 +39,9 @@ export const Seats: CollectionConfig = {
     update: authenticated,
     delete: adminOnly,
   },
-  admin: {},
+  admin: {
+    hidden: true,
+  },
   fields: [
     {
       name: 'type',

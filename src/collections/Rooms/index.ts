@@ -16,6 +16,7 @@ export const Rooms: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
+    hidden: true,
   },
   fields: [
     {

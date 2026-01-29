@@ -3,6 +3,9 @@ import { CollectionConfig } from 'payload'
 export const Reservations: CollectionConfig = {
   slug: 'reservations',
   access: {},
+  admin: {
+    hidden: true,
+  },
   fields: [
     {
       name: 'seat',
