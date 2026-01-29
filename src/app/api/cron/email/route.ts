@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
         },
       ],
     },
-    limit: 20, // Batch size
+    limit: 10, // Batch size
   })
 
   const results = {

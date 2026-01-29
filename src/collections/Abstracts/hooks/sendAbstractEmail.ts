@@ -7,12 +7,15 @@ import { CollectionAfterChangeHook } from 'payload'
 export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
   data,
   doc,
+  previousDoc,
   operation,
   req,
 }) => {
   // 1. Determine the recipient and content
   let emailHtml = ''
   let emailSubject = ''
+
+  console.log({ docSubmitter: doc.submitter })
 
   // We need the submitter's email. If not populated, we fetch it.
   const submitter =
@@ -35,16 +38,7 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
   }
 
   // 3. Logic for Update (Status Changes)
-  if (operation === 'update') {
-    // Fetch previous document to check if status actually changed
-    const previousDoc = await req.payload.findByID({
-      collection: 'abstracts',
-      id: doc.id,
-      select: {
-        status: true,
-      },
-    })
-
+  if (operation === 'update' && previousDoc) {
     // Only send email if status actually changed
     if (data.status === 'verified' && previousDoc.status !== 'verified') {
       emailSubject = 'MedConf - Abstract Verified'
@@ -69,4 +63,6 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
       },
     })
   }
+
+  return data
 }
