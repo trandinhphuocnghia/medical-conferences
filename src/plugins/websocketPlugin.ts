@@ -155,11 +155,9 @@ export const websocketServerPlugin =
                 ws.send(JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }))
 
                 const secret = new TextEncoder().encode(payload.secret)
-                const { payload: user } = await jwtVerify(data.token, secret)
 
                 //broadcast to all clients:
                 wss.clients.forEach((client) => {
-                  console.log({ client })
                   if (client.readyState === ws.OPEN) {
                     client.send(
                       JSON.stringify({

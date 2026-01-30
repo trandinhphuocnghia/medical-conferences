@@ -2,32 +2,40 @@ import { Abstract, Post } from '@/payload-types'
 import { APIError, type CollectionBeforeChangeHook } from 'payload'
 
 export const checkDeadline: CollectionBeforeChangeHook<Abstract> = async ({ data, req }) => {
-  // Admins can bypass deadline
-  if (req.user?.role === 'admin') return data
-
-  const payload = req.payload
+  const { payload, user } = req
   const conferenceId = typeof data.conference === 'object' ? data.conference?.id : data.conference
 
   if (!conferenceId) return data
 
-  // Fetch conference details including deadline
+  // 1. Optimization: Only fetch the fields we need
   const conference = (await payload.findByID({
     collection: 'posts',
     id: conferenceId,
+    select: {
+      abstractSubmissionDeadline: true,
+      notificationOfAcceptanceDate: true,
+    },
   })) as Post
 
-  if (!conference.abstractSubmissionDeadline) return data
+  if (!conference) return data
 
-  const deadline = new Date(conference.abstractSubmissionDeadline)
   const now = new Date()
+  const isAdmin = user?.role === 'admin'
 
-  if (now > deadline) {
-    throw new APIError(
-      'Abstract submission deadline has passed for this conference.',
-      400,
-      null,
-      true,
-    )
+  // 2. Determine which deadline to check
+  const deadlineField = isAdmin
+    ? conference.notificationOfAcceptanceDate
+    : conference.abstractSubmissionDeadline
+
+  const errorMessage = isAdmin
+    ? 'Notification of acceptance date has passed.'
+    : 'Abstract submission deadline has passed.'
+
+  if (!deadlineField) return data
+
+  // 3. Comparison
+  if (now > new Date(deadlineField)) {
+    throw new APIError(errorMessage, 400, null, true)
   }
 
   return data

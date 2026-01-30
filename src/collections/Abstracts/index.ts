@@ -1,13 +1,12 @@
 import { adminOrSubmitter, authenticated } from '@/access/collectionAccess'
-import { adminOnlyFieldAccess, userOnlyFieldAccess } from '@/access/fieldAccess'
+import { userOnlyFieldAccess } from '@/access/fieldAccess'
+import { scientificLexical } from '@/fields/scientificLexical'
 import type { CollectionConfig, Where } from 'payload'
 import { beforeDelete } from './hooks/beforeDelete'
 import { checkDeadline } from './hooks/checkDeadline'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { checkValidStatus } from './hooks/checkValidStatus'
 import { sendAbstractEmail } from './hooks/sendAbstractEmail'
-
-import { scientificLexical } from '@/fields/scientificLexical'
 
 export const Abstracts: CollectionConfig = {
   slug: 'abstracts',
@@ -59,7 +58,6 @@ export const Abstracts: CollectionConfig = {
                   },
                   admin: {
                     width: '100%',
-                    readOnly: !Boolean(adminOnlyFieldAccess),
                   },
                 },
               ],
@@ -79,7 +77,6 @@ export const Abstracts: CollectionConfig = {
                   },
                   admin: {
                     width: '50%',
-                    readOnly: !Boolean(adminOnlyFieldAccess),
                   },
                 },
                 {
@@ -94,7 +91,6 @@ export const Abstracts: CollectionConfig = {
                   },
                   admin: {
                     width: '50%',
-                    readOnly: !Boolean(adminOnlyFieldAccess),
                   },
                   filterOptions: ({ data }): Where => {
                     return {
@@ -179,6 +175,10 @@ export const Abstracts: CollectionConfig = {
         update: () => false,
       },
     },
+    //TODO: WILLING
+    /*
+    create admin components improve UX of the status field.
+     */
     {
       name: 'status',
       type: 'select',
@@ -203,6 +203,11 @@ export const Abstracts: CollectionConfig = {
 
   hooks: {
     beforeChange: [checkDeadline, checkExistAbstract],
+    //TODO: MUST
+    /*
+    1. define mail_logs collections.
+    2. define API cron-jon.
+    */
     afterChange: [sendAbstractEmail],
     beforeDelete: [beforeDelete],
   },

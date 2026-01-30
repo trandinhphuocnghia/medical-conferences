@@ -15,6 +15,7 @@ export const Media: CollectionConfig = {
   },
   admin: {
     hidden: userView,
+    defaultColumns: ['filename', 'createdAt', 'updatedAt'],
   },
   fields: [
     {

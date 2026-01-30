@@ -1,15 +1,17 @@
 import type { CollectionConfig } from 'payload'
 
+import { slugField } from '@/fields/slug'
+import { hero } from '@/heros/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { hero } from '@/heros/config'
-import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
+import { adminOnly, anyone, authenticated } from '@/access/collectionAccess'
+import { author } from '@/utilities/collectionAuthor'
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -17,9 +19,6 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { notAdminView } from '@/access/collectionView'
-import { adminOnly, anyone, authenticated } from '@/access/collectionAccess'
-import { author } from '@/utilities/collectionAuthor'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -36,7 +35,7 @@ export const Pages: CollectionConfig<'pages'> = {
   },
   admin: {
     defaultColumns: ['title', 'slug', 'updated_at'],
-    hidden: notAdminView,
+    hidden: true,
     livePreview: {
       url: ({ data, req }) => {
         const path = generatePreviewPath({

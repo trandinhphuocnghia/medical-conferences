@@ -81,6 +81,7 @@ export interface Config {
     rooms: Room;
     seats: Seat;
     reservations: Reservation;
+    'mail-logs': MailLog;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -109,6 +110,7 @@ export interface Config {
     rooms: RoomsSelect<false> | RoomsSelect<true>;
     seats: SeatsSelect<false> | SeatsSelect<true>;
     reservations: ReservationsSelect<false> | ReservationsSelect<true>;
+    'mail-logs': MailLogsSelect<false> | MailLogsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -897,6 +899,23 @@ export interface Reservation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mail-logs".
+ */
+export interface MailLog {
+  id: number;
+  to: string;
+  subject: string;
+  html: string;
+  status?: ('pending' | 'sent' | 'failed') | null;
+  retryCount?: number | null;
+  lastError?: string | null;
+  sentAt?: string | null;
+  abstractId?: (number | null) | Abstract;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1092,6 +1111,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reservations';
         value: number | Reservation;
+      } | null)
+    | ({
+        relationTo: 'mail-logs';
+        value: number | MailLog;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1534,6 +1557,22 @@ export interface ReservationsSelect<T extends boolean = true> {
   seat?: T;
   user?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mail-logs_select".
+ */
+export interface MailLogsSelect<T extends boolean = true> {
+  to?: T;
+  subject?: T;
+  html?: T;
+  status?: T;
+  retryCount?: T;
+  lastError?: T;
+  sentAt?: T;
+  abstractId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

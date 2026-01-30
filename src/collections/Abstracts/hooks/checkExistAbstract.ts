@@ -22,6 +22,7 @@ export const checkExistAbstract: CollectionBeforeChangeHook<Abstract> = async ({
         { status: { in: ['pending', 'verified'] } },
       ],
     },
+    select: { title: true },
     limit: 1,
   })
 

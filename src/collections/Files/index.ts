@@ -13,6 +13,7 @@ export const Files: CollectionConfig = {
     update: adminOrOwner,
   },
   admin: {
+    defaultColumns: ['filename', 'createdAt', 'updatedAt'],
     hidden: userView,
   },
   fields: [],
