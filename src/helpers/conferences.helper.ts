@@ -26,8 +26,6 @@ export function extractTextFromContent(content: Topic['content']): string {
 
     const n = node as Record<string, unknown>
 
-    console.log(content)
-
     if (n.type === 'upload') {
       return '' // Skip images for text extraction
     }

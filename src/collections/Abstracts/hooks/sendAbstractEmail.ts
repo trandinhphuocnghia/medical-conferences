@@ -15,8 +15,6 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
   let emailHtml = ''
   let emailSubject = ''
 
-  console.log({ docSubmitter: doc.submitter })
-
   // We need the submitter's email. If not populated, we fetch it.
   const submitter =
     typeof doc.submitter === 'object'

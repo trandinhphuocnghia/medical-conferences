@@ -28,8 +28,6 @@ const EventCard = ({ date, title, description, imageStyle, link, actionText }: E
 )
 
 export const Events = ({ conferences }: { conferences: Post[] }) => {
-  console.log({ conferences })
-
   return (
     <section className="w-full" id="events">
       <div className="flex flex-col gap-10 px-4 py-10 sm:px-6 lg:px-4 lg:py-16">
