@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+import { CollectionConfig, CustomComponent } from 'payload'
+import { ProcessLogsButton } from './ui/ProcessLogsButton'
 
 export const MailLogs: CollectionConfig = {
   slug: 'mail-logs',
@@ -8,7 +9,15 @@ export const MailLogs: CollectionConfig = {
     update: ({ req }) => req.user?.role === 'admin',
     delete: ({ req }) => req.user?.role === 'admin',
   },
-  admin: { useAsTitle: 'subject', group: 'System' },
+  admin: {
+    useAsTitle: 'subject',
+    group: 'System',
+    defaultColumns: ['to', 'status', 'retryCount', 'createdAt', 'abstractId'],
+    components: {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      beforeListTable: [ProcessLogsButton as any as CustomComponent],
+    },
+  },
   fields: [
     { name: 'to', type: 'text', required: true },
     { name: 'subject', type: 'text', required: true },
@@ -19,6 +28,7 @@ export const MailLogs: CollectionConfig = {
       defaultValue: 'pending',
       options: [
         { label: 'Pending', value: 'pending' },
+        { label: 'Processing', value: 'processing' },
         { label: 'Sent', value: 'sent' },
         { label: 'Failed', value: 'failed' },
       ],
