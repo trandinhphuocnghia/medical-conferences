@@ -906,7 +906,7 @@ export interface MailLog {
   to: string;
   subject: string;
   html: string;
-  status?: ('pending' | 'sent' | 'failed') | null;
+  status?: ('pending' | 'processing' | 'sent' | 'failed') | null;
   retryCount?: number | null;
   lastError?: string | null;
   sentAt?: string | null;
