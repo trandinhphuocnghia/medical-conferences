@@ -1,19 +1,20 @@
 'use client'
 
-import { useTransition } from 'react'
+import { loginUser } from '@/app/actions/loginUser'
 import Form from '@/components/common/form'
 import FormField from '@/components/common/form-field'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
 import { Separator } from '@/components/ui/separator'
-import Link from 'next/link'
 import { Spinner } from '@/components/ui/spinner'
-import { toastError, toastSuccess } from '@/utilities/toast'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { signinSchema, signinSchemaType } from '@/schemas/signin.schema'
-import { loginUser } from '@/app/actions/loginUser'
+import { toastError, toastSuccess } from '@/utilities/toast'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useTransition } from 'react'
 
 export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
   const [isPending, startTransition] = useTransition()
@@ -51,7 +52,7 @@ export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
             {(field) => <Input {...field} />}
           </FormField>
           <FormField name="password" label="Password" required>
-            {(field) => <Input {...field} type="password" />}
+            {(field) => <PasswordInput {...field} />}
           </FormField>
           <FieldGroup>
             <Field>

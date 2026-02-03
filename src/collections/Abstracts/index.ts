@@ -1,5 +1,5 @@
 import { adminOrSubmitter, authenticated } from '@/access/collectionAccess'
-import { userOnlyFieldAccess } from '@/access/fieldAccess'
+import { draftOnlyFieldAccess } from '@/access/fieldAccess'
 import { scientificLexical } from '@/fields/scientificLexical'
 import type { CollectionConfig, Where } from 'payload'
 import { beforeDelete } from './hooks/beforeDelete'
@@ -53,8 +53,8 @@ export const Abstracts: CollectionConfig = {
                   type: 'text',
                   required: true,
                   access: {
-                    update: userOnlyFieldAccess,
-                    create: userOnlyFieldAccess,
+                    update: draftOnlyFieldAccess,
+                    create: draftOnlyFieldAccess,
                   },
                   admin: {
                     width: '100%',
@@ -72,8 +72,8 @@ export const Abstracts: CollectionConfig = {
                   required: true,
                   index: true,
                   access: {
-                    update: userOnlyFieldAccess,
-                    create: userOnlyFieldAccess,
+                    update: draftOnlyFieldAccess,
+                    create: draftOnlyFieldAccess,
                   },
                   admin: {
                     width: '50%',
@@ -86,8 +86,8 @@ export const Abstracts: CollectionConfig = {
                   required: true,
                   index: true,
                   access: {
-                    update: userOnlyFieldAccess,
-                    create: userOnlyFieldAccess,
+                    update: draftOnlyFieldAccess,
+                    create: draftOnlyFieldAccess,
                   },
                   admin: {
                     width: '50%',
@@ -117,8 +117,8 @@ export const Abstracts: CollectionConfig = {
               required: true,
               label: 'Main Content',
               access: {
-                update: userOnlyFieldAccess,
-                create: userOnlyFieldAccess,
+                update: draftOnlyFieldAccess,
+                create: draftOnlyFieldAccess,
               },
               admin: {
                 description: 'Structure: Introduction, Methods, Results, Conclusion.',
@@ -131,8 +131,8 @@ export const Abstracts: CollectionConfig = {
               minRows: 1,
               maxRows: 5,
               access: {
-                update: userOnlyFieldAccess,
-                create: userOnlyFieldAccess,
+                update: draftOnlyFieldAccess,
+                create: draftOnlyFieldAccess,
               },
               fields: [{ name: 'word', type: 'text' }],
               admin: { description: 'Add up to 5 keywords for indexing.' },
@@ -151,8 +151,8 @@ export const Abstracts: CollectionConfig = {
               hasMany: true,
               label: 'Supporting Images/Charts',
               access: {
-                update: userOnlyFieldAccess,
-                create: userOnlyFieldAccess,
+                update: draftOnlyFieldAccess,
+                create: draftOnlyFieldAccess,
               },
             },
           ],
@@ -196,7 +196,10 @@ export const Abstracts: CollectionConfig = {
       },
       admin: {
         position: 'sidebar',
-        description: 'Current status of the abstract.',
+        description: 'Users can only set Draft or Pending. Admins manage review statuses.',
+        components: {
+          Field: '@/collections/Abstracts/ui/StatusSelectComponent#StatusSelectComponent',
+        },
       },
     },
   ],

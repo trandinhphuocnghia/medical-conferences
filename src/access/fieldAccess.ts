@@ -24,3 +24,17 @@ export const adminExceptSelfFieldAccess: FieldAccess<User> = ({ req: { user, dat
 
   return false
 }
+
+export const draftOnlyFieldAccess: FieldAccess = ({ req: { user }, doc }) => {
+  // Must be authenticated
+  if (!user) return false
+
+  if (user.role === 'admin') return false
+
+  // Allow creation (no doc yet)
+  if (!doc) return true
+
+  // Allow editing ONLY if status is draft (for both users and admins)
+  // This preserves the integrity of submitted abstracts
+  return doc.status === 'draft'
+}
