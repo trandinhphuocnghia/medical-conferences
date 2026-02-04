@@ -1,15 +1,26 @@
 'use client'
 
-import { SelectInput, useField } from '@payloadcms/ui'
-import React from 'react'
+import { SelectInput, useAuth, useField } from '@payloadcms/ui'
+import React, { useEffect, useState } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const StatusSelectComponent: React.FC<any> = (props) => {
-  const { path, user, readOnly } = props
+  const { path, readOnly } = props
   const { value, setValue } = useField<string>({ path })
+  const authData = useAuth()
 
-  const isUser = user?.role === 'user'
-  const isLocked = isUser && value === 'pending'
+  const [isUser, setIsUser] = useState(authData?.user?.role === 'user')
+
+  useEffect(() => {
+    // Only update if we actually have user role data
+    // Don't reset when auth context briefly loses data during hydration
+    if (authData?.user?.role) {
+      setIsUser(authData.user.role === 'user')
+    }
+  }, [authData?.user])
+
+  // Derive isLockedStatus from stable isUser state
+  const isLockedStatus = isUser && ['pending', 'accepted', 'rejected', 'verified'].includes(value)
 
   // Filter options based on role
   const allOptions = [
@@ -30,7 +41,45 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
   // Get current option label for locked state
   const currentOption = allOptions.find((opt) => opt.value === value)
 
-  if (isLocked) {
+  // Status-specific styling and messages
+  const statusConfig: Record<
+    string,
+    { icon: string; bgColor: string; borderColor: string; textColor: string; message: string }
+  > = {
+    pending: {
+      icon: '⏳',
+      bgColor: '#fef3c7',
+      borderColor: '#f59e0b',
+      textColor: '#92400e',
+      message:
+        'Your abstract has been submitted for review. The status will be updated by an admin.',
+    },
+    accepted: {
+      icon: '✅',
+      bgColor: '#d1fae5',
+      borderColor: '#10b981',
+      textColor: '#065f46',
+      message: 'Congratulations! Your abstract has been accepted.',
+    },
+    rejected: {
+      icon: '❌',
+      bgColor: '#fee2e2',
+      borderColor: '#ef4444',
+      textColor: '#991b1b',
+      message: 'Your abstract was not accepted. Please contact the organizers for feedback.',
+    },
+    verified: {
+      icon: '✓',
+      bgColor: '#dbeafe',
+      borderColor: '#3b82f6',
+      textColor: '#1e40af',
+      message: 'Your abstract has been verified and published.',
+    },
+  }
+
+  const config = statusConfig[value] || statusConfig.pending
+
+  if (isLockedStatus) {
     return (
       <div className="field-type select-field">
         <div className="field-label">
@@ -39,24 +88,26 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
         <div
           style={{
             padding: '8px 12px',
-            backgroundColor: '#f3f4f6',
-            border: '1px solid #d1d5db',
+            backgroundColor: config.bgColor,
+            border: `2px solid ${config.borderColor}`,
             borderRadius: '4px',
-            color: '#6b7280',
+            color: config.textColor,
             marginBottom: '8px',
+            fontWeight: '500',
           }}
         >
+          <span style={{ marginRight: '8px' }}>{config.icon}</span>
           {currentOption?.label || 'Pending Review'}
         </div>
         <div
           className="field-description"
           style={{
             fontSize: '13px',
-            color: '#6b7280',
+            color: config.textColor,
             fontStyle: 'italic',
           }}
         >
-          ⏳ Your abstract has been submitted for review. The status will be updated by an admin.
+          {config.message}
         </div>
       </div>
     )

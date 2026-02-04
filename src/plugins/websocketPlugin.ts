@@ -133,7 +133,6 @@ export const websocketServerPlugin =
             const { payload: user } = await jwtVerify(token, secret)
 
             if (!user) {
-              console.log('ERROR:', { user })
               return callback(false, 401, 'Invalid Token')
             }
 
