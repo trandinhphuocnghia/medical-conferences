@@ -23,7 +23,6 @@ export const Seats = ({ seats = [], token }: Props) => {
   const handleMessage = useCallback((message: WSMessage<Reservation>) => {
     switch (message.type) {
       case MESSAGE_TYPES.CLIENT_LIST_UPDATE:
-        console.log(message)
         break
       case MESSAGE_TYPES.COLLECTION_DATA:
         break

@@ -813,7 +813,7 @@ export interface Abstract {
   files?: (number | File)[] | null;
   submitter?: (number | null) | User;
   /**
-   * Current status of the abstract.
+   * Users can only set Draft or Pending. Admins manage review statuses.
    */
   status?: ('draft' | 'pending' | 'accepted' | 'rejected' | 'verified') | null;
   updatedAt: string;

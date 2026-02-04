@@ -175,10 +175,6 @@ export const Abstracts: CollectionConfig = {
         update: () => false,
       },
     },
-    //TODO: WILLING
-    /*
-    create admin components improve UX of the status field.
-     */
     {
       name: 'status',
       type: 'select',
