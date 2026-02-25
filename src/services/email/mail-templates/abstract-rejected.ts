@@ -29,7 +29,7 @@ export const abstractRejectedMail = (abstract: Abstract) => `
           <!-- Content -->
           <tr>
             <td style="padding:24px; font-family:Arial; font-size:15px; color:#0b2545; line-height:1.5;">
-              <p>Hi <strong>${(abstract.submitter as User).fullname}</strong>,</p>
+              <p>Hi <strong>${(abstract.submitter as User)?.fullname ?? (abstract as any).submitterName ?? 'Researcher'}</strong>,</p>
               <p>Thank you for submitting <strong>${abstract.title}</strong>. After careful review, we regret to inform you that your abstract was not accepted.</p>
 
               <table role="presentation" width="100%" style="background:#fff6f6; border:1px solid #ffecec; border-radius:8px; padding:14px;">

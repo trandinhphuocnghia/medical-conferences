@@ -1,32 +1,50 @@
-import { Abstract } from '@/payload-types'
-import { APIError, CollectionBeforeChangeHook } from 'payload'
+import { APIError, CollectionBeforeChangeHook, Where } from 'payload'
 
-export const checkExistAbstract: CollectionBeforeChangeHook<Abstract> = async ({
-  data,
-  req,
-  operation,
-}) => {
-  const payload = req.payload
+// Using a loose data type since submitterEmail won't be in generated types until next migration
+type AbstractData = {
+  conference?: number | string
+  topic?: number | string
+  submitterEmail?: string
+  [key: string]: unknown
+}
 
-  const conference = data.conference
-  const topic = data.topic
+export const checkExistAbstract: CollectionBeforeChangeHook = async ({ data, req, operation }) => {
+  const typedData = data as AbstractData
+  const conference = typedData.conference
+  const topic = typedData.topic
 
-  if (!conference || !topic) return
+  if (!conference || !topic) return data
 
-  const currentUser = req.user?.id
-
-  // Check if an abstract with same conf + topic exists
   if (operation === 'create') {
-    const existing = await payload.find({
-      collection: 'abstracts',
-      where: {
+    const currentUserId = req.user?.id
+    const submitterEmail = typedData.submitterEmail
+
+    let whereClause: Where
+
+    if (currentUserId) {
+      whereClause = {
         and: [
           { conference: { equals: conference } },
           { topic: { equals: topic } },
-          { submitter: { equals: currentUser } },
+          { submitter: { equals: currentUserId } },
           { status: { in: ['pending', 'accepted', 'verified'] } },
         ],
-      },
+      }
+    } else {
+      whereClause = {
+        and: [
+          { conference: { equals: conference } },
+          { topic: { equals: topic } },
+          { submitterEmail: { equals: submitterEmail } },
+          { status: { in: ['pending', 'accepted', 'verified'] } },
+        ],
+      }
+    }
+
+    const existing = await req.payload.find({
+      collection: 'abstracts',
+      overrideAccess: true,
+      where: whereClause,
       select: { title: true },
       limit: 1,
     })

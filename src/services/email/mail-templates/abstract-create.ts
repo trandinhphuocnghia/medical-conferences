@@ -30,7 +30,7 @@ export const abstractCreateMail = (abstract: Abstract) => `
           <!-- Content -->
           <tr>
             <td style="padding:24px; font-family:Arial; font-size:15px; color:#0b2545; line-height:1.5;">
-              <p>Hi <strong>${(abstract.submitter as User).fullname}</strong>,</p>
+              <p>Hi <strong>${(abstract.submitter as User)?.fullname ?? (abstract as any).submitterName ?? 'Researcher'}</strong>,</p>
               <p>Thank you for your submission. We have successfully received your abstract titled:</p>
 
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f8fbff; border:1px solid #eef6ff; border-radius:8px; padding:16px;">

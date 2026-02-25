@@ -5,6 +5,7 @@ import * as migration_20260123_074442_fix_schema from './20260123_074442_fix_sch
 import * as migration_20260125_041610_add_indexes_and_fixes from './20260125_041610_add_indexes_and_fixes';
 import * as migration_20260127_032534_add_media_sizes from './20260127_032534_add_media_sizes';
 import * as migration_20260127_071401_add_abstracts_files from './20260127_071401_add_abstracts_files';
+import * as migration_20260225_101751 from './20260225_101751';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260127_071401_add_abstracts_files.up,
     down: migration_20260127_071401_add_abstracts_files.down,
-    name: '20260127_071401_add_abstracts_files'
+    name: '20260127_071401_add_abstracts_files',
+  },
+  {
+    up: migration_20260225_101751.up,
+    down: migration_20260225_101751.down,
+    name: '20260225_101751'
   },
 ];

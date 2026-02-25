@@ -29,7 +29,7 @@ export const abstractApprovedMail = (abstract: Abstract) => `
           <!-- Content -->
           <tr>
             <td style="padding:24px; font-family:Arial; font-size:15px; color:#073b2e; line-height:1.5;">
-              <p>Congratulations <strong>${(abstract.submitter as User).fullname}</strong>!</p>
+              <p>Congratulations <strong>${(abstract.submitter as User)?.fullname ?? (abstract as any).submitterName ?? 'Researcher'}</strong>!</p>
               <p>Your abstract <strong>"${abstract.title}"</strong> has been has been approved for the upcoming event.</p>
               <p style="text-align:center; margin:20px;">
                 <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/abstracts/${abstract.id}" style="background:#05986a; color:#ffffff; padding:10px 16px; text-decoration:none; border-radius:6px; font-weight:bold; font-family:Arial;">View Accepted Submission</a>

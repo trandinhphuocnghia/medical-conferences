@@ -1,6 +1,5 @@
 import { adminOrSubmitter, authenticated } from '@/access/collectionAccess'
 import { draftOnlyFieldAccess } from '@/access/fieldAccess'
-import { scientificLexical } from '@/fields/scientificLexical'
 import type { CollectionConfig, Where } from 'payload'
 import { beforeDelete } from './hooks/beforeDelete'
 import { checkDeadline } from './hooks/checkDeadline'
@@ -13,11 +12,7 @@ export const Abstracts: CollectionConfig = {
 
   access: {
     admin: authenticated,
-    create: ({ req: { user } }) => {
-      if (!user) return false
-
-      return user.role === 'user'
-    },
+    create: () => true, // public — no login required
     read: adminOrSubmitter,
     update: adminOrSubmitter,
   },
@@ -43,6 +38,48 @@ export const Abstracts: CollectionConfig = {
                   Field: '@/components/Abstracts/Submitter',
                 },
                 condition: (_, __, { user }) => user?.role === 'admin',
+              },
+            },
+            // Anonymous submitter contact info
+            {
+              type: 'row',
+              admin: {
+                // Hide anonymous contact fields when a linked user account exists
+                condition: (data) => !data?.submitter,
+              },
+              fields: [
+                {
+                  name: 'submitterName',
+                  type: 'text',
+                  label: 'Full Name',
+                  required: false, // conditionally required only for anonymous
+                  access: {
+                    update: () => false, // read-only after creation
+                  },
+                  admin: { width: '50%', readOnly: true },
+                },
+                {
+                  name: 'submitterEmail',
+                  type: 'email',
+                  label: 'Email Address',
+                  required: false,
+                  access: {
+                    update: () => false,
+                  },
+                  admin: { width: '50%', readOnly: true },
+                },
+              ],
+            },
+            {
+              name: 'submitterOrganization',
+              type: 'text',
+              label: 'Organization / Institution',
+              access: {
+                update: () => false,
+              },
+              admin: {
+                readOnly: true,
+                condition: (data) => !data?.submitter,
               },
             },
             {
@@ -114,19 +151,42 @@ export const Abstracts: CollectionConfig = {
           label: '2. Abstract Body',
           fields: [
             {
-              name: 'description',
-              type: 'richText',
-              editor: scientificLexical,
+              name: 'nameOfStudy',
+              type: 'text',
+              label: 'Name of the Study',
+              access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
+            },
+            {
+              name: 'aim',
+              type: 'textarea',
+              label: 'Aim of Study',
               required: true,
-              label: 'Main Content',
-              access: {
-                update: draftOnlyFieldAccess,
-                create: draftOnlyFieldAccess,
-              },
-              admin: {
-                description:
-                  'Structure: Introduction, Name of the study, Aim of study, Methods, Results, Conclusion.',
-              },
+              access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
+              admin: { description: 'What is the objective of this study?' },
+            },
+            {
+              name: 'methods',
+              type: 'textarea',
+              label: 'Methods',
+              required: true,
+              access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
+              admin: { description: 'Describe the study design and methodology.' },
+            },
+            {
+              name: 'results',
+              type: 'textarea',
+              label: 'Results',
+              required: true,
+              access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
+              admin: { description: 'Summarize the key findings.' },
+            },
+            {
+              name: 'conclusion',
+              type: 'textarea',
+              label: 'Conclusion',
+              required: true,
+              access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
+              admin: { description: 'What do the results mean?' },
             },
             {
               name: 'keywords',
@@ -134,10 +194,7 @@ export const Abstracts: CollectionConfig = {
               label: 'Keywords',
               minRows: 1,
               maxRows: 5,
-              access: {
-                update: draftOnlyFieldAccess,
-                create: draftOnlyFieldAccess,
-              },
+              access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
               fields: [{ name: 'word', type: 'text' }],
               admin: { description: 'Add up to 5 keywords for indexing.' },
             },
@@ -170,10 +227,11 @@ export const Abstracts: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       index: true,
-      defaultValue: ({ req }) => req.user?.id,
+      defaultValue: ({ req }) => req.user?.id ?? null, // null for anonymous submissions
       admin: {
         readOnly: true,
         position: 'sidebar',
+        description: 'Populated if the submitter had an account.',
       },
       access: {
         update: () => false,

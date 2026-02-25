@@ -18,22 +18,33 @@ export function TopicExplorer({ topics, conferenceId }: TopicExplorerProps) {
   const [activeTopic, setActiveTopic] = useState(topics[0])
   const router = useRouter()
 
-  const onSubmitAbstract = useCallback(() => {
+  const onSubmitAbstract = useCallback(async () => {
     const allRelatedConferences = activeTopic.conference?.docs
-
     if (!allRelatedConferences?.length) return
 
     const relatedConferenceIds = allRelatedConferences.map((item) =>
       isObject(item) ? item?.id || -1 : item,
     )
-    if (!relatedConferenceIds.length) return
-
     if (!relatedConferenceIds.includes(conferenceId)) return
 
-    return router.push(
-      `/dashboard/collections/abstracts?conference=${conferenceId}&topic=${activeTopic.id}`,
-    )
-  }, [activeTopic, conferenceId])
+    // Check if user is logged in
+    try {
+      const res = await fetch('/api/users/me', { credentials: 'include' })
+      const data = await res.json()
+      if (data?.user) {
+        // Logged-in → go to admin panel create form
+        router.push(
+          `/dashboard/collections/abstracts/create?conference=${conferenceId}&topic=${activeTopic.id}`,
+        )
+      } else {
+        // Anonymous → go to public form with pre-selection
+        router.push(`/submit-abstract?conference=${conferenceId}&topic=${activeTopic.id}`)
+      }
+    } catch {
+      // Network error fallback → public form
+      router.push(`/submit-abstract?conference=${conferenceId}&topic=${activeTopic.id}`)
+    }
+  }, [activeTopic, conferenceId, router])
 
   // Get category name from topic
   const getCategoryName = (category: number | Category): string => {

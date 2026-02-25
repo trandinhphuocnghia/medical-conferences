@@ -15,19 +15,21 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
   let emailHtml = ''
   let emailSubject = ''
 
-  // We need the submitter's email. If not populated, we fetch it.
-  const submitter =
-    typeof doc.submitter === 'object'
-      ? (doc.submitter as User)
-      : await req.payload.findByID({
-          collection: 'users',
-          id: doc.submitter as number,
-          select: {
-            email: true,
-          },
-        })
+  // We need the submitter's email. Use the user relationship or the anonymous email field.
+  const submitterEmail =
+    typeof doc.submitter === 'object' && doc.submitter !== null
+      ? (doc.submitter as User).email
+      : typeof doc.submitter === 'number'
+        ? (
+            await req.payload.findByID({
+              collection: 'users',
+              id: doc.submitter as number,
+              select: { email: true },
+            })
+          )?.email
+        : (doc as any).submitterEmail // anonymous submission
 
-  if (!submitter?.email) return
+  if (!submitterEmail) return
 
   // 2. Logic for Create (New Submission)
   if (operation === 'create') {
@@ -47,20 +49,20 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
     }
   }
 
-  // 4. THE SENIOR MOVE: Create the log entry instead of sending
+  // 4. Create the mail log entry — cron job picks it up and sends
   if (emailHtml && emailSubject) {
     await req.payload.create({
       collection: 'mail-logs',
       data: {
-        to: submitter.email,
+        to: submitterEmail,
         subject: emailSubject,
         html: emailHtml,
         status: 'pending',
         retryCount: 0,
         abstractId: doc.id,
       },
-      req, // ← share the same DB transaction
-      overrideAccess: true, // ← hook runs as system, not as the submitting user
+      req,
+      overrideAccess: true,
     })
   }
 

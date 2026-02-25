@@ -780,27 +780,29 @@ export interface Form {
  */
 export interface Abstract {
   id: number;
+  submitterName?: string | null;
+  submitterEmail?: string | null;
+  submitterOrganization?: string | null;
   title: string;
   conference: number | Post;
   topic: number | Topic;
+  nameOfStudy?: string | null;
   /**
-   * Structure: Introduction, Methods, Results, Conclusion.
+   * What is the objective of this study?
    */
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
+  aim: string;
+  /**
+   * Describe the study design and methodology.
+   */
+  methods: string;
+  /**
+   * Summarize the key findings.
+   */
+  results: string;
+  /**
+   * What do the results mean?
+   */
+  conclusion: string;
   /**
    * Add up to 5 keywords for indexing.
    */
@@ -811,6 +813,9 @@ export interface Abstract {
       }[]
     | null;
   files?: (number | File)[] | null;
+  /**
+   * Populated if the submitter had an account.
+   */
   submitter?: (number | null) | User;
   /**
    * Users can only set Draft or Pending. Admins manage review statuses.
@@ -1377,10 +1382,17 @@ export interface CategoriesSelect<T extends boolean = true> {
  * via the `definition` "abstracts_select".
  */
 export interface AbstractsSelect<T extends boolean = true> {
+  submitterName?: T;
+  submitterEmail?: T;
+  submitterOrganization?: T;
   title?: T;
   conference?: T;
   topic?: T;
-  description?: T;
+  nameOfStudy?: T;
+  aim?: T;
+  methods?: T;
+  results?: T;
+  conclusion?: T;
   keywords?:
     | T
     | {
