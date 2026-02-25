@@ -30,6 +30,7 @@ export async function GET(req: NextRequest) {
   // 3. Fetch pending/failed logs
   const logs = await payload.find({
     collection: 'mail-logs',
+    overrideAccess: true,
     where: {
       or: [
         { status: { equals: 'pending' } },
@@ -49,6 +50,7 @@ export async function GET(req: NextRequest) {
     succeeded: 0,
     failed: 0,
     skipped: 0,
+    errors: [] as { id: string; error: string }[], // Added to store error details
   }
 
   // 4. Process each log with race condition prevention
@@ -58,6 +60,7 @@ export async function GET(req: NextRequest) {
       collection: 'mail-logs',
       id: log.id,
       depth: 0,
+      overrideAccess: true,
       select: {
         status: true,
       },
@@ -75,6 +78,7 @@ export async function GET(req: NextRequest) {
     await payload.update({
       collection: 'mail-logs',
       id: log.id,
+      overrideAccess: true,
       data: { status: 'processing' },
     })
 
@@ -89,6 +93,7 @@ export async function GET(req: NextRequest) {
       await payload.update({
         collection: 'mail-logs',
         id: log.id,
+        overrideAccess: true,
         data: {
           status: 'sent',
           sentAt: new Date().toISOString(),
@@ -99,10 +104,12 @@ export async function GET(req: NextRequest) {
     } catch (error: unknown) {
       // Failure: Update status to failed and increment retry count
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      console.error(`[Email Cron] Failed to send log ${log.id}:`, errorMessage)
 
       await payload.update({
         collection: 'mail-logs',
         id: log.id,
+        overrideAccess: true,
         data: {
           status: 'failed',
           retryCount: (log.retryCount || 0) + 1,

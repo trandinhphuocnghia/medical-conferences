@@ -1,5 +1,5 @@
 import { Abstract } from '@/payload-types'
-import { CollectionBeforeChangeHook } from 'payload'
+import { APIError, CollectionBeforeChangeHook } from 'payload'
 
 export const checkExistAbstract: CollectionBeforeChangeHook<Abstract> = async ({
   data,
@@ -32,7 +32,7 @@ export const checkExistAbstract: CollectionBeforeChangeHook<Abstract> = async ({
     })
 
     if (existing.docs.length > 0) {
-      throw new Error(`Abstract already exists for this conference and topic.`)
+      throw new APIError(`Abstract already exists for this conference and topic.`, 400, null, true)
     }
   }
 

@@ -91,11 +91,14 @@ export const Abstracts: CollectionConfig = {
                   },
                   admin: {
                     width: '50%',
+                    components: {
+                      Field: '@/collections/Abstracts/ui/TopicRadioField#TopicRadioField',
+                    },
                   },
                   filterOptions: ({ data }): Where => {
                     return {
                       conference: {
-                        in: data.conference ? [data.conference] : [-1], //<- query to no
+                        in: data.conference ? [data.conference] : [-1],
                       },
                       active: { equals: true },
                     } as Where
@@ -121,7 +124,8 @@ export const Abstracts: CollectionConfig = {
                 create: draftOnlyFieldAccess,
               },
               admin: {
-                description: 'Structure: Introduction, Methods, Results, Conclusion.',
+                description:
+                  'Structure: Introduction, Name of the study, Aim of study, Methods, Results, Conclusion.',
               },
             },
             {

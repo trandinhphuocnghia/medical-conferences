@@ -31,6 +31,7 @@ import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/fields/slug/SlugComponent'
 import { default as default_456e947bd32a68c51f30490fe255096a } from '@/components/Abstracts/Submitter'
+import { TopicRadioField as TopicRadioField_c1532bd7c27c396b5e309adebddb407d } from '@/collections/Abstracts/ui/TopicRadioField'
 import { StatusSelectComponent as StatusSelectComponent_ec7581c80bae57b1a8c2ff492a778a2a } from '@/collections/Abstracts/ui/StatusSelectComponent'
 import { RowLabel as RowLabel_ec255a65fa6fa8d1faeb09cf35284224 } from '@/Header/RowLabel'
 import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/RowLabel'
@@ -74,6 +75,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/fields/slug/SlugComponent#SlugComponent": SlugComponent_92cc057d0a2abb4f6cf0307edf59f986,
   "@/components/Abstracts/Submitter#default": default_456e947bd32a68c51f30490fe255096a,
+  "@/collections/Abstracts/ui/TopicRadioField#TopicRadioField": TopicRadioField_c1532bd7c27c396b5e309adebddb407d,
   "@/collections/Abstracts/ui/StatusSelectComponent#StatusSelectComponent": StatusSelectComponent_ec7581c80bae57b1a8c2ff492a778a2a,
   "@/Header/RowLabel#RowLabel": RowLabel_ec255a65fa6fa8d1faeb09cf35284224,
   "@/Footer/RowLabel#RowLabel": RowLabel_1f6ff6ff633e3695d348f4f3c58f1466,
