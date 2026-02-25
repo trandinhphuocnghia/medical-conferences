@@ -1,58 +1,53 @@
 'use client'
 
+import type { User } from '@/payload-types'
 import { SelectInput, useAuth, useField } from '@payloadcms/ui'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const StatusSelectComponent: React.FC<any> = (props) => {
   const { path, readOnly } = props
   const { value, setValue } = useField<string>({ path })
-  const authData = useAuth()
+  const { user } = useAuth<User>()
 
-  const [isUser, setIsUser] = useState(authData?.user?.role === 'user')
+  const isUser = user?.role === 'user'
+  const isAdmin = user?.role === 'admin'
 
-  useEffect(() => {
-    // Only update if we actually have user role data
-    // Don't reset when auth context briefly loses data during hydration
-    if (authData?.user?.role) {
-      setIsUser(authData.user.role === 'user')
-    }
-  }, [authData?.user])
-
-  // Derive isLockedStatus from stable isUser state
-  const isLockedStatus = isUser && ['pending', 'accepted', 'rejected', 'verified'].includes(value)
-
-  // Filter options based on role
-  const allOptions = [
-    { label: 'Draft', value: 'draft' },
-    { label: 'Submit for Review', value: 'pending' },
-    { label: 'Accepted', value: 'accepted' },
-    { label: 'Rejected', value: 'rejected' },
-    { label: 'Verified', value: 'verified' },
-  ]
-
+  // ── Options per role ─────────────────────────────────────────
   const userOptions = [
     { label: 'Draft', value: 'draft' },
     { label: 'Submit for Review', value: 'pending' },
   ]
 
-  const options = isUser ? userOptions : allOptions
+  const adminOptions = [
+    { label: 'Accepted', value: 'accepted' },
+    { label: 'Rejected', value: 'rejected' },
+    { label: 'Verified', value: 'verified' },
+  ]
 
-  // Get current option label for locked state
+  const allOptions = [...userOptions, ...adminOptions]
+  const options = isUser ? userOptions : adminOptions
+
   const currentOption = allOptions.find((opt) => opt.value === value)
 
-  // Status-specific styling and messages
+  // ── Status badge config (shown for users with locked status, and for admins on draft/pending) ──
   const statusConfig: Record<
     string,
     { icon: string; bgColor: string; borderColor: string; textColor: string; message: string }
   > = {
+    draft: {
+      icon: '📝',
+      bgColor: '#f3f4f6',
+      borderColor: '#9ca3af',
+      textColor: '#374151',
+      message: 'Abstract is in draft mode.',
+    },
     pending: {
       icon: '⏳',
       bgColor: '#fef3c7',
       borderColor: '#f59e0b',
       textColor: '#92400e',
-      message:
-        'Your abstract has been submitted for review. The status will be updated by an admin.',
+      message: 'Submitted for review. Update the status below once a decision is made.',
     },
     accepted: {
       icon: '✅',
@@ -77,9 +72,13 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
     },
   }
 
-  const config = statusConfig[value] || statusConfig.pending
+  const config = statusConfig[value] ?? statusConfig.pending
 
-  if (isLockedStatus) {
+  // ── User: locked status badge (read-only) ─────────────────────
+  const isUserLockedStatus =
+    isUser && ['pending', 'accepted', 'rejected', 'verified'].includes(value)
+
+  if (isUserLockedStatus) {
     return (
       <div className="field-type select-field">
         <div className="field-label">
@@ -97,15 +96,11 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
           }}
         >
           <span style={{ marginRight: '8px' }}>{config.icon}</span>
-          {currentOption?.label || 'Pending Review'}
+          {currentOption?.label ?? 'Pending Review'}
         </div>
         <div
           className="field-description"
-          style={{
-            fontSize: '13px',
-            color: config.textColor,
-            fontStyle: 'italic',
-          }}
+          style={{ fontSize: '13px', color: config.textColor, fontStyle: 'italic' }}
         >
           {config.message}
         </div>
@@ -113,6 +108,52 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
     )
   }
 
+  // ── Admin: show current status badge (if draft/pending) + action dropdown ──
+  if (isAdmin && ['draft', 'pending'].includes(value)) {
+    return (
+      <div className="field-type select-field">
+        <div className="field-label">
+          <label>Status</label>
+        </div>
+        {/* Current status badge */}
+        <div
+          style={{
+            padding: '6px 12px',
+            backgroundColor: config.bgColor,
+            border: `2px solid ${config.borderColor}`,
+            borderRadius: '4px',
+            color: config.textColor,
+            marginBottom: '8px',
+            fontWeight: '500',
+            fontSize: '13px',
+          }}
+        >
+          <span style={{ marginRight: '8px' }}>{config.icon}</span>
+          {currentOption?.label ?? value}
+        </div>
+        <div
+          className="field-description"
+          style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}
+        >
+          {config.message}
+        </div>
+        {/* Action dropdown */}
+        <SelectInput
+          {...props}
+          path={path}
+          name={path}
+          options={adminOptions}
+          value={value}
+          onChange={(option) => {
+            if (option && !Array.isArray(option)) setValue(option.value)
+          }}
+          readOnly={readOnly}
+        />
+      </div>
+    )
+  }
+
+  // ── Default: standard dropdown for the current role ───────────
   return (
     <div className="field-type select-field">
       <SelectInput
@@ -122,9 +163,7 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
         options={options}
         value={value}
         onChange={(option) => {
-          if (option && !Array.isArray(option)) {
-            setValue(option.value)
-          }
+          if (option && !Array.isArray(option)) setValue(option.value)
         }}
         readOnly={readOnly}
       />

@@ -143,10 +143,15 @@ export const Users: CollectionConfig = {
       type: 'select',
       index: true,
       label: 'User Role',
-
+      saveToJWT: true, // ← makes role available in useAuth() for all users
       access: {
         create: adminOnlyFieldAccess,
-        read: adminOnlyFieldAccess,
+        read: ({ req: { user }, doc }) => {
+          if (!user) return false
+          if (user.role === 'admin') return true
+          // Users can read their own role (e.g. for useAuth() in admin UI)
+          return String(user.id) === String(doc?.id)
+        },
         update: adminExceptSelfFieldAccess,
       },
       defaultValue: 'user',

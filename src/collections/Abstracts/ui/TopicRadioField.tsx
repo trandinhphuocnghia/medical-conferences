@@ -1,6 +1,7 @@
 'use client'
 
-import { useField, useFormFields } from '@payloadcms/ui'
+import type { User } from '@/payload-types'
+import { useAuth, useField, useFormFields } from '@payloadcms/ui'
 import React, { useEffect, useState } from 'react'
 
 type Topic = {
@@ -14,6 +15,8 @@ type TopicRadioFieldProps = {
 
 export const TopicRadioField: React.FC<TopicRadioFieldProps> = ({ path }) => {
   const { value, setValue } = useField<string | number>({ path })
+  const { user } = useAuth<User>()
+  const isAdmin = user?.role === 'admin'
 
   // Watch the conference and status fields
   const conferenceId = useFormFields(([fields]) => {
@@ -42,13 +45,49 @@ export const TopicRadioField: React.FC<TopicRadioFieldProps> = ({ path }) => {
       `/api/topics?where[conference][in][0]=${conferenceId}&where[active][equals]=true&limit=100&depth=0`,
     )
       .then((res) => res.json())
-      .then((data) => {
-        setTopics(data?.docs ?? [])
-      })
+      .then((data) => setTopics(data?.docs ?? []))
       .catch(() => setTopics([]))
       .finally(() => setLoading(false))
   }, [conferenceId, setValue])
 
+  const currentId =
+    typeof value === 'object' && value !== null && 'id' in (value as object)
+      ? (value as { id: string | number }).id
+      : value
+
+  const selectedTopic = topics.find((t) => String(t.id) === String(currentId))
+
+  // ── Admin view: show only the selected topic ───────────────────
+  if (isAdmin) {
+    return (
+      <div className="field-type">
+        <label className="field-label">Topic</label>
+        {loading ? (
+          <p style={{ fontSize: '0.875rem' }}>Loading...</p>
+        ) : selectedTopic ? (
+          <p
+            style={{
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              padding: '0.25rem 0.75rem',
+              background: 'var(--theme-elevation-100)',
+              borderRadius: '0.375rem',
+              display: 'inline-block',
+              marginTop: '0.25rem',
+            }}
+          >
+            {selectedTopic.name}
+          </p>
+        ) : (
+          <p style={{ color: 'var(--theme-text-disabled)', fontSize: '0.875rem' }}>
+            No topic selected.
+          </p>
+        )}
+      </div>
+    )
+  }
+
+  // ── User view: radio list ──────────────────────────────────────
   if (!conferenceId) {
     return (
       <div className="field-type">
@@ -79,11 +118,6 @@ export const TopicRadioField: React.FC<TopicRadioFieldProps> = ({ path }) => {
       </div>
     )
   }
-
-  const currentId =
-    typeof value === 'object' && value !== null && 'id' in (value as object)
-      ? (value as { id: string | number }).id
-      : value
 
   return (
     <div className="field-type">
