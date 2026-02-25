@@ -11,7 +11,6 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { uploadthingStorage } from '@payloadcms/storage-uploadthing'
 import { Plugin } from 'payload'
-import { websocketServerPlugin } from './websocketPlugin'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | MedConf` : 'MedConf'
@@ -80,10 +79,6 @@ export const plugins: Plugin[] = [
         hidden: notAdminView,
       },
     },
-  }),
-
-  websocketServerPlugin({
-    collections: ['reservations'],
   }),
 
   payloadCloudPlugin(),

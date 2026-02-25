@@ -31,8 +31,8 @@ export const draftOnlyFieldAccess: FieldAccess = ({ req: { user }, doc }) => {
 
   if (user.role === 'admin') return false
 
-  // Allow creation (no doc yet)
-  if (!doc) return true
+  // Allow creation — Payload may pass {} instead of null for new docs
+  if (!doc?.id) return true
 
   // Allow editing ONLY if status is draft (for both users and admins)
   // This preserves the integrity of submitted abstracts

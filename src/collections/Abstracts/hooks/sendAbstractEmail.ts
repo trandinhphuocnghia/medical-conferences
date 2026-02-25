@@ -55,10 +55,12 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
         to: submitter.email,
         subject: emailSubject,
         html: emailHtml,
-        status: 'pending', // The Cron job will pick this up
+        status: 'pending',
         retryCount: 0,
         abstractId: doc.id,
       },
+      req, // ← share the same DB transaction
+      overrideAccess: true, // ← hook runs as system, not as the submitting user
     })
   }
 
