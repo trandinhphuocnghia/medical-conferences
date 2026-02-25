@@ -4,6 +4,7 @@ import { DetailHeader } from './components/detail-header'
 import { LogisticsBento } from './components/logistics-bento'
 import { ScientificTimeline } from './components/scientific-timeline'
 import { TopicExplorer } from './components/topic-exploer'
+import { CallAbstractSection } from './components/call-abstract-section'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
@@ -50,6 +51,8 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
           venueAddress="513 Yeongdong-daero, Gangnam-gu, Seoul 06164"
           floorPlanUrl="#"
         />
+
+        <CallAbstractSection post={conferenceData} />
       </main>
     </div>
   )

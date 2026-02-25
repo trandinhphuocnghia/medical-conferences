@@ -27,7 +27,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
   const onSubmit = async (data: AbstractFormSchema) => {
     startTransition(async () => {
       try {
-        const res = await createAbstract(conferenceId, data)
+        const res = await createAbstract({ ...data, conference: conferenceId })
 
         if (!res.success) {
           toastError({
@@ -41,8 +41,8 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
             description: '',
             files: [],
             title: '',
-            topic: '',
-            keywords: '',
+            topic: undefined,
+            keywords: [],
           })
         }
       } catch (_error) {
@@ -61,7 +61,7 @@ export function CreateAbstractForm({ topics, conferenceId }: Props) {
       mode="all"
       schema={abstractFormSchema}
       onSubmit={onSubmit}
-      className="w-full "
+      className="w-full"
     >
       <FormField name="title" label="Title of your paper" required>
         {(field) => <Input {...field} />}

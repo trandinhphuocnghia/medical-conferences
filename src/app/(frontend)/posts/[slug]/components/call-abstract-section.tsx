@@ -1,9 +1,10 @@
+'use client'
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert'
 import { Post, Topic } from '@/payload-types'
 import { useUserStore } from '@/stores/userStore'
 import { CircleAlert } from 'lucide-react'
 import Link from 'next/link'
-import { CreateAbstractForm } from './create-abstract-form'
+import { AbstractSubmitForm } from '@/components/Abstracts'
 
 export const CallAbstractSection = ({ post }: { post: Post }) => {
   const { user } = useUserStore()
@@ -12,20 +13,23 @@ export const CallAbstractSection = ({ post }: { post: Post }) => {
     : null
 
   const isSubmissionOpen = submissionDeadline && new Date() < submissionDeadline
+  const topics = (post.topics as Topic[]) ?? []
+
   return (
     <div id="abstract-form" className="flex flex-col border-t gap-8 mx-auto max-w-6xl pt-12">
-      <h2 className="font-bold text-2xl">Call for abstract</h2>
+      <h2 className="font-bold text-2xl">Call for Abstract</h2>
+
       {isSubmissionOpen ? (
         <>
           {user ? (
-            <CreateAbstractForm conferenceId={post.id} topics={(post.topics as Topic[]) || []} />
+            <AbstractSubmitForm conferenceId={post.id} topics={topics} />
           ) : (
             <p>
               Please
-              <Link href={`/signin?redirect=/post/${post.slug}`} className="underline">
-                login
+              <Link href={`/signin?redirect=/posts/${post.slug}`} className="underline">
+                sign in
               </Link>
-              to submit an abstract
+              to submit an abstract.
             </p>
           )}
         </>

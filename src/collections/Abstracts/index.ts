@@ -130,10 +130,10 @@ export const Abstracts: CollectionConfig = {
           fields: [
             {
               name: 'files',
-              type: 'upload', // Better than 'text' URL - link to Media collection
-              relationTo: 'media',
+              type: 'upload',
+              relationTo: 'files',
               hasMany: true,
-              label: 'Supporting Images/Charts',
+              label: 'Supporting Files',
             },
           ],
         },
