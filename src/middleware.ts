@@ -1,8 +1,10 @@
-import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-pathname', pathname + request.nextUrl.search)
 
   // Redirect default Payload login to custom signin page
   if (pathname === '/dashboard/login') {
@@ -12,26 +14,25 @@ export async function middleware(request: NextRequest) {
   // Get the payload-token cookie
   const token = request.cookies.get('payload-token')?.value
 
-  // If there's a token, check the user's auth status
-  if (token) {
+  // ONLY check auth on login/signup pages to avoid redundant fetches on every page
+  const isAuthPage = pathname === '/signup' || pathname === '/signin'
+
+  if (token && isAuthPage) {
     try {
-      // Use environment variable for production, fallback to origin for local
       const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || request.nextUrl.origin
 
       const response = await fetch(`${baseUrl}/api/users/me`, {
         headers: {
           Authorization: `JWT ${token}`,
         },
-        // Add timeout and cache options for production
         next: { revalidate: 0 },
-        signal: AbortSignal.timeout(5000), // 5 second timeout
+        signal: AbortSignal.timeout(5000),
       })
 
       if (response.ok) {
         const { user } = await response.json()
 
-        // If user is authenticated and on signup/login pages, redirect to dashboard
-        if (user && (pathname === '/signup' || pathname === '/signin')) {
+        if (user) {
           if (user.role === 'admin') {
             return NextResponse.redirect(new URL('/dashboard', request.url))
           }
@@ -39,12 +40,15 @@ export async function middleware(request: NextRequest) {
         }
       }
     } catch (error) {
-      // If there's an error checking auth, continue to the page
       console.error('Middleware auth check error:', error)
     }
   }
 
-  return NextResponse.next()
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
 }
 
 export const config = {
