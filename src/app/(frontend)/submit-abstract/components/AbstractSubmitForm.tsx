@@ -7,6 +7,10 @@ import {
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState, useTransition } from 'react'
 import { z } from 'zod'
+import {
+  AbstractFileUploader,
+  type UploadedFileData,
+} from './AbstractFileUploader'
 
 // ── Zod schemas per step ──────────────────────────────────────────────────
 const step3Schema = z.object({
@@ -42,13 +46,14 @@ type FormState = {
   keywords: { word: string }[]
 }
 
-const TOTAL_STEPS = 6
+const TOTAL_STEPS = 7
 const STEPS = [
   'Select Conference',
   'Select Topic',
   'Your Information',
   'Abstract Body',
   'Keywords',
+  'Upload File',
   'Review & Submit',
 ]
 
@@ -60,6 +65,7 @@ export function AbstractSubmitForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
+  const [uploadedFile, setUploadedFile] = useState<UploadedFileData | null>(null)
 
   const [form, setForm] = useState<FormState>({
     conferenceId: null,
@@ -182,6 +188,7 @@ export function AbstractSubmitForm() {
         results: form.results,
         conclusion: form.conclusion,
         keywords: form.keywords.filter((k) => k.word.trim()),
+        ...(uploadedFile?.publicFileId ? { publicFileId: uploadedFile.publicFileId } : {}),
       }
       const res = await createAbstractPublic(payload)
       if (res.success) setSubmitted(true)
@@ -500,8 +507,32 @@ export function AbstractSubmitForm() {
             </Step>
           )}
 
-          {/* ── STEP 6: Review ────────────────────────────────────────────── */}
+          {/* ── STEP 6: File Upload ───────────────────────────────────────── */}
           {step === 6 && (
+            <Step
+              title="Upload Abstract File"
+              sub="Optionally attach a PDF of your full abstract (max 8 MB)."
+            >
+              <AbstractFileUploader
+                onUploadSuccess={(fileData) => setUploadedFile(fileData)}
+              />
+              {uploadedFile && (
+                <p
+                  style={{
+                    marginTop: '0.75rem',
+                    fontSize: '0.8125rem',
+                    color: 'var(--muted-foreground)',
+                  }}
+                >
+                  ✅ Attached:
+                  <strong style={{ color: 'var(--foreground)' }}>{uploadedFile.name}</strong>
+                </p>
+              )}
+            </Step>
+          )}
+
+          {/* ── STEP 7: Review ────────────────────────────────────────────── */}
+          {step === 7 && (
             <Step title="Review & Submit" sub="Please review your submission before sending.">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {(
@@ -530,6 +561,9 @@ export function AbstractSubmitForm() {
                             .join(', '),
                         }
                       : null,
+                    uploadedFile
+                      ? { label: 'Attached File', value: uploadedFile.name }
+                      : { label: 'Attached File', value: 'None' },
                   ].filter(Boolean) as { label: string; value?: string; multiline?: boolean }[]
                 ).map(({ label, value, multiline }) => (
                   <div

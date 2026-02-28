@@ -19,19 +19,25 @@ export type PublicAbstractData = {
   conclusion: string
   // Keywords
   keywords?: { word: string }[]
+  // Uploaded file — the public-files doc ID returned by onUploadComplete
+  publicFileId?: number
 }
 
 export async function createAbstractPublic(data: PublicAbstractData) {
   try {
     const payload = await getPayload({ config: configPromise })
 
+    const { publicFileId, ...rest } = data
+
     const abstract = await payload.create({
       collection: 'abstracts',
       overrideAccess: true, // public submission — bypass access control
       data: {
-        ...data,
+        ...rest,
         status: 'pending', // goes straight to pending for admin review
         submitter: null as unknown as number, // no user account required
+        // Link the uploaded file if one was provided
+        ...(publicFileId ? { files: [publicFileId] } : {}),
       },
     })
 

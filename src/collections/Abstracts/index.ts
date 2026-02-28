@@ -207,13 +207,27 @@ export const Abstracts: CollectionConfig = {
           fields: [
             {
               name: 'files',
-              type: 'upload',
-              relationTo: 'files',
+              type: 'relationship',
+              relationTo: 'public-files',
               hasMany: true,
-              label: 'Supporting Images/Charts',
+              label: 'Supporting Files',
               access: {
                 update: draftOnlyFieldAccess,
                 create: draftOnlyFieldAccess,
+              },
+              admin: {
+                description:
+                  'Files uploaded client-side via Uploadthing. Each file is tracked separately in the public-files collection.',
+              },
+            },
+            // ── Inline file preview links ─────────────────────────────────────
+            {
+              name: 'filesPreview',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/collections/Abstracts/ui/FilesPreview#FilesPreview',
+                },
               },
             },
           ],

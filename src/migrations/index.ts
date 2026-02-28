@@ -6,6 +6,7 @@ import * as migration_20260125_041610_add_indexes_and_fixes from './20260125_041
 import * as migration_20260127_032534_add_media_sizes from './20260127_032534_add_media_sizes';
 import * as migration_20260127_071401_add_abstracts_files from './20260127_071401_add_abstracts_files';
 import * as migration_20260225_101751 from './20260225_101751';
+import * as migration_20260228_122854_add_public_files from './20260228_122854_add_public_files';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20260225_101751.up,
     down: migration_20260225_101751.down,
-    name: '20260225_101751'
+    name: '20260225_101751',
+  },
+  {
+    up: migration_20260228_122854_add_public_files.up,
+    down: migration_20260228_122854_add_public_files.down,
+    name: '20260228_122854_add_public_files'
   },
 ];

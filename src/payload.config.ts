@@ -11,6 +11,7 @@ import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
 import { MailLogs } from './collections/EmailLogs'
 import { Files } from './collections/Files'
+import { PublicFiles } from './collections/PublicFiles'
 import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -117,6 +118,7 @@ export default buildConfig({
     UserGroups,
     Media,
     Files,
+    PublicFiles,
     Likes,
     Comments,
     Rooms,

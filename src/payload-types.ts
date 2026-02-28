@@ -76,6 +76,7 @@ export interface Config {
     'user-groups': UserGroup;
     media: Media;
     files: File;
+    'public-files': PublicFile;
     likes: Like;
     comments: Comment;
     rooms: Room;
@@ -105,6 +106,7 @@ export interface Config {
     'user-groups': UserGroupsSelect<false> | UserGroupsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     files: FilesSelect<false> | FilesSelect<true>;
+    'public-files': PublicFilesSelect<false> | PublicFilesSelect<true>;
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
     rooms: RoomsSelect<false> | RoomsSelect<true>;
@@ -812,7 +814,10 @@ export interface Abstract {
         id?: string | null;
       }[]
     | null;
-  files?: (number | File)[] | null;
+  /**
+   * Files uploaded client-side via Uploadthing. Each file is tracked separately in the public-files collection.
+   */
+  files?: (number | PublicFile)[] | null;
   /**
    * Populated if the submitter had an account.
    */
@@ -821,6 +826,39 @@ export interface Abstract {
    * Users can only set Draft or Pending. Admins manage review statuses.
    */
   status?: ('draft' | 'pending' | 'accepted' | 'rejected' | 'verified') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Files uploaded client-side for abstract submissions.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "public-files".
+ */
+export interface PublicFile {
+  id: number;
+  /**
+   * Public CDN URL returned by Uploadthing.
+   */
+  url: string;
+  /**
+   * Uploadthing file key — required for deletion.
+   */
+  key: string;
+  filename: string;
+  mimeType?: string | null;
+  /**
+   * File size in bytes.
+   */
+  filesize?: number | null;
+  /**
+   * Populated when the uploader had an active session.
+   */
+  uploadedBy?: (number | null) | User;
+  /**
+   * Linked once the abstract form is submitted. Files without an abstract are considered orphans and eligible for cleanup.
+   */
+  abstract?: (number | null) | Abstract;
   updatedAt: string;
   createdAt: string;
 }
@@ -1096,6 +1134,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'files';
         value: number | File;
+      } | null)
+    | ({
+        relationTo: 'public-files';
+        value: number | PublicFile;
       } | null)
     | ({
         relationTo: 'likes';
@@ -1517,6 +1559,21 @@ export interface FilesSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "public-files_select".
+ */
+export interface PublicFilesSelect<T extends boolean = true> {
+  url?: T;
+  key?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  uploadedBy?: T;
+  abstract?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
