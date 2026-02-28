@@ -188,7 +188,7 @@ export function AbstractSubmitForm() {
         results: form.results,
         conclusion: form.conclusion,
         keywords: form.keywords.filter((k) => k.word.trim()),
-        ...(uploadedFile?.publicFileId ? { publicFileId: uploadedFile.publicFileId } : {}),
+        ...(uploadedFile?.publicFileId ? { publicFileId: Number(uploadedFile.publicFileId) } : {}),
       }
       const res = await createAbstractPublic(payload)
       if (res.success) setSubmitted(true)
