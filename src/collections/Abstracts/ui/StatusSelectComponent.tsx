@@ -20,7 +20,6 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
   ]
 
   const adminOptions = [
-    { label: 'Accepted', value: 'accepted' },
     { label: 'Rejected', value: 'rejected' },
     { label: 'Verified', value: 'verified' },
   ]
@@ -49,13 +48,7 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
       textColor: '#92400e',
       message: 'Submitted for review. Update the status below once a decision is made.',
     },
-    accepted: {
-      icon: '✅',
-      bgColor: '#d1fae5',
-      borderColor: '#10b981',
-      textColor: '#065f46',
-      message: 'Congratulations! Your abstract has been accepted.',
-    },
+
     rejected: {
       icon: '❌',
       bgColor: '#fee2e2',
@@ -75,8 +68,7 @@ export const StatusSelectComponent: React.FC<any> = (props) => {
   const config = statusConfig[value] ?? statusConfig.pending
 
   // ── User: locked status badge (read-only) ─────────────────────
-  const isUserLockedStatus =
-    isUser && ['pending', 'accepted', 'rejected', 'verified'].includes(value)
+  const isUserLockedStatus = isUser && ['pending', 'rejected', 'verified'].includes(value)
 
   if (isUserLockedStatus) {
     return (

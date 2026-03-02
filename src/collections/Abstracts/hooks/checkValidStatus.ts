@@ -1,5 +1,5 @@
-import { APIError, FieldHook } from 'payload'
 import { Abstract } from '@/payload-types'
+import { APIError, FieldHook } from 'payload'
 
 export const checkValidStatus: FieldHook<Abstract> = async ({ req, originalDoc, value }) => {
   // If no change, or no value, return value (allow)
@@ -12,7 +12,7 @@ export const checkValidStatus: FieldHook<Abstract> = async ({ req, originalDoc, 
   // 1. Logic for Users
   if (role === 'user') {
     // Cannot change to admin-only statuses
-    if (['accepted', 'rejected', 'verified'].includes(value)) {
+    if (['rejected', 'verified'].includes(value)) {
       throw new APIError('You are not authorized to set this status.', 403, null, true)
     }
 
@@ -26,11 +26,16 @@ export const checkValidStatus: FieldHook<Abstract> = async ({ req, originalDoc, 
 
   // 2. Logic for Admins
   if (role === 'admin') {
-    // "just works with accepted, rejected or verified"
+    // "just works with rejected or verified"
     // Meaning admins should not be transitioning TO draft or pending from other states
     // (They typically move things forward)
     if (['draft', 'pending'].includes(value)) {
-       throw new APIError('Admins effectively only manage Accepted, Rejected, or Verified statuses.', 400, null, true)
+      throw new APIError(
+        'Admins effectively only manage Rejected, or Verified statuses.',
+        400,
+        null,
+        true,
+      )
     }
   }
 

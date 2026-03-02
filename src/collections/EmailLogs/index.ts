@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+import { CollectionConfig, CustomComponent } from 'payload'
+import { ProcessLogsButton } from './ui/ProcessLogsButton'
 
 export const MailLogs: CollectionConfig = {
   slug: 'mail-logs',
@@ -13,7 +14,7 @@ export const MailLogs: CollectionConfig = {
     group: 'System',
     defaultColumns: ['to', 'status', 'retryCount', 'createdAt', 'abstractId'],
     components: {
-      //  beforeList: [ProcessLogsButton as any as CustomComponent], //<- NOTE: comment out before generate:importmap.
+      beforeList: [ProcessLogsButton as any as CustomComponent], //<- NOTE: comment out before generate:importmap.
     },
   },
   fields: [

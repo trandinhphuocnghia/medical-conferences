@@ -27,7 +27,7 @@ export const checkExistAbstract: CollectionBeforeChangeHook = async ({ data, req
           { conference: { equals: conference } },
           { topic: { equals: topic } },
           { submitter: { equals: currentUserId } },
-          { status: { in: ['pending', 'accepted', 'verified'] } },
+          { status: { in: ['pending', 'verified'] } },
         ],
       }
     } else {
@@ -36,7 +36,7 @@ export const checkExistAbstract: CollectionBeforeChangeHook = async ({ data, req
           { conference: { equals: conference } },
           { topic: { equals: topic } },
           { submitterEmail: { equals: submitterEmail } },
-          { status: { in: ['pending', 'accepted', 'verified'] } },
+          { status: { in: ['pending', 'verified'] } },
         ],
       }
     }
