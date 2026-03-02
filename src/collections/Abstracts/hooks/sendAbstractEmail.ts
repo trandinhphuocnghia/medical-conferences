@@ -2,6 +2,7 @@ import { Abstract, User } from '@/payload-types'
 import { abstractApprovedMail } from '@/services/email/mail-templates/abstract-approved'
 import { abstractCreateMail } from '@/services/email/mail-templates/abstract-create'
 import { abstractRejectedMail } from '@/services/email/mail-templates/abstract-rejected'
+import { enqueueEmailJob } from '@/services/email/qstash'
 import { CollectionAfterChangeHook } from 'payload'
 
 export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
@@ -27,7 +28,7 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
               select: { email: true },
             })
           )?.email
-        : (doc as any).submitterEmail // anonymous submission
+        : (doc as { submitterEmail?: string }).submitterEmail // anonymous submission
 
   if (!submitterEmail) return
 
@@ -49,9 +50,9 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
     }
   }
 
-  // 4. Create the mail log entry — cron job picks it up and sends
+  // 4. Create the mail-log record (audit trail)
   if (emailHtml && emailSubject) {
-    await req.payload.create({
+    const mailLog = await req.payload.create({
       collection: 'mail-logs',
       data: {
         to: submitterEmail,
@@ -64,6 +65,18 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
       req,
       overrideAccess: true,
     })
+
+    // 5. Enqueue to QStash — it will trigger /api/email/worker automatically
+    try {
+      await enqueueEmailJob(mailLog.id)
+    } catch (err) {
+      // Log error but do NOT throw — the mail-log exists and can be retried
+      // via the fallback /api/cron/email endpoint if QStash is unavailable
+      req.payload.logger.error(
+        { err, mailLogId: mailLog.id },
+        '[sendAbstractEmail] Failed to enqueue QStash job. Mail-log preserved for cron fallback.',
+      )
+    }
   }
 
   return data

@@ -24,10 +24,36 @@ export async function GET(req: NextRequest) {
   const payload = await getPayload({ config })
 
   const batchSize = parseInt(process.env.EMAIL_BATCH_SIZE || '10', 10)
+  const staleThresholdMs = 10 * 60 * 1000 // 10 minutes
 
-  console.log('[Email Cron] Starting email processing job')
+  console.log('[Email Cron] Starting sweep (QStash fallback)')
 
-  // 3. Fetch pending/failed logs
+  // 3a. Recover stale 'processing' records — these are logs that QStash triggered
+  //     but the worker crashed before updating the status. Reset them to 'failed'
+  //     so this sweep can pick them up.
+  const staleProcessing = await payload.find({
+    collection: 'mail-logs',
+    overrideAccess: true,
+    where: {
+      and: [
+        { status: { equals: 'processing' } },
+        { updatedAt: { less_than: new Date(Date.now() - staleThresholdMs).toISOString() } },
+      ],
+    },
+    limit: batchSize,
+  })
+
+  for (const stale of staleProcessing.docs) {
+    await payload.update({
+      collection: 'mail-logs',
+      id: stale.id,
+      overrideAccess: true,
+      data: { status: 'failed', lastError: 'Stale processing — recovered by cron' },
+    })
+    console.log(`[Email Cron] Reset stale processing log ${stale.id}`)
+  }
+
+  // 3b. Fetch pending/failed logs QStash may have missed
   const logs = await payload.find({
     collection: 'mail-logs',
     overrideAccess: true,

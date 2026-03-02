@@ -50,6 +50,8 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@uploadthing/react": "^7.3.3",
+    "@upstash/qstash": "^2.9.0",
+    "@upstash/qstash-cli": "^2.32.32",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.36.3",
     "class-variance-authority": "^0.7.1",
