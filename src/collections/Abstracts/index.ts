@@ -258,7 +258,6 @@ export const Abstracts: CollectionConfig = {
       options: [
         { label: 'Draft', value: 'draft' },
         { label: 'Summit for Review', value: 'pending' },
-        { label: 'Accepted', value: 'accepted' },
         { label: 'Rejected', value: 'rejected' },
         { label: 'Verified', value: 'verified' },
       ],
