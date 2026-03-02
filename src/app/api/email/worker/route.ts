@@ -53,9 +53,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `mail-log ${mailLogId} not found` }, { status: 404 })
   }
 
-  // Skip if already sent (idempotency guard — QStash delivers at-least-once)
-  if (log.status === 'sent') {
-    return NextResponse.json({ message: 'Already sent, skipping.' })
+  // Skip if already sent or being processed (idempotency guard — QStash delivers at-least-once,
+  // cron may also run concurrently on the same log)
+  if (log.status === 'sent' || log.status === 'processing') {
+    return NextResponse.json({ message: `Already ${log.status}, skipping.` })
   }
 
   // 4. Mark as processing to prevent duplicate sends

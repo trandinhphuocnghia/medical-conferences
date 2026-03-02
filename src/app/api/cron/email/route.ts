@@ -54,14 +54,23 @@ export async function GET(req: NextRequest) {
   }
 
   // 3b. Fetch pending/failed logs QStash may have missed
+  // Grace period: skip logs newer than 2 minutes — QStash is handling those.
+  const gracePeriodMs = 2 * 60 * 1000
+  const graceThreshold = new Date(Date.now() - gracePeriodMs).toISOString()
+
   const logs = await payload.find({
     collection: 'mail-logs',
     overrideAccess: true,
     where: {
-      or: [
-        { status: { equals: 'pending' } },
+      and: [
+        { createdAt: { less_than: graceThreshold } },
         {
-          and: [{ status: { equals: 'failed' } }, { retryCount: { less_than: 3 } }],
+          or: [
+            { status: { equals: 'pending' } },
+            {
+              and: [{ status: { equals: 'failed' } }, { retryCount: { less_than: 3 } }],
+            },
+          ],
         },
       ],
     },
