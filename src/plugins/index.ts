@@ -13,7 +13,7 @@ import { uploadthingStorage } from '@payloadcms/storage-uploadthing'
 import { Plugin } from 'payload'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | MedConf` : 'MedConf'
+  return doc?.title ? `${doc.title} | HIGCF` : 'HIGCF'
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc }) => {

@@ -17,7 +17,7 @@ export function CTASection() {
           {/* Content */}
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold text-primary-foreground tracking-tight text-balance">
-              Secure Your Spot at HIGF 2026
+              Secure Your Spot at HIGCF 2026
             </h2>
             <p className="mt-4 text-lg text-primary-foreground/80 text-pretty">
               Early bird registration ends August 1st. Join thousands of healthcare professionals

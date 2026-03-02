@@ -11,11 +11,11 @@ import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
 import { MailLogs } from './collections/EmailLogs'
 import { Files } from './collections/Files'
-import { PublicFiles } from './collections/PublicFiles'
 import { Likes } from './collections/Likes'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { PublicFiles } from './collections/PublicFiles'
 import { Reservations } from './collections/Reservations'
 import { Rooms } from './collections/Rooms'
 import { Seats } from './collections/Seats'
@@ -52,7 +52,7 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: '',
-      description: 'Medconf',
+      description: 'HIGCF',
       icons: [
         // TODO: favicon
         // {
@@ -62,8 +62,8 @@ export default buildConfig({
         // },
       ],
       openGraph: {
-        siteName: 'HIGF',
-        description: 'HIGF',
+        siteName: 'HIGCF',
+        description: 'HIGCF',
         type: 'website',
         images: [
           {
@@ -73,9 +73,9 @@ export default buildConfig({
       },
       twitter: {
         card: 'summary_large_image',
-        site: '@HIGF',
-        title: 'HIGF',
-        description: 'HIGF',
+        site: '@HIGCF',
+        title: 'HIGCF',
+        description: 'HIGCF',
       },
     },
     user: Users.slug,

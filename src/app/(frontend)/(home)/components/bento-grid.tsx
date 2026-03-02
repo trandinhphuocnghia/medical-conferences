@@ -77,7 +77,7 @@ export function BentoGrid() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
-            Why Attend HIGF 2026
+            Why Attend HIGCF 2026
           </h2>
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-pretty">
             Four days of cutting-edge medical research, networking opportunities, and hands-on

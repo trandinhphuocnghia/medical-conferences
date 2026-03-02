@@ -58,7 +58,7 @@ export const abstractRejectedMail = (abstract: Abstract) => `
           <tr>
             <td style="padding:18px 24px; border-top:1px solid #f0f4fa; font-family:Arial; font-size:13px; color:#7a8aa6;">
               Thank you for your interest in ${(abstract.conference as Post).title}.<br>
-              MedConf · <a href="mailto:${process.env.MAIL_HOST}" style="color:#0b57b7;">${process.env.MAIL_HOST}</a>
+              HIGCF · <a href="mailto:${process.env.MAIL_HOST}" style="color:#0b57b7;">${process.env.MAIL_HOST}</a>
             </td>
           </tr>
 
