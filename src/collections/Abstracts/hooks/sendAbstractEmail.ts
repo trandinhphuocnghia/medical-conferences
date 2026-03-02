@@ -33,7 +33,7 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
 
   // 2. Logic for Create (New Submission)
   if (operation === 'create') {
-    emailSubject = 'MedConf - Abstract Submitted'
+    emailSubject = 'HIGCF - Abstract Submitted'
     emailHtml = abstractCreateMail(doc)
   }
 
@@ -41,10 +41,10 @@ export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
   if (operation === 'update' && previousDoc) {
     // Only send email if status actually changed
     if (data.status === 'verified' && previousDoc.status !== 'verified') {
-      emailSubject = 'MedConf - Abstract Verified'
+      emailSubject = 'HIGCF - Abstract Verified'
       emailHtml = abstractApprovedMail(doc)
     } else if (data.status === 'rejected' && previousDoc.status !== 'rejected') {
-      emailSubject = 'MedConf - Abstract Rejected'
+      emailSubject = 'HIGCF - Abstract Rejected'
       emailHtml = abstractRejectedMail(doc)
     }
   }

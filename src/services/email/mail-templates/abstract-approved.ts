@@ -42,7 +42,7 @@ export const abstractApprovedMail = (abstract: Abstract) => `
           <!-- Footer -->
           <tr>
             <td style="padding:18px 24px; border-top:1px solid #eef7f2; font-family:Arial; font-size:13px; color:#6b8f7f;">
-              MedConf<br/>
+              HIGCF<br/>
               We look forward to your participation.
             </td>
           </tr>

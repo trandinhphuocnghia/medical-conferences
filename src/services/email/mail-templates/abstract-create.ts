@@ -57,7 +57,7 @@ export const abstractCreateMail = (abstract: Abstract) => `
           <!-- Footer -->
           <tr>
             <td style="padding:18px 24px; background:#ffffff; border-top:1px solid #f0f4fa; font-family:Arial; font-size:13px; color:#7a8aa6;">
-              MedConf<br/>
+              HIGCF<br/>
               If this wasn’t you, contact <a href="mailto:${process.env.MAIL_HOST}" style="color:#0b57b7;">${process.env.MAIL_HOST}</a>.
             </td>
           </tr>

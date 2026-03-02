@@ -3,8 +3,8 @@ import { Suspense } from 'react'
 import { AbstractSubmitForm } from './components/AbstractSubmitForm'
 
 export const metadata: Metadata = {
-  title: 'Submit Abstract | MedConf',
-  description: 'Submit your scientific abstract for review at MedConf conferences.',
+  title: 'Submit Abstract | HIGCF',
+  description: 'Submit your scientific abstract for review at HIGCF conferences.',
 }
 
 export default function SubmitAbstractPage() {

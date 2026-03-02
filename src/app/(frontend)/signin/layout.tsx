@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'HIGF - Sign In',
+  title: 'HIGCF - Sign In',
   description: 'Sign in to your account',
 }
 
