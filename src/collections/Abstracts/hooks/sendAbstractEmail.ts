@@ -5,7 +5,7 @@ import { abstractRejectedMail } from '@/services/email/mail-templates/abstract-r
 import { enqueueEmailJob } from '@/services/email/qstash'
 import { CollectionAfterChangeHook } from 'payload'
 
-export const sendAbstractEmail: CollectionAfterChangeHook<Abstract> = async ({
+export const sendAbstractEmailToQStash: CollectionAfterChangeHook<Abstract> = async ({
   data,
   doc,
   previousDoc,

@@ -5,7 +5,7 @@ import { beforeDelete } from './hooks/beforeDelete'
 import { checkDeadline } from './hooks/checkDeadline'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { checkValidStatus } from './hooks/checkValidStatus'
-import { sendAbstractEmail } from './hooks/sendAbstractEmail'
+import { sendAbstractEmailToQStash } from './hooks/sendAbstractEmail'
 
 export const Abstracts: CollectionConfig = {
   slug: 'abstracts',
@@ -277,12 +277,7 @@ export const Abstracts: CollectionConfig = {
 
   hooks: {
     beforeChange: [checkDeadline, checkExistAbstract],
-    //TODO: MUST
-    /*
-    1. define mail_logs collections.
-    2. define API cron-jon.
-    */
-    afterChange: [sendAbstractEmail],
+    afterChange: [sendAbstractEmailToQStash],
     beforeDelete: [beforeDelete],
   },
 }

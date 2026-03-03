@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 
+import { atomicClaim, MAX_RETRIES, nextFailureStatus } from '@/services/email/claimMailLog'
 import config from '@payload-config'
 
 export async function GET(req: NextRequest) {
-  // 1. Quick auth check first (before expensive getPayload call)
+  // 1. Auth check — Bearer CRON_SECRET (Railway cron) or admin user session
   const authHeader = req.headers.get('authorization')
   const isCron = authHeader === `Bearer ${process.env.CRON_SECRET}`
 
-  // Early exit for unauthorized requests
   if (!isCron) {
-    // For non-cron requests, we need to check admin role
-    // This requires payload, but we'll do it efficiently
     const payload = await getPayload({ config })
     const { user } = await payload.auth({ headers: req.headers })
 
@@ -20,17 +18,14 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // 2. Initialize payload (reuse if already initialized for auth)
   const payload = await getPayload({ config })
-
   const batchSize = parseInt(process.env.EMAIL_BATCH_SIZE || '10', 10)
   const staleThresholdMs = 10 * 60 * 1000 // 10 minutes
 
   console.log('[Email Cron] Starting sweep (QStash fallback)')
 
-  // 3a. Recover stale 'processing' records — these are logs that QStash triggered
-  //     but the worker crashed before updating the status. Reset them to 'failed'
-  //     so this sweep can pick them up.
+  // 2. Recover stale 'processing' records — crashed workers that never updated status.
+  //    Reset to 'failed' so the sweep can pick them up.
   const staleProcessing = await payload.find({
     collection: 'mail-logs',
     overrideAccess: true,
@@ -43,17 +38,22 @@ export async function GET(req: NextRequest) {
     limit: batchSize,
   })
 
-  for (const stale of staleProcessing.docs) {
-    await payload.update({
-      collection: 'mail-logs',
-      id: stale.id,
-      overrideAccess: true,
-      data: { status: 'failed', lastError: 'Stale processing — recovered by cron' },
-    })
-    console.log(`[Email Cron] Reset stale processing log ${stale.id}`)
-  }
+  await Promise.all(
+    staleProcessing.docs.map(async (stale) => {
+      await payload.update({
+        collection: 'mail-logs',
+        id: stale.id,
+        overrideAccess: true,
+        data: { status: 'failed', lastError: 'Stale processing — recovered by cron' },
+      })
+      console.log(`[Email Cron] Reset stale processing log ${stale.id}`)
+    }),
+  )
 
-  // 3b. Fetch pending/failed logs QStash may have missed
+  // 3. Fetch pending/failed logs that QStash may have missed.
+  //    Grace period: skip logs newer than 2 min — QStash is still handling those.
+  const graceThreshold = new Date(Date.now() - 2 * 60 * 1000).toISOString()
+
   const logs = await payload.find({
     collection: 'mail-logs',
     overrideAccess: true,
@@ -61,52 +61,41 @@ export async function GET(req: NextRequest) {
       or: [
         { status: { equals: 'pending' } },
         {
-          and: [{ status: { equals: 'failed' } }, { retryCount: { less_than: 3 } }],
+          or: [
+            { status: { equals: 'pending' } },
+            {
+              and: [{ status: { equals: 'failed' } }, { retryCount: { less_than: MAX_RETRIES } }],
+            },
+          ],
         },
       ],
     },
     limit: batchSize,
   })
 
-  console.log(`[Email Cron] Found ${logs.totalDocs} logs to process`)
+  console.log(`[Email Cron] Found ${logs.totalDocs} logs to sweep`)
 
   const results = {
     total: logs.totalDocs,
     processed: 0,
     succeeded: 0,
     failed: 0,
+    deadLettered: 0,
     skipped: 0,
-    errors: [] as { id: string; error: string }[], // Added to store error details
   }
 
-  // 4. Process each log with race condition prevention
+  // 4. Process each log with ATOMIC claim.
+  //    Single SQL: UPDATE mail_logs SET status='processing' WHERE id=X AND status IN ('pending','failed') RETURNING id
+  //    If another process already claimed it → 0 rows → skip (no race condition).
   for (const log of logs.docs) {
-    // Re-fetch to ensure status hasn't changed (race condition check)
-    const currentLog = await payload.findByID({
-      collection: 'mail-logs',
-      id: log.id,
-      depth: 0,
-      overrideAccess: true,
-      select: {
-        status: true,
-      },
-    })
+    const claimed = await atomicClaim(payload, log.id, ['pending', 'failed'])
 
-    // Skip if already sent or processing
-    if (currentLog.status === 'sent' || currentLog.status === 'processing') {
+    if (!claimed) {
       results.skipped++
       continue
     }
 
     results.processed++
-
-    // Mark as processing to prevent concurrent execution
-    await payload.update({
-      collection: 'mail-logs',
-      id: log.id,
-      overrideAccess: true,
-      data: { status: 'processing' },
-    })
 
     try {
       await payload.sendEmail({
@@ -115,7 +104,6 @@ export async function GET(req: NextRequest) {
         html: log.html,
       })
 
-      // Success: Update status to sent with timestamp
       await payload.update({
         collection: 'mail-logs',
         id: log.id,
@@ -126,27 +114,31 @@ export async function GET(req: NextRequest) {
           lastError: null,
         },
       })
+
       results.succeeded++
     } catch (error: unknown) {
-      // Failure: Update status to failed and increment retry count
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      console.error(`[Email Cron] Failed to send log ${log.id}:`, errorMessage)
+      const newStatus = nextFailureStatus(log.retryCount || 0)
+      const newRetryCount = (log.retryCount || 0) + 1
+
+      console.error(`[Email Cron] Failed log ${log.id} (attempt ${newRetryCount}):`, errorMessage)
 
       await payload.update({
         collection: 'mail-logs',
         id: log.id,
         overrideAccess: true,
-        data: {
-          status: 'failed',
-          retryCount: (log.retryCount || 0) + 1,
-          lastError: errorMessage,
-        },
+        data: { status: newStatus, retryCount: newRetryCount, lastError: errorMessage },
       })
-      results.failed++
+
+      if (newStatus === 'dead-letter') {
+        console.error(`[Email Cron] 💀 Dead letter: mail-log ${log.id} — manual review required`)
+        results.deadLettered++
+      } else {
+        results.failed++
+      }
     }
   }
 
   console.log('[Email Cron] Results:', results)
-
   return NextResponse.json(results)
 }

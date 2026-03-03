@@ -1,3 +1,4 @@
+import { atomicClaim, nextFailureStatus } from '@/services/email/claimMailLog'
 import config from '@payload-config'
 import { Receiver } from '@upstash/qstash'
 import { NextRequest, NextResponse } from 'next/server'
@@ -7,12 +8,8 @@ import { getPayload } from 'payload'
  * POST /api/email/worker
  *
  * Called by QStash after an email job is enqueued.
- * Verifies the QStash signature, fetches the mail-log record,
+ * Verifies the QStash signature, atomically claims the mail-log record,
  * sends the email via Payload's email adapter, and updates the log status.
- *
- * Required env vars:
- *   QSTASH_CURRENT_SIGNING_KEY
- *   QSTASH_NEXT_SIGNING_KEY
  */
 export async function POST(req: NextRequest) {
   // 1. Verify the request came from QStash
@@ -53,20 +50,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: `mail-log ${mailLogId} not found` }, { status: 404 })
   }
 
-  // Skip if already sent (idempotency guard — QStash delivers at-least-once)
+  // 4. Quick guard: skip terminal states (no atomic claim needed)
   if (log.status === 'sent') {
-    return NextResponse.json({ message: 'Already sent, skipping.' })
+    return NextResponse.json({ message: `Already sent, skipping.` })
   }
 
-  // 4. Mark as processing to prevent duplicate sends
-  await payload.update({
-    collection: 'mail-logs',
-    id: mailLogId,
-    overrideAccess: true,
-    data: { status: 'processing' },
-  })
+  // 5. Atomically claim the record — single SQL UPDATE...RETURNING
+  //    If another process (duplicate QStash delivery or cron) already grabbed it, skip.
+  const claimed = await atomicClaim(payload, mailLogId, ['pending', 'failed'])
+  if (!claimed) {
+    return NextResponse.json({ message: 'Log already claimed by another process.' })
+  }
 
-  // 5. Send the email via Payload's configured adapter (Resend)
+  // 6. Send the email via Payload's configured adapter (Resend)
   try {
     await payload.sendEmail({
       to: log.to,
@@ -74,7 +70,7 @@ export async function POST(req: NextRequest) {
       html: log.html,
     })
 
-    // 6. Success — mark as sent
+    // Success — mark as sent
     await payload.update({
       collection: 'mail-logs',
       id: mailLogId,
@@ -90,21 +86,34 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, mailLogId })
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    console.error(`[Email Worker] Failed to send mail-log ${mailLogId}:`, errorMessage)
+    const newStatus = nextFailureStatus(log.retryCount || 0)
+    const newRetryCount = (log.retryCount || 0) + 1
 
-    // 7. Failure — update status and let QStash retry
+    console.error(
+      `[Email Worker] Failed mail-log ${mailLogId} (attempt ${newRetryCount}):`,
+      errorMessage,
+    )
+
     await payload.update({
       collection: 'mail-logs',
       id: mailLogId,
       overrideAccess: true,
       data: {
-        status: 'failed',
-        retryCount: (log.retryCount || 0) + 1,
+        status: newStatus,
+        retryCount: newRetryCount,
         lastError: errorMessage,
       },
     })
 
-    // Return 500 so QStash knows to retry
+    if (newStatus === 'dead-letter') {
+      // Return 200 — stops QStash from retrying a permanently failed log
+      console.error(
+        `[Email Worker] Dead letter: mail-log ${mailLogId} — manual intervention required`,
+      )
+      return NextResponse.json({ error: errorMessage, deadLetter: true })
+    }
+
+    // Return 500 → QStash will auto-retry with backoff
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }

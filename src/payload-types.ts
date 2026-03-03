@@ -825,7 +825,7 @@ export interface Abstract {
   /**
    * Users can only set Draft or Pending. Admins manage review statuses.
    */
-  status?: ('draft' | 'pending' | 'accepted' | 'rejected' | 'verified') | null;
+  status?: ('draft' | 'pending' | 'rejected' | 'verified') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -949,7 +949,7 @@ export interface MailLog {
   to: string;
   subject: string;
   html: string;
-  status?: ('pending' | 'processing' | 'sent' | 'failed') | null;
+  status?: ('pending' | 'processing' | 'sent' | 'failed' | 'dead-letter') | null;
   retryCount?: number | null;
   lastError?: string | null;
   sentAt?: string | null;
