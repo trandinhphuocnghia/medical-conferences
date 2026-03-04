@@ -1,13 +1,12 @@
 import { getConferences } from '@/app/actions/conferences/getConferences'
+import { getCurrentConference } from '@/app/actions/conferences/getCurrentConference'
 import { generateMetadata } from '../[slug]/page'
 import { Homepage } from './components/homepage'
 
 export default async function Home({}: { searchParams: Promise<{ search?: string }> }) {
-  const posts = await getConferences({})
+  const [posts, currentConference] = await Promise.all([getConferences({}), getCurrentConference()])
 
-  const conferences = posts?.docs
-
-  return <Homepage conferences={conferences} />
+  return <Homepage conferences={posts?.docs ?? []} currentConference={currentConference} />
 }
 
 export { generateMetadata }

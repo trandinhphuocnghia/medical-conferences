@@ -1,7 +1,44 @@
 import { Button } from '@/components/ui/button'
+import { Post } from '@/payload-types'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
+import Link from 'next/link'
 
-export function HeroSection() {
+type HeroSectionProps = {
+  conference: Post | null
+}
+
+function formatDateRange(start?: string | null, end?: string | null): string {
+  if (!start) return ''
+  const startDate = new Date(start)
+  const endDate = end ? new Date(end) : null
+
+  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' }
+  const yearOpts: Intl.DateTimeFormatOptions = { ...opts, year: 'numeric' }
+
+  if (!endDate) return startDate.toLocaleDateString('en-US', yearOpts)
+
+  // Same month: "September 15–18, 2026"
+  if (startDate.getMonth() === endDate.getMonth()) {
+    return `${startDate.toLocaleDateString('en-US', opts)}–${endDate.getDate()}, ${endDate.getFullYear()}`
+  }
+
+  // Different months: "September 30 – October 2, 2026"
+  return `${startDate.toLocaleDateString('en-US', opts)} – ${endDate.toLocaleDateString('en-US', yearOpts)}`
+}
+
+function isAbstractOpen(deadline?: string | null): boolean {
+  if (!deadline) return false
+  return new Date(deadline) > new Date()
+}
+
+export function HeroSection({ conference }: HeroSectionProps) {
+  const dateRange = formatDateRange(conference?.startDate, conference?.endDate)
+  const location =
+    conference?.venueName && conference?.venueCity
+      ? `${conference.venueName}, ${conference.venueCity}`
+      : (conference?.venueCity ?? null)
+  const abstractOpen = isAbstractOpen(conference?.abstractSubmissionDeadline as string | null)
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center bg-primary overflow-hidden">
       {/* Background Pattern */}
@@ -14,48 +51,69 @@ export function HeroSection() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 text-accent mb-8">
           <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-          <span className="text-sm font-medium">Registration Now Open</span>
+          <span className="text-sm font-medium">
+            {abstractOpen ? 'Abstract Submission Open' : 'Registration Now Open'}
+          </span>
         </div>
 
         {/* Main Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground tracking-tight text-balance max-w-5xl mx-auto leading-tight">
-          Advancing Medicine Through Collaboration
+          {conference?.title ?? 'Advancing Medicine Through Collaboration'}
         </h1>
 
-        {/* Subtitle */}
+        {/* Subtitle / Theme */}
         <p className="mt-6 text-lg sm:text-xl text-primary-foreground/80 max-w-2xl mx-auto leading-relaxed text-pretty">
-          Join 5,000+ healthcare professionals at the premier international medical conference.
-          Discover breakthrough research, connect with global experts, and shape the future of
-          healthcare.
+          {conference?.theme ??
+            'Join healthcare professionals at the premier international medical conference.'}
         </p>
 
         {/* Event Details */}
-        <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-primary-foreground/90">
-          <div className="flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-accent" />
-            <span className="text-sm font-medium">September 15-18, 2026</span>
+        {(dateRange || location) && (
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-primary-foreground/90">
+            {dateRange && (
+              <div className="flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-accent" />
+                <span className="text-sm font-medium">{dateRange}</span>
+              </div>
+            )}
+            {location && (
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-accent" />
+                <span className="text-sm font-medium">{location}</span>
+              </div>
+            )}
           </div>
-          <div className="flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-accent" />
-            <span className="text-sm font-medium">Boston Convention Center</span>
-          </div>
-        </div>
+        )}
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-          <Button
-            size="lg"
-            className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 py-6 text-base font-semibold"
-          >
-            Register Now
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
+          {conference?.slug ? (
+            <Button
+              size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 py-6 text-base font-semibold"
+              asChild
+            >
+              <Link href={`/posts/${conference.slug}`}>
+                View Conference
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 py-6 text-base font-semibold"
+            >
+              Explore Conferences
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          )}
           <Button
             size="lg"
             variant="outline"
             className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 py-6 text-base font-semibold bg-transparent"
+            asChild
           >
-            View Full Schedule
+            <Link href="/posts">View All Conferences</Link>
           </Button>
         </div>
       </div>

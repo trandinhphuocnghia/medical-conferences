@@ -7,7 +7,7 @@ import './index.scss'
 
 const BackToFrontend: React.FC = () => {
   return (
-    <Link href="/conferences" className="back-to-frontend-link">
+    <Link href="/posts" className="back-to-frontend-link">
       <ArrowLeft className="back-to-frontend-icon" />
       <span className="back-to-frontend-text">Back to HIGCF</span>
     </Link>

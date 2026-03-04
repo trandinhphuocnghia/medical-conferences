@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 const NAV_ITEMS = [
+  { label: 'Conferences', href: '/posts' },
   { label: 'About', href: '/#about' },
   { label: 'Speakers', href: '/#speakers' },
   { label: 'Schedule', href: '/#schedule' },
@@ -28,9 +29,7 @@ export const HeaderClient = ({ data }: { data: Header }) => {
             <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
               <Stethoscope className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="font-semibold text-lg text-foreground">
-              HIGCF 2026
-            </span>
+            <span className="font-semibold text-lg text-foreground">HIGCF 2026</span>
           </Link>
 
           {/* Desktop Navigation */}

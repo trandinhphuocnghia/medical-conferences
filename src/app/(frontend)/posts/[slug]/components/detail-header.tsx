@@ -91,7 +91,7 @@ export function DetailHeader({ conference, attendees = 1000, cmeCredits = 20 }: 
         {/* Top Navigation */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
           <Link
-            href="/conferences"
+            href="/posts"
             className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors group"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
