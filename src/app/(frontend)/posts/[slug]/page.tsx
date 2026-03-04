@@ -1,8 +1,9 @@
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import type { Post, Topic } from '@/payload-types'
 import { DetailHeader } from './components/detail-header'
-import { LogisticsBento } from './components/logistics-bento'
+import { MessageSection } from './components/president-message'
 import { ScientificTimeline } from './components/scientific-timeline'
+import { StickySubNav } from './components/sticky-subnav'
 import { TopicExplorer } from './components/topic-exploer'
 
 const getTopics = (conference: Post): Topic[] => {
@@ -27,30 +28,32 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
   const topics = getTopics(conferenceData)
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-background">
+      <StickySubNav />
+
       <DetailHeader
         conference={conferenceData}
         attendees={0} //TODO
         cmeCredits={0} //TODO
       />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {topics.length > 0 && <TopicExplorer conferenceId={conferenceData.id} topics={topics} />}
+      <MessageSection conference={conferenceData} />
 
-        <ScientificTimeline
-          abstractSubmissionDeadline={conferenceData.abstractSubmissionDeadline}
-          notificationOfAcceptanceDate={conferenceData.notificationOfAcceptanceDate}
-          earlyRegistrationDeadline={conferenceData.earlyRegistrationDeadline}
-          startDate={conferenceData.startDate}
-          endDate={conferenceData.endDate}
-        />
+      <ScientificTimeline
+        abstractSubmissionDeadline={conferenceData.abstractSubmissionDeadline}
+        notificationOfAcceptanceDate={conferenceData.notificationOfAcceptanceDate}
+        earlyRegistrationDeadline={conferenceData.earlyRegistrationDeadline}
+        startDate={conferenceData.startDate}
+        endDate={conferenceData.endDate}
+      />
 
-        <LogisticsBento
-          conference={conferenceData}
-          venueAddress="513 Yeongdong-daero, Gangnam-gu, Seoul 06164"
-          floorPlanUrl="#"
-        />
-      </main>
+      {topics.length > 0 && <TopicExplorer conferenceId={conferenceData.id} topics={topics} />}
+
+      {/* <LogisticsBento
+        conference={conferenceData}
+        venueAddress="513 Yeongdong-daero, Gangnam-gu, Seoul 06164"
+        floorPlanUrl="#"
+      /> */}
     </div>
   )
 }
