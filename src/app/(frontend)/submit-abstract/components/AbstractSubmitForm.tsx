@@ -11,17 +11,38 @@ import { AbstractFileUploader, type UploadedFileData } from './AbstractFileUploa
 
 // ── Zod schemas per step ──────────────────────────────────────────────────
 const step3Schema = z.object({
-  submitterName: z.string().min(2, 'Full name must be at least 2 characters'),
+  submitterName: z
+    .string()
+    .min(2, 'Full name must be at least 2 characters')
+    .max(100, 'Full name must be at most 100 characters'),
   submitterEmail: z.string().email('Enter a valid email address'),
-  submitterOrganization: z.string().optional(),
-  title: z.string().min(5, 'Title must be at least 5 characters'),
+  submitterOrganization: z
+    .string()
+    .max(200, 'Organization must be at most 200 characters')
+    .optional(),
+  title: z
+    .string()
+    .min(5, 'Title must be at least 5 characters')
+    .max(300, 'Title must be at most 300 characters'),
 })
 
 const step4Schema = z.object({
-  aim: z.string().min(20, 'Aim must be at least 20 characters'),
-  methods: z.string().min(20, 'Methods must be at least 20 characters'),
-  results: z.string().min(20, 'Results must be at least 20 characters'),
-  conclusion: z.string().min(10, 'Conclusion must be at least 10 characters'),
+  aim: z
+    .string()
+    .min(20, 'Aim must be at least 20 characters')
+    .max(2000, 'Aim must be at most 2000 characters'),
+  methods: z
+    .string()
+    .min(20, 'Methods must be at least 20 characters')
+    .max(3000, 'Methods must be at most 3000 characters'),
+  results: z
+    .string()
+    .min(20, 'Results must be at least 20 characters')
+    .max(3000, 'Results must be at most 3000 characters'),
+  conclusion: z
+    .string()
+    .min(10, 'Conclusion must be at least 10 characters')
+    .max(2000, 'Conclusion must be at most 2000 characters'),
 })
 
 // ── Types ─────────────────────────────────────────────────────────────────
@@ -365,6 +386,7 @@ export function AbstractSubmitForm() {
                           value={form.otherTopic}
                           onChange={(e) => set('otherTopic', e.target.value)}
                           placeholder="Enter your topic"
+                          maxLength={150}
                           style={inputStyle(!!validationErrors.otherTopic)}
                         />
                       </Field>
@@ -385,6 +407,7 @@ export function AbstractSubmitForm() {
                       value={form.submitterName}
                       onChange={(e) => set('submitterName', e.target.value)}
                       placeholder="Dr. Jane Smith"
+                      maxLength={100}
                       style={inputStyle(!!validationErrors.submitterName)}
                     />
                   </Field>
@@ -403,6 +426,7 @@ export function AbstractSubmitForm() {
                     value={form.submitterOrganization}
                     onChange={(e) => set('submitterOrganization', e.target.value)}
                     placeholder="Seoul National University Hospital"
+                    maxLength={200}
                     style={inputStyle(false)}
                   />
                 </Field>
@@ -411,6 +435,7 @@ export function AbstractSubmitForm() {
                     value={form.title}
                     onChange={(e) => set('title', e.target.value)}
                     placeholder="Full title of your abstract"
+                    maxLength={300}
                     style={inputStyle(!!validationErrors.title)}
                   />
                 </Field>
@@ -419,6 +444,7 @@ export function AbstractSubmitForm() {
                     value={form.nameOfStudy}
                     onChange={(e) => set('nameOfStudy', e.target.value)}
                     placeholder="e.g., The GASTRIC-2024 Study"
+                    maxLength={300}
                     style={inputStyle(false)}
                   />
                 </Field>
@@ -437,33 +463,38 @@ export function AbstractSubmitForm() {
                       label: 'Aim of Study *',
                       placeholder: 'State the objective and rationale...',
                       rows: 3,
+                      max: 2000,
                     },
                     {
                       key: 'methods',
                       label: 'Methods *',
                       placeholder: 'Study design, population, analysis...',
                       rows: 4,
+                      max: 3000,
                     },
                     {
                       key: 'results',
                       label: 'Results *',
                       placeholder: 'Key quantitative and qualitative findings...',
                       rows: 4,
+                      max: 3000,
                     },
                     {
                       key: 'conclusion',
                       label: 'Conclusion *',
                       placeholder: 'Clinical implications and conclusions...',
                       rows: 3,
+                      max: 2000,
                     },
                   ] as const
-                ).map(({ key, label, placeholder, rows }) => (
+                ).map(({ key, label, placeholder, rows, max }) => (
                   <Field key={key} label={label} error={validationErrors[key]}>
                     <textarea
                       value={form[key]}
                       onChange={(e) => set(key, e.target.value)}
                       placeholder={placeholder}
                       rows={rows}
+                      maxLength={max}
                       style={{
                         ...inputStyle(!!validationErrors[key]),
                         resize: 'vertical',
@@ -485,6 +516,7 @@ export function AbstractSubmitForm() {
                     <input
                       value={kw.word}
                       placeholder={`Keyword ${i + 1}`}
+                      maxLength={50}
                       onChange={(e) => {
                         const updated = [...form.keywords]
                         updated[i] = { word: e.target.value }
