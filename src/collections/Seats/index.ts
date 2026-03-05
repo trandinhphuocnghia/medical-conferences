@@ -14,7 +14,6 @@ export interface TicketOption {
   value: TicketType
 }
 
-//TODO 20/1: check index of this collection.
 export const TICKET_OPTIONS: TicketOption[] = [
   {
     label: 'VIP',
@@ -82,7 +81,7 @@ export const Seats: CollectionConfig = {
   ],
   indexes: [
     {
-      fields: ['label', 'room'], //TODO 20/1: COMPOUND INDEX
+      fields: ['label', 'room'],
       unique: true,
     },
   ],

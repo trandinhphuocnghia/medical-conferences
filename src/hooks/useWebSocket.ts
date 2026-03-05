@@ -18,9 +18,6 @@ export function useWebSocket<T>({ collection, onMessage, token }: UseWebSocketPr
       if (wsRef.current?.readyState === WebSocket.OPEN) return
 
       try {
-        // Initialize Payload if needed
-        // await initPayload() <- TODO: CHECK THIS.
-
         wsRef.current = new WebSocket(`${WS_CONFIG.URL}?token=${token}`)
 
         wsRef.current.onopen = () => {

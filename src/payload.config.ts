@@ -106,6 +106,9 @@ export default buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
+      max: 3, // keep low — each serverless instance gets its own pool; Neon pooler fans out
+      idleTimeoutMillis: 20_000, // close idle connections after 20s (Neon suspends at 30s)
+      connectionTimeoutMillis: 10_000, // fail fast on cold starts instead of hanging
     },
   }),
   collections: [
