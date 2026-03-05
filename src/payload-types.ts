@@ -787,7 +787,11 @@ export interface Abstract {
   submitterOrganization?: string | null;
   title: string;
   conference: number | Post;
-  topic: number | Topic;
+  topic?: (number | null) | Topic;
+  /**
+   * Enter a custom topic if none of the above apply.
+   */
+  otherTopic?: string | null;
   nameOfStudy?: string | null;
   /**
    * What is the objective of this study?
@@ -1430,6 +1434,7 @@ export interface AbstractsSelect<T extends boolean = true> {
   title?: T;
   conference?: T;
   topic?: T;
+  otherTopic?: T;
   nameOfStudy?: T;
   aim?: T;
   methods?: T;
