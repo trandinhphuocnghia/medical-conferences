@@ -7,10 +7,7 @@ import {
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState, useTransition } from 'react'
 import { z } from 'zod'
-import {
-  AbstractFileUploader,
-  type UploadedFileData,
-} from './AbstractFileUploader'
+import { AbstractFileUploader, type UploadedFileData } from './AbstractFileUploader'
 
 // ── Zod schemas per step ──────────────────────────────────────────────────
 const step3Schema = z.object({
@@ -33,7 +30,8 @@ type Topic = { id: number; name: string }
 
 type FormState = {
   conferenceId: number | null
-  topicId: number | null
+  topicId: number | 'other' | null
+  otherTopic: string
   submitterName: string
   submitterEmail: string
   submitterOrganization: string
@@ -70,6 +68,7 @@ export function AbstractSubmitForm() {
   const [form, setForm] = useState<FormState>({
     conferenceId: null,
     topicId: null,
+    otherTopic: '',
     submitterName: '',
     submitterEmail: '',
     submitterOrganization: '',
@@ -181,7 +180,8 @@ export function AbstractSubmitForm() {
         submitterOrganization: form.submitterOrganization || undefined,
         title: form.title,
         conference: form.conferenceId!,
-        topic: form.topicId!,
+        topic: form.topicId === 'other' ? 'other' : form.topicId!,
+        ...(form.topicId === 'other' && form.otherTopic ? { otherTopic: form.otherTopic } : {}),
         nameOfStudy: form.nameOfStudy || undefined,
         aim: form.aim,
         methods: form.methods,
@@ -198,7 +198,10 @@ export function AbstractSubmitForm() {
 
   const canProceedBasic = () => {
     if (step === 1) return !!form.conferenceId
-    if (step === 2) return !!form.topicId
+    if (step === 2) {
+      if (form.topicId === 'other') return form.otherTopic.trim().length > 0
+      return !!form.topicId
+    }
     return true
   }
 
@@ -333,12 +336,40 @@ export function AbstractSubmitForm() {
                     <OptionCard
                       key={t.id}
                       selected={form.topicId === t.id}
-                      onClick={() => set('topicId', t.id)}
+                      onClick={() => {
+                        set('topicId', t.id)
+                        set('otherTopic', '')
+                      }}
                       radio
                     >
                       {t.name}
                     </OptionCard>
                   ))}
+
+                  {/* "Other" option */}
+                  <OptionCard
+                    selected={form.topicId === 'other'}
+                    onClick={() => set('topicId', 'other')}
+                    radio
+                  >
+                    Other
+                  </OptionCard>
+
+                  {form.topicId === 'other' && (
+                    <div style={{ marginTop: '0.25rem' }}>
+                      <Field
+                        label="Please specify your topic *"
+                        error={validationErrors.otherTopic || ''}
+                      >
+                        <input
+                          value={form.otherTopic}
+                          onChange={(e) => set('otherTopic', e.target.value)}
+                          placeholder="Enter your topic"
+                          style={inputStyle(!!validationErrors.otherTopic)}
+                        />
+                      </Field>
+                    </div>
+                  )}
                 </OptionList>
               )}
             </Step>
@@ -513,9 +544,7 @@ export function AbstractSubmitForm() {
               title="Upload Abstract File"
               sub="Optionally attach a PDF of your full abstract (max 8 MB)."
             >
-              <AbstractFileUploader
-                onUploadSuccess={(fileData) => setUploadedFile(fileData)}
-              />
+              <AbstractFileUploader onUploadSuccess={(fileData) => setUploadedFile(fileData)} />
               {uploadedFile && (
                 <p
                   style={{
@@ -541,7 +570,13 @@ export function AbstractSubmitForm() {
                       label: 'Conference',
                       value: conferences.find((c) => c.id === form.conferenceId)?.title,
                     },
-                    { label: 'Topic', value: topics.find((t) => t.id === form.topicId)?.name },
+                    {
+                      label: 'Topic',
+                      value:
+                        form.topicId === 'other'
+                          ? `Other: ${form.otherTopic}`
+                          : topics.find((t) => t.id === form.topicId)?.name,
+                    },
                     { label: 'Name', value: form.submitterName },
                     { label: 'Email', value: form.submitterEmail },
                     form.submitterOrganization

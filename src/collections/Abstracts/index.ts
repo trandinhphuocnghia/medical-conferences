@@ -5,6 +5,7 @@ import { beforeDelete } from './hooks/beforeDelete'
 import { checkDeadline } from './hooks/checkDeadline'
 import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { checkValidStatus } from './hooks/checkValidStatus'
+import { normalizeOtherTopic, restoreOtherTopic } from './hooks/handleOtherTopic'
 import { sendAbstractEmailToQStash } from './hooks/sendAbstractEmail'
 
 export const Abstracts: CollectionConfig = {
@@ -120,7 +121,7 @@ export const Abstracts: CollectionConfig = {
                   name: 'topic',
                   type: 'relationship',
                   relationTo: 'topics',
-                  required: true,
+                  required: false,
                   index: true,
                   access: {
                     update: draftOnlyFieldAccess,
@@ -142,6 +143,31 @@ export const Abstracts: CollectionConfig = {
                   },
                 },
               ],
+            },
+            {
+              name: 'otherTopic',
+              type: 'text',
+              label: 'Please specify your topic',
+              required: false,
+              access: {
+                update: draftOnlyFieldAccess,
+                create: draftOnlyFieldAccess,
+              },
+              admin: {
+                condition: (data) => !data?.topic || data?.topic === 'other',
+                description: 'Enter a custom topic if none of the above apply.',
+              },
+              validate: (
+                value: string | null | undefined,
+                { data }: { data: Record<string, unknown> },
+              ) => {
+                // Required only when the user picked "Other" (topic is null/other)
+                const hasStandardTopic = data?.topic && data.topic !== 'other'
+                if (!hasStandardTopic && !value) {
+                  return 'Please specify your topic or select one from the list.'
+                }
+                return true
+              },
             },
           ],
         },
@@ -276,8 +302,9 @@ export const Abstracts: CollectionConfig = {
   ],
 
   hooks: {
-    beforeChange: [checkDeadline, checkExistAbstract],
+    beforeChange: [normalizeOtherTopic, checkDeadline, checkExistAbstract],
     afterChange: [sendAbstractEmailToQStash],
+    afterRead: [restoreOtherTopic],
     beforeDelete: [beforeDelete],
   },
 }

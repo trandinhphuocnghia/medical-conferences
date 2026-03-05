@@ -13,6 +13,8 @@ type TopicRadioFieldProps = {
   path: string
 }
 
+const OTHER_VALUE = 'other'
+
 export const TopicRadioField: React.FC<TopicRadioFieldProps> = ({ path }) => {
   const { value, setValue } = useField<string | number>({ path })
   const { user } = useAuth<User>()
@@ -55,6 +57,7 @@ export const TopicRadioField: React.FC<TopicRadioFieldProps> = ({ path }) => {
       ? (value as { id: string | number }).id
       : value
 
+  const isOtherSelected = String(currentId) === OTHER_VALUE
   const selectedTopic = topics.find((t) => String(t.id) === String(currentId))
 
   // ── Admin view: show only the selected topic ───────────────────
@@ -64,6 +67,21 @@ export const TopicRadioField: React.FC<TopicRadioFieldProps> = ({ path }) => {
         <label className="field-label">Topic</label>
         {loading ? (
           <p style={{ fontSize: '0.875rem' }}>Loading...</p>
+        ) : isOtherSelected ? (
+          <p
+            style={{
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              padding: '0.25rem 0.75rem',
+              background: 'var(--theme-elevation-100)',
+              borderRadius: '0.375rem',
+              display: 'inline-block',
+              marginTop: '0.25rem',
+              fontStyle: 'italic',
+            }}
+          >
+            Other (custom topic)
+          </p>
         ) : selectedTopic ? (
           <p
             style={{
@@ -154,6 +172,37 @@ export const TopicRadioField: React.FC<TopicRadioFieldProps> = ({ path }) => {
             {topic.name}
           </label>
         ))}
+
+        {/* ── "Other" option ─────────────────────────────────────── */}
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            cursor: isReadOnly ? 'default' : 'pointer',
+            fontSize: '0.875rem',
+            opacity: isReadOnly ? 0.6 : 1,
+            borderTop: '1px solid var(--theme-elevation-150)',
+            paddingTop: '0.5rem',
+            marginTop: '0.25rem',
+          }}
+        >
+          <input
+            type="radio"
+            name={path}
+            value={OTHER_VALUE}
+            checked={isOtherSelected}
+            disabled={isReadOnly}
+            onChange={() => !isReadOnly && setValue(OTHER_VALUE)}
+            style={{
+              accentColor: 'var(--theme-success-500)',
+              width: '1rem',
+              height: '1rem',
+              cursor: isReadOnly ? 'default' : 'pointer',
+            }}
+          />
+          Other
+        </label>
       </div>
     </div>
   )
