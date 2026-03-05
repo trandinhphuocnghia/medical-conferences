@@ -794,19 +794,19 @@ export interface Abstract {
   otherTopic?: string | null;
   nameOfStudy?: string | null;
   /**
-   * What is the objective of this study?
+   * What is the objective of this study? (max 2000 characters)
    */
   aim: string;
   /**
-   * Describe the study design and methodology.
+   * Describe the study design and methodology. (max 3000 characters)
    */
   methods: string;
   /**
-   * Summarize the key findings.
+   * Summarize the key findings. (max 3000 characters)
    */
   results: string;
   /**
-   * What do the results mean?
+   * What do the results mean? (max 2000 characters)
    */
   conclusion: string;
   /**

@@ -53,6 +53,7 @@ export const Abstracts: CollectionConfig = {
                   name: 'submitterName',
                   type: 'text',
                   label: 'Full Name',
+                  maxLength: 100,
                   required: false, // conditionally required only for anonymous
                   access: {
                     update: () => false, // read-only after creation
@@ -75,6 +76,7 @@ export const Abstracts: CollectionConfig = {
               name: 'submitterOrganization',
               type: 'text',
               label: 'Organization / Institution',
+              maxLength: 200,
               access: {
                 update: () => false,
               },
@@ -90,6 +92,7 @@ export const Abstracts: CollectionConfig = {
                   name: 'title',
                   type: 'text',
                   required: true,
+                  maxLength: 300,
                   access: {
                     update: draftOnlyFieldAccess,
                     create: draftOnlyFieldAccess,
@@ -148,6 +151,7 @@ export const Abstracts: CollectionConfig = {
               name: 'otherTopic',
               type: 'text',
               label: 'Please specify your topic',
+              maxLength: 150,
               required: false,
               access: {
                 update: draftOnlyFieldAccess,
@@ -180,39 +184,46 @@ export const Abstracts: CollectionConfig = {
               name: 'nameOfStudy',
               type: 'text',
               label: 'Name of the Study',
+              maxLength: 300,
               access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
             },
             {
               name: 'aim',
               type: 'textarea',
               label: 'Aim of Study',
+              maxLength: 2000,
               required: true,
               access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
-              admin: { description: 'What is the objective of this study?' },
+              admin: { description: 'What is the objective of this study? (max 2000 characters)' },
             },
             {
               name: 'methods',
               type: 'textarea',
               label: 'Methods',
+              maxLength: 3000,
               required: true,
               access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
-              admin: { description: 'Describe the study design and methodology.' },
+              admin: {
+                description: 'Describe the study design and methodology. (max 3000 characters)',
+              },
             },
             {
               name: 'results',
               type: 'textarea',
               label: 'Results',
+              maxLength: 3000,
               required: true,
               access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
-              admin: { description: 'Summarize the key findings.' },
+              admin: { description: 'Summarize the key findings. (max 3000 characters)' },
             },
             {
               name: 'conclusion',
               type: 'textarea',
               label: 'Conclusion',
+              maxLength: 2000,
               required: true,
               access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
-              admin: { description: 'What do the results mean?' },
+              admin: { description: 'What do the results mean? (max 2000 characters)' },
             },
             {
               name: 'keywords',
@@ -221,7 +232,7 @@ export const Abstracts: CollectionConfig = {
               minRows: 1,
               maxRows: 5,
               access: { update: draftOnlyFieldAccess, create: draftOnlyFieldAccess },
-              fields: [{ name: 'word', type: 'text' }],
+              fields: [{ name: 'word', type: 'text', maxLength: 50 }],
               admin: { description: 'Add up to 5 keywords for indexing.' },
             },
           ],
