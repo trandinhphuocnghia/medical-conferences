@@ -132,6 +132,8 @@ export default buildConfig({
   cors: [
     ...[getServerSideURL()].filter(Boolean),
     process.env.NEXT_PUBLIC_SERVER_URL,
+    'https://www.higcf.org',
+    'https://higcf.org',
     'https://studio.apollographql.com', // ✅ allow Apollo Sandbox
   ],
   globals: [Header, Footer],
