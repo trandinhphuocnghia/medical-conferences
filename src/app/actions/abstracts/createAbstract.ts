@@ -27,29 +27,6 @@ export async function createAbstract(conference: number, data: AbstractFormSchem
       }
     }
 
-    //TODO:
-
-    // const abstract = await payload.create({
-    //   collection: 'abstracts',
-
-    //   data: {
-    //     ...data,
-    //     files: [] as File[],
-    //     description: '',
-    //     conference: Number(conference),
-    //     topic: Number(data.topic),
-    //     status: 'pending',
-    //     submitter: user.id,
-    //   },
-    //   draft: false,
-
-    //   overrideAccess: false,
-    //   req: {
-    //     headers,
-    //     user,
-    //   },
-    // })
-
     return { success: true, undefined }
   } catch (error) {
     console.error('Create abstract error:', error)
