@@ -85,6 +85,7 @@ export function AbstractSubmitForm() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
   const [uploadedFile, setUploadedFile] = useState<UploadedFileData | null>(null)
+  const [isFileUploading, setIsFileUploading] = useState(false)
 
   const [form, setForm] = useState<FormState>({
     conferenceId: null,
@@ -223,6 +224,8 @@ export function AbstractSubmitForm() {
       if (form.topicId === 'other') return form.otherTopic.trim().length > 0
       return !!form.topicId
     }
+    // Block navigation while a file upload is still in flight
+    if (step === 6 && isFileUploading) return false
     return true
   }
 
@@ -576,8 +579,25 @@ export function AbstractSubmitForm() {
               title="Upload Abstract File"
               sub="Optionally attach a PDF of your full abstract (max 8 MB)."
             >
-              <AbstractFileUploader onUploadSuccess={(fileData) => setUploadedFile(fileData)} />
-              {uploadedFile && (
+              <AbstractFileUploader
+                onUploadSuccess={(fileData) => setUploadedFile(fileData)}
+                onUploadStateChange={(uploading) => setIsFileUploading(uploading)}
+              />
+              {isFileUploading && (
+                <p
+                  style={{
+                    marginTop: '0.75rem',
+                    fontSize: '0.8125rem',
+                    color: 'var(--cyan)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.375rem',
+                  }}
+                >
+                  ⏳ Upload in progress — please wait before continuing.
+                </p>
+              )}
+              {uploadedFile && !isFileUploading && (
                 <p
                   style={{
                     marginTop: '0.75rem',
@@ -585,7 +605,7 @@ export function AbstractSubmitForm() {
                     color: 'var(--muted-foreground)',
                   }}
                 >
-                  ✅ Attached:
+                  ✅ Attached:{' '}
                   <strong style={{ color: 'var(--foreground)' }}>{uploadedFile.name}</strong>
                 </p>
               )}

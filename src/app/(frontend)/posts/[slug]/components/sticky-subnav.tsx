@@ -17,7 +17,7 @@ export function StickySubNav() {
 
   const navItems = [
     { label: 'Overview', href: '#overview' },
-    { label: 'Message from President', href: '#message' },
+    { label: 'Message from the Organizing Committee', href: '#message' },
     { label: 'Scientific Topics', href: '#topics' },
     { label: 'Program', href: '#program' },
     { label: 'Speakers', href: '#speakers' },
