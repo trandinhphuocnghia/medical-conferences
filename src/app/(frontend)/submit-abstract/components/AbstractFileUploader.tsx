@@ -15,6 +15,8 @@ export type UploadedFileData = {
 type Props = {
   /** Called once the S3 upload succeeds and the server has processed the file. */
   onUploadSuccess: (fileData: UploadedFileData) => void
+  /** Called whenever the uploading state changes — lets the parent block navigation. */
+  onUploadStateChange?: (isUploading: boolean) => void
   /**
    * Optional Cloudflare Turnstile (or any CAPTCHA) token.
    * Forwarded as `x-turnstile-token` request header for middleware validation.
@@ -23,7 +25,7 @@ type Props = {
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export function AbstractFileUploader({ onUploadSuccess, captchaToken }: Props) {
+export function AbstractFileUploader({ onUploadSuccess, onUploadStateChange, captchaToken }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -35,6 +37,7 @@ export function AbstractFileUploader({ onUploadSuccess, captchaToken }: Props) {
 
     onUploadBegin() {
       setIsUploading(true)
+      onUploadStateChange?.(true)
       setUploadError(null)
       setProgress(0)
     },
@@ -45,6 +48,7 @@ export function AbstractFileUploader({ onUploadSuccess, captchaToken }: Props) {
 
     onClientUploadComplete(res) {
       setIsUploading(false)
+      onUploadStateChange?.(false)
       setProgress(100)
       if (!res || res.length === 0) return
 
@@ -63,6 +67,7 @@ export function AbstractFileUploader({ onUploadSuccess, captchaToken }: Props) {
 
     onUploadError(error) {
       setIsUploading(false)
+      onUploadStateChange?.(false)
       setProgress(0)
 
       const message = error?.message ?? ''
