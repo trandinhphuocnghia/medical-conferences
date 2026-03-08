@@ -44,11 +44,11 @@ export const FooterClient = () => {
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-3 text-sm text-background/70">
                 <Mail className="w-4 h-4" />
-                <span>info@higcf2026.org</span>
+                <span>-</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-background/70">
                 <Phone className="w-4 h-4" />
-                <span>+1 (555) 123-4567</span>
+                <span>-</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-background/70">
                 <MapPin className="w-4 h-4" />
