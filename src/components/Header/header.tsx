@@ -1,7 +1,6 @@
 'use client'
 
 import { UserMenu } from '@/Header/UserMenu'
-import { Button } from '@/components/ui/button'
 import type { Header } from '@/payload-types'
 import { useUserStore } from '@/stores/userStore'
 import { Menu, Stethoscope, X } from 'lucide-react'
@@ -50,17 +49,12 @@ export const HeaderClient = ({ data }: { data: Header }) => {
             {user ? (
               <UserMenu />
             ) : (
-              <>
-                <Link
-                  href="/signin"
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  Register Now
-                </Button>
-              </>
+              <Link
+                href="/signin"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Sign In
+              </Link>
             )}
           </div>
 
@@ -92,11 +86,7 @@ export const HeaderClient = ({ data }: { data: Header }) => {
                   {item.label}
                 </Link>
               ))}
-              {!user && (
-                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-2">
-                  Register Now
-                </Button>
-              )}
+
             </nav>
           </div>
         )}

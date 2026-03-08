@@ -86,7 +86,7 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
             </span>
 
             {/* Live Seat Count Badge */}
-            <div
+            {/* <div
               className={`
                 flex items-center gap-1.5 rounded-full px-3 py-1.5
                 ${isLowSeats ? 'bg-rose-50 text-rose-600' : 'bg-[#06B6D4]/10 text-[#06B6D4]'}
@@ -94,9 +94,9 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
             >
               <Users className="h-3.5 w-3.5" />
               <span className="font-mono text-xs font-medium">
-                {conference.seatsAvailable} seats
+                {"-"} seats
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Title */}
