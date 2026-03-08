@@ -33,6 +33,9 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
               <h2 className="text-navy text-3xl font-bold mb-1">
                 Message from the Organizing Committee
               </h2>
+              <p className="text-accent font-semibold text-base">
+                Organizing Committee Chair
+              </p>
               <p className="text-accent font-semibold text-base mb-6">
               Vo Duy Long
               </p>
@@ -91,7 +94,10 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
                   <p className="text-xs font-700 uppercase tracking-widest text-muted-foreground mb-1">
                     Conference Host
                   </p>
-                  <p className="font-semibold text-foreground text-sm leading-snug">
+                  <p className="text-foreground text-sm leading-snug">
+                  Vietnamese Society of Gastric Surgery
+                  </p>
+                  <p className="text-foreground text-sm leading-snug">
                     University Medical Center at Ho Chi Minh City
                   </p>
                 </div>
