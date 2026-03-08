@@ -34,18 +34,16 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
                 Message from the Organizing Committee
               </h2>
               <p className="text-accent font-semibold text-base mb-6">
-                Assoc. Prof. Vo Duy Long — Organizing Committee Chair
+              Vo Duy Long
               </p>
 
               <div className="text-muted-foreground space-y-4 leading-relaxed">
-                <p className="font-medium text-foreground">Dear Esteemed Colleagues,</p>
+                <p>Dear Esteemed Colleagues,</p>
 
                 <p>
-                  The University Medical Center at Ho Chi Minh City is honored to host the{' '}
-                  <strong className="text-foreground">
-                    6th Meeting of the Ho Chi Minh City International Gastric Cancer Forum
-                  </strong>
-                  , to be held at the University Medical Center Ho Chi Minh City.
+                  The University Medical Center at Ho Chi Minh City is honored to host the 6th
+                  Meeting of the Ho Chi Minh City International Gastric Cancer Forum, to be held at
+                  the University Medical Center Ho Chi Minh City.
                 </p>
 
                 <p>
@@ -61,34 +59,64 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
                   In Vietnam, the majority of gastric cancer patients are diagnosed at an advanced
                   stage. Therefore, the management of gastric cancer requires close multidisciplinary
                   collaboration within a multimodal treatment strategy. This year&apos;s conference
-                  will focus on updating significant advances in{' '}
-                  <strong className="text-foreground">preoperative assessment</strong>,{' '}
-                  <strong className="text-foreground">intraoperative techniques</strong>, and{' '}
-                  <strong className="text-foreground">postoperative management</strong>, as well as
-                  discussing contemporary multimodal treatment trends and novel surgical approaches.
-                  In addition, one full day will be dedicated to{' '}
-                  <strong className="text-foreground">live surgery sessions</strong>, featuring two
+                  will focus on updating significant advances in preoperative assessment,
+                  intraoperative techniques, and postoperative management, as well as discussing
+                  contemporary multimodal treatment trends and novel surgical approaches. In
+                  addition, one full day will be dedicated to live surgery sessions, featuring two
                   laparoscopic gastrectomy cases with standard lymphadenectomy using ICG for lymph
                   node navigation, and two endoscopic submucosal dissection (ESD) cases for
                   early-stage gastric cancer.
                 </p>
 
                 <p>
-                  We are deeply honored to welcome{' '}
-                  <strong className="text-foreground">14 leading international experts</strong> in
-                  gastric cancer from Japan, Korea, China, Taiwan, Chile, and Malaysia, along with
+                  We are deeply honored to welcome 14 leading international experts in gastric
+                  cancer from Japan, Korea, China, Taiwan, Chile, and Malaysia, along with
                   distinguished professors and experienced specialists from major hospitals across
                   Vietnam.
                 </p>
 
                 <p>
                   The University Medical Center at Ho Chi Minh City cordially invites you to attend
-                  this meeting, taking place on{' '}
-                  <strong className="text-foreground">May 14–16, 2026</strong>, in Ho Chi Minh City
-                  — a dynamic hub and a pioneer in international integration.
+                  this meeting, taking place on May 14–16, 2026, in Ho Chi Minh City — a dynamic
+                  hub and a pioneer in international integration.
                 </p>
 
-                <p className="font-medium text-foreground">We look forward to welcoming you.</p>
+                <p>We look forward to welcoming you.</p>
+              </div>
+
+              {/* Host & Secretariat */}
+              <div className="mt-8 pt-8 border-t border-border grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* Left: Conference Host */}
+                <div>
+                  <p className="text-xs font-700 uppercase tracking-widest text-muted-foreground mb-1">
+                    Conference Host
+                  </p>
+                  <p className="font-semibold text-foreground text-sm leading-snug">
+                    University Medical Center at Ho Chi Minh City
+                  </p>
+                </div>
+
+                {/* Right: Conference Secretariat */}
+                <div>
+                  <p className="text-xs font-700 uppercase tracking-widest text-muted-foreground mb-1">
+                    Conference Secretariat
+                  </p>
+                  <div className='flex flex-col gap-1'>
+                    <a
+                    href="mailto: nguyen.dt5@umc.edu.vn"
+                    className="text-sm text-accent hover:underline transition-colors"
+                  >
+                     nguyen.dt5@umc.edu.vn
+                  </a>
+                  <a
+                    href="mailto: phuoc.td@umc.edu.vn"
+                    className="text-sm text-accent hover:underline transition-colors"
+                  >
+                     phuoc.td@umc.edu.vn
+                  </a>
+                  </div>
+                
+                </div>
               </div>
 
               {/* Committee Members */}
