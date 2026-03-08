@@ -52,7 +52,7 @@ export const FooterClient = () => {
               </div>
               <div className="flex items-center gap-3 text-sm text-background/70">
                 <MapPin className="w-4 h-4" />
-                <span>Boston Convention Center</span>
+                <span>-</span>
               </div>
             </div>
           </div>
