@@ -173,6 +173,23 @@ export const Abstracts: CollectionConfig = {
                 return true
               },
             },
+            {
+              name: 'presentationLanguage',
+              type: 'select',
+              label: 'Presentation Language',
+              required: false, // enforced as required by the public form — optional here so admin-created records don't break
+              options: [
+                { label: 'English', value: 'english' },
+                { label: 'Vietnamese', value: 'vietnamese' },
+              ],
+              access: {
+                update: () => false, // set once at submission — admin cannot change
+              },
+              admin: {
+                readOnly: true,
+                description: 'Language the presenter will use during their session.',
+              },
+            },
           ],
         },
 
