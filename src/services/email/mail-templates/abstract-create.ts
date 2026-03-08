@@ -1,64 +1,166 @@
-import { Abstract, Post, User } from '@/payload-types'
-import { formatDateTime } from '@/utilities/formatDateTime'
+import type { Abstract, Post, User } from '@/payload-types'
+import { SUPPORT_EMAILS } from '@/services/email/constants'
 
-export const abstractCreateMail = (abstract: Abstract) => `
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+/** Resolve the display name from the abstract — works for both authenticated
+ *  (submitter populated as User object) and anonymous submissions. */
+function resolveSubmitterName(doc: Abstract): string {
+  if (typeof doc.submitter === 'object' && doc.submitter !== null) {
+    const user = doc.submitter as User
+    return (user.fullname ?? `${user.firstName} ${user.lastName}`.trim()) || 'Researcher'
+  }
+  return (doc.submitterName ?? 'Researcher') || 'Researcher'
+}
+
+/** Resolve the conference title — `conference` may be an ID (number) or a
+ *  populated Post object. Falls back gracefully if not populated. */
+function resolveConferenceName(doc: Abstract): string {
+  if (typeof doc.conference === 'object' && doc.conference !== null) {
+    return (doc.conference as Post).title ?? 'Conference'
+  }
+  return 'Conference'
+}
+
+
+
+// ── Template ─────────────────────────────────────────────────────────────────
+export const abstractCreateMail = (abstract: Abstract): string => {
+  const submitterName = resolveSubmitterName(abstract)
+  const conferenceName = resolveConferenceName(abstract)
+
+  return `
 <!doctype html>
-<html>
-<body style="margin:0; padding:0; background:#f5f7fb;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f5f7fb; padding:20px 0;">
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    }
+    table { border-collapse: collapse; mso-table-lspace: 0; mso-table-rspace: 0; }
+    a { text-decoration: none; color: #06b6d4; }
+    @media only screen and (max-width: 600px) {
+      .container { width: 100% !important; max-width: 600px !important; }
+      .mobile-padding { padding: 16px !important; }
+    }
+  </style>
+</head>
+<body>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+    style="width: 100%; background-color: #f8fafc; padding: 32px 0;">
     <tr>
       <td align="center">
-        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="background:#ffffff; border-radius:8px; overflow:hidden; width:100%; max-width:600px;">
-          
+        <table role="presentation" cellspacing="0" cellpadding="0" class="container"
+          style="width: 100%; max-width: 600px; background-color: #ffffff; border-radius: 10px;
+                 overflow: hidden; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);">
+
           <!-- Header -->
           <tr>
-            <td style="padding:20px 24px; border-bottom:1px solid #eef3fb;">
+            <td style="padding: 24px; border-bottom: 1px solid #e2e8f0; background-color: #ffffff;">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td width="48" style="background:#e9f1ff; border-radius:8px; text-align:center; font-weight:bold; color:#0b57b7; font-family:Arial; font-size:16px; padding:8px">
-                    LOGO
+                  <td width="48" style="padding-right: 14px; vertical-align: middle;">
+                    <div style="width: 48px; height: 48px;
+                                background: linear-gradient(135deg, #0f172a 0%, #06b6d4 100%);
+                                border-radius: 8px; text-align: center; line-height: 48px;
+                                font-size: 24px; color: #ffffff;">
+                      ✓
+                    </div>
                   </td>
-                  <td style="padding-left:12px;">
-                    <p style="margin:0; font-size:18px; font-family:Arial; color:#0b2545;">Abstract Submission Received</p>
-                    <p style="margin:2px 0 0; font-size:13px; font-family:Arial; color:#7a8aa6;">${(abstract.conference as Post).title}</p>
+                  <td style="vertical-align: middle;">
+                    <p style="margin: 0; font-size: 17px; font-weight: 600; color: #0f172a; line-height: 1.3;">
+                      Abstract Submission Confirmed
+                    </p>
+                    <p style="margin: 4px 0 0; font-size: 13px; color: #64748b;">
+                      ${conferenceName}
+                    </p>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
 
-          <!-- Content -->
+          <!-- Body -->
           <tr>
-            <td style="padding:24px; font-family:Arial; font-size:15px; color:#0b2545; line-height:1.5;">
-              <p>Hi <strong>${(abstract.submitter as User)?.fullname ?? (abstract as any).submitterName ?? 'Researcher'}</strong>,</p>
-              <p>Thank you for your submission. We have successfully received your abstract titled:</p>
+            <td style="padding: 32px 28px;" class="mobile-padding">
 
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f8fbff; border:1px solid #eef6ff; border-radius:8px; padding:16px;">
+              <!-- Greeting -->
+              <p style="margin: 0 0 20px; font-size: 15px; color: #0f172a; line-height: 1.6;">
+                Dear <strong>${submitterName}</strong>,
+              </p>
+
+              <!-- Thank-you line -->
+              <p style="margin: 0 0 16px; font-size: 15px; color: #0f172a; line-height: 1.6;">
+                Thank you for your abstract submission to
+                <strong>${conferenceName}</strong>.
+              </p>
+
+              <!-- Abstract card -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+                style="background-color: #f0f9ff; border: 1px solid #cffafe;
+                       border-radius: 8px; margin: 0 0 24px; overflow: hidden;">
                 <tr>
-                  <td style="font-family:Arial; font-size:15px; padding:16px">
-                    <strong>${abstract.title}</strong>
-                    <div style="margin-top:4px; font-size:13px; color:#556b8a;">
-                      Submitted on: ${formatDateTime(abstract.createdAt)}
-                    </div>
+                  <td style="padding: 18px;">
+                    <p style="margin: 0 0 6px; font-size: 11px; color: #06b6d4; font-weight: 600;
+                               letter-spacing: 0.6px; text-transform: uppercase;">
+                      Abstract Received
+                    </p>
+                    <p style="margin: 0; font-size: 15px; font-weight: 600; color: #0f172a; line-height: 1.5;">
+                      ${abstract.title}
+                    </p>
                   </td>
                 </tr>
               </table>
 
-              <p style="text-align:center; margin:20px;">
-                <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/dashboard/collections/abstracts/${abstract.id}" style="background:#0b57b7; color:#ffffff; padding:10px 16px; text-decoration:none; border-radius:6px; font-weight:bold; font-family:Arial;">View Submission</a>
-              </p>
+              <!-- Save confirmation note -->
+              <div style="background-color: #f8fafc; border-left: 4px solid #06b6d4;
+                          padding: 14px 16px; border-radius: 4px; margin: 0 0 24px;">
+                <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.6;">
+                  Please save this email or print it out as confirmation of your submission.
+                </p>
+              </div>
 
-              <p style="font-size:13px; color:#556b8a;">Questions? Contact: 
-                <a href="mailto:${process.env.MAIL_HOST}" style="color:#0b57b7;">${process.env.MAIL_HOST}</a>
+              <!-- Contact -->
+              <p style="margin: 0 0 6px; font-size: 14px; color: #475569; line-height: 1.6;">
+                Should you have any inquiries, please contact us via email:
+              </p>
+              <p style="margin: 0; font-size: 14px; color: #0f172a; line-height: 1.8;">
+                ${SUPPORT_EMAILS.map(
+                  (email) =>
+                    `<a href="mailto:${email}" style="color: #06b6d4; font-weight: 500; display: block;">${email}</a>`,
+                ).join('')}
               </p>
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="padding:18px 24px; background:#ffffff; border-top:1px solid #f0f4fa; font-family:Arial; font-size:13px; color:#7a8aa6;">
-              HIGCF<br/>
-              If this wasn’t you, contact <a href="mailto:${process.env.MAIL_HOST}" style="color:#0b57b7;">${process.env.MAIL_HOST}</a>.
+            <td style="padding: 20px 28px; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
+              <p style="margin: 0 0 4px; font-size: 13px; font-weight: 600; color: #0f172a;">
+                Secretariat of ${conferenceName}
+              </p>
+              <p style="margin: 0; font-size: 12px; color: #64748b; line-height: 1.8;">
+                Email:
+                ${SUPPORT_EMAILS.map(
+                  (email) =>
+                    `<a href="mailto:${email}" style="color: #06b6d4; display: block;">${email}</a>`,
+                ).join('')}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Copyright -->
+          <tr>
+            <td style="padding: 14px 28px; background-color: #ffffff;
+                       border-top: 1px solid #e2e8f0; text-align: center;">
+              <p style="margin: 0; font-size: 11px; color: #cbd5e1;">
+                © ${new Date().getFullYear()} ${conferenceName}. All rights reserved.
+              </p>
             </td>
           </tr>
 
@@ -68,5 +170,5 @@ export const abstractCreateMail = (abstract: Abstract) => `
   </table>
 </body>
 </html>
-
 `
+}
