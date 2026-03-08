@@ -10,7 +10,13 @@ import { z } from 'zod'
 import { AbstractFileUploader, type UploadedFileData } from './AbstractFileUploader'
 
 // ── Zod schemas per step ──────────────────────────────────────────────────
-const step3Schema = z.object({
+const stepLangSchema = z.object({
+  presentationLanguage: z.enum(['english', 'vietnamese'], {
+    required_error: 'Please select a presentation language.',
+  }),
+})
+
+const step4Schema_info = z.object({
   submitterName: z
     .string()
     .min(2, 'Full name must be at least 2 characters')
@@ -26,7 +32,7 @@ const step3Schema = z.object({
     .max(300, 'Title must be at most 300 characters'),
 })
 
-const step4Schema = z.object({
+const step5Schema = z.object({
   aim: z
     .string()
     .min(20, 'Aim must be at least 20 characters')
@@ -53,6 +59,7 @@ type FormState = {
   conferenceId: number | null
   topicId: number | 'other' | null
   otherTopic: string
+  presentationLanguage: 'english' | 'vietnamese' | null
   submitterName: string
   submitterEmail: string
   submitterOrganization: string
@@ -65,10 +72,11 @@ type FormState = {
   keywords: { word: string }[]
 }
 
-const TOTAL_STEPS = 7
+const TOTAL_STEPS = 8
 const STEPS = [
   'Select Conference',
   'Select Topic',
+  'Presentation Language',
   'Your Information',
   'Abstract Body',
   'Keywords',
@@ -91,6 +99,7 @@ export function AbstractSubmitForm() {
     conferenceId: null,
     topicId: null,
     otherTopic: '',
+    presentationLanguage: null,
     submitterName: '',
     submitterEmail: '',
     submitterOrganization: '',
@@ -118,7 +127,7 @@ export function AbstractSubmitForm() {
         conferenceId: confId ? Number(confId) : prev.conferenceId,
         topicId: topicId ? Number(topicId) : prev.topicId,
       }))
-      // Skip to step 3 (Your Info) since conference & topic are pre-selected
+      // Skip to step 3 (Presentation Language) since conference & topic are pre-selected
       if (confId && topicId) setStep(3)
     }
   }, [searchParams])
@@ -154,7 +163,20 @@ export function AbstractSubmitForm() {
   const validateStep = (currentStep: number): boolean => {
     setValidationErrors({})
     if (currentStep === 3) {
-      const result = step3Schema.safeParse({
+      const result = stepLangSchema.safeParse({
+        presentationLanguage: form.presentationLanguage,
+      })
+      if (!result.success) {
+        const errs: Record<string, string> = {}
+        result.error.issues.forEach((i) => {
+          errs[String(i.path[0])] = i.message
+        })
+        setValidationErrors(errs)
+        return false
+      }
+    }
+    if (currentStep === 4) {
+      const result = step4Schema_info.safeParse({
         submitterName: form.submitterName,
         submitterEmail: form.submitterEmail,
         submitterOrganization: form.submitterOrganization,
@@ -169,8 +191,8 @@ export function AbstractSubmitForm() {
         return false
       }
     }
-    if (currentStep === 4) {
-      const result = step4Schema.safeParse({
+    if (currentStep === 5) {
+      const result = step5Schema.safeParse({
         aim: form.aim,
         methods: form.methods,
         results: form.results,
@@ -200,6 +222,7 @@ export function AbstractSubmitForm() {
         submitterName: form.submitterName,
         submitterEmail: form.submitterEmail,
         submitterOrganization: form.submitterOrganization || undefined,
+        presentationLanguage: form.presentationLanguage!,
         title: form.title,
         conference: form.conferenceId!,
         topic: form.topicId === 'other' ? 'other' : form.topicId!,
@@ -224,8 +247,9 @@ export function AbstractSubmitForm() {
       if (form.topicId === 'other') return form.otherTopic.trim().length > 0
       return !!form.topicId
     }
+    if (step === 3) return !!form.presentationLanguage
     // Block navigation while a file upload is still in flight
-    if (step === 6 && isFileUploading) return false
+    if (step === 7 && isFileUploading) return false
     return true
   }
 
@@ -400,8 +424,60 @@ export function AbstractSubmitForm() {
             </Step>
           )}
 
-          {/* ── STEP 3: Info ──────────────────────────────────────────────── */}
+          {/* ── STEP 3: Presentation Language ─────────────────────────────── */}
           {step === 3 && (
+            <Step
+              title="Presentation Language"
+              sub="Please select the language you will use for your presentation."
+            >
+              <p
+                style={{
+                  fontSize: '0.8125rem',
+                  color: 'var(--muted-foreground)',
+                  lineHeight: '1.6',
+                  marginBottom: '1.25rem',
+                  padding: '0.875rem 1rem',
+                  background: 'var(--accent)',
+                  borderRadius: '8px',
+                  borderLeft: '3px solid var(--primary)',
+                }}
+              >
+                Please note that presentation slides are required to be prepared in English. The
+                presentation language will help the organizing committee arrange the sessions more
+                effectively, and the award structure differs between the two sessions.
+              </p>
+              <OptionList>
+                <OptionCard
+                  selected={form.presentationLanguage === 'english'}
+                  onClick={() => set('presentationLanguage', 'english')}
+                  radio
+                >
+                  English
+                </OptionCard>
+                <OptionCard
+                  selected={form.presentationLanguage === 'vietnamese'}
+                  onClick={() => set('presentationLanguage', 'vietnamese')}
+                  radio
+                >
+                  Vietnamese
+                </OptionCard>
+              </OptionList>
+              {validationErrors.presentationLanguage && (
+                <p
+                  style={{
+                    marginTop: '0.5rem',
+                    fontSize: '0.8125rem',
+                    color: 'var(--destructive)',
+                  }}
+                >
+                  {validationErrors.presentationLanguage}
+                </p>
+              )}
+            </Step>
+          )}
+
+          {/* ── STEP 4: Info ──────────────────────────────────────────────── */}
+          {step === 4 && (
             <Step title="Your Information" sub="Tell us about yourself and your abstract title.">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
                 <TwoCol>
@@ -455,8 +531,8 @@ export function AbstractSubmitForm() {
             </Step>
           )}
 
-          {/* ── STEP 4: Abstract Body ─────────────────────────────────────── */}
-          {step === 4 && (
+          {/* ── STEP 5: Abstract Body ─────────────────────────────────────── */}
+          {step === 5 && (
             <Step title="Abstract Body" sub="Complete each section clearly and concisely.">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
                 {(
@@ -510,8 +586,8 @@ export function AbstractSubmitForm() {
             </Step>
           )}
 
-          {/* ── STEP 5: Keywords ──────────────────────────────────────────── */}
-          {step === 5 && (
+          {/* ── STEP 6: Keywords ──────────────────────────────────────────── */}
+          {step === 6 && (
             <Step title="Keywords" sub="Add up to 5 keywords to help categorize your abstract.">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {form.keywords.map((kw, i) => (
@@ -573,8 +649,8 @@ export function AbstractSubmitForm() {
             </Step>
           )}
 
-          {/* ── STEP 6: File Upload ───────────────────────────────────────── */}
-          {step === 6 && (
+          {/* ── STEP 7: File Upload ───────────────────────────────────────── */}
+          {step === 7 && (
             <Step
               title="Upload Abstract File"
               sub="Optionally attach a PDF of your full abstract (max 8 MB)."
@@ -612,8 +688,8 @@ export function AbstractSubmitForm() {
             </Step>
           )}
 
-          {/* ── STEP 7: Review ────────────────────────────────────────────── */}
-          {step === 7 && (
+          {/* ── STEP 8: Review ────────────────────────────────────────────── */}
+          {step === 8 && (
             <Step title="Review & Submit" sub="Please review your submission before sending.">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {(
@@ -628,6 +704,15 @@ export function AbstractSubmitForm() {
                         form.topicId === 'other'
                           ? `Other: ${form.otherTopic}`
                           : topics.find((t) => t.id === form.topicId)?.name,
+                    },
+                    {
+                      label: 'Presentation Language',
+                      value:
+                        form.presentationLanguage === 'english'
+                          ? 'English'
+                          : form.presentationLanguage === 'vietnamese'
+                            ? 'Vietnamese'
+                            : '—',
                     },
                     { label: 'Name', value: form.submitterName },
                     { label: 'Email', value: form.submitterEmail },

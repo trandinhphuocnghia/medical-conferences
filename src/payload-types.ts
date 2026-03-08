@@ -792,6 +792,10 @@ export interface Abstract {
    * Enter a custom topic if none of the above apply.
    */
   otherTopic?: string | null;
+  /**
+   * Language the presenter will use during their session.
+   */
+  presentationLanguage?: ('english' | 'vietnamese') | null;
   nameOfStudy?: string | null;
   /**
    * What is the objective of this study? (max 2000 characters)
@@ -1435,6 +1439,7 @@ export interface AbstractsSelect<T extends boolean = true> {
   conference?: T;
   topic?: T;
   otherTopic?: T;
+  presentationLanguage?: T;
   nameOfStudy?: T;
   aim?: T;
   methods?: T;

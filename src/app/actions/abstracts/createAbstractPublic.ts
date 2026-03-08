@@ -7,6 +7,8 @@ export type PublicAbstractData = {
   submitterName: string
   submitterEmail: string
   submitterOrganization?: string
+  // Presentation language — required from the public form
+  presentationLanguage: 'english' | 'vietnamese'
   // Abstract core
   title: string
   conference: number
