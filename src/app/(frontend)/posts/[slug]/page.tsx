@@ -1,6 +1,8 @@
+import { getConferencePresenters } from '@/app/actions/abstracts/getConferencePresenters'
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import type { Post, Topic } from '@/payload-types'
 import { DetailHeader } from './components/detail-header'
+import { PresentersSection } from './components/presenters-section'
 import { MessageSection } from './components/president-message'
 import { ScientificTimeline } from './components/scientific-timeline'
 import { StickySubNav } from './components/sticky-subnav'
@@ -45,6 +47,10 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         earlyRegistrationDeadline={conferenceData.earlyRegistrationDeadline}
         startDate={conferenceData.startDate}
         endDate={conferenceData.endDate}
+      />
+
+      <PresentersSection
+        presenters={(await getConferencePresenters(conferenceData.id)).presenters}
       />
 
       {topics.length > 0 && <TopicExplorer conferenceId={conferenceData.id} topics={topics} />}

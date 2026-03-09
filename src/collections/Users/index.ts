@@ -1,6 +1,7 @@
 import { adminOnly, adminOrOwner, anyone, authenticated } from '@/access/collectionAccess'
 import { notAdminView } from '@/access/collectionView'
 import { adminExceptSelfFieldAccess, adminOnlyFieldAccess } from '@/access/fieldAccess'
+import { bioLexical } from '@/fields/bioLexical'
 import type { CollectionConfig } from 'payload'
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 import { preventCreateAdmin } from './hooks/preventCreateAdmin'
@@ -173,6 +174,44 @@ export const Users: CollectionConfig = {
           value: 'user',
         },
       ],
+    },
+    {
+      name: 'source',
+      type: 'select',
+      defaultValue: 'registration',
+      options: [
+        { label: 'Admin (Invited)', value: 'admin' },
+        { label: 'Public Registration', value: 'registration' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'How this user was created in the system.',
+      },
+      access: {
+        update: adminOnlyFieldAccess,
+      },
+    },
+    {
+      name: 'registrationType',
+      type: 'select',
+      defaultValue: 'standard',
+      options: [
+        { label: 'Invited Speaker', value: 'invited' },
+        { label: 'Standard Participant', value: 'standard' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Used to highlight keynote/invited speakers on the conference page.',
+      },
+    },
+    {
+      name: 'bio',
+      type: 'richText',
+      editor: bioLexical,
+      label: 'Professional Bio',
+      admin: {
+        description: 'A summary for the conference presenter profile. Supports images.',
+      },
     },
   ],
   hooks: {
