@@ -1,12 +1,10 @@
-import { getConferences } from '@/app/actions/conferences/getConferences'
-import { getCurrentConference } from '@/app/actions/conferences/getCurrentConference'
-import { generateMetadata } from '../[slug]/page'
-import { Homepage } from './components/homepage'
+'use client'
+import { permanentRedirect } from 'next/navigation'
 
-export default async function Home({}: { searchParams: Promise<{ search?: string }> }) {
-  const [posts, currentConference] = await Promise.all([getConferences({}), getCurrentConference()])
-
-  return <Homepage conferences={posts?.docs ?? []} currentConference={currentConference} />
+export default function Home({}: { searchParams: Promise<{ search?: string }> }) {
+  // const [posts, currentConference] = await Promise.all([getConferences({}), getCurrentConference()])
+  // return <Homepage conferences={posts?.docs ?? []} currentConference={currentConference} />
+  permanentRedirect('/posts')
 }
 
-export { generateMetadata }
+// export { generateMetadata }
