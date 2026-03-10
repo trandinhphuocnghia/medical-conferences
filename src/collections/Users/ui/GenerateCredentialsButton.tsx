@@ -11,9 +11,6 @@ export const GenerateCredentialsButton: React.FC = () => {
   const { id } = useDocumentInfo()
   const { setModified, dispatchFields } = useForm()
 
-  // Hide on edit pages — only show when creating a new user
-  if (id) return null
-
   const handleGenerate = useCallback(() => {
     // Generate a random 8-char hex string for the email
     const randomId = Math.random().toString(36).substring(2, 10)
@@ -45,6 +42,9 @@ export const GenerateCredentialsButton: React.FC = () => {
 
     setModified(true)
   }, [dispatchFields, setModified])
+
+  // Hide on edit pages — only show when creating a new user
+  if (id) return null
 
   return (
     <div style={{ marginBottom: '1rem' }}>
