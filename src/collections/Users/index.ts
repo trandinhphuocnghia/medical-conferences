@@ -35,6 +35,15 @@ export const Users: CollectionConfig = {
           label: 'User Type & Status',
           fields: [
             {
+              type: 'ui',
+              name: 'generateCredentials',
+              admin: {
+                components: {
+                  Field: '@/collections/Users/ui/GenerateCredentialsButton#GenerateCredentialsButton',
+                },
+              },
+            },
+            {
               name: 'email',
               type: 'email',
               label: 'Email Address',
