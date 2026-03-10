@@ -17,7 +17,7 @@ interface PluginTypes {
 
 /** Global WebSocket server instance */
 let wss: WebSocketServer
-const clients = new Map() // Key: userId, Value: WebSocket object
+// const clients = new Map() // Key: userId, Value: WebSocket object
 
 /**
  * Payload CMS plugin that adds real-time functionality through WebSockets
@@ -137,7 +137,7 @@ export const websocketServerPlugin =
             }
 
             callback(true) // User is authenticated!
-          } catch (err) {
+          } catch (_err) {
             callback(false, 401, 'Forbidden')
           }
         },
@@ -153,7 +153,7 @@ export const websocketServerPlugin =
                 //send to client:
                 ws.send(JSON.stringify({ type: MESSAGE_TYPES.TOUCHING, data: [] }))
 
-                const secret = new TextEncoder().encode(payload.secret)
+                // const secret = new TextEncoder().encode(payload.secret)
 
                 //broadcast to all clients:
                 wss.clients.forEach((client) => {

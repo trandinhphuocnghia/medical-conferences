@@ -315,25 +315,52 @@ export interface UserGroup {
  */
 export interface User {
   id: number;
+  email: string;
+  role?: ('admin' | 'modifier' | 'user') | null;
+  active?: boolean | null;
+  /**
+   * How this user was created in the system.
+   */
+  source: 'admin-created' | 'registration';
+  /**
+   * Used to highlight keynote/invited speakers on the conference page.
+   */
+  registrationType?: ('invited' | 'standard') | null;
   firstName: string;
   lastName: string;
   fullname?: string | null;
-  active?: boolean | null;
-  title?: ('Dr.' | 'Prof.' | 'Mr.' | 'Ms.' | 'Mx.') | null;
-  avatar?: (number | null) | Media;
   organization?: string | null;
   medicalLicenseNumber?: string | null;
   specialization?: string | null;
   phoneNumber?: string | null;
   address?: string | null;
+  title?: ('Dr.' | 'Prof.' | 'Mr.' | 'Ms.' | 'Mx.') | null;
+  degrees?: string | null;
+  avatar?: (number | null) | Media;
+  /**
+   * A summary for the conference presenter profile. Supports images.
+   */
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
    * Select medical topics you are interested in.
    */
   interests?: (number | Topic)[] | null;
-  role?: ('admin' | 'modifier' | 'user') | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
   salt?: string | null;
@@ -1462,22 +1489,26 @@ export interface AbstractsSelect<T extends boolean = true> {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  email?: T;
+  role?: T;
+  active?: T;
+  source?: T;
+  registrationType?: T;
   firstName?: T;
   lastName?: T;
   fullname?: T;
-  active?: T;
-  title?: T;
-  avatar?: T;
   organization?: T;
   medicalLicenseNumber?: T;
   specialization?: T;
   phoneNumber?: T;
   address?: T;
+  title?: T;
+  degrees?: T;
+  avatar?: T;
+  bio?: T;
   interests?: T;
-  role?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
   salt?: T;

@@ -47,7 +47,7 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
 
         switch (node.type) {
           case 'heading':
-            const HeadingTag = node.tag as React.ElementType
+            const HeadingTag = (node.tag || 'h2') as React.ElementType
             return (
               <HeadingTag key={i} className="font-semibold text-slate-800 my-4">
                 <Serialize nodes={node.children} />
@@ -60,7 +60,7 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
               </p>
             )
           case 'list':
-            const ListTag = node.tag as React.ElementType
+            const ListTag = (node.tag || 'ul') as React.ElementType
             return (
               <ListTag
                 key={i}

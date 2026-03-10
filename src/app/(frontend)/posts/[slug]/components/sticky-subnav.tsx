@@ -17,10 +17,10 @@ export function StickySubNav() {
 
   const navItems = [
     { label: 'Overview', href: '#overview' },
-    { label: 'Message from the Organizing Committee', href: '#message' },
-    { label: 'Scientific Topics', href: '#topics' },
-    { label: 'Program', href: '#program' },
-    { label: 'Speakers', href: '#speakers' },
+    { label: 'Message', href: '#message' },
+    { label: 'Timeline', href: '#timeline' },
+    { label: 'Presenters', href: '#presenters' },
+    { label: 'Topics', href: '#topics' },
     { label: 'Logistics', href: '#logistics' },
   ]
 

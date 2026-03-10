@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   { label: 'Venue', href: '/#venue' },
 ] as const
 
-export const HeaderClient = ({ data }: { data: Header }) => {
+export const HeaderClient = ({ data: _data }: { data: Header }) => {
   const { user } = useUserStore((state) => state)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -86,7 +86,6 @@ export const HeaderClient = ({ data }: { data: Header }) => {
                   {item.label}
                 </Link>
               ))}
-
             </nav>
           </div>
         )}

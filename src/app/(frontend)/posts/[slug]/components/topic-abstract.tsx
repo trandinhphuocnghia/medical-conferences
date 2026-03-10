@@ -29,7 +29,7 @@ export default function TopicAbstractList({ abstracts = [] }: { abstracts: Abstr
                   <p>{abstract.title}</p>
                   <Tooltip>
                     <TooltipTrigger>
-                      {/* <AbstractStatus status={abstract.status} /> */}
+                      <AbstractStatus status={abstract.status || 'pending'} />
                     </TooltipTrigger>
                     <TooltipContent>
                       <p className="capitalize">{abstract.status}</p>

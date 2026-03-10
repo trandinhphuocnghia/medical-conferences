@@ -35,8 +35,8 @@ export const publicFileRouter = {
     .middleware(async ({ req }) => {
       // ── 1. Extract client IP ────────────────────────────────────────────────
       const ip =
-        req.headers.get('cf-connecting-ip') ??   // Cloudflare
-        req.headers.get('x-real-ip') ??           // Nginx / Vercel
+        req.headers.get('cf-connecting-ip') ?? // Cloudflare
+        req.headers.get('x-real-ip') ?? // Nginx / Vercel
         req.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
         '127.0.0.1'
 
@@ -57,7 +57,7 @@ export const publicFileRouter = {
       // ── 4. Pass metadata to onUploadComplete ────────────────────────────────
       return { ip }
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ file }) => {
       // This runs on YOUR server after the browser finishes uploading directly
       // to UploadThing. We use Payload's local API (not an HTTP fetch) so this
       // works in both local dev and production — no need for PAYLOAD_API_KEY
@@ -94,7 +94,6 @@ export const publicFileRouter = {
         return { success: false }
       }
     }),
-
 } satisfies FileRouter
 
 export type PublicFileRouter = typeof publicFileRouter

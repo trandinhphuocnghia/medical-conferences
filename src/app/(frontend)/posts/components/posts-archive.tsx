@@ -148,7 +148,9 @@ export function PostsArchive({ initialPosts }: PostsArchiveProps) {
           <div className="flex items-center justify-between">
             <p className="text-sm text-[#0F172A]/60">
               Showing
-              <span className="font-semibold text-[#0F172A]">{filteredConferences.length}</span>{' '}
+              <span className="font-semibold text-[#0F172A]">
+                {filteredConferences.length}
+              </span>{' '}
               conferences
             </p>
             <div className="flex items-center gap-2">

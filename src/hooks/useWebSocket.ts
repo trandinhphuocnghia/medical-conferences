@@ -61,7 +61,7 @@ export function useWebSocket<T>({ collection, onMessage, token }: UseWebSocketPr
         wsRef.current = null
       }
     }
-  }, [collection, onMessage])
+  }, [collection, onMessage, token])
 
   return { connectStatus: status }
 }

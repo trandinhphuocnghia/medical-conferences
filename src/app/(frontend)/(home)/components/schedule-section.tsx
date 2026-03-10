@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { ArrowRight, Clock, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
