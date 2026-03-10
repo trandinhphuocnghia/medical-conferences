@@ -25,7 +25,11 @@ type Props = {
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export function AbstractFileUploader({ onUploadSuccess, onUploadStateChange, captchaToken }: Props) {
+export function AbstractFileUploader({
+  onUploadSuccess,
+  onUploadStateChange,
+  captchaToken,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)

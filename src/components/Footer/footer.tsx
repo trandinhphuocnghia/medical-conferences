@@ -35,9 +35,8 @@ export const FooterClient = () => {
               <span className="font-semibold text-lg">HIGCF 2026</span>
             </Link>
             <p className="mt-4 text-background/70 text-sm max-w-sm leading-relaxed">
-              The premier international medical conference bringing together
-              healthcare professionals to advance medicine through
-              collaboration.
+              The premier international medical conference bringing together healthcare
+              professionals to advance medicine through collaboration.
             </p>
 
             {/* Contact Info */}
@@ -60,9 +59,7 @@ export const FooterClient = () => {
           {/* Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="font-semibold text-sm uppercase tracking-wide mb-4">
-                {title}
-              </h3>
+              <h3 className="font-semibold text-sm uppercase tracking-wide mb-4">{title}</h3>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.label}>
@@ -81,9 +78,7 @@ export const FooterClient = () => {
 
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-background/50">
-            2026 HIGCF. All rights reserved.
-          </p>
+          <p className="text-sm text-background/50">2026 HIGCF. All rights reserved.</p>
           <p className="text-sm text-background/50">
             Organized by International Medical Conference Association
           </p>

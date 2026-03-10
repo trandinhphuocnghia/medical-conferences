@@ -30,15 +30,11 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
           {/* Message from Organizing Committee */}
           <div className="lg:col-span-2">
             <div className="prose prose-slate max-w-none">
-              <h2 className="text-navy text-3xl font-bold mb-1">
+              <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
                 Message from the Organizing Committee
               </h2>
-              <p className="text-accent font-semibold text-base">
-                Organizing Committee Chair
-              </p>
-              <p className="text-accent font-semibold text-base mb-6">
-              Vo Duy Long
-              </p>
+              <p className="text-accent font-semibold text-base">Organizing Committee Chair</p>
+              <p className="text-accent font-semibold text-base mb-6">Vo Duy Long</p>
 
               <div className="text-muted-foreground space-y-4 leading-relaxed">
                 <p>Dear Esteemed Colleagues,</p>
@@ -51,23 +47,23 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
 
                 <p>
                   Since its inaugural meeting in 2018, the Ho Chi Minh City International Gastric
-                  Cancer Forum (formerly known as the{' '}
-                  <em>Gastric Cancer Consensus Conference</em>) has become an annual scientific
-                  forum of high prestige, bringing together surgeons, endoscopists, oncologists, and
-                  leading experts from Vietnam and around the world to share clinical experience and
-                  advances in gastric cancer research and treatment.
+                  Cancer Forum (formerly known as the <em>Gastric Cancer Consensus Conference</em>)
+                  has become an annual scientific forum of high prestige, bringing together
+                  surgeons, endoscopists, oncologists, and leading experts from Vietnam and around
+                  the world to share clinical experience and advances in gastric cancer research and
+                  treatment.
                 </p>
 
                 <p>
                   In Vietnam, the majority of gastric cancer patients are diagnosed at an advanced
-                  stage. Therefore, the management of gastric cancer requires close multidisciplinary
-                  collaboration within a multimodal treatment strategy. This year&apos;s conference
-                  will focus on updating significant advances in preoperative assessment,
-                  intraoperative techniques, and postoperative management, as well as discussing
-                  contemporary multimodal treatment trends and novel surgical approaches. In
-                  addition, one full day will be dedicated to live surgery sessions, featuring two
-                  laparoscopic gastrectomy cases with standard lymphadenectomy using ICG for lymph
-                  node navigation, and two endoscopic submucosal dissection (ESD) cases for
+                  stage. Therefore, the management of gastric cancer requires close
+                  multidisciplinary collaboration within a multimodal treatment strategy. This
+                  year&apos;s conference will focus on updating significant advances in preoperative
+                  assessment, intraoperative techniques, and postoperative management, as well as
+                  discussing contemporary multimodal treatment trends and novel surgical approaches.
+                  In addition, one full day will be dedicated to live surgery sessions, featuring
+                  two laparoscopic gastrectomy cases with standard lymphadenectomy using ICG for
+                  lymph node navigation, and two endoscopic submucosal dissection (ESD) cases for
                   early-stage gastric cancer.
                 </p>
 
@@ -80,8 +76,8 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
 
                 <p>
                   The University Medical Center at Ho Chi Minh City cordially invites you to attend
-                  this meeting, taking place on May 14–16, 2026, in Ho Chi Minh City — a dynamic
-                  hub and a pioneer in international integration.
+                  this meeting, taking place on May 14–16, 2026, in Ho Chi Minh City — a dynamic hub
+                  and a pioneer in international integration.
                 </p>
 
                 <p>We look forward to welcoming you.</p>
@@ -95,7 +91,7 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
                     Conference Host
                   </p>
                   <p className="text-foreground text-sm leading-snug">
-                  Vietnamese Society of Gastric Surgery
+                    Vietnamese Society of Gastric Surgery
                   </p>
                   <p className="text-foreground text-sm leading-snug">
                     University Medical Center at Ho Chi Minh City
@@ -107,28 +103,31 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
                   <p className="text-xs font-700 uppercase tracking-widest text-muted-foreground mb-1">
                     Conference Secretariat
                   </p>
-                  <div className='flex flex-col gap-1'>
+                  <div className="flex flex-col gap-1">
                     <a
-                    href="mailto: nguyen.dt5@umc.edu.vn"
-                    className="text-sm text-accent hover:underline transition-colors"
-                  >
-                     nguyen.dt5@umc.edu.vn
-                  </a>
-                  <a
-                    href="mailto: phuoc.td@umc.edu.vn"
-                    className="text-sm text-accent hover:underline transition-colors"
-                  >
-                     phuoc.td@umc.edu.vn
-                  </a>
+                      href="mailto: nguyen.dt5@umc.edu.vn"
+                      className="text-sm text-accent hover:underline transition-colors"
+                    >
+                      nguyen.dt5@umc.edu.vn
+                    </a>
+                    <a
+                      href="mailto: phuoc.td@umc.edu.vn"
+                      className="text-sm text-accent hover:underline transition-colors"
+                    >
+                      phuoc.td@umc.edu.vn
+                    </a>
                   </div>
-                
                 </div>
               </div>
 
               {/* Committee Members */}
               {member?.avatar && (
                 <div className="mt-8 pt-8 border-t border-border">
-                  <h3 className="text-navy text-lg font-semibold mb-6">Organizing Committee</h3>
+                  <h3 className="text-xl font-semibold text-navy mb-8 flex items-center gap-2 uppercase tracking-wider text-sm">
+                    <span className="h-px bg-slate-200 flex-1"></span>
+                    Organizing Committee
+                    <span className="h-px bg-slate-200 flex-1"></span>
+                  </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div
                       key={member.id}

@@ -22,8 +22,6 @@ function resolveConferenceName(doc: Abstract): string {
   return 'Conference'
 }
 
-
-
 // ── Template ─────────────────────────────────────────────────────────────────
 export const abstractCreateMail = (abstract: Abstract): string => {
   const submitterName = resolveSubmitterName(abstract)

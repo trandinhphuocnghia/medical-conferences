@@ -27,7 +27,6 @@ export const Media: CollectionConfig = {
   upload: {
     adapter: 'uploadthing',
     disableLocalStorage: true,
-
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     crop: true,

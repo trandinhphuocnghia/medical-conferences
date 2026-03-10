@@ -1,12 +1,13 @@
-import * as migration_20260122_080441_add_conference_to_topics from './20260122_080441_add_conference_to_topics';
-import * as migration_20260122_081808_init from './20260122_081808_init';
-import * as migration_20260122_085903_reset_schema from './20260122_085903_reset_schema';
-import * as migration_20260123_074442_fix_schema from './20260123_074442_fix_schema';
-import * as migration_20260125_041610_add_indexes_and_fixes from './20260125_041610_add_indexes_and_fixes';
-import * as migration_20260127_032534_add_media_sizes from './20260127_032534_add_media_sizes';
-import * as migration_20260127_071401_add_abstracts_files from './20260127_071401_add_abstracts_files';
-import * as migration_20260225_101751 from './20260225_101751';
-import * as migration_20260228_122854_add_public_files from './20260228_122854_add_public_files';
+import * as migration_20260122_080441_add_conference_to_topics from './20260122_080441_add_conference_to_topics'
+import * as migration_20260122_081808_init from './20260122_081808_init'
+import * as migration_20260122_085903_reset_schema from './20260122_085903_reset_schema'
+import * as migration_20260123_074442_fix_schema from './20260123_074442_fix_schema'
+import * as migration_20260125_041610_add_indexes_and_fixes from './20260125_041610_add_indexes_and_fixes'
+import * as migration_20260127_032534_add_media_sizes from './20260127_032534_add_media_sizes'
+import * as migration_20260127_071401_add_abstracts_files from './20260127_071401_add_abstracts_files'
+import * as migration_20260225_101751 from './20260225_101751'
+import * as migration_20260228_122854_add_public_files from './20260228_122854_add_public_files'
+import * as migration_20260310_071639_add_degrees_to_users from './20260310_071639_add_degrees_to_users'
 
 export const migrations = [
   {
@@ -52,6 +53,11 @@ export const migrations = [
   {
     up: migration_20260228_122854_add_public_files.up,
     down: migration_20260228_122854_add_public_files.down,
-    name: '20260228_122854_add_public_files'
+    name: '20260228_122854_add_public_files',
   },
-];
+  {
+    up: migration_20260310_071639_add_degrees_to_users.up,
+    down: migration_20260310_071639_add_degrees_to_users.down,
+    name: '20260310_071639_add_degrees_to_users',
+  },
+]
