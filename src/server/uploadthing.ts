@@ -57,7 +57,7 @@ export const publicFileRouter = {
       // ── 4. Pass metadata to onUploadComplete ────────────────────────────────
       return { ip }
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ file }) => {
       // This runs on YOUR server after the browser finishes uploading directly
       // to UploadThing. We use Payload's local API (not an HTTP fetch) so this
       // works in both local dev and production — no need for PAYLOAD_API_KEY

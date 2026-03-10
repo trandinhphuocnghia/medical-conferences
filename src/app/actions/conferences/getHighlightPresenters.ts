@@ -1,6 +1,6 @@
 'use server'
 
-import type { User, UserGroup, Post } from '@/payload-types'
+import type { User, UserGroup } from '@/payload-types'
 import configPromise from '@/payload.config'
 import { getPayload } from 'payload'
 import { PresenterData } from '../abstracts/getConferencePresenters'

@@ -1,4 +1,3 @@
-import { getConferencePresenters } from '@/app/actions/abstracts/getConferencePresenters'
 import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import type { Post, Topic } from '@/payload-types'
@@ -33,7 +32,7 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
   const topics = getTopics(conferenceData)
 
   const [presentersData] = await Promise.all([
-    //getConferencePresenters(conferenceData.id),
+    //getConferencePresenters(conferenceData.id), // This was commented out, so the import is unused.
     getHighlightPresenters(conferenceData.id),
   ])
 

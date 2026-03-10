@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, MapPin, Users } from 'lucide-react'
+import { Calendar, MapPin } from 'lucide-react'
 import Link from 'next/link'
 
 export interface Conference {
@@ -37,8 +37,7 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
     text: 'text-[#06B6D4]',
   }
 
-  const seatPercentage = (conference.seatsAvailable / conference.totalSeats) * 100
-  const isLowSeats = seatPercentage < 20
+
 
   return (
     <Link href={`/posts/${conference.id}`} className="group block">
