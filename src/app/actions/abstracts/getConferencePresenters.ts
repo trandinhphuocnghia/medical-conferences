@@ -11,6 +11,7 @@ export type PresenterData = {
   organization?: string
   avatarUrl?: string
   bio?: any
+  degrees?: string
   registrationType?: 'invited' | 'standard'
   abstracts: {
     id: string | number
@@ -54,6 +55,7 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
       let email: string | undefined
       let avatarUrl: string | undefined
       let bio: any = null
+      let degrees: string | undefined
       let regType: 'invited' | 'standard' = 'standard'
 
       if (abs.submitter && typeof abs.submitter === 'object') {
@@ -64,6 +66,7 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
         email = user.email
         avatarUrl = typeof user.avatar === 'object' ? (user.avatar as any)?.url : undefined
         bio = user.bio
+        degrees = user.degrees || undefined
         regType = user.registrationType || 'standard'
       } else {
         // Anonymous submitter
@@ -84,6 +87,7 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
           organization,
           avatarUrl,
           bio,
+          degrees,
           registrationType: regType,
           abstracts: [],
         })

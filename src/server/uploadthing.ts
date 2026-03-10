@@ -35,8 +35,8 @@ export const publicFileRouter = {
     .middleware(async ({ req }) => {
       // ── 1. Extract client IP ────────────────────────────────────────────────
       const ip =
-        req.headers.get('cf-connecting-ip') ??   // Cloudflare
-        req.headers.get('x-real-ip') ??           // Nginx / Vercel
+        req.headers.get('cf-connecting-ip') ?? // Cloudflare
+        req.headers.get('x-real-ip') ?? // Nginx / Vercel
         req.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
         '127.0.0.1'
 
@@ -94,7 +94,6 @@ export const publicFileRouter = {
         return { success: false }
       }
     }),
-
 } satisfies FileRouter
 
 export type PublicFileRouter = typeof publicFileRouter

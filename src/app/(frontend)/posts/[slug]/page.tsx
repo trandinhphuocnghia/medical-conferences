@@ -1,4 +1,5 @@
 import { getConferencePresenters } from '@/app/actions/abstracts/getConferencePresenters'
+import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import type { Post, Topic } from '@/payload-types'
 import { DetailHeader } from './components/detail-header'
@@ -19,6 +20,8 @@ type Args = {
   }>
 }
 
+//[NEED REVIEW] [CLAUDE]: This component is in use on develop,
+//TODO: when the claude is working again should review the code.
 export default async function ConferenceDetailPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
 
@@ -28,6 +31,11 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
   if (!conferenceData) return null
 
   const topics = getTopics(conferenceData)
+
+  const [presentersData] = await Promise.all([
+    //getConferencePresenters(conferenceData.id),
+    getHighlightPresenters(conferenceData.id),
+  ])
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,11 +57,9 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         endDate={conferenceData.endDate}
       />
 
-      <PresentersSection
-        presenters={(await getConferencePresenters(conferenceData.id)).presenters}
-      />
-
       {topics.length > 0 && <TopicExplorer conferenceId={conferenceData.id} topics={topics} />}
+
+      <PresentersSection presenters={presentersData.presenters} highlightPresenters={[]} />
 
       {/* <LogisticsBento
         conference={conferenceData}

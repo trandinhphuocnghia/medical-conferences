@@ -80,15 +80,15 @@ export function ScientificTimeline({
   return (
     <section id="timeline" className="py-8 sm:py-12 scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 sm:mb-8">
-          <span className="font-mono text-[10px] sm:text-xs tracking-widest text-cyan-600 uppercase">
+        <div className="mb-12">
+          <span className="font-mono text-[10px] sm:text-xs tracking-widest text-accent uppercase font-semibold">
             Important Dates
           </span>
-          <h2 className="mt-1.5 sm:mt-2 text-xl sm:text-3xl font-semibold tracking-tight text-[#0F172A]">
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-navy mb-4">
             Scientific Milestone Tracker
           </h2>
-          <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-            Key deadlines and event dates for your planning
+          <p className="text-lg text-muted-foreground max-w-2xl">
+            Key deadlines and event dates for your conference planning and participation.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ export function ScientificTimeline({
                       {/* Label & Description */}
                       <h3
                         className={`font-semibold text-sm mb-1 ${
-                          milestone.type === 'event' ? 'text-white' : 'text-[#0F172A]'
+                          milestone.type === 'event' ? 'text-white' : 'text-navy'
                         }`}
                       >
                         {milestone.label}
@@ -228,7 +228,7 @@ export function ScientificTimeline({
                   </div>
                   <h3
                     className={`font-semibold text-sm sm:text-base mb-0.5 sm:mb-1 ${
-                      milestone.type === 'event' ? 'text-white' : 'text-[#0F172A]'
+                      milestone.type === 'event' ? 'text-white' : 'text-navy'
                     }`}
                   >
                     {milestone.label}

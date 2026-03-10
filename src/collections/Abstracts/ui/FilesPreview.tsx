@@ -100,10 +100,7 @@ export const FilesPreview: React.FC = () => {
           }}
         >
           {files.map((file) => (
-            <li
-              key={file.id}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-            >
+            <li key={file.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ fontSize: '1rem', flexShrink: 0 }}>📄</span>
               <a
                 href={file.url}
@@ -120,9 +117,7 @@ export const FilesPreview: React.FC = () => {
                 {file.filename}
               </a>
               {file.filesize ? (
-                <span
-                  style={{ fontSize: '0.75rem', color: '#9ca3af', flexShrink: 0 }}
-                >
+                <span style={{ fontSize: '0.75rem', color: '#9ca3af', flexShrink: 0 }}>
                   ({formatBytes(file.filesize)})
                 </span>
               ) : null}

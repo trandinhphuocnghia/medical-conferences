@@ -84,10 +84,10 @@ export function TopicExplorer({ topics, conferenceId }: TopicExplorerProps) {
   return (
     <section id="topics" className="py-8 sm:py-12 scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 sm:mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-2">Scientific Topics</h2>
-          <p className="text-muted-foreground">
-            Explore the key research areas and topics covered at the conference
+        <div className="mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">Scientific Topics</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl">
+            Explore the key research areas and medical topics covered at this conference.
           </p>
         </div>
 
@@ -159,7 +159,7 @@ export function TopicExplorer({ topics, conferenceId }: TopicExplorerProps) {
                   >
                     {activeCategoryName}
                   </span>
-                  <h3 className="text-lg sm:text-2xl font-semibold text-[#0F172A] tracking-tight leading-snug">
+                  <h3 className="text-xl sm:text-2xl font-bold text-navy tracking-tight leading-snug">
                     {activeTopic.name}
                   </h3>
                 </div>

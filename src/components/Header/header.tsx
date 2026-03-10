@@ -86,7 +86,6 @@ export const HeaderClient = ({ data }: { data: Header }) => {
                   {item.label}
                 </Link>
               ))}
-
             </nav>
           </div>
         )}
