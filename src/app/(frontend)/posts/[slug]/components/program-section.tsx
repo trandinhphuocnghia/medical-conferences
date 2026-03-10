@@ -1,16 +1,5 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Clock } from 'lucide-react'
-
-interface Session {
-  id: string
-  time: string
-  title: string
-  speaker: string
-  location: string
-  category: string
-}
 
 export function ProgramSection() {
   return (

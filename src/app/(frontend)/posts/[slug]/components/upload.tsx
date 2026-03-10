@@ -13,28 +13,32 @@ export const FileUploader = ({
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileChange = (e: any) => {
-    const newFiles: File[] = e.target.files
-      ? Array.from(e.target.files)
-      : Array.from(e.dataTransfer.files)
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | React.DragEvent) => {
+    let filesToProcess: File[] = []
 
-    if (newFiles.length > 0) {
+    if ('target' in e && (e.target as HTMLInputElement).files) {
+      filesToProcess = Array.from((e.target as HTMLInputElement).files || [])
+    } else if ('dataTransfer' in e && e.dataTransfer.files) {
+      filesToProcess = Array.from(e.dataTransfer.files)
+    }
+
+    if (filesToProcess.length > 0) {
       // Append new files to existing ones
-      onChange([...files, ...newFiles])
+      onChange([...files, ...filesToProcess])
     }
   }
 
-  const handleDragOver = (e: any) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(true)
   }
 
-  const handleDragLeave = (e: any) => {
+  const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(false)
   }
 
-  const handleDrop = (e: any) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(false)
     handleFileChange(e)

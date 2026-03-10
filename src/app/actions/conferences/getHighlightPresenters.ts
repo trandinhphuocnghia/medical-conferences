@@ -36,14 +36,20 @@ export async function getHighlightPresenters(conferenceId: number): Promise<{
         const isNotStaff = user.role !== 'admin' && user.role !== 'modifier'
         return isHighlight && isNotStaff
       })
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+        return dateB - dateA
+      })
       .map((user) => {
+        const avatar = user.avatar && typeof user.avatar === 'object' ? (user.avatar as any) : null
+
         return {
           id: user.id,
           name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unnamed User',
           email: user.email || undefined,
           organization: user.organization || undefined,
-          avatarUrl: typeof user.avatar === 'object' ? (user.avatar as any)?.url : undefined,
+          avatarUrl: avatar?.url || undefined,
           bio: user.bio,
           degrees: user.degrees || undefined,
           registrationType: user.registrationType || 'standard',

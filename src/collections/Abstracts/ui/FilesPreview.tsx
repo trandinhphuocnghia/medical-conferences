@@ -56,7 +56,7 @@ export const FilesPreview: React.FC = () => {
       .then((data) => setFiles([...populated, ...(data?.docs ?? [])]))
       .catch(() => setFiles(populated))
       .finally(() => setLoading(false))
-  }, [rawFiles.length]) // re-run only when the count changes
+  }, [rawFiles]) // re-run when the files array object changes
 
   // Always render the container so the admin can see there's no file if empty
   return (
