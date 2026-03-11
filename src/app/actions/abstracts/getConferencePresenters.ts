@@ -1,24 +1,12 @@
 'use server'
 
-import type { Abstract } from '@/payload-types'
+import type { Abstract, Topic, User } from '@/payload-types'
 import configPromise from '@/payload.config'
 import { getPayload } from 'payload'
+import { type PresenterData, userToPresenterData } from '../shared/presenterUtils'
 
-export type PresenterData = {
-  id: string | number
-  name: string
-  email?: string
-  organization?: string
-  avatarUrl?: string
-  bio?: any
-  degrees?: string
-  registrationType?: 'invited' | 'standard'
-  abstracts: {
-    id: string | number
-    title: string
-    topicName?: string
-  }[]
-}
+// Re-export so existing consumers don't break
+export type { PresenterData } from '../shared/presenterUtils'
 
 /**
  * Fetches verified abstracts for a specific conference and groups them by presenter.
@@ -49,51 +37,29 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
     const presenterMap = new Map<string | number, PresenterData>()
 
     abstracts.forEach((abs: Abstract) => {
-      let presenterId: string | number
-      let name: string
-      let organization: string | undefined
-      let email: string | undefined
-      let avatarUrl: string | undefined
-      let bio: any = null
-      let degrees: string | undefined
-      let regType: 'invited' | 'standard' = 'standard'
+      let presenterEntry: PresenterData
 
       if (abs.submitter && typeof abs.submitter === 'object') {
-        const user = abs.submitter as any // Use any temporarily if types are not updated
-        presenterId = user.id
-        name = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unnamed User'
-        organization = user.organization || undefined
-        email = user.email
-        avatarUrl = typeof user.avatar === 'object' ? (user.avatar as any)?.url : undefined
-        bio = user.bio
-        degrees = user.degrees || undefined
-        regType = user.registrationType || 'standard'
+        presenterEntry = userToPresenterData(abs.submitter as User)
       } else {
         // Anonymous submitter
-        presenterId = `anon-${abs.submitterEmail || abs.id}`
-        name = abs.submitterName || 'Anonymous'
-        organization = abs.submitterOrganization || undefined
-        email = abs.submitterEmail || undefined
+        presenterEntry = {
+          id: `anon-${abs.submitterEmail || abs.id}`,
+          name: abs.submitterName || 'Anonymous',
+          email: abs.submitterEmail || undefined,
+          organization: abs.submitterOrganization || undefined,
+          abstracts: [],
+        }
       }
 
       const topicName =
-        abs.topic && typeof abs.topic === 'object' ? (abs.topic as any)?.name : abs.otherTopic
+        abs.topic && typeof abs.topic === 'object' ? (abs.topic as Topic).name : abs.otherTopic
 
-      if (!presenterMap.has(presenterId)) {
-        presenterMap.set(presenterId, {
-          id: presenterId,
-          name,
-          email,
-          organization,
-          avatarUrl,
-          bio,
-          degrees,
-          registrationType: regType,
-          abstracts: [],
-        })
+      if (!presenterMap.has(presenterEntry.id)) {
+        presenterMap.set(presenterEntry.id, presenterEntry)
       }
 
-      presenterMap.get(presenterId)!.abstracts.push({
+      presenterMap.get(presenterEntry.id)!.abstracts.push({
         id: abs.id as string | number,
         title: abs.title,
         topicName: topicName as string | undefined,

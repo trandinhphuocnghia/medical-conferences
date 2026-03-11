@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { PresenterData } from '@/app/actions/abstracts/getConferencePresenters'
 import { RichTextParser } from '@/components/RichTextParser'
 import { Building2, User } from 'lucide-react'
 import NextImage from 'next/image'
+import { useState } from 'react'
 import { PresenterDetailModal } from './presenter-detail-modal'
 
 interface PresentersSectionProps {
@@ -145,16 +145,7 @@ function PresenterCard({
         <div className="p-1 flex-1 flex flex-col justify-start text-left">
           <h4 className="text-sm sm:text-base font-bold text-navy leading-tight group-hover:text-accent transition-colors mb-1.5">
             {presenter.name}
-            {presenter.degrees && (
-              <span className="text-[0.8em] font-medium text-slate-500">, {presenter.degrees}</span>
-            )}
           </h4>
-          {/* Role/Title */}
-          {presenter.organization && (
-            <p className="text-xs sm:text-sm font-medium text-slate-600 leading-snug">
-              {presenter.organization}
-            </p>
-          )}
         </div>
       </button>
     )

@@ -49,13 +49,21 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
           case 'heading':
             const HeadingTag = (node.tag || 'h2') as React.ElementType
             return (
-              <HeadingTag key={i} className="font-semibold text-slate-800 my-4">
+              <HeadingTag
+                key={i}
+                className="font-semibold text-slate-800 my-4"
+                style={node.indent ? { paddingInlineStart: `${node.indent * 2}rem` } : {}}
+              >
                 <Serialize nodes={node.children} />
               </HeadingTag>
             )
           case 'paragraph':
             return (
-              <p key={i} className="mb-4 leading-relaxed text-slate-600">
+              <p
+                key={i}
+                className="mb-4 leading-relaxed text-slate-600"
+                style={node.indent ? { paddingInlineStart: `${node.indent * 2}rem` } : {}}
+              >
                 <Serialize nodes={node.children} />
               </p>
             )
@@ -65,6 +73,7 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
               <ListTag
                 key={i}
                 className={`mb-4 pl-6 ${node.tag === 'ol' ? 'list-decimal' : 'list-disc'}`}
+                style={node.indent ? { paddingInlineStart: `${node.indent * 2}rem` } : {}}
               >
                 <Serialize nodes={node.children} />
               </ListTag>
@@ -116,6 +125,39 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
                 )}
               </div>
             )
+
+          case 'table':
+            return (
+              <div key={i} className="my-6 overflow-x-auto rounded-lg border border-slate-200">
+                <table className="w-full border-collapse text-sm">
+                  <tbody>
+                    <Serialize nodes={node.children} />
+                  </tbody>
+                </table>
+              </div>
+            )
+          case 'tablerow':
+            return (
+              <tr key={i} className="border-b border-slate-200 last:border-b-0">
+                <Serialize nodes={node.children} />
+              </tr>
+            )
+          case 'tablecell':
+            const CellTag = node.headerState ? 'th' : 'td'
+            return (
+              <CellTag
+                key={i}
+                colSpan={node.colSpan || 1}
+                rowSpan={node.rowSpan || 1}
+                className={`px-4 py-2.5 text-left border-r border-slate-200 last:border-r-0 ${
+                  node.headerState ? 'bg-slate-50 font-semibold text-slate-800' : 'text-slate-600'
+                }`}
+              >
+                <Serialize nodes={node.children} />
+              </CellTag>
+            )
+          case 'horizontalrule':
+            return <hr key={i} className="my-8 border-t border-slate-200" />
 
           default:
             return (
