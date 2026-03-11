@@ -1,5 +1,5 @@
-import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
+import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
 import type { Post, Topic } from '@/payload-types'
 import { DetailHeader } from './components/detail-header'
 import { PresentersSection } from './components/presenters-section'
@@ -38,7 +38,7 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
 
   return (
     <div className="min-h-screen bg-background">
-      <StickySubNav />
+      <StickySubNav conferenceId={conferenceData?.id} />
 
       <DetailHeader
         conference={conferenceData}
