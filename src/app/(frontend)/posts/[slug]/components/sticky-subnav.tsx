@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-export function StickySubNav() {
+export function StickySubNav({ conferenceId }: { conferenceId: number }) {
   const [isSticky, setIsSticky] = useState(false)
 
   useEffect(() => {
@@ -21,7 +21,11 @@ export function StickySubNav() {
     { label: 'Timeline', href: '#timeline' },
     { label: 'Presenters', href: '#presenters' },
     { label: 'Topics', href: '#topics' },
-    { label: 'Logistics', href: '#logistics' },
+    // { label: 'Logistics', href: '#logistics' },
+    {
+      label: 'Registration',
+      href: `/registration${conferenceId ? `?conference=${conferenceId}` : ''}`,
+    },
   ]
 
   return (

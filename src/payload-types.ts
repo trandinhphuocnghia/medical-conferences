@@ -77,6 +77,7 @@ export interface Config {
     media: Media;
     files: File;
     'public-files': PublicFile;
+    registrations: Registration;
     likes: Like;
     comments: Comment;
     rooms: Room;
@@ -107,6 +108,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     files: FilesSelect<false> | FilesSelect<true>;
     'public-files': PublicFilesSelect<false> | PublicFilesSelect<true>;
+    registrations: RegistrationsSelect<false> | RegistrationsSelect<true>;
     likes: LikesSelect<false> | LikesSelect<true>;
     comments: CommentsSelect<false> | CommentsSelect<true>;
     rooms: RoomsSelect<false> | RoomsSelect<true>;
@@ -918,6 +920,24 @@ export interface File {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations".
+ */
+export interface Registration {
+  id: number;
+  conference: number | Post;
+  email: string;
+  fullName: string;
+  organization?: string | null;
+  joinTheGala?: boolean | null;
+  /**
+   * Dietary restrictions, accessibility needs, or other notes.
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "likes".
  */
 export interface Like {
@@ -1173,6 +1193,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'public-files';
         value: number | PublicFile;
+      } | null)
+    | ({
+        relationTo: 'registrations';
+        value: number | Registration;
       } | null)
     | ({
         relationTo: 'likes';
@@ -1613,6 +1637,20 @@ export interface PublicFilesSelect<T extends boolean = true> {
   filesize?: T;
   uploadedBy?: T;
   abstract?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "registrations_select".
+ */
+export interface RegistrationsSelect<T extends boolean = true> {
+  conference?: T;
+  email?: T;
+  fullName?: T;
+  organization?: T;
+  joinTheGala?: T;
+  notes?: T;
   updatedAt?: T;
   createdAt?: T;
 }
