@@ -16,6 +16,7 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { PublicFiles } from './collections/PublicFiles'
+import { Registrations } from './collections/Registrations'
 import { Reservations } from './collections/Reservations'
 import { Rooms } from './collections/Rooms'
 import { Seats } from './collections/Seats'
@@ -122,6 +123,7 @@ export default buildConfig({
     Media,
     Files,
     PublicFiles,
+    Registrations,
     Likes,
     Comments,
     Rooms,
