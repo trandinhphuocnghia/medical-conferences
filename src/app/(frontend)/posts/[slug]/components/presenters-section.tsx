@@ -36,7 +36,7 @@ export function PresentersSection({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
-              Featured & Distinguished Presenters
+              Featured & Distinguished Speakers
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl">
               Meet the clinical experts and researchers presenting their latest findings at this
