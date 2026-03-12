@@ -3,7 +3,8 @@
 import { UserMenu } from '@/Header/UserMenu'
 import type { Header } from '@/payload-types'
 import { useUserStore } from '@/stores/userStore'
-import { Menu, Stethoscope, X } from 'lucide-react'
+import { Logo } from '../Logo/Logo'
+import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -25,10 +26,8 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
-              <Stethoscope className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-semibold text-lg text-foreground">HIGCF 2026</span>
+            <Logo className="h-10 w-auto" />
+            <span className="font-bold text-xl tracking-tight text-foreground uppercase">HIGCF</span>
           </Link>
 
           {/* Desktop Navigation */}

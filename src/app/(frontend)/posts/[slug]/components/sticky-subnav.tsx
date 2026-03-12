@@ -19,7 +19,7 @@ export function StickySubNav({ conferenceId }: { conferenceId: number }) {
     { label: 'Overview', href: '#overview' },
     { label: 'Message', href: '#message' },
     { label: 'Timeline', href: '#timeline' },
-    { label: 'Presenters', href: '#presenters' },
+    { label: 'Speakers', href: '#speakers' },
     { label: 'Topics', href: '#topics' },
     // { label: 'Logistics', href: '#logistics' },
     {

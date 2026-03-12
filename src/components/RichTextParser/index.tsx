@@ -98,7 +98,7 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
               <a
                 key={i}
                 href={node.fields?.url || '#'}
-                target={node.fields?.newTab ? '_blank' : undefined}
+                target='_blank'
                 rel={node.fields?.newTab ? 'noopener noreferrer' : undefined}
                 className="text-cyan-600 hover:underline"
               >
