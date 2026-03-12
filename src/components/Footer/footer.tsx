@@ -1,5 +1,6 @@
-import { Mail, MapPin, Phone, Stethoscope } from 'lucide-react'
+import { Mail, MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
+import { Logo } from '../Logo/Logo'
 
 const footerLinks = {
   Conference: [
@@ -28,11 +29,11 @@ export const FooterClient = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center">
-                <Stethoscope className="w-5 h-5 text-accent-foreground" />
+            <Link href="/" className="flex items-center gap-3">
+              <div className="bg-white p-1 rounded-md overflow-hidden">
+                <Logo className="h-10 w-auto" />
               </div>
-              <span className="font-semibold text-lg">HIGCF 2026</span>
+              <span className="font-bold text-xl tracking-tight">HIGCF</span>
             </Link>
             <p className="mt-4 text-background/70 text-sm max-w-sm leading-relaxed">
               The premier international medical conference bringing together healthcare
@@ -79,9 +80,9 @@ export const FooterClient = () => {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-background/50">2026 HIGCF. All rights reserved.</p>
-          <p className="text-sm text-background/50">
+          {/* <p className="text-sm text-background/50">
             Organized by International Medical Conference Association
-          </p>
+          </p> */}
         </div>
       </div>
     </footer>
