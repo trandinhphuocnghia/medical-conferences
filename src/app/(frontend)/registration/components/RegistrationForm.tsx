@@ -10,13 +10,16 @@ import React, { useEffect, useState, useTransition } from 'react'
 import { z } from 'zod'
 
 // ── Zod schemas per step ──────────────────────────────────────────────────
-const detailsSchema = z.object({
+const personalInfoSchema = z.object({
   fullName: z
     .string()
     .min(2, 'Full name must be at least 2 characters')
     .max(100, 'Full name must be at most 100 characters'),
   email: z.string().email('Enter a valid email address'),
   organization: z.string().max(200, 'Organization must be at most 200 characters').optional(),
+})
+
+const feeStepSchema = z.object({
   notes: z.string().max(1000, 'Notes must be at most 1000 characters').optional(),
 })
 
@@ -32,8 +35,14 @@ type FormState = {
   notes: string
 }
 
-const TOTAL_STEPS = 4
-const STEPS = ['Select Conference', 'Your Details', 'Vietnam CME', 'Review & Register']
+const TOTAL_STEPS = 5
+const STEPS = [
+  'Select Conference',
+  'Personal Information',
+  'Registration Fee',
+  'Vietnam CME',
+  'Review & Register',
+]
 
 // ── Main Component ────────────────────────────────────────────────────────
 export function RegistrationForm() {
@@ -63,7 +72,7 @@ export function RegistrationForm() {
     const confId = searchParams.get('conference')
     if (confId) {
       setForm((prev) => ({ ...prev, conferenceId: Number(confId) }))
-      setStep(2) // skip to details
+      setStep(2) // skip to personal info
     }
   }, [searchParams])
 
@@ -84,10 +93,22 @@ export function RegistrationForm() {
   const validateStep = (currentStep: number): boolean => {
     setValidationErrors({})
     if (currentStep === 2) {
-      const result = detailsSchema.safeParse({
+      const result = personalInfoSchema.safeParse({
         fullName: form.fullName,
         email: form.email,
         organization: form.organization || undefined,
+      })
+      if (!result.success) {
+        const errs: Record<string, string> = {}
+        result.error.issues.forEach((i) => {
+          errs[String(i.path[0])] = i.message
+        })
+        setValidationErrors(errs)
+        return false
+      }
+    }
+    if (currentStep === 3) {
+      const result = feeStepSchema.safeParse({
         notes: form.notes || undefined,
       })
       if (!result.success) {
@@ -207,7 +228,7 @@ export function RegistrationForm() {
         </div>
       </div>
 
-      {/* STEP 1: Select Conference */}
+      {/* ── STEP 1: Select Conference ──────────────────────────────────────── */}
       {step === 1 && (
         <StepSection
           title="Select Conference"
@@ -240,9 +261,12 @@ export function RegistrationForm() {
         </StepSection>
       )}
 
-      {/* STEP 2: Your Details */}
+      {/* ── STEP 2: Personal Information ───────────────────────────────────── */}
       {step === 2 && (
-        <StepSection title="Your Details" subtitle="Please provide your registration information.">
+        <StepSection
+          title="Personal Information"
+          subtitle="Please provide your personal details."
+        >
           <FieldGroup>
             <FieldLabel htmlFor="fullName" required>
               Full Name
@@ -282,6 +306,206 @@ export function RegistrationForm() {
             />
           </FieldGroup>
 
+          <NavRow>
+            <NavBtn onClick={() => setStep(1)} secondary>
+              Back
+            </NavBtn>
+            <NavBtn onClick={goNext}>Continue</NavBtn>
+          </NavRow>
+        </StepSection>
+      )}
+
+      {/* ── STEP 3: Registration Fee + Gala + Notes ────────────────────────── */}
+      {step === 3 && (
+        <StepSection
+          title="Registration Fee"
+          subtitle="Review the conference fees and provide additional details."
+        >
+          {/* Fee Information Panel */}
+          <div
+            style={{
+              background: 'linear-gradient(135deg, oklch(0.97 0.02 250), oklch(0.97 0.01 195))',
+              border: '1px solid oklch(0.88 0.04 250)',
+              borderRadius: 12,
+              padding: '1.5rem',
+              marginBottom: '1.5rem',
+            }}
+          >
+            {/* Fee Cards */}
+            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+              {/* Early Bird */}
+              <div
+                style={{
+                  flex: '1 1 200px',
+                  background: 'var(--background)',
+                  borderRadius: 10,
+                  padding: '1.25rem',
+                  border: '1.5px solid oklch(0.65 0.18 155 / 0.3)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    background: 'oklch(0.65 0.18 155)',
+                    color: '#fff',
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    padding: '0.2rem 0.625rem',
+                    borderRadius: '0 8px 0 8px',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  EARLY BIRD
+                </div>
+                <p
+                  style={{
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: 'var(--muted-foreground)',
+                    marginBottom: '0.125rem',
+                  }}
+                >
+                  Early Bird Registration
+                </p>
+                <p
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--muted-foreground)',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  On or before April 15, 2026
+                </p>
+                <p
+                  style={{
+                    fontSize: '1.375rem',
+                    fontWeight: 800,
+                    color: 'oklch(0.45 0.15 155)',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  1.500.000 VND
+                </p>
+              </div>
+
+              {/* Late Registration */}
+              <div
+                style={{
+                  flex: '1 1 200px',
+                  background: 'var(--background)',
+                  borderRadius: 10,
+                  padding: '1.25rem',
+                  border: '1.5px solid oklch(0.75 0.12 50 / 0.3)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    background: 'oklch(0.65 0.15 50)',
+                    color: '#fff',
+                    fontSize: '0.6875rem',
+                    fontWeight: 700,
+                    padding: '0.2rem 0.625rem',
+                    borderRadius: '0 8px 0 8px',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  LATE
+                </div>
+                <p
+                  style={{
+                    fontSize: '0.8125rem',
+                    fontWeight: 600,
+                    color: 'var(--muted-foreground)',
+                    marginBottom: '0.125rem',
+                  }}
+                >
+                  Late Registration
+                </p>
+                <p
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--muted-foreground)',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  After April 15, 2026
+                </p>
+                <p
+                  style={{
+                    fontSize: '1.375rem',
+                    fontWeight: 800,
+                    color: 'oklch(0.55 0.12 50)',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  2.500.000 VND
+                </p>
+              </div>
+            </div>
+
+            {/* Fee Includes/Excludes */}
+            <p
+              style={{
+                fontSize: '0.8125rem',
+                color: 'var(--foreground)',
+                lineHeight: 1.7,
+                marginBottom: '1rem',
+              }}
+            >
+              The above fee includes the <strong>Gala Dinner</strong> and{' '}
+              <strong>CME registration</strong>. The fee does not include accommodation or travel
+              expenses.
+            </p>
+
+            {/* Important Notes */}
+            <div
+              style={{
+                background: 'oklch(0.98 0.01 80)',
+                border: '1px solid oklch(0.88 0.06 80)',
+                borderRadius: 8,
+                padding: '0.875rem 1rem',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: '0.8125rem',
+                  fontWeight: 700,
+                  color: 'oklch(0.45 0.1 50)',
+                  marginBottom: '0.375rem',
+                }}
+              >
+                ⓘ Important notes:
+              </p>
+              <ul
+                style={{
+                  margin: 0,
+                  paddingLeft: '1.125rem',
+                  fontSize: '0.8125rem',
+                  color: 'var(--foreground)',
+                  lineHeight: 1.7,
+                }}
+              >
+                <li>
+                  Presenters with accepted abstracts are exempt from the conference registration fee.
+                </li>
+                <li>
+                  For international participants, a separate policy applies; please contact the
+                  organizing committee for on-site registration.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Join Gala Dinner */}
           <FieldGroup>
             <FieldLabel>Join the Gala Dinner?</FieldLabel>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -302,6 +526,7 @@ export function RegistrationForm() {
             </div>
           </FieldGroup>
 
+          {/* Notes */}
           <FieldGroup>
             <FieldLabel htmlFor="notes">
               Notes{' '}
@@ -337,7 +562,7 @@ export function RegistrationForm() {
           </FieldGroup>
 
           <NavRow>
-            <NavBtn onClick={() => setStep(1)} secondary>
+            <NavBtn onClick={() => setStep(2)} secondary>
               Back
             </NavBtn>
             <NavBtn onClick={goNext}>Continue</NavBtn>
@@ -345,8 +570,8 @@ export function RegistrationForm() {
         </StepSection>
       )}
 
-      {/* STEP 3: Vietnam CME */}
-      {step === 3 && (
+      {/* ── STEP 4: Vietnam CME ─────────────────────────────────────────────── */}
+      {step === 4 && (
         <StepSection
           title="CME Credits (Vietnam)"
           subtitle="Are you a participant based in Vietnam?"
@@ -421,7 +646,7 @@ export function RegistrationForm() {
           )}
 
           <NavRow>
-            <NavBtn onClick={() => setStep(2)} secondary>
+            <NavBtn onClick={() => setStep(3)} secondary>
               Back
             </NavBtn>
             <NavBtn onClick={goNext} disabled={vietnamParticipant === null}>
@@ -431,8 +656,8 @@ export function RegistrationForm() {
         </StepSection>
       )}
 
-      {/* STEP 4: Review & Submit */}
-      {step === 4 && (
+      {/* ── STEP 5: Review & Submit ─────────────────────────────────────────── */}
+      {step === 5 && (
         <StepSection
           title="Review & Register"
           subtitle="Please review your information before submitting."
@@ -469,7 +694,7 @@ export function RegistrationForm() {
           )}
 
           <NavRow>
-            <NavBtn onClick={() => setStep(3)} secondary>
+            <NavBtn onClick={() => setStep(4)} secondary>
               Back
             </NavBtn>
             <NavBtn onClick={handleSubmit} disabled={isPending}>
