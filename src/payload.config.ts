@@ -55,12 +55,15 @@ export default buildConfig({
       titleSuffix: '',
       description: 'HIGCF',
       icons: [
-        // TODO: favicon
-        // {
-        //   rel: 'icon',
-        //   type: 'image/png',
-        //   url: '/favicon.png',
-        // },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          url: '/favicon-32x32.png',
+        },
+        {
+          rel: 'apple-touch-icon',
+          url: '/apple-touch-icon.png',
+        },
       ],
       openGraph: {
         siteName: 'HIGCF',
