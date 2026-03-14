@@ -136,7 +136,7 @@ export function ConferenceCard({ conference }: ConferenceCardProps) {
             <div className="flex items-center gap-1.5">
               <span className="text-xs text-[#0F172A]/50">CME Credits:</span>
               <span className="font-mono text-sm font-semibold text-[#06B6D4]">
-                {conference.cmeCredits}
+                -
               </span>
             </div>
             <span className="font-mono text-[10px] text-[#0F172A]/40 uppercase tracking-wider">
