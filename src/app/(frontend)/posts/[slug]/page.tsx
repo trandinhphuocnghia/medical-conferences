@@ -7,6 +7,7 @@ import { MessageSection } from './components/president-message'
 import { ScientificTimeline } from './components/scientific-timeline'
 import { StickySubNav } from './components/sticky-subnav'
 import { TopicExplorer } from './components/topic-exploer'
+import { ProgramSection } from './components/conference-program'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
@@ -60,11 +61,9 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
 
       <PresentersSection presenters={presentersData.presenters} highlightPresenters={[]} />
 
-      {/* <LogisticsBento
-        conference={conferenceData}
-        venueAddress="513 Yeongdong-daero, Gangnam-gu, Seoul 06164"
-        floorPlanUrl="#"
-      /> */}
+      <ProgramSection program={conferenceData.program} />
+
+
     </div>
   )
 }

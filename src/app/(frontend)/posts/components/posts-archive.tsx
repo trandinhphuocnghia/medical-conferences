@@ -1,6 +1,7 @@
 'use client'
 
 import type { Post } from '@/payload-types'
+import { formatDate } from '@/utilities/dateUtils'
 import { ArrowLeft, Microscope } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
@@ -19,13 +20,11 @@ const mapPostToConference = (post: Post): Conference => {
     id: post.slug,
     title: post.title || 'Untitled Conference',
     date: post.startDate || new Date().toISOString(),
-    dateDisplay: post.startDate
-      ? new Date(post.startDate).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })
-      : 'TBD',
+    dateDisplay: formatDate(post.startDate, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }) || 'TBD',
     location: post.venueCity || 'Unknown Location', // Assuming venueCity exists or using placeholder
     specialty: 'General', // Placeholder - maybe derive from Topics?
     seatsAvailable: 100, // Placeholder

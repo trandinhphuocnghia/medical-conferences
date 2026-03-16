@@ -16,6 +16,9 @@ import {
 
 import { author } from '@/utilities/collectionAuthor'
 import { afterToday, beforeValidateDate } from './hooks/validation'
+import { bioLexical } from '@/fields/bioLexical'
+import { Post } from '@/payload-types'
+import { validateCongressDate } from './hooks/congressValidation'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -242,6 +245,61 @@ export const Posts: CollectionConfig<'posts'> = {
             }),
           ],
         },
+        {
+          label: 'Program',
+          fields: [
+            {
+              name: 'program',
+              type: 'array',
+              label: 'Congresses',
+              admin: {
+                initCollapsed: true,
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                },
+                {
+                  name: 'days',
+                  type: 'array',
+                  admin: {
+                    initCollapsed: true,
+                  },
+                  fields: [
+                    {
+                      name: 'title',
+                      type: 'text',
+                    },
+                    {
+                      name: 'date',
+                      type: 'date',
+                      required: true,
+                      validate: validateCongressDate,
+                      admin: {
+                        date: {
+                          pickerAppearance: 'dayAndTime',
+                          minDate: afterToday,
+                        },
+                      },
+                    },
+                    {
+                      name: 'venue',
+                      type: 'text',
+                    },
+                    {
+                      name: 'content',
+                      type: 'richText',
+                      editor: bioLexical,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        //
       ],
     },
     ...slugField(),

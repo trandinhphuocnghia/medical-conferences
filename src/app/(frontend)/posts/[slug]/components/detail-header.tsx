@@ -3,6 +3,7 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { Post } from '@/payload-types'
+import { formatDate } from '@/utilities/dateUtils'
 import { Calendar, MapPin, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -27,13 +28,6 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
   const location = `${venueName}, ${venueCity}`
   const startDate = new Date(conferenceStartDate)
   const endDate = new Date(conferenceEndDate)
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    })
-  }
 
   return (
     <section id="overview" className="bg-background py-12 sm:py-16 scroll-mt-[132px]">

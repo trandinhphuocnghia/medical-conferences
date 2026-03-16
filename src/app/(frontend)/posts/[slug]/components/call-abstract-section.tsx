@@ -1,6 +1,7 @@
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert'
 import { Post, Topic } from '@/payload-types'
 import { useUserStore } from '@/stores/userStore'
+import { formatDate, formatTime } from '@/utilities/dateUtils'
 import { CircleAlert } from 'lucide-react'
 import Link from 'next/link'
 import { CreateAbstractForm } from './create-abstract-form'
@@ -36,9 +37,9 @@ export const CallAbstractSection = ({ post }: { post: Post }) => {
           </AlertIcon>
           <AlertTitle>
             The abstract submission period has closed as of{' '}
-            <b>{submissionDeadline?.toLocaleDateString()}</b>
+            <b>{formatDate(submissionDeadline)}</b>
             {' at '}
-            <b>{submissionDeadline?.toLocaleTimeString()}</b>
+            <b>{formatTime(submissionDeadline)}</b>
           </AlertTitle>
         </Alert>
       )}

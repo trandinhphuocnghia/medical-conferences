@@ -1,5 +1,6 @@
 'use client'
 
+import { formatDate } from '@/utilities/dateUtils'
 import {
   createAbstractPublic,
   type PublicAbstractData,
@@ -8,7 +9,6 @@ import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState, useTransition } from 'react'
 import { z } from 'zod'
 import { AbstractFileUploader, type UploadedFileData } from './AbstractFileUploader'
-
 // ── Zod schemas per step ──────────────────────────────────────────────────
 const stepLangSchema = z.object({
   presentationLanguage: z.enum(['english', 'vietnamese'], {
@@ -361,7 +361,7 @@ export function AbstractSubmitForm() {
                             marginTop: 2,
                           }}
                         >
-                          Deadline: {new Date(conf.abstractSubmissionDeadline).toLocaleDateString()}
+                          Deadline: {formatDate(conf.abstractSubmissionDeadline)}
                         </span>
                       )}
                     </OptionCard>

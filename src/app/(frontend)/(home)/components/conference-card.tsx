@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Post } from '@/payload-types'
-import { formatDateTime } from '@/utilities/formatDateTime'
+import { formatDate } from '@/utilities/dateUtils'
 import { ArrowRight, Calendar } from 'lucide-react'
 import Link from 'next/link'
 
@@ -20,7 +20,7 @@ export default function ConferenceCard({ post }: ConferenceCardProps) {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Calendar size={14} />
-            {formatDateTime(post.startDate || '')}
+            {formatDate(post?.startDate || '')}
           </div>
         </div>
         <CardTitle className="text-xl">{post.title}</CardTitle>
