@@ -19,9 +19,9 @@ export function StickySubNav({ conferenceId }: { conferenceId: number }) {
     { label: 'Overview', href: '#overview' },
     { label: 'Message', href: '#message' },
     { label: 'Timeline', href: '#timeline' },
-    { label: 'Speakers', href: '#speakers' },
     { label: 'Topics', href: '#topics' },
-    // { label: 'Logistics', href: '#logistics' },
+    { label: 'Speakers', href: '#speakers' },
+    { label: 'Program', href: '#program' },
     {
       label: 'Registration',
       href: `/registration${conferenceId ? `?conference=${conferenceId}` : ''}`,

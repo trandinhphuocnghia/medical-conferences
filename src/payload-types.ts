@@ -288,6 +288,35 @@ export interface Post {
     image?: (number | null) | Media;
     description?: string | null;
   };
+  program?:
+    | {
+        title: string;
+        days?:
+          | {
+              title?: string | null;
+              date: string;
+              venue?: string | null;
+              content?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   slug: string;
   slugLock?: boolean | null;
   createdBy?: (number | null) | User;
@@ -1438,6 +1467,21 @@ export interface PostsSelect<T extends boolean = true> {
         title?: T;
         image?: T;
         description?: T;
+      };
+  program?:
+    | T
+    | {
+        title?: T;
+        days?:
+          | T
+          | {
+              title?: T;
+              date?: T;
+              venue?: T;
+              content?: T;
+              id?: T;
+            };
+        id?: T;
       };
   slug?: T;
   slugLock?: T;

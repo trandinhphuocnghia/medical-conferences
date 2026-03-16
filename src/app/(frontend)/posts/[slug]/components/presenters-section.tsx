@@ -6,10 +6,12 @@ import { Building2, User } from 'lucide-react'
 import NextImage from 'next/image'
 import { useState } from 'react'
 import { PresenterDetailModal } from './presenter-detail-modal'
+import { Post } from '@/payload-types'
 
 interface PresentersSectionProps {
   presenters: PresenterData[]
   highlightPresenters?: PresenterData[]
+  programs?: Post['program']
 }
 
 export function PresentersSection({
@@ -32,7 +34,7 @@ export function PresentersSection({
 
   return (
     <>
-      <section id="speakers" className="py-16 sm:py-24 bg-slate-50/50 scroll-mt-[132px]">
+      <section id="speakers" className="py-8 sm:py-12 bg-slate-50/50 scroll-mt-[132px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">

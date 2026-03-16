@@ -1,29 +1,11 @@
 import { Button } from '@/components/ui/button'
 import { Post } from '@/payload-types'
+import { formatDateRange } from '@/utilities/dateUtils'
 import { ArrowRight, Calendar, MapPin } from 'lucide-react'
 import Link from 'next/link'
 
 type HeroSectionProps = {
   conference: Post | null
-}
-
-function formatDateRange(start?: string | null, end?: string | null): string {
-  if (!start) return ''
-  const startDate = new Date(start)
-  const endDate = end ? new Date(end) : null
-
-  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' }
-  const yearOpts: Intl.DateTimeFormatOptions = { ...opts, year: 'numeric' }
-
-  if (!endDate) return startDate.toLocaleDateString('en-US', yearOpts)
-
-  // Same month: "September 15–18, 2026"
-  if (startDate.getMonth() === endDate.getMonth()) {
-    return `${startDate.toLocaleDateString('en-US', opts)}–${endDate.getDate()}, ${endDate.getFullYear()}`
-  }
-
-  // Different months: "September 30 – October 2, 2026"
-  return `${startDate.toLocaleDateString('en-US', opts)} – ${endDate.toLocaleDateString('en-US', yearOpts)}`
 }
 
 function isAbstractOpen(deadline?: string | null): boolean {

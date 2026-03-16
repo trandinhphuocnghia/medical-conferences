@@ -1,6 +1,6 @@
 'use client'
 import { Post, UserGroup } from '@/payload-types'
-import { formatDateTime } from '@/utilities/formatDateTime'
+import { formatDateRange } from '@/utilities/dateUtils'
 
 const ConferenceOverview = ({ post }: { post: Post }) => {
   const { title, theme, host, venueCity, venueName, contactEmails } = post
@@ -8,7 +8,7 @@ const ConferenceOverview = ({ post }: { post: Post }) => {
     { label: 'Title', value: title },
     {
       label: 'When',
-      value: formatDateTime(post.startDate) + ' - ' + formatDateTime(post.endDate),
+      value: formatDateRange(post?.startDate, post?.endDate),
     },
     { label: 'Venue', value: [venueCity, venueName]?.toString()?.split(', ') },
     { label: 'Theme', value: theme },

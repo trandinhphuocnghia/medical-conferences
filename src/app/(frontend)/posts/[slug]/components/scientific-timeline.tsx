@@ -1,7 +1,6 @@
 'use client'
 
-import React from 'react'
-
+import { getMilestoneDate } from '@/utilities/dateUtils'
 import { Bell, Calendar, CheckCircle2, Clock, Flag } from 'lucide-react'
 
 interface TimelineProps {
@@ -27,21 +26,6 @@ export function ScientificTimeline({
   startDate,
   endDate,
 }: TimelineProps) {
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr)
-    return {
-      day: date.getDate(),
-      month: date.toLocaleDateString('en-US', { month: 'short' }),
-      year: date.getFullYear(),
-      full: date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-    }
-  }
-
   const milestones: MilestoneData[] = [
     {
       date: abstractSubmissionDeadline,
@@ -70,7 +54,7 @@ export function ScientificTimeline({
       type: 'event',
       icon: <Flag className="h-5 w-5" />,
       description: endDate
-        ? `Conference runs through ${formatDate(endDate).full}`
+        ? `Conference runs through ${getMilestoneDate(endDate)?.full}`
         : 'Opening ceremony and keynote sessions',
     },
   ]
@@ -100,7 +84,8 @@ export function ScientificTimeline({
 
             <div className="grid grid-cols-4 gap-4">
               {milestones.map((milestone, index) => {
-                const dateFormatted = formatDate(milestone.date)
+                const dateFormatted = getMilestoneDate(milestone.date)
+                if (!dateFormatted) return null
                 const past = isPast(milestone.date)
 
                 return (
@@ -156,7 +141,7 @@ export function ScientificTimeline({
                             milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
                           }`}
                         >
-                          {dateFormatted.month} {dateFormatted.year}
+                          {dateFormatted.monthShort} {dateFormatted.year}
                         </div>
                       </div>
 
@@ -186,8 +171,9 @@ export function ScientificTimeline({
         {/* Mobile Vertical Timeline */}
         <div className="lg:hidden space-y-3 sm:space-y-4">
           {milestones.map((milestone, index) => {
-            const dateFormatted = formatDate(milestone.date)
-            const past = isPast(milestone.date)
+                const dateFormatted = getMilestoneDate(milestone.date)
+                if (!dateFormatted) return null
+                const past = isPast(milestone.date)
 
             return (
               <div
@@ -245,7 +231,7 @@ export function ScientificTimeline({
                       milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
                     }`}
                   >
-                    {dateFormatted.month} {dateFormatted.day}, {dateFormatted.year}
+                    {dateFormatted.monthShort} {dateFormatted.day}, {dateFormatted.year}
                   </div>
                 </div>
               </div>
