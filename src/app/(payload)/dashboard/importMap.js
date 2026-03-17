@@ -36,7 +36,6 @@ import { TopicRadioField as TopicRadioField_c1532bd7c27c396b5e309adebddb407d } f
 import { FilesPreview as FilesPreview_871f6682863ede98982d52de85ffdb80 } from '@/collections/Abstracts/ui/FilesPreview'
 import { StatusSelectComponent as StatusSelectComponent_ec7581c80bae57b1a8c2ff492a778a2a } from '@/collections/Abstracts/ui/StatusSelectComponent'
 import { GenerateCredentialsButton as GenerateCredentialsButton_cf3e28758eb21dce1661bfe73db50cf1 } from '@/collections/Users/ui/GenerateCredentialsButton'
-import { TableFeatureClient as TableFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { RowLabel as RowLabel_ec255a65fa6fa8d1faeb09cf35284224 } from '@/Header/RowLabel'
 import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/RowLabel'
 import { default as default_66dcba8625c994af6076586cb15c754f } from '@/components/UserAvatar'
@@ -84,7 +83,6 @@ export const importMap = {
   "@/collections/Abstracts/ui/FilesPreview#FilesPreview": FilesPreview_871f6682863ede98982d52de85ffdb80,
   "@/collections/Abstracts/ui/StatusSelectComponent#StatusSelectComponent": StatusSelectComponent_ec7581c80bae57b1a8c2ff492a778a2a,
   "@/collections/Users/ui/GenerateCredentialsButton#GenerateCredentialsButton": GenerateCredentialsButton_cf3e28758eb21dce1661bfe73db50cf1,
-  "@payloadcms/richtext-lexical/client#TableFeatureClient": TableFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/Header/RowLabel#RowLabel": RowLabel_ec255a65fa6fa8d1faeb09cf35284224,
   "@/Footer/RowLabel#RowLabel": RowLabel_1f6ff6ff633e3695d348f4f3c58f1466,
   "@/components/UserAvatar#default": default_66dcba8625c994af6076586cb15c754f,
