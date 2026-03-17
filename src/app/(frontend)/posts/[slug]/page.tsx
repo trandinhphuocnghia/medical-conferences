@@ -1,13 +1,14 @@
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
-import type { Post, Topic } from '@/payload-types'
+import type { Post, Sponsor, Topic } from '@/payload-types'
+import { ProgramSection } from './components/conference-program'
+import { SponsorSection } from './components/conference-sponsor'
 import { DetailHeader } from './components/detail-header'
 import { PresentersSection } from './components/presenters-section'
 import { MessageSection } from './components/president-message'
 import { ScientificTimeline } from './components/scientific-timeline'
 import { StickySubNav } from './components/sticky-subnav'
-import { TopicExplorer } from './components/topic-exploer'
-import { ProgramSection } from './components/conference-program'
+import { TopicAccordion } from './components/topic-accordion'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
@@ -31,6 +32,8 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
   if (!conferenceData) return null
 
   const topics = getTopics(conferenceData)
+  const sponsors =
+    conferenceData.sponsors?.filter((s): s is Sponsor => typeof s === 'object' && s !== null) || []
 
   const [presentersData] = await Promise.all([
     //getConferencePresenters(conferenceData.id), // This was commented out, so the import is unused.
@@ -57,13 +60,13 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         endDate={conferenceData.endDate}
       />
 
-      {topics.length > 0 && <TopicExplorer conferenceId={conferenceData.id} topics={topics} />}
+      {topics.length > 0 && <TopicAccordion conferenceId={conferenceData.id} topics={topics} />}
 
       <PresentersSection presenters={presentersData.presenters} highlightPresenters={[]} />
 
       <ProgramSection program={conferenceData.program} />
 
-
+      <SponsorSection sponsors={sponsors} />
     </div>
   )
 }
