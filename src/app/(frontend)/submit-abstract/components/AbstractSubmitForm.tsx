@@ -125,10 +125,16 @@ export function AbstractSubmitForm() {
       setForm((prev) => ({
         ...prev,
         conferenceId: confId ? Number(confId) : prev.conferenceId,
-        topicId: topicId ? Number(topicId) : prev.topicId,
+        topicId:
+          topicId === 'other' ? 'other' : topicId ? Number(topicId) : prev.topicId,
       }))
-      // Skip to step 3 (Presentation Language) since conference & topic are pre-selected
-      if (confId && topicId) setStep(3)
+      // Skip to step 3 (Presentation Language) if conference and a specific topic are selected.
+      // If it's "other", we stay on step 2 so they can specify the otherTopic name.
+      if (confId && topicId && topicId !== 'other') {
+        setStep(3)
+      } else if (confId && topicId === 'other') {
+        setStep(2)
+      }
     }
   }, [searchParams])
 
