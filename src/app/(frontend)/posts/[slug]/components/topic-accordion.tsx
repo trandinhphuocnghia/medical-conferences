@@ -106,6 +106,41 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
               </AccordionContent>
             </AccordionItem>
           ))}
+
+          {/* Other Topic Option */}
+          <AccordionItem
+            value="topic-other"
+            className="border border-border rounded-lg bg-card px-4 sm:px-6 overflow-hidden"
+          >
+            <AccordionTrigger className="hover:text-accent py-5 no-underline hover:no-underline">
+              <div className="text-left pr-4">
+                <h3 className="font-semibold text-navy text-lg leading-snug">Other Topic</h3>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pb-6">
+              <div className="bg-slate-50/50 rounded-xl p-5 sm:p-6 border border-slate-100">
+                <div className="prose prose-slate max-w-none text-sm sm:text-base mb-6">
+                  <p className="text-slate-700">
+                    If your research falls outside the specific topics listed above, we still
+                    encourage you to submit. Please select this option and specify your topic
+                    details in the submission form.
+                  </p>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                  <p className="text-xs sm:text-sm text-slate-500">
+                    Have a unique research topic to share?
+                  </p>
+                  <Button
+                    onClick={() => onSubmitAbstract('other')}
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 w-full sm:w-auto"
+                  >
+                    <Send className="h-4 w-4" />
+                    Submit Other Topic
+                  </Button>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
       </div>
     </section>
