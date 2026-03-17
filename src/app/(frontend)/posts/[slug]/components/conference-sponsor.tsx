@@ -73,7 +73,6 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
 
         {(sponsor.level === 'diamond' || sponsor.level === 'gold') && (
           <div className="flex-1 flex flex-col items-center justify-center">
-            <p className="font-bold text-navy text-sm sm:text-base text-balance">{sponsor.title}</p>
             {sponsor.url && (
               <div className="mt-2 flex items-center gap-1 text-accent text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 <ExternalLink className="h-3 w-3" />
@@ -87,9 +86,6 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
       {(sponsor.level === 'silver' || sponsor.level === 'bronze') && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors duration-300 rounded-xl">
           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center gap-1.5">
-            <p className="font-semibold text-white text-xs sm:text-sm text-balance text-center px-2">
-              {sponsor.title}
-            </p>
             {sponsor.url && (
               <div className="flex items-center gap-1 text-accent text-[10px] sm:text-xs font-medium">
                 <ExternalLink className="h-3 w-3" />
