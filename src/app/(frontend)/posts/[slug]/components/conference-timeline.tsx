@@ -1,6 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Post } from '@/payload-types'
 import { Alert, AlertIcon, AlertTitle } from '@/components/ui/alert'
+import { formatDate, getMilestoneDate } from '@/utilities/dateUtils'
 import { Play } from 'lucide-react'
 
 interface DateInfo {
@@ -79,11 +80,13 @@ const EventTimeline: React.FC<Post> = ({
               ? 'ring-gray-400 border-gray-400'
               : `${colorSet.ring} `
 
-          const month = item.date.toLocaleString('en-US', { month: 'short' }).toUpperCase()
-          const day = item.date.getDate()
-          const weekday = item.date.toLocaleString('en-US', {
-            weekday: 'short',
-          })
+          const dateInfo = getMilestoneDate(item.date.toISOString())
+          if (!dateInfo) return null
+
+          const month = dateInfo.monthShort.toUpperCase()
+          const day = dateInfo.day
+          const weekday = dateInfo.weekday.slice(0, 3) // Get first 3 letters matching 'short'
+
 
           // Date text color matches the circle's primary color
           const textColor = isPast ? 'text-gray-600' : `${colorSet.text}`
@@ -102,7 +105,7 @@ const EventTimeline: React.FC<Post> = ({
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-sm font-bold">{item.label}</div>
-                  <div className="text-xs text-gray-300">{item.date.toLocaleDateString()}</div>
+                  <div className="text-xs text-slate-500">{formatDate(item.date)}</div>
                 </TooltipContent>
               </Tooltip>
 

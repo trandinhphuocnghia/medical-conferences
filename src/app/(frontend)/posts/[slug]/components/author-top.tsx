@@ -1,6 +1,5 @@
-// import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Post, User } from '@/payload-types'
-import { formatDateTime } from '@/utilities/formatDateTime'
+import { formatDate } from '@/utilities/dateUtils'
 
 export function AuthorTop({
   author,
@@ -21,7 +20,7 @@ export function AuthorTop({
         <h3 className="font-semibold">
           {title} {fullname} • {organization}
         </h3>
-        <p className="text-sm text-muted-foreground">{formatDateTime(createdAt)}</p>
+        <p className="text-sm text-muted-foreground">{formatDate(createdAt)}</p>
       </div>
     </div>
   )
