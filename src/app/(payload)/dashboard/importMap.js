@@ -30,6 +30,7 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/fields/slug/SlugComponent'
+import { TableFeatureClient as TableFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_456e947bd32a68c51f30490fe255096a } from '@/components/Abstracts/Submitter'
 import { TopicRadioField as TopicRadioField_c1532bd7c27c396b5e309adebddb407d } from '@/collections/Abstracts/ui/TopicRadioField'
 import { FilesPreview as FilesPreview_871f6682863ede98982d52de85ffdb80 } from '@/collections/Abstracts/ui/FilesPreview'
@@ -77,6 +78,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/fields/slug/SlugComponent#SlugComponent": SlugComponent_92cc057d0a2abb4f6cf0307edf59f986,
+  "@payloadcms/richtext-lexical/client#TableFeatureClient": TableFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/components/Abstracts/Submitter#default": default_456e947bd32a68c51f30490fe255096a,
   "@/collections/Abstracts/ui/TopicRadioField#TopicRadioField": TopicRadioField_c1532bd7c27c396b5e309adebddb407d,
   "@/collections/Abstracts/ui/FilesPreview#FilesPreview": FilesPreview_871f6682863ede98982d52de85ffdb80,

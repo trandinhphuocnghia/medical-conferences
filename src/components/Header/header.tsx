@@ -3,17 +3,14 @@
 import { UserMenu } from '@/Header/UserMenu'
 import type { Header } from '@/payload-types'
 import { useUserStore } from '@/stores/userStore'
-import { Logo } from '../Logo/Logo'
 import { Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
+import { Logo } from '../Logo/Logo'
 
 const NAV_ITEMS = [
   { label: 'Conferences', href: '/posts' },
   { label: 'About', href: '/#about' },
-  { label: 'Speakers', href: '/#speakers' },
-  { label: 'Schedule', href: '/#schedule' },
-  { label: 'Venue', href: '/#venue' },
 ] as const
 
 export const HeaderClient = ({ data: _data }: { data: Header }) => {
@@ -27,7 +24,9 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <Logo className="h-10 w-auto" />
-            <span className="font-bold text-xl tracking-tight text-foreground uppercase">HIGCF</span>
+            <span className="font-bold text-xl tracking-tight text-foreground uppercase">
+              HIGCF
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
