@@ -118,9 +118,7 @@ export function SponsorSection({ sponsors = [] }: SponsorSectionProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-10 sm:mb-12">
-          <h2 className="text-2xl sm:text-4xl font-bold text-navy mb-2 mt-2">
-            Conference Sponsors
-          </h2>
+          <h2 className="text-2xl sm:text-4xl font-bold text-navy mb-2 mt-2">Sponsors</h2>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl">
             We gratefully acknowledge our sponsors whose support makes this conference possible
           </p>
