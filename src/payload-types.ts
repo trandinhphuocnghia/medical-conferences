@@ -83,6 +83,7 @@ export interface Config {
     rooms: Room;
     seats: Seat;
     reservations: Reservation;
+    sponsors: Sponsor;
     'mail-logs': MailLog;
     redirects: Redirect;
     forms: Form;
@@ -114,6 +115,7 @@ export interface Config {
     rooms: RoomsSelect<false> | RoomsSelect<true>;
     seats: SeatsSelect<false> | SeatsSelect<true>;
     reservations: ReservationsSelect<false> | ReservationsSelect<true>;
+    sponsors: SponsorsSelect<false> | SponsorsSelect<true>;
     'mail-logs': MailLogsSelect<false> | MailLogsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -317,6 +319,10 @@ export interface Post {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Select the sponsors for this conference.
+   */
+  sponsors?: (number | Sponsor)[] | null;
   slug: string;
   slugLock?: boolean | null;
   createdBy?: (number | null) | User;
@@ -507,6 +513,19 @@ export interface Category {
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsors".
+ */
+export interface Sponsor {
+  id: number;
+  title: string;
+  logo: number | Media;
+  level: 'diamond' | 'gold' | 'silver' | 'bronze';
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1248,6 +1267,10 @@ export interface PayloadLockedDocument {
         value: number | Reservation;
       } | null)
     | ({
+        relationTo: 'sponsors';
+        value: number | Sponsor;
+      } | null)
+    | ({
         relationTo: 'mail-logs';
         value: number | MailLog;
       } | null)
@@ -1483,6 +1506,7 @@ export interface PostsSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  sponsors?: T;
   slug?: T;
   slugLock?: T;
   createdBy?: T;
@@ -1749,6 +1773,18 @@ export interface ReservationsSelect<T extends boolean = true> {
   seat?: T;
   user?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sponsors_select".
+ */
+export interface SponsorsSelect<T extends boolean = true> {
+  title?: T;
+  logo?: T;
+  level?: T;
+  url?: T;
   updatedAt?: T;
   createdAt?: T;
 }

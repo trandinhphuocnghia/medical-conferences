@@ -20,6 +20,7 @@ import { Registrations } from './collections/Registrations'
 import { Reservations } from './collections/Reservations'
 import { Rooms } from './collections/Rooms'
 import { Seats } from './collections/Seats'
+import { Sponsors } from './collections/Sponsors'
 import { Topics } from './collections/Topics'
 import { UserGroups } from './collections/UserGroups'
 import { Users } from './collections/Users'
@@ -132,6 +133,7 @@ export default buildConfig({
     Rooms,
     Seats,
     Reservations,
+    Sponsors,
     MailLogs,
   ],
   cors: [

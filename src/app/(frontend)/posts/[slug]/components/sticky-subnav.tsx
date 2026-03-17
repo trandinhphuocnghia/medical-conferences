@@ -22,6 +22,7 @@ export function StickySubNav({ conferenceId }: { conferenceId: number }) {
     { label: 'Topics', href: '#topics' },
     { label: 'Speakers', href: '#speakers' },
     { label: 'Program', href: '#program' },
+    { label: 'Sponsors', href: '#sponsors' },
     {
       label: 'Registration',
       href: `/registration${conferenceId ? `?conference=${conferenceId}` : ''}`,

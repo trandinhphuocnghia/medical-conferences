@@ -14,11 +14,10 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
-import { author } from '@/utilities/collectionAuthor'
-import { afterToday, beforeValidateDate } from './hooks/validation'
 import { bioLexical } from '@/fields/bioLexical'
-import { Post } from '@/payload-types'
+import { author } from '@/utilities/collectionAuthor'
 import { validateCongressDate } from './hooks/congressValidation'
+import { afterToday, beforeValidateDate } from './hooks/validation'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -296,6 +295,20 @@ export const Posts: CollectionConfig<'posts'> = {
                   ],
                 },
               ],
+            },
+          ],
+        },
+        {
+          label: 'Sponsors',
+          fields: [
+            {
+              name: 'sponsors',
+              type: 'relationship',
+              relationTo: 'sponsors',
+              hasMany: true,
+              admin: {
+                description: 'Select the sponsors for this conference.',
+              },
             },
           ],
         },
