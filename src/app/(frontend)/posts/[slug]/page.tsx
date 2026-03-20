@@ -9,6 +9,7 @@ import { MessageSection } from './components/president-message'
 import { ScientificTimeline } from './components/scientific-timeline'
 import { StickySubNav } from './components/sticky-subnav'
 import { TopicAccordion } from './components/topic-accordion'
+import { CountdownTimer } from './components/countdown-timer'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
@@ -50,6 +51,9 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         cmeCredits={0} //TODO
       />
 
+      <CountdownTimer targetDate={conferenceData.startDate} />
+
+
       <MessageSection conference={conferenceData} />
 
       <ScientificTimeline
@@ -61,6 +65,7 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
       />
 
       {topics.length > 0 && <TopicAccordion conferenceId={conferenceData.id} topics={topics} />}
+
 
       <PresentersSection presenters={presentersData.presenters} highlightPresenters={[]} />
 

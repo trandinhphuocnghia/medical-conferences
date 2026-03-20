@@ -6,7 +6,7 @@ import {
 } from '@/app/actions/registrations/createRegistrationPublic'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
-import React, { useEffect, useState, useTransition } from 'react'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
 import { z } from 'zod'
 
 // ── Zod schemas per step ──────────────────────────────────────────────────
@@ -52,6 +52,12 @@ export function RegistrationForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
+  const formContainerRef = useRef<HTMLDivElement>(null)
+
+  // Scroll to top of form whenever step changes
+  useEffect(() => {
+    formContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [step])
 
   const [form, setForm] = useState<FormState>({
     conferenceId: null,
@@ -191,7 +197,7 @@ export function RegistrationForm() {
 
   // ── Form Steps ────────────────────────────────────────────────────────────
   return (
-    <FormContainer>
+    <FormContainer ref={formContainerRef}>
       {/* Progress Tracker */}
       <div style={{ marginBottom: '2rem' }}>
         <div
@@ -252,12 +258,6 @@ export function RegistrationForm() {
               ))}
             </div>
           )}
-          <NavRow>
-            <div />
-            <NavBtn onClick={goNext} disabled={!canProceedStep1}>
-              Continue
-            </NavBtn>
-          </NavRow>
         </StepSection>
       )}
 
@@ -306,12 +306,6 @@ export function RegistrationForm() {
             />
           </FieldGroup>
 
-          <NavRow>
-            <NavBtn onClick={() => setStep(1)} secondary>
-              Back
-            </NavBtn>
-            <NavBtn onClick={goNext}>Continue</NavBtn>
-          </NavRow>
         </StepSection>
       )}
 
@@ -561,12 +555,6 @@ export function RegistrationForm() {
             )}
           </FieldGroup>
 
-          <NavRow>
-            <NavBtn onClick={() => setStep(2)} secondary>
-              Back
-            </NavBtn>
-            <NavBtn onClick={goNext}>Continue</NavBtn>
-          </NavRow>
         </StepSection>
       )}
 
@@ -645,14 +633,6 @@ export function RegistrationForm() {
             </div>
           )}
 
-          <NavRow>
-            <NavBtn onClick={() => setStep(3)} secondary>
-              Back
-            </NavBtn>
-            <NavBtn onClick={goNext} disabled={vietnamParticipant === null}>
-              Continue
-            </NavBtn>
-          </NavRow>
         </StepSection>
       )}
 
@@ -693,30 +673,82 @@ export function RegistrationForm() {
             </div>
           )}
 
-          <NavRow>
-            <NavBtn onClick={() => setStep(4)} secondary>
-              Back
+        </StepSection>
+      )}
+
+      {/* Sticky Navigation Bar */}
+      <div
+        style={{
+          position: 'sticky',
+          bottom: '1.5rem',
+          zIndex: 40,
+          marginTop: '1rem',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1rem 1.5rem',
+            background: 'oklch(0.98 0.005 250 / 0.85)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--border)',
+            boxShadow:
+              '0 -4px 24px oklch(0.22 0.05 250 / 0.08), 0 -1px 6px oklch(0.22 0.05 250 / 0.04)',
+          }}
+        >
+          {step > 1 ? (
+            <NavBtn onClick={() => setStep((s) => s - 1)} secondary>
+              ← Back
             </NavBtn>
+          ) : (
+            <div />
+          )}
+
+          {/* Step indicator in the center */}
+          <span
+            style={{
+              fontSize: '0.8125rem',
+              color: 'var(--muted-foreground)',
+              fontWeight: 500,
+              userSelect: 'none',
+            }}
+          >
+            {step} / {TOTAL_STEPS}
+          </span>
+
+          {step < TOTAL_STEPS ? (
+            <NavBtn
+              onClick={goNext}
+              disabled={step === 1 ? !canProceedStep1 : step === 4 ? vietnamParticipant === null : false}
+            >
+              Continue →
+            </NavBtn>
+          ) : (
             <NavBtn onClick={handleSubmit} disabled={isPending}>
               {isPending ? 'Submitting…' : 'Submit Registration'}
             </NavBtn>
-          </NavRow>
-        </StepSection>
-      )}
+          )}
+        </div>
+      </div>
     </FormContainer>
   )
 }
 
-function FormContainer({ children }: { children: React.ReactNode }) {
+const FormContainer = React.forwardRef<HTMLDivElement, { children: React.ReactNode }>(function FormContainer({ children }, ref) {
   return (
     <div
+      ref={ref}
       style={{
         maxWidth: 620,
         margin: '0 auto',
         background: 'var(--card)',
         borderRadius: 16,
         boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-        padding: '2.5rem 2rem',
+        padding: '2.5rem 2rem 6rem',
         border: '1px solid var(--border)',
       }}
     >
@@ -744,7 +776,7 @@ function FormContainer({ children }: { children: React.ReactNode }) {
       {children}
     </div>
   )
-}
+})
 
 function StepSection({
   title,
