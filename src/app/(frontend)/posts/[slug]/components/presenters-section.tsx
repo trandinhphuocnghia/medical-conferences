@@ -7,6 +7,7 @@ import { Building2, User } from 'lucide-react'
 import NextImage from 'next/image'
 import { useState } from 'react'
 import { PresenterDetailModal } from './presenter-detail-modal'
+import { Post } from '@/payload-types'
 
 interface PresentersSectionProps {
   presenters: PresenterData[]
