@@ -6,7 +6,7 @@ import {
   type PublicAbstractData,
 } from '@/app/actions/abstracts/createAbstractPublic'
 import { useSearchParams } from 'next/navigation'
-import React, { useEffect, useState, useTransition } from 'react'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
 import { z } from 'zod'
 import { AbstractFileUploader, type UploadedFileData } from './AbstractFileUploader'
 // ── Zod schemas per step ──────────────────────────────────────────────────
@@ -94,6 +94,12 @@ export function AbstractSubmitForm() {
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
   const [uploadedFile, setUploadedFile] = useState<UploadedFileData | null>(null)
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const formContainerRef = useRef<HTMLDivElement>(null)
+
+  // Scroll to top of form whenever step changes
+  useEffect(() => {
+    formContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [step])
 
   const [form, setForm] = useState<FormState>({
     conferenceId: null,
@@ -294,7 +300,7 @@ export function AbstractSubmitForm() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div ref={formContainerRef} className="max-w-2xl mx-auto" style={{ paddingBottom: '4rem' }}>
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
         <h1
@@ -792,24 +798,60 @@ export function AbstractSubmitForm() {
         </div>
       </div>
 
-      {/* Navigation */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.25rem' }}>
-        {step > 1 ? (
-          <NavBtn onClick={() => setStep((s) => s - 1)} secondary>
-            ← Back
-          </NavBtn>
-        ) : (
-          <div />
-        )}
-        {step < TOTAL_STEPS ? (
-          <NavBtn onClick={goNext} disabled={!canProceedBasic()}>
-            Continue →
-          </NavBtn>
-        ) : (
-          <NavBtn onClick={handleSubmit} disabled={isPending}>
-            {isPending ? 'Submitting…' : 'Submit Abstract'}
-          </NavBtn>
-        )}
+      {/* Sticky Navigation Bar */}
+      <div
+        style={{
+          position: 'sticky',
+          bottom: '1.5rem',
+          zIndex: 40,
+          marginTop: '1.25rem',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1rem 1.5rem',
+            background: 'oklch(0.98 0.005 250 / 0.85)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--border)',
+            boxShadow:
+              '0 -4px 24px oklch(0.22 0.05 250 / 0.08), 0 -1px 6px oklch(0.22 0.05 250 / 0.04)',
+          }}
+        >
+          {step > 1 ? (
+            <NavBtn onClick={() => setStep((s) => s - 1)} secondary>
+              ← Back
+            </NavBtn>
+          ) : (
+            <div />
+          )}
+
+          {/* Step indicator in the center */}
+          <span
+            style={{
+              fontSize: '0.8125rem',
+              color: 'var(--muted-foreground)',
+              fontWeight: 500,
+              userSelect: 'none',
+            }}
+          >
+            {step} / {TOTAL_STEPS}
+          </span>
+
+          {step < TOTAL_STEPS ? (
+            <NavBtn onClick={goNext} disabled={!canProceedBasic()}>
+              Continue →
+            </NavBtn>
+          ) : (
+            <NavBtn onClick={handleSubmit} disabled={isPending}>
+              {isPending ? 'Submitting…' : 'Submit Abstract'}
+            </NavBtn>
+          )}
+        </div>
       </div>
     </div>
   )
