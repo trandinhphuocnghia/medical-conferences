@@ -19,7 +19,7 @@ async function getDocument(collection: Collection, slug: string, depth = 0) {
     },
   })
 
-  return page.docs[0]
+  return page?.docs?.[0] ?? null
 }
 
 /**
