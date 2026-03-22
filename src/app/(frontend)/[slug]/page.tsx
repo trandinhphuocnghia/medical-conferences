@@ -72,12 +72,20 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
-  const page = await queryPageBySlug({
-    slug,
-  })
+  try {
+    const { slug = 'home' } = await paramsPromise
+    const page = await queryPageBySlug({
+      slug,
+    })
 
-  return generateMeta({ doc: page })
+    return generateMeta({ doc: page })
+  } catch (error) {
+    console.error('Error generating metadata:', error)
+    return {
+      title: 'HIGCF',
+      description: '',
+    }
+  }
 }
 
 const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
