@@ -1,57 +1,12 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
-
-// ── Rate Limiter (lazy-init, skipped if env vars missing) ──────────────────
-let ratelimit: Ratelimit | null = null
-
-if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-  ratelimit = new Ratelimit({
-    redis: Redis.fromEnv(),
-    // 20 requests per 10-second sliding window
-    limiter: Ratelimit.slidingWindow(20, '10 s'),// [Check]: SLIDING WINDOW
-    analytics: true,
-    prefix: 'ratelimit:mw',
-  })
-}
-
-function getClientIp(request: NextRequest): string {
-  return (
-    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    request.headers.get('x-real-ip') ||
-    '127.0.0.1'
-  )
-}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-pathname', pathname + request.nextUrl.search)
 
-  // ── Rate Limiting ──────────────────────────────────────────────────────
-  if (ratelimit) {
-    try {
-      const ip = getClientIp(request)
-      const { success, limit, reset } = await ratelimit.limit(ip)
-
-      if (!success) {
-        return new NextResponse('Too Many Requests', {
-          status: 429,
-          headers: {
-            'Retry-After': String(Math.ceil((reset - Date.now()) / 1000)),
-            'X-RateLimit-Limit': String(limit),
-            'X-RateLimit-Remaining': '0',
-          },
-        })
-      }
-    } catch (error) {
-      // If Redis is unreachable, log and allow the request through
-      console.error('Rate limiter error:', error)
-    }
-  }
-
-  // ── Redirect default Payload login to custom signin page ───────────────
+  // Redirect default Payload login to custom signin page
   if (pathname === '/dashboard/login') {
     return NextResponse.redirect(new URL('/signin', request.url))
   }
@@ -108,4 +63,3 @@ export const config = {
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 }
-
