@@ -1,5 +1,28 @@
+import { jwtVerify } from 'jose'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+
+// ── JWT secret ─────────────────────────────────────────────────────────────
+// Payload internally derives the actual signing secret from the config secret:
+//   crypto.createHash('sha256').update(secret).digest('hex').slice(0, 32)
+// (see: payload/dist/index.js → this.secret = ...)
+// We must replicate this derivation in the Edge Runtime using crypto.subtle.
+let _jwtSecret: Uint8Array | null = null
+
+async function getJwtSecret(): Promise<Uint8Array> {
+  if (_jwtSecret) return _jwtSecret
+
+  const rawSecret = process.env.PAYLOAD_SECRET || ''
+  const msgBuffer = new TextEncoder().encode(rawSecret)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
+  // Payload slices to first 32 hex characters
+  const derivedSecret = hashHex.slice(0, 32)
+
+  _jwtSecret = new TextEncoder().encode(derivedSecret)
+  return _jwtSecret
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -11,36 +34,35 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/signin', request.url))
   }
 
-  // Get the payload-token cookie
-  const token = request.cookies.get('payload-token')?.value
-
-  // ONLY check auth on login/signup pages to avoid redundant fetches on every page
+  // ── Stateless auth redirect for login/signup pages ─────────────────────
+  // If the user already has a valid JWT, redirect them away from auth pages.
+  // Uses jose.jwtVerify() at the Edge — zero network calls, zero DB queries.
   const isAuthPage = pathname === '/signup' || pathname === '/signin'
 
-  if (token && isAuthPage) {
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || request.nextUrl.origin
+  if (isAuthPage) {
+    const token = request.cookies.get('payload-token')?.value
 
-      const response = await fetch(`${baseUrl}/api/users/me`, {
-        headers: {
-          Authorization: `JWT ${token}`,
-        },
-        next: { revalidate: 0 },
-        signal: AbortSignal.timeout(5000),
-      })
+    if (token) {
+      try {
+        const secret = await getJwtSecret()
+        const { payload } = await jwtVerify(token, secret)
 
-      if (response.ok) {
-        const { user } = await response.json()
+        // The 'role' field is saved to JWT via `saveToJWT: true` in the Users collection
+        const role = payload.role as string | undefined
 
-        if (user) {
-          if (user.role === 'admin') {
-            return NextResponse.redirect(new URL('/dashboard', request.url))
-          }
-          return NextResponse.redirect(new URL('/dashboard/account', request.url))
+        if (role === 'admin') {
+          return NextResponse.redirect(new URL('/dashboard', request.url))
         }
+
+        // Any valid authenticated user (modifier, user, etc.)
+        return NextResponse.redirect(new URL('/dashboard/account', request.url))
+      } catch {
+        // Invalid/expired token — let the user through to the auth page.
+        // Clear the stale cookie so they aren't stuck:
+        const response = NextResponse.next({ request: { headers: requestHeaders } })
+        response.cookies.delete('payload-token')
+        return response
       }
-    } catch (error) {
-      console.error('Middleware auth check error:', error)
     }
   }
 
