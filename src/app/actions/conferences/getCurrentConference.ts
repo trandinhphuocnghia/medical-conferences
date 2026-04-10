@@ -34,6 +34,10 @@ export async function getCurrentConference(): Promise<Post | null> {
         venueName: true,
         venueCity: true,
         abstractSubmissionDeadline: true,
+        abstractDeadlineExtended: true,
+        previousAbstractDeadline: true,
+        notificationDateChanged: true,
+        previousNotificationDate: true,
       },
     })
 

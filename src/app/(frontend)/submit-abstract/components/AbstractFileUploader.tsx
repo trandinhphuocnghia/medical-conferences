@@ -13,8 +13,8 @@ export type UploadedFileData = {
 }
 
 type Props = {
-  /** Called once the S3 upload succeeds and the server has processed the file. */
-  onUploadSuccess: (fileData: UploadedFileData) => void
+  /** Called whenever the list of uploaded files changes. */
+  onFilesChange: (files: UploadedFileData[]) => void
   /** Called whenever the uploading state changes — lets the parent block navigation. */
   onUploadStateChange?: (isUploading: boolean) => void
   /**
@@ -24,9 +24,12 @@ type Props = {
   captchaToken?: string
 }
 
+const MAX_FILES = 5
+const ACCEPTED_TYPES = '.pdf,.png,.jpg,.jpeg,.webp'
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export function AbstractFileUploader({
-  onUploadSuccess,
+  onFilesChange,
   onUploadStateChange,
   captchaToken,
 }: Props) {
@@ -34,7 +37,7 @@ export function AbstractFileUploader({
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [uploaded, setUploaded] = useState<UploadedFileData | null>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFileData[]>([])
 
   const { startUpload } = useUploadThing('abstractFileUploader', {
     headers: captchaToken ? { 'x-turnstile-token': captchaToken } : undefined,
@@ -56,17 +59,18 @@ export function AbstractFileUploader({
       setProgress(100)
       if (!res || res.length === 0) return
 
-      const file = res[0]!
-      const publicFileId = (file.serverData as { publicFileId?: string } | null)?.publicFileId
-
-      const fileData: UploadedFileData = {
+      const newFiles: UploadedFileData[] = res.map((file) => ({
         url: file.url,
         key: file.key,
         name: file.name,
-        publicFileId,
-      }
-      setUploaded(fileData)
-      onUploadSuccess(fileData)
+        publicFileId: (file.serverData as { publicFileId?: string } | null)?.publicFileId,
+      }))
+
+      setUploadedFiles((prev) => {
+        const updated = [...prev, ...newFiles].slice(0, MAX_FILES)
+        onFilesChange(updated)
+        return updated
+      })
     },
 
     onUploadError(error) {
@@ -92,86 +96,101 @@ export function AbstractFileUploader({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? [])
     if (!files.length) return
-    // Reset so the same file can be re-selected after replacing
     e.target.value = ''
-    startUpload(files)
+
+    const slotsLeft = MAX_FILES - uploadedFiles.length
+    if (slotsLeft <= 0) {
+      setUploadError(`Maximum ${MAX_FILES} files allowed.`)
+      return
+    }
+
+    const filesToUpload = files.slice(0, slotsLeft)
+    startUpload(filesToUpload)
   }
 
-  const handleReplace = () => {
-    setUploaded(null)
-    setUploadError(null)
-    setProgress(0)
-    // Small timeout so state clears before the dialog opens
-    setTimeout(() => inputRef.current?.click(), 50)
+  const handleRemove = (index: number) => {
+    setUploadedFiles((prev) => {
+      const updated = prev.filter((_, i) => i !== index)
+      onFilesChange(updated)
+      return updated
+    })
   }
+
+  const canAddMore = uploadedFiles.length < MAX_FILES
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
     <div>
-      {/* Hidden native file input — upload fires immediately on selection */}
+      {/* Hidden native file input */}
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,application/pdf"
+        accept={ACCEPTED_TYPES}
+        multiple
         style={{ display: 'none' }}
         onChange={handleFileChange}
         disabled={isUploading}
       />
 
-      {/* ── Success State ──────────────────────────────────────────────────── */}
-      {uploaded && (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '0.625rem',
-            padding: '0.875rem 1rem',
-            background: 'oklch(0.97 0.03 145)',
-            border: '1.5px solid oklch(0.72 0.18 145)',
-            borderRadius: 'var(--radius)',
-            fontSize: '0.875rem',
-            color: 'oklch(0.30 0.12 145)',
-          }}
-        >
-          <span style={{ fontSize: '1rem', flexShrink: 0 }}>✅</span>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-              {/* Clickable link to preview the uploaded file */}
+      {/* ── Uploaded Files List ──────────────────────────────────────────── */}
+      {uploadedFiles.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.875rem' }}>
+          {uploadedFiles.map((file, i) => (
+            <div
+              key={file.key}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.625rem',
+                padding: '0.625rem 0.875rem',
+                background: 'oklch(0.97 0.03 145)',
+                border: '1.5px solid oklch(0.72 0.18 145)',
+                borderRadius: 'var(--radius)',
+                fontSize: '0.875rem',
+                color: 'oklch(0.30 0.12 145)',
+              }}
+            >
+              <span style={{ fontSize: '0.875rem', flexShrink: 0 }}>
+                {file.name.match(/\.(png|jpe?g|webp)$/i) ? '🖼️' : '📄'}
+              </span>
               <a
-                href={uploaded.url}
+                href={file.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  fontWeight: 600,
+                  flex: 1,
+                  minWidth: 0,
+                  fontWeight: 500,
                   color: 'oklch(0.30 0.12 145)',
                   textDecoration: 'underline',
                   wordBreak: 'break-all',
+                  fontSize: '0.8125rem',
                 }}
               >
-                {uploaded.name}
+                {file.name}
               </a>
-              <span style={{ color: 'oklch(0.55 0.10 145)', fontSize: '0.75rem' }}>
-                (click to view)
-              </span>
-            </div>
-            <div style={{ marginTop: '0.375rem' }}>
               <button
                 type="button"
-                onClick={handleReplace}
+                onClick={() => handleRemove(i)}
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'oklch(0.30 0.12 145)',
-                  textDecoration: 'underline',
+                  color: 'var(--destructive)',
                   cursor: 'pointer',
-                  fontSize: '0.8125rem',
-                  padding: 0,
+                  fontSize: '1.125rem',
+                  lineHeight: 1,
+                  padding: '0 0.25rem',
+                  flexShrink: 0,
                 }}
+                title="Remove file"
               >
-                Replace file
+                ×
               </button>
             </div>
-          </div>
+          ))}
+          <p style={{ fontSize: '0.75rem', color: 'var(--muted-foreground)', margin: 0 }}>
+            {uploadedFiles.length} / {MAX_FILES} files uploaded
+          </p>
         </div>
       )}
 
@@ -183,7 +202,7 @@ export function AbstractFileUploader({
             alignItems: 'flex-start',
             gap: '0.5rem',
             padding: '0.75rem 1rem',
-            marginBottom: uploaded ? 0 : '0.875rem',
+            marginBottom: '0.875rem',
             background: 'oklch(0.97 0.02 20)',
             border: '1.5px solid var(--destructive)',
             borderRadius: 'var(--radius)',
@@ -196,8 +215,8 @@ export function AbstractFileUploader({
         </div>
       )}
 
-      {/* ── Drop / Select zone (hidden after a successful upload) ──────────── */}
-      {!uploaded && (
+      {/* ── Drop / Select zone (visible when more files can be added) ────── */}
+      {canAddMore && (
         <div
           role="button"
           tabIndex={0}
@@ -247,10 +266,10 @@ export function AbstractFileUploader({
               margin: 0,
             }}
           >
-            {isUploading ? 'Uploading…' : 'Drag & drop your PDF here'}
+            {isUploading ? 'Uploading…' : 'Drag & drop your files here'}
           </p>
           <p style={{ fontSize: '0.8125rem', color: 'var(--muted-foreground)', margin: 0 }}>
-            PDF only · max 8 MB
+            PDF or images (PNG, JPG, WebP) · max 8 MB each · up to {MAX_FILES} files
           </p>
 
           {/* ── Progress bar (visible while uploading) ─────────────────────── */}
@@ -301,7 +320,7 @@ export function AbstractFileUploader({
                 cursor: 'pointer',
               }}
             >
-              Choose file
+              Choose files
             </button>
           )}
         </div>

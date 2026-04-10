@@ -261,6 +261,10 @@ export interface Post {
   topics?: (number | Topic)[] | null;
   abstractSubmissionDeadline: string;
   notificationOfAcceptanceDate: string;
+  abstractDeadlineExtended?: boolean | null;
+  notificationDateChanged?: boolean | null;
+  previousAbstractDeadline?: string | null;
+  previousNotificationDate?: string | null;
   earlyRegistrationDeadline: string;
   /**
    * Start date and time of the conference.
@@ -1468,6 +1472,10 @@ export interface PostsSelect<T extends boolean = true> {
   topics?: T;
   abstractSubmissionDeadline?: T;
   notificationOfAcceptanceDate?: T;
+  abstractDeadlineExtended?: T;
+  notificationDateChanged?: T;
+  previousAbstractDeadline?: T;
+  previousNotificationDate?: T;
   earlyRegistrationDeadline?: T;
   startDate?: T;
   endDate?: T;

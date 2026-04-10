@@ -9,6 +9,11 @@ interface TimelineProps {
   earlyRegistrationDeadline: string
   startDate: string
   endDate?: string
+  // Highlights
+  abstractDeadlineExtended?: boolean | null
+  previousAbstractDeadline?: string | null
+  notificationDateChanged?: boolean | null
+  previousNotificationDate?: string | null
 }
 
 interface MilestoneData {
@@ -17,6 +22,9 @@ interface MilestoneData {
   type: 'deadline' | 'event'
   icon: React.ReactNode
   description: string
+  highlight?: boolean | null
+  previousDate?: string | null
+  highlightText?: string
 }
 
 export function ScientificTimeline({
@@ -25,6 +33,10 @@ export function ScientificTimeline({
   earlyRegistrationDeadline,
   startDate,
   endDate,
+  abstractDeadlineExtended,
+  previousAbstractDeadline,
+  notificationDateChanged,
+  previousNotificationDate,
 }: TimelineProps) {
   const milestones: MilestoneData[] = [
     {
@@ -33,6 +45,9 @@ export function ScientificTimeline({
       type: 'deadline',
       icon: <Clock className="h-5 w-5" />,
       description: 'Final deadline for research abstract submissions',
+      highlight: abstractDeadlineExtended,
+      previousDate: previousAbstractDeadline,
+      highlightText: 'Deadline Extended',
     },
     {
       date: notificationOfAcceptanceDate,
@@ -40,6 +55,9 @@ export function ScientificTimeline({
       type: 'deadline',
       icon: <Bell className="h-5 w-5" />,
       description: 'Authors notified of abstract acceptance status',
+      highlight: notificationDateChanged,
+      previousDate: previousNotificationDate,
+      highlightText: 'Date Updated',
     },
     {
       date: earlyRegistrationDeadline,
@@ -129,6 +147,14 @@ export function ScientificTimeline({
 
                       {/* Date Display */}
                       <div className="font-mono text-center mb-3">
+                        {milestone.highlight && milestone.previousDate && (
+                          <div className="text-[10px] text-slate-400 line-through mb-1">
+                            {(() => {
+                              const d = getMilestoneDate(milestone.previousDate)
+                              return d ? `${d.monthShort} ${d.day}, ${d.year}` : ''
+                            })()}
+                          </div>
+                        )}
                         <div
                           className={`text-3xl font-bold ${
                             milestone.type === 'event' ? 'text-white' : 'text-[#0F172A]'
@@ -143,6 +169,13 @@ export function ScientificTimeline({
                         >
                           {dateFormatted.monthShort} {dateFormatted.year}
                         </div>
+                        {milestone.highlight && (
+                          <div className="mt-1.5">
+                            <span className="bg-amber-100 text-amber-700 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider animate-pulse">
+                              {milestone.highlightText || 'Updated'}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Label & Description */}
@@ -227,11 +260,26 @@ export function ScientificTimeline({
                     {milestone.description}
                   </p>
                   <div
-                    className={`font-mono text-xs sm:text-sm font-medium ${
+                    className={`font-mono text-xs sm:text-sm font-medium flex flex-wrap items-center gap-2 ${
                       milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
                     }`}
                   >
-                    {dateFormatted.monthShort} {dateFormatted.day}, {dateFormatted.year}
+                    {milestone.highlight && milestone.previousDate && (
+                      <span className="text-slate-400 line-through text-[10px] sm:text-xs">
+                        {(() => {
+                          const d = getMilestoneDate(milestone.previousDate)
+                          return d ? `${d.monthShort} ${d.day}` : ''
+                        })()}
+                      </span>
+                    )}
+                    <span>
+                      {dateFormatted.monthShort} {dateFormatted.day}, {dateFormatted.year}
+                    </span>
+                    {milestone.highlight && (
+                      <span className="bg-amber-100 text-amber-700 text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                        {milestone.highlightText || 'Updated'}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
