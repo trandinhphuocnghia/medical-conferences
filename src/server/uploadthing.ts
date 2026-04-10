@@ -1,23 +1,8 @@
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
 import { UploadThingError } from 'uploadthing/server'
+import { uploadLimiter } from './rateLimit'
 
 const f = createUploadthing()
-
-// ── Upstash Redis client ──────────────────────────────────────────────────────
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-})
-
-// ── Rate limiter: max 3 uploads per 1 minute window per IP ───────────────────
-const ratelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(3, '1 m'),
-  prefix: '@upstash/ratelimit:public-upload',
-  analytics: true, // track in Upstash console
-})
 
 // ── File Router ───────────────────────────────────────────────────────────────
 export const publicFileRouter = {
@@ -45,13 +30,15 @@ export const publicFileRouter = {
       // await validateTurnstileToken(turnstileToken)
 
       // ── 3. Rate limiting ────────────────────────────────────────────────────
-      const { success, remaining, reset } = await ratelimit.limit(ip)
+      if (uploadLimiter) {
+        const { success, remaining, reset } = await uploadLimiter.limit(ip)
 
-      if (!success) {
-        const retryAfterSeconds = Math.ceil((reset - Date.now()) / 1000)
-        throw new UploadThingError(
-          `Rate limit exceeded. You can upload again in ${retryAfterSeconds}s. (${remaining} remaining)`,
-        )
+        if (!success) {
+          const retryAfterSeconds = Math.ceil((reset - Date.now()) / 1000)
+          throw new UploadThingError(
+            `Rate limit exceeded. You can upload again in ${retryAfterSeconds}s. (${remaining} remaining)`,
+          )
+        }
       }
 
       // ── 4. Pass metadata to onUploadComplete ────────────────────────────────
