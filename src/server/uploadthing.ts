@@ -16,6 +16,7 @@ export const publicFileRouter = {
    */
   abstractFileUploader: f({
     pdf: { maxFileSize: '8MB', maxFileCount: 5 },
+    image: { maxFileSize: '8MB', maxFileCount: 5 },
   })
     .middleware(async ({ req }) => {
       // ── 1. Extract client IP ────────────────────────────────────────────────

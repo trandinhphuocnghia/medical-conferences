@@ -22,8 +22,8 @@ export type PublicAbstractData = {
   conclusion: string
   // Keywords
   keywords?: { word: string }[]
-  // Uploaded file — the public-files doc ID returned by onUploadComplete
-  publicFileId?: number
+  // Uploaded files — the public-files doc IDs returned by onUploadComplete
+  publicFileIds?: number[]
 }
 
 export async function createAbstractPublic(data: PublicAbstractData) {
@@ -48,7 +48,7 @@ export async function createAbstractPublic(data: PublicAbstractData) {
     
     const payload = await getPayload({ config: configPromise })
 
-    const { publicFileId, otherTopic, ...rest } = data
+    const { publicFileIds, otherTopic, ...rest } = data
 
     const abstract = await payload.create({
       collection: 'abstracts',
@@ -60,8 +60,8 @@ export async function createAbstractPublic(data: PublicAbstractData) {
         ...(rest.topic === 'other' && otherTopic ? { otherTopic } : {}),
         status: 'pending', // goes straight to pending for admin review
         submitter: null as unknown as number, // no user account required
-        // Link the uploaded file if one was provided
-        ...(publicFileId ? { files: [publicFileId] } : {}),
+        // Link uploaded files if any were provided
+        ...(publicFileIds && publicFileIds.length > 0 ? { files: publicFileIds } : {}),
       },
     })
 

@@ -18,6 +18,7 @@ import { bioLexical } from '@/fields/bioLexical'
 import { author } from '@/utilities/collectionAuthor'
 import { validateCongressDate } from './hooks/congressValidation'
 import { afterToday, beforeValidateDate } from './hooks/validation'
+import { detectDeadlineChanges } from './hooks/detectDeadlineChanges'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -142,6 +143,52 @@ export const Posts: CollectionConfig<'posts'> = {
               admin: {
                 date: { pickerAppearance: 'dayAndTime', minDate: afterToday },
               },
+            },
+            // --- Highlight Metadata (Hidden from normal view, driven by hook) ---
+            {
+              type: 'collapsible',
+              label: 'Deadline Highlight Settings',
+              admin: {
+                initCollapsed: true,
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'abstractDeadlineExtended',
+                      type: 'checkbox',
+                      label: 'Abstract Deadline Extended (Highlight)',
+                      defaultValue: false,
+                      admin: { width: '50%' },
+                    },
+                    {
+                      name: 'notificationDateChanged',
+                      type: 'checkbox',
+                      label: 'Notification Date Changed (Highlight)',
+                      defaultValue: false,
+                      admin: { width: '50%' },
+                    },
+                  ],
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'previousAbstractDeadline',
+                      type: 'date',
+                      label: 'Previous Abstract Deadline',
+                      admin: { width: '50%', readOnly: true },
+                    },
+                    {
+                      name: 'previousNotificationDate',
+                      type: 'date',
+                      label: 'Previous Notification Date',
+                      admin: { width: '50%', readOnly: true },
+                    },
+                  ],
+                },
+              ],
             },
             // 3. Early Registration Deadline (Last Deadline)
             {
@@ -327,6 +374,7 @@ export const Posts: CollectionConfig<'posts'> = {
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
     beforeValidate: [beforeValidateDate],
+    beforeChange: [detectDeadlineChanges],
   },
   versions: {
     drafts: {

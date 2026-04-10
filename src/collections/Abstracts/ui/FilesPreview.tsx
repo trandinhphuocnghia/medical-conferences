@@ -7,6 +7,7 @@ type PublicFile = {
   id: number | string
   filename: string
   url: string
+  mimeType?: string
   filesize?: number
 }
 
@@ -15,6 +16,11 @@ function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+}
+
+function isImage(file: PublicFile): boolean {
+  if (file.mimeType) return file.mimeType.startsWith('image/')
+  return /\.(png|jpe?g|webp|gif|svg)$/i.test(file.filename)
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -96,31 +102,69 @@ export const FilesPreview: React.FC = () => {
             padding: 0,
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.375rem',
+            gap: '0.625rem',
           }}
         >
           {files.map((file) => (
-            <li key={file.id} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1rem', flexShrink: 0 }}>📄</span>
-              <a
-                href={file.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontSize: '0.875rem',
-                  color: '#3b82f6',
-                  textDecoration: 'underline',
-                  wordBreak: 'break-all',
-                  fontWeight: 500,
-                }}
-              >
-                {file.filename}
-              </a>
-              {file.filesize ? (
-                <span style={{ fontSize: '0.75rem', color: '#9ca3af', flexShrink: 0 }}>
-                  ({formatBytes(file.filesize)})
-                </span>
-              ) : null}
+            <li
+              key={file.id}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.75rem',
+                padding: '0.5rem 0',
+                borderBottom: '1px solid var(--theme-elevation-100, #f0f0f0)',
+              }}
+            >
+              {/* Thumbnail or icon */}
+              {isImage(file) ? (
+                <a href={file.url} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={file.url}
+                    alt={file.filename}
+                    style={{
+                      width: 64,
+                      height: 64,
+                      objectFit: 'cover',
+                      borderRadius: '4px',
+                      border: '1px solid var(--theme-elevation-150, #e5e7eb)',
+                      flexShrink: 0,
+                    }}
+                  />
+                </a>
+              ) : (
+                <span style={{ fontSize: '1.5rem', flexShrink: 0, lineHeight: 1 }}>📄</span>
+              )}
+
+              {/* File info */}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <a
+                  href={file.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontSize: '0.875rem',
+                    color: '#3b82f6',
+                    textDecoration: 'underline',
+                    wordBreak: 'break-all',
+                    fontWeight: 500,
+                  }}
+                >
+                  {file.filename}
+                </a>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '0.5rem',
+                    marginTop: '0.125rem',
+                    fontSize: '0.75rem',
+                    color: '#9ca3af',
+                  }}
+                >
+                  {file.mimeType && <span>{file.mimeType}</span>}
+                  {file.filesize ? <span>{formatBytes(file.filesize)}</span> : null}
+                </div>
+              </div>
             </li>
           ))}
         </ul>

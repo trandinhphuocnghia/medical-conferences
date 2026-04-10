@@ -62,6 +62,10 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         earlyRegistrationDeadline={conferenceData.earlyRegistrationDeadline}
         startDate={conferenceData.startDate}
         endDate={conferenceData.endDate}
+        abstractDeadlineExtended={conferenceData.abstractDeadlineExtended}
+        previousAbstractDeadline={conferenceData.previousAbstractDeadline}
+        notificationDateChanged={conferenceData.notificationDateChanged}
+        previousNotificationDate={conferenceData.previousNotificationDate}
       />
 
       {topics.length > 0 && <TopicAccordion conferenceId={conferenceData.id} topics={topics} />}
