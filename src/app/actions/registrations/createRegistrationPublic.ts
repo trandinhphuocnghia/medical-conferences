@@ -14,7 +14,26 @@ export type PublicRegistrationData = {
 
 export async function createRegistrationPublic(data: PublicRegistrationData) {
   try {
+    const { headers: getHeaders } = await import('next/headers')
+    const { submissionLimiter } = await import('@/server/rateLimit')
+
+    if (submissionLimiter) {
+      const headersList = await getHeaders()
+      const forwardedFor = headersList.get('x-forwarded-for')
+      const ip = forwardedFor ? forwardedFor.split(',')[0] : '127.0.0.1'
+
+      const { success, reset } = await submissionLimiter.limit(`registration:${ip}`)
+
+      if (!success) {
+        return {
+          success: false,
+          error: `Too many requests. Please try again after ${Math.ceil((reset - Date.now()) / 1000 / 60)} minutes.`,
+        }
+      }
+    }
+
     const payload = await getPayload({ config: configPromise })
+
 
     const registration = await payload.create({
       collection: 'registrations',

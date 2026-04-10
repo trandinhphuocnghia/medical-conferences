@@ -3,7 +3,6 @@ import { draftOnlyFieldAccess } from '@/access/fieldAccess'
 import type { CollectionConfig, Where } from 'payload'
 import { beforeDelete } from './hooks/beforeDelete'
 import { checkDeadline } from './hooks/checkDeadline'
-import { checkExistAbstract } from './hooks/checkExistAbstract'
 import { checkValidStatus } from './hooks/checkValidStatus'
 import { normalizeOtherTopic, restoreOtherTopic } from './hooks/handleOtherTopic'
 import { sendAbstractEmailToQStash } from './hooks/sendAbstractEmail'
@@ -330,7 +329,7 @@ export const Abstracts: CollectionConfig = {
   ],
 
   hooks: {
-    beforeChange: [normalizeOtherTopic, checkDeadline, checkExistAbstract],
+    beforeChange: [normalizeOtherTopic, checkDeadline],
     afterChange: [sendAbstractEmailToQStash],
     afterRead: [restoreOtherTopic],
     beforeDelete: [beforeDelete],
