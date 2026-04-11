@@ -83,19 +83,6 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
     })
   }
 
-  if (notification && registration && registration <= notification) {
-    throw new ValidationError({
-      collection: 'posts',
-      errors: [
-        {
-          path: 'earlyRegistrationDeadline',
-          message:
-            'Early Registration deadline must be strictly after the Notification of Acceptance Date.',
-        },
-      ],
-    })
-  }
-
   if (submission && submission >= start) {
     throw new ValidationError({
       collection: 'posts',
@@ -107,6 +94,7 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
       ],
     })
   }
+
   if (notification && notification >= start) {
     throw new ValidationError({
       collection: 'posts',
@@ -118,13 +106,14 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
       ],
     })
   }
-  if (registration && registration >= start) {
+
+  if (registration && (registration >= start || registration >= end)) {
     throw new ValidationError({
       collection: 'posts',
       errors: [
         {
           path: 'earlyRegistrationDeadline',
-          message: 'Early Registration Deadline must be before the Conference Start Date.',
+          message: 'Early Registration Deadline must be before the Conference Start and End dates.',
         },
       ],
     })
