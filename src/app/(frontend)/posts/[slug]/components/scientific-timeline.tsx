@@ -9,6 +9,11 @@ interface TimelineProps {
   earlyRegistrationDeadline: string
   startDate: string
   endDate?: string
+  // Highlights
+  abstractDeadlineExtended?: boolean | null
+  previousAbstractDeadline?: string | null
+  notificationDateChanged?: boolean | null
+  previousNotificationDate?: string | null
 }
 
 interface MilestoneData {
@@ -17,6 +22,9 @@ interface MilestoneData {
   type: 'deadline' | 'event'
   icon: React.ReactNode
   description: string
+  highlight?: boolean | null
+  previousDate?: string | null
+  highlightText?: string
 }
 
 export function ScientificTimeline({
@@ -25,6 +33,10 @@ export function ScientificTimeline({
   earlyRegistrationDeadline,
   startDate,
   endDate,
+  abstractDeadlineExtended,
+  previousAbstractDeadline,
+  notificationDateChanged,
+  previousNotificationDate,
 }: TimelineProps) {
   const milestones: MilestoneData[] = [
     {
@@ -33,6 +45,9 @@ export function ScientificTimeline({
       type: 'deadline',
       icon: <Clock className="h-5 w-5" />,
       description: 'Final deadline for research abstract submissions',
+      highlight: abstractDeadlineExtended,
+      previousDate: previousAbstractDeadline,
+      highlightText: 'Deadline Extended',
     },
     {
       date: notificationOfAcceptanceDate,
@@ -40,6 +55,9 @@ export function ScientificTimeline({
       type: 'deadline',
       icon: <Bell className="h-5 w-5" />,
       description: 'Authors notified of abstract acceptance status',
+      highlight: notificationDateChanged,
+      previousDate: previousNotificationDate,
+      highlightText: 'Date Updated',
     },
     {
       date: earlyRegistrationDeadline,
@@ -92,32 +110,29 @@ export function ScientificTimeline({
                   <div key={index} className="relative flex flex-col items-center">
                     {/* Icon Node */}
                     <div
-                      className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center mb-4 border-2 transition-all ${
-                        milestone.type === 'event'
+                      className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center mb-4 border-2 transition-all ${milestone.type === 'event'
                           ? 'bg-[#0F172A] border-[#0F172A] text-white'
                           : past
                             ? 'bg-slate-100 border-slate-300 text-slate-400'
                             : 'bg-white border-[#06B6D4] text-[#06B6D4]'
-                      }`}
+                        }`}
                     >
                       {milestone.icon}
                     </div>
 
                     {/* Content Card */}
                     <div
-                      className={`w-full p-4 rounded-xl border backdrop-blur-sm transition-all hover:shadow-lg ${
-                        milestone.type === 'event'
+                      className={`w-full p-4 rounded-xl border backdrop-blur-sm transition-all hover:shadow-lg ${milestone.type === 'event'
                           ? 'bg-[#0F172A] border-[#0F172A] text-white'
                           : 'bg-white/80 border-[#E2E8F0]'
-                      }`}
+                        }`}
                     >
                       {/* Type Badge */}
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-medium mb-3 ${
-                          milestone.type === 'event'
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-medium mb-3 ${milestone.type === 'event'
                             ? 'bg-cyan-500/20 text-cyan-300'
                             : 'bg-amber-500/10 text-amber-600 border border-amber-200'
-                        }`}
+                          }`}
                       >
                         {milestone.type === 'deadline' ? (
                           <Clock className="h-2.5 w-2.5" />
@@ -129,34 +144,45 @@ export function ScientificTimeline({
 
                       {/* Date Display */}
                       <div className="font-mono text-center mb-3">
+                        {milestone.highlight && milestone.previousDate && (
+                          <div className="text-[10px] text-slate-400 line-through mb-1">
+                            {(() => {
+                              const d = getMilestoneDate(milestone.previousDate)
+                              return d ? `${d.monthShort} ${d.day}, ${d.year}` : ''
+                            })()}
+                          </div>
+                        )}
                         <div
-                          className={`text-3xl font-bold ${
-                            milestone.type === 'event' ? 'text-white' : 'text-[#0F172A]'
-                          }`}
+                          className={`text-3xl font-bold ${milestone.type === 'event' ? 'text-white' : 'text-[#0F172A]'
+                            }`}
                         >
                           {dateFormatted.day}
                         </div>
                         <div
-                          className={`text-sm uppercase tracking-wider ${
-                            milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
-                          }`}
+                          className={`text-sm uppercase tracking-wider ${milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
+                            }`}
                         >
                           {dateFormatted.monthShort} {dateFormatted.year}
                         </div>
+                        {milestone.highlight && (
+                          <div className="mt-1.5">
+                            <span className="bg-amber-100 text-amber-700 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider animate-pulse">
+                              {milestone.highlightText || 'Updated'}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Label & Description */}
                       <h3
-                        className={`font-semibold text-sm mb-1 ${
-                          milestone.type === 'event' ? 'text-white' : 'text-navy'
-                        }`}
+                        className={`font-semibold text-sm mb-1 ${milestone.type === 'event' ? 'text-white' : 'text-navy'
+                          }`}
                       >
                         {milestone.label}
                       </h3>
                       <p
-                        className={`text-xs leading-relaxed ${
-                          milestone.type === 'event' ? 'text-slate-300' : 'text-slate-500'
-                        }`}
+                        className={`text-xs leading-relaxed ${milestone.type === 'event' ? 'text-slate-300' : 'text-slate-500'
+                          }`}
                       >
                         {milestone.description}
                       </p>
@@ -171,28 +197,26 @@ export function ScientificTimeline({
         {/* Mobile Vertical Timeline */}
         <div className="lg:hidden space-y-3 sm:space-y-4">
           {milestones.map((milestone, index) => {
-                const dateFormatted = getMilestoneDate(milestone.date)
-                if (!dateFormatted) return null
-                const past = isPast(milestone.date)
+            const dateFormatted = getMilestoneDate(milestone.date)
+            if (!dateFormatted) return null
+            const past = isPast(milestone.date)
 
             return (
               <div
                 key={index}
-                className={`flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border backdrop-blur-sm ${
-                  milestone.type === 'event'
+                className={`flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border backdrop-blur-sm ${milestone.type === 'event'
                     ? 'bg-[#0F172A] border-[#0F172A]'
                     : 'bg-white/80 border-[#E2E8F0]'
-                }`}
+                  }`}
               >
                 {/* Icon */}
                 <div
-                  className={`shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 ${
-                    milestone.type === 'event'
+                  className={`shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 ${milestone.type === 'event'
                       ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400'
                       : past
                         ? 'bg-slate-100 border-slate-300 text-slate-400'
                         : 'bg-cyan-50 border-[#06B6D4] text-[#06B6D4]'
-                  }`}
+                    }`}
                 >
                   <span className="[&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5">
                     {milestone.icon}
@@ -203,35 +227,46 @@ export function ScientificTimeline({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider font-medium ${
-                        milestone.type === 'event'
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider font-medium ${milestone.type === 'event'
                           ? 'bg-cyan-500/20 text-cyan-300'
                           : 'bg-amber-500/10 text-amber-600'
-                      }`}
+                        }`}
                     >
                       {milestone.type}
                     </span>
                   </div>
                   <h3
-                    className={`font-semibold text-sm sm:text-base mb-0.5 sm:mb-1 ${
-                      milestone.type === 'event' ? 'text-white' : 'text-navy'
-                    }`}
+                    className={`font-semibold text-sm sm:text-base mb-0.5 sm:mb-1 ${milestone.type === 'event' ? 'text-white' : 'text-navy'
+                      }`}
                   >
                     {milestone.label}
                   </h3>
                   <p
-                    className={`text-[11px] sm:text-xs mb-1.5 sm:mb-2 leading-relaxed ${
-                      milestone.type === 'event' ? 'text-slate-300' : 'text-slate-500'
-                    }`}
+                    className={`text-[11px] sm:text-xs mb-1.5 sm:mb-2 leading-relaxed ${milestone.type === 'event' ? 'text-slate-300' : 'text-slate-500'
+                      }`}
                   >
                     {milestone.description}
                   </p>
                   <div
-                    className={`font-mono text-xs sm:text-sm font-medium ${
-                      milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
-                    }`}
+                    className={`font-mono text-xs sm:text-sm font-medium flex flex-wrap items-center gap-2 ${milestone.type === 'event' ? 'text-cyan-300' : 'text-[#06B6D4]'
+                      }`}
                   >
-                    {dateFormatted.monthShort} {dateFormatted.day}, {dateFormatted.year}
+                    {milestone.highlight && milestone.previousDate && (
+                      <span className="text-slate-400 line-through text-[10px] sm:text-xs">
+                        {(() => {
+                          const d = getMilestoneDate(milestone.previousDate)
+                          return d ? `${d.monthShort} ${d.day}` : ''
+                        })()}
+                      </span>
+                    )}
+                    <span>
+                      {dateFormatted.monthShort} {dateFormatted.day}, {dateFormatted.year}
+                    </span>
+                    {milestone.highlight && (
+                      <span className="bg-amber-100 text-amber-700 text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                        {milestone.highlightText || 'Updated'}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

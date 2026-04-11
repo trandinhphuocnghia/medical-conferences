@@ -52,7 +52,12 @@ const step5Schema = z.object({
 })
 
 // ── Types ─────────────────────────────────────────────────────────────────
-type Conference = { id: number; title: string; abstractSubmissionDeadline?: string }
+type Conference = {
+  id: number
+  title: string
+  abstractSubmissionDeadline?: string
+  abstractDeadlineExtended?: boolean | null
+}
 type Topic = { id: number; name: string }
 
 type FormState = {
@@ -92,7 +97,7 @@ export function AbstractSubmitForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
-  const [uploadedFile, setUploadedFile] = useState<UploadedFileData | null>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFileData[]>([])
   const [isFileUploading, setIsFileUploading] = useState(false)
   const formContainerRef = useRef<HTMLDivElement>(null)
 
@@ -245,7 +250,13 @@ export function AbstractSubmitForm() {
         results: form.results,
         conclusion: form.conclusion,
         keywords: form.keywords.filter((k) => k.word.trim()),
-        ...(uploadedFile?.publicFileId ? { publicFileId: Number(uploadedFile.publicFileId) } : {}),
+        ...(uploadedFiles.length > 0
+          ? {
+            publicFileIds: uploadedFiles
+              .filter((f) => f.publicFileId)
+              .map((f) => Number(f.publicFileId)),
+          }
+          : {}),
       }
       const res = await createAbstractPublic(payload)
       if (res.success) setSubmitted(true)
@@ -365,16 +376,32 @@ export function AbstractSubmitForm() {
                         {conf.title}
                       </span>
                       {conf.abstractSubmissionDeadline && (
-                        <span
-                          style={{
-                            fontSize: '0.75rem',
-                            color: 'var(--muted-foreground)',
-                            display: 'block',
-                            marginTop: 2,
-                          }}
-                        >
-                          Deadline: {formatDate(conf.abstractSubmissionDeadline)}
-                        </span>
+                        <div style={{ marginTop: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span
+                            style={{
+                              fontSize: '0.75rem',
+                              color: 'var(--muted-foreground)',
+                            }}
+                          >
+                            Deadline: {formatDate(conf.abstractSubmissionDeadline)}
+                          </span>
+                          {conf.abstractDeadlineExtended && (
+                            <span
+                              style={{
+                                fontSize: '0.65rem',
+                                color: '#b45309',
+                                background: '#fef3c7',
+                                padding: '1px 5px',
+                                borderRadius: '4px',
+                                fontWeight: 600,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.02em',
+                              }}
+                            >
+                              Extended
+                            </span>
+                          )}
+                        </div>
                       )}
                     </OptionCard>
                   ))}
@@ -664,11 +691,11 @@ export function AbstractSubmitForm() {
           {/* ── STEP 7: File Upload ───────────────────────────────────────── */}
           {step === 7 && (
             <Step
-              title="Upload Abstract File"
-              sub="Optionally attach a PDF of your full abstract (max 8 MB)."
+              title="Upload Files"
+              sub="Optionally attach PDFs or images related to your abstract (max 8 MB each, up to 5 files)."
             >
               <AbstractFileUploader
-                onUploadSuccess={(fileData) => setUploadedFile(fileData)}
+                onFilesChange={(files) => setUploadedFiles(files)}
                 onUploadStateChange={(uploading) => setIsFileUploading(uploading)}
               />
               {isFileUploading && (
@@ -683,18 +710,6 @@ export function AbstractSubmitForm() {
                   }}
                 >
                   ⏳ Upload in progress — please wait before continuing.
-                </p>
-              )}
-              {uploadedFile && !isFileUploading && (
-                <p
-                  style={{
-                    marginTop: '0.75rem',
-                    fontSize: '0.8125rem',
-                    color: 'var(--muted-foreground)',
-                  }}
-                >
-                  ✅ Attached:{' '}
-                  <strong style={{ color: 'var(--foreground)' }}>{uploadedFile.name}</strong>
                 </p>
               )}
             </Step>
@@ -738,16 +753,16 @@ export function AbstractSubmitForm() {
                     { label: 'Conclusion', value: form.conclusion, multiline: true },
                     form.keywords.filter((k) => k.word).length > 0
                       ? {
-                          label: 'Keywords',
-                          value: form.keywords
-                            .filter((k) => k.word)
-                            .map((k) => k.word)
-                            .join(', '),
-                        }
+                        label: 'Keywords',
+                        value: form.keywords
+                          .filter((k) => k.word)
+                          .map((k) => k.word)
+                          .join(', '),
+                      }
                       : null,
-                    uploadedFile
-                      ? { label: 'Attached File', value: uploadedFile.name }
-                      : { label: 'Attached File', value: 'None' },
+                    uploadedFiles.length > 0
+                      ? { label: 'Attached Files', value: uploadedFiles.map((f) => f.name).join(', ') }
+                      : { label: 'Attached Files', value: 'None' },
                   ].filter(Boolean) as { label: string; value?: string; multiline?: boolean }[]
                 ).map(({ label, value, multiline }) => (
                   <div
