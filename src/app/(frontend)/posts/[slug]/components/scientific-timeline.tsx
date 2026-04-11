@@ -111,10 +111,10 @@ export function ScientificTimeline({
                     {/* Icon Node */}
                     <div
                       className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center mb-4 border-2 transition-all ${milestone.type === 'event'
-                          ? 'bg-[#0F172A] border-[#0F172A] text-white'
-                          : past
-                            ? 'bg-slate-100 border-slate-300 text-slate-400'
-                            : 'bg-white border-[#06B6D4] text-[#06B6D4]'
+                        ? 'bg-[#0F172A] border-[#0F172A] text-white'
+                        : past
+                          ? 'bg-slate-100 border-slate-300 text-slate-400'
+                          : 'bg-white border-[#06B6D4] text-[#06B6D4]'
                         }`}
                     >
                       {milestone.icon}
@@ -123,15 +123,15 @@ export function ScientificTimeline({
                     {/* Content Card */}
                     <div
                       className={`w-full p-4 rounded-xl border backdrop-blur-sm transition-all hover:shadow-lg ${milestone.type === 'event'
-                          ? 'bg-[#0F172A] border-[#0F172A] text-white'
-                          : 'bg-white/80 border-[#E2E8F0]'
+                        ? 'bg-[#0F172A] border-[#0F172A] text-white'
+                        : 'bg-white/80 border-[#E2E8F0]'
                         }`}
                     >
                       {/* Type Badge */}
                       <span
                         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider font-medium mb-3 ${milestone.type === 'event'
-                            ? 'bg-cyan-500/20 text-cyan-300'
-                            : 'bg-amber-500/10 text-amber-600 border border-amber-200'
+                          ? 'bg-cyan-500/20 text-cyan-300'
+                          : 'bg-amber-500/10 text-amber-600 border border-amber-200'
                           }`}
                       >
                         {milestone.type === 'deadline' ? (
@@ -205,17 +205,17 @@ export function ScientificTimeline({
               <div
                 key={index}
                 className={`flex gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border backdrop-blur-sm ${milestone.type === 'event'
-                    ? 'bg-[#0F172A] border-[#0F172A]'
-                    : 'bg-white/80 border-[#E2E8F0]'
+                  ? 'bg-[#0F172A] border-[#0F172A]'
+                  : 'bg-white/80 border-[#E2E8F0]'
                   }`}
               >
                 {/* Icon */}
                 <div
                   className={`shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 ${milestone.type === 'event'
-                      ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400'
-                      : past
-                        ? 'bg-slate-100 border-slate-300 text-slate-400'
-                        : 'bg-cyan-50 border-[#06B6D4] text-[#06B6D4]'
+                    ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400'
+                    : past
+                      ? 'bg-slate-100 border-slate-300 text-slate-400'
+                      : 'bg-cyan-50 border-[#06B6D4] text-[#06B6D4]'
                     }`}
                 >
                   <span className="[&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-5 sm:[&>svg]:w-5">
@@ -228,8 +228,8 @@ export function ScientificTimeline({
                   <div className="flex items-center gap-2 mb-1">
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] uppercase tracking-wider font-medium ${milestone.type === 'event'
-                          ? 'bg-cyan-500/20 text-cyan-300'
-                          : 'bg-amber-500/10 text-amber-600'
+                        ? 'bg-cyan-500/20 text-cyan-300'
+                        : 'bg-amber-500/10 text-amber-600'
                         }`}
                     >
                       {milestone.type}
