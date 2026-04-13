@@ -326,6 +326,20 @@ export const Abstracts: CollectionConfig = {
         },
       },
     },
+    {
+      name: 'rejectionReason',
+      type: 'textarea',
+      label: 'Rejection Reason',
+      admin: {
+        position: 'sidebar',
+        condition: (data) => data?.status === 'rejected',
+        description: 'Explain why this abstract was not accepted. This will be sent to the researcher.',
+      },
+      access: {
+        read: ({ req }) => req.user?.role === 'admin',
+        update: ({ req }) => req.user?.role === 'admin',
+      },
+    },
   ],
 
   hooks: {
