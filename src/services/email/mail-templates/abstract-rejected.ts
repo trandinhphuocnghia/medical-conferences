@@ -54,10 +54,11 @@ export const abstractRejectedMail = (abstract: Abstract): string => {
                   <td style="padding: 18px;">
                     <p style="margin: 0 0 6px; font-size: 11px; color: #b91c1c; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase;">Submission Details</p>
                     <p style="margin: 0 0 12px; font-size: 15px; font-weight: 600; color: #7f1d1d; line-height: 1.5;">${abstract.title}</p>
-                    <div style="border-top: 1px solid #fee2e2; padding-top: 12px;">
+                    
+                    ${(abstract as any)?.rejectionReason ? `<div style="border-top: 1px solid #fee2e2; padding-top: 12px;">
                       <p style="margin: 0 0 4px; font-size: 12px; color: #b91c1c; font-weight: 600;">Feedback from Reviewers:</p>
-                      <p style="margin: 0; font-size: 13px; color: #991b1b; font-style: italic;">"${(abstract as any).rejectionReason || 'No specific feedback provided'}"</p>
-                    </div>
+                      <p style="margin: 0; font-size: 13px; color: #991b1b; font-style: italic;">"${(abstract as any).rejectionReason}"</p>
+                    </div>` : ''}
                   </td>
                 </tr>
               </table>
