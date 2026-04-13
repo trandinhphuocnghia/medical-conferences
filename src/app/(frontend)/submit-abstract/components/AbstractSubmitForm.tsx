@@ -252,10 +252,10 @@ export function AbstractSubmitForm() {
         keywords: form.keywords.filter((k) => k.word.trim()),
         ...(uploadedFiles.length > 0
           ? {
-            publicFileIds: uploadedFiles
-              .filter((f) => f.publicFileId)
-              .map((f) => Number(f.publicFileId)),
-          }
+              publicFileIds: uploadedFiles
+                .filter((f) => f.publicFileId)
+                .map((f) => Number(f.publicFileId)),
+            }
           : {}),
       }
       const res = await createAbstractPublic(payload)
@@ -753,12 +753,12 @@ export function AbstractSubmitForm() {
                     { label: 'Conclusion', value: form.conclusion, multiline: true },
                     form.keywords.filter((k) => k.word).length > 0
                       ? {
-                        label: 'Keywords',
-                        value: form.keywords
-                          .filter((k) => k.word)
-                          .map((k) => k.word)
-                          .join(', '),
-                      }
+                          label: 'Keywords',
+                          value: form.keywords
+                            .filter((k) => k.word)
+                            .map((k) => k.word)
+                            .join(', '),
+                        }
                       : null,
                     uploadedFiles.length > 0
                       ? { label: 'Attached Files', value: uploadedFiles.map((f) => f.name).join(', ') }
