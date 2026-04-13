@@ -58,9 +58,6 @@ export const abstractApprovedMail = (abstract: Abstract): string => {
                 </tr>
               </table>
 
-              <p style="text-align: center; margin: 32px 0;">
-                <a href="${process.env.NEXT_PUBLIC_SERVER_URL}/posts/${(abstract as any).conferenceSlug || '#'}" style="display: inline-block; background-color: #059669; color: #ffffff; padding: 12px 24px; border-radius: 6px; font-weight: 600; font-size: 14px;">View Official Timeline</a>
-              </p>
 
               <p style="margin: 0 0 6px; font-size: 14px; color: #475569; line-height: 1.6;">Should you have any inquiries regarding the presentation requirements, please contact us:</p>
               <p style="margin: 0; font-size: 14px; color: #0f172a; line-height: 1.8;">
