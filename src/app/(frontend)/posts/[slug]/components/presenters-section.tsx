@@ -156,19 +156,17 @@ function PresenterCard({
   return (
     <button
       onClick={onClick}
-      className={`group relative rounded-2xl border transition-all duration-300 text-left w-full hover:scale-105 active:scale-100 ${
-        featured
+      className={`group relative rounded-2xl border transition-all duration-300 text-left w-full hover:scale-105 active:scale-100 ${featured
           ? 'bg-white border-accent/20 shadow-lg shadow-accent/10 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/15'
           : 'bg-white/60 border-border hover:border-accent/30 hover:shadow-lg hover:bg-white'
-      }`}
+        }`}
     >
       <div className="p-5 sm:p-6">
         {/* Avatar Section */}
         <div className="flex items-start gap-3 sm:gap-4 mb-4">
           <div
-            className={`shrink-0 rounded-xl overflow-hidden bg-muted border-2 transition-colors ${
-              featured ? 'border-accent/20 group-hover:border-accent/40' : 'border-border'
-            }`}
+            className={`shrink-0 rounded-xl overflow-hidden bg-muted border-2 transition-colors ${featured ? 'border-accent/20 group-hover:border-accent/40' : 'border-border'
+              }`}
           >
             {presenter.avatarUrl ? (
               <NextImage
@@ -181,9 +179,8 @@ function PresenterCard({
               />
             ) : (
               <div
-                className={`h-16 w-16 flex items-center justify-center ${
-                  featured ? 'bg-accent/10 text-accent' : 'bg-muted text-muted-foreground'
-                }`}
+                className={`h-16 w-16 flex items-center justify-center ${featured ? 'bg-accent/10 text-accent' : 'bg-muted text-muted-foreground'
+                  }`}
               >
                 <User className="h-8 w-8" />
               </div>
@@ -193,9 +190,8 @@ function PresenterCard({
           {/* Info */}
           <div className="flex-1 min-w-0">
             <h4
-              className={`font-semibold truncate transition-colors ${
-                featured ? 'text-lg text-navy group-hover:text-accent' : 'text-base text-navy'
-              }`}
+              className={`font-semibold truncate transition-colors ${featured ? 'text-lg text-navy group-hover:text-accent' : 'text-base text-navy'
+                }`}
             >
               {presenter.name}
               {presenter.degrees && (
