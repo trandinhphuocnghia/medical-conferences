@@ -915,6 +915,10 @@ export interface Abstract {
    * Users can only set Draft or Pending. Admins manage review statuses.
    */
   status?: ('draft' | 'pending' | 'rejected' | 'verified') | null;
+  /**
+   * Explain why this abstract was not accepted. This will be sent to the researcher.
+   */
+  rejectionReason?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1581,6 +1585,7 @@ export interface AbstractsSelect<T extends boolean = true> {
   files?: T;
   submitter?: T;
   status?: T;
+  rejectionReason?: T;
   updatedAt?: T;
   createdAt?: T;
 }
