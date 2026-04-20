@@ -18,7 +18,7 @@ export const Users: CollectionConfig = {
     update: adminOrOwner,
   },
   admin: {
-    defaultColumns: ['name', 'email', 'title', 'role', 'createdAt'],
+    defaultColumns: ['firstName', 'lastName', 'email', 'role', 'nationality', 'createdAt'],
     useAsTitle: 'firstName',
     hidden: notAdminView,
   },
@@ -123,6 +123,18 @@ export const Users: CollectionConfig = {
               admin: {
                 position: 'sidebar',
                 description: 'Used to highlight keynote/invited speakers on the conference page.',
+              },
+            },
+            {
+              name: 'nationality',
+              type: 'select',
+              defaultValue: 'international',
+              options: [
+                { label: 'Vietnamese', value: 'vietnamese' },
+                { label: 'International', value: 'international' },
+              ],
+              admin: {
+                position: 'sidebar',
               },
             },
           ],

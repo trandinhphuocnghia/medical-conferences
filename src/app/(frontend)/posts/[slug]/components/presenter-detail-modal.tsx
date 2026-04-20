@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { FileText, Award } from 'lucide-react'
 import NextImage from 'next/image'
 
@@ -24,13 +24,13 @@ export function PresenterDetailModal({ presenter, open, onOpenChange }: Presente
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl h-[90vh] overflow-hidden flex flex-col p-0 gap-0">
+        <DialogHeader className="p-6 pb-2 shrink-0">
           <DialogTitle className="sr-only">Presenter Details</DialogTitle>
           <DialogDescription className="sr-only">{presenter.name}</DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 overflow-y-auto">
+        <ScrollArea className="flex-1 min-h-0">
           <div className="px-6 py-4">
             {/* Header Section */}
             <div className="mb-8">

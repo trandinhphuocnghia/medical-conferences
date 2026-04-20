@@ -95,14 +95,52 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'venueName',
               type: 'text',
-              label: 'Venue Name (e.g., Lotte Hotel Seoul)',
-              required: true,
+              label: 'Venue Name (Legacy)',
+              admin: {
+                description: 'Use the new "Venues" array below. This field is for legacy data.',
+              },
             },
             {
               name: 'venueCity',
               type: 'text',
-              label: 'Venue City',
-              required: true,
+              label: 'Venue City (Legacy)',
+            },
+            {
+              name: 'venues',
+              type: 'array',
+              label: 'Venues',
+              admin: {
+                description: 'Add one or more venues for this conference.',
+              },
+              fields: [
+                {
+                  name: 'name',
+                  type: 'text',
+                  label: 'Venue Name',
+                  required: true,
+                  admin: { width: '50%' },
+                },
+                {
+                  name: 'city',
+                  type: 'text',
+                  label: 'City',
+                  required: true,
+                  admin: { width: '50%' },
+                },
+                {
+                  name: 'address',
+                  type: 'text',
+                  label: 'Full Address',
+                },
+                {
+                  name: 'note',
+                  type: 'text',
+                  label: 'Note (e.g., May 14th & 16th)',
+                  admin: {
+                    placeholder: 'May 14th & 16th',
+                  },
+                },
+              ],
             },
 
             {
