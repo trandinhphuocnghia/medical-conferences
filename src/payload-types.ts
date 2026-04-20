@@ -253,8 +253,23 @@ export interface Post {
    * Primary host of the conference (e.g., Korean Gastric Cancer Association).
    */
   host: number | UserGroup;
-  venueName: string;
-  venueCity: string;
+  /**
+   * Use the new "Venues" array below. This field is for legacy data.
+   */
+  venueName?: string | null;
+  venueCity?: string | null;
+  /**
+   * Add one or more venues for this conference.
+   */
+  venues?:
+    | {
+        name: string;
+        city: string;
+        address?: string | null;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).
    */
@@ -367,6 +382,7 @@ export interface User {
    * Used to highlight keynote/invited speakers on the conference page.
    */
   registrationType?: ('invited' | 'standard') | null;
+  nationality?: ('vietnamese' | 'international') | null;
   firstName: string;
   lastName: string;
   fullname?: string | null;
@@ -1473,6 +1489,15 @@ export interface PostsSelect<T extends boolean = true> {
   host?: T;
   venueName?: T;
   venueCity?: T;
+  venues?:
+    | T
+    | {
+        name?: T;
+        city?: T;
+        address?: T;
+        note?: T;
+        id?: T;
+      };
   topics?: T;
   abstractSubmissionDeadline?: T;
   notificationOfAcceptanceDate?: T;
@@ -1599,6 +1624,7 @@ export interface UsersSelect<T extends boolean = true> {
   active?: T;
   source?: T;
   registrationType?: T;
+  nationality?: T;
   firstName?: T;
   lastName?: T;
   fullname?: T;

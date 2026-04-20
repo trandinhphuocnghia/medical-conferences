@@ -21,11 +21,11 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
     endDate: conferenceEndDate,
     venueName,
     venueCity,
+    venues,
     id,
   } = conference
   const router = useRouter()
 
-  const location = `${venueName}, ${venueCity}`
   const startDate = new Date(conferenceStartDate)
   const endDate = new Date(conferenceEndDate)
 
@@ -41,34 +41,48 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
         </div>
 
         {/* Meta Information */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="flex items-center gap-3">
-            <Calendar className="h-5 w-5 text-accent" />
+        <div className="flex flex-col sm:flex-row sm:items-start gap-8 sm:gap-24 mb-10">
+          <div className="flex items-start gap-3">
+            <Calendar className="h-5 w-5 text-accent mt-1 shrink-0" />
             <div>
               <p className="text-sm text-muted-foreground">Dates</p>
-              <p className="font-semibold text-foreground">
-                {formatDate(startDate)} - {formatDate(endDate)}
-              </p>
+              <div className="mt-1">
+                <p className="font-semibold text-foreground">
+                  {formatDate(startDate)} - {formatDate(endDate)}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <MapPin className="h-5 w-5 text-accent" />
-            <div>
+          <div className="flex items-start gap-3">
+            <MapPin className="h-5 w-5 text-accent mt-1 shrink-0" />
+            <div className="min-w-0 flex-1">
               <p className="text-sm text-muted-foreground">Location</p>
-              <p className="font-semibold text-foreground">{location}</p>
+              <div className="space-y-2 mt-1">
+                {venues && venues.length > 0 ? (
+                  venues.map((v, i) => (
+                    <div key={i} className="text-sm sm:text-base">
+                      <p className="font-semibold text-foreground leading-snug">
+                        {v.name}
+                        {v.city && <span className="font-normal opacity-80">, {v.city}</span>}
+                      </p>
+                      {v.address && (
+                        <p className="text-xs text-muted-foreground mt-0.5">{v.address}</p>
+                      )}
+                      {v.note && (
+                        <p className="text-xs font-medium text-accent mt-0.5 italic">{v.note}</p>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p className="font-semibold text-foreground">
+                    {venueName}
+                    {venueCity && <span className="font-normal opacity-80">, {venueCity}</span>}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <Users className="h-5 w-5 text-accent" />
-            {/* 
-            Attendees Count
-            <div>
-              <p className="text-sm text-muted-foreground">Attendees</p>
-              <p className="font-semibold text-foreground">
-                {(attendeeCount || 0).toLocaleString()}+
-              </p>
-            </div> */}
-          </div>
+
         </div>
 
         {/* Call for Abstract Card */}
