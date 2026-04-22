@@ -80,7 +80,7 @@ export function SpeakerCarousel({ speakers, onPresenterClick }: SpeakerCarouselP
       onTouchEnd={() => setIsPaused(false)}
     >
       {/* Navigation Buttons */}
-      <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 pointer-events-none z-10 flex justify-between px-2 sm:-mx-4">
+      <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 pointer-events-none z-10 hidden sm:flex justify-between px-2">
         <Button
           variant="outline"
           size="icon"
@@ -102,16 +102,15 @@ export function SpeakerCarousel({ speakers, onPresenterClick }: SpeakerCarouselP
         </Button>
       </div>
 
-      {/* Scrollable Container */}
       <div
         ref={scrollContainerRef}
-        className="flex items-stretch gap-4 sm:gap-6 overflow-x-auto scrollbar-hide scroll-smooth py-4 px-1 snap-x snap-mandatory"
+        className="flex items-stretch gap-4 sm:gap-6 py-6 px-2 overflow-x-auto scrollbar-hide snap-x"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {speakers.map((presenter) => (
           <div
             key={presenter.id}
-            className="flex-none w-[160px] sm:w-[200px] lg:w-[220px] h-full snap-start"
+            className="flex-none w-[140px] sm:w-[180px] h-full snap-start"
           >
             <PresenterCard
               presenter={presenter}
