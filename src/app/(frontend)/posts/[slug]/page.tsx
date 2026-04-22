@@ -70,10 +70,10 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
 
       {topics.length > 0 && <TopicAccordion conferenceId={conferenceData.id} topics={topics} />}
 
+      <ProgramPreviewCard slug={slug} program={conferenceData.program} />
 
       <PresentersSection presenters={presentersData.presenters} highlightPresenters={[]} />
 
-      <ProgramPreviewCard slug={slug} program={conferenceData.program} />
 
       <SponsorSection sponsors={sponsors} />
     </div>

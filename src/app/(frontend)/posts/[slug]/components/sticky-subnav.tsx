@@ -28,7 +28,11 @@ export function StickySubNav({ conferenceId, slug }: StickySubNavProps) {
 
   const navItems = [
     { label: 'Overview', href: `${conferenceBasePath}#overview` },
+    { label: 'Message', href: `${conferenceBasePath}#message` },
+    { label: 'Timeline', href: `${conferenceBasePath}#timeline` },
+    { label: 'Topics', href: `${conferenceBasePath}#topics` },
     { label: 'Program', href: `${conferenceBasePath}/program` },
+    { label: 'Speakers', href: `${conferenceBasePath}#speakers` },
     {
       label: 'Call for Abstract',
       href: `/submit-abstract?conference=${conferenceId}`,
@@ -37,10 +41,6 @@ export function StickySubNav({ conferenceId, slug }: StickySubNavProps) {
       label: 'Registration',
       href: `/registration?conference=${conferenceId}`,
     },
-    { label: 'Message', href: `${conferenceBasePath}#message` },
-    { label: 'Timeline', href: `${conferenceBasePath}#timeline` },
-    { label: 'Topics', href: `${conferenceBasePath}#topics` },
-    { label: 'Speakers', href: `${conferenceBasePath}#speakers` },
     { label: 'Sponsors', href: `${conferenceBasePath}#sponsors` },
   ]
 

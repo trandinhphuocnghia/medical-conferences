@@ -114,7 +114,7 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
           >
             <AccordionTrigger className="hover:text-accent py-5 no-underline hover:no-underline">
               <div className="text-left pr-4">
-                <h3 className="font-semibold text-navy text-lg leading-snug">Other Topic</h3>
+                <h3 className="font-semibold text-navy text-lg leading-snug">Topics</h3>
               </div>
             </AccordionTrigger>
             <AccordionContent className="pb-6">
@@ -132,7 +132,7 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
                   </p>
                   <Button
                     onClick={() => onSubmitAbstract('other')}
-                      className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 w-full sm:w-auto"
+                    className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 w-full sm:w-auto"
                   >
                     <Send className="h-4 w-4" />
                     Submit Other Topic

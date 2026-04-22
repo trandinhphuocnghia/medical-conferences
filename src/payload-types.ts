@@ -253,10 +253,6 @@ export interface Post {
    * Primary host of the conference (e.g., Korean Gastric Cancer Association).
    */
   host: number | UserGroup;
-  /**
-   * Use the new "Venues" array below. This field is for legacy data.
-   */
-  venueName?: string | null;
   venueCity?: string | null;
   /**
    * Add one or more venues for this conference.
@@ -342,6 +338,13 @@ export interface Post {
    * Select the sponsors for this conference.
    */
   sponsors?: (number | Sponsor)[] | null;
+  attendeesCount?: number | null;
+  keynoteSpeakersCount?: number | null;
+  /**
+   * Override the automatic "X Days" calculation (e.g., "May 14-16").
+   */
+  durationOverride?: string | null;
+  cmeCredits?: string | null;
   slug: string;
   slugLock?: boolean | null;
   createdBy?: (number | null) | User;
@@ -1487,7 +1490,6 @@ export interface PostsSelect<T extends boolean = true> {
   theme?: T;
   active?: T;
   host?: T;
-  venueName?: T;
   venueCity?: T;
   venues?:
     | T
@@ -1544,6 +1546,10 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
       };
   sponsors?: T;
+  attendeesCount?: T;
+  keynoteSpeakersCount?: T;
+  durationOverride?: T;
+  cmeCredits?: T;
   slug?: T;
   slugLock?: T;
   createdBy?: T;
