@@ -1,7 +1,6 @@
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
 import type { Post, Sponsor, Topic } from '@/payload-types'
-import { ProgramSection } from './components/conference-program'
 import { SponsorSection } from './components/conference-sponsor'
 import { DetailHeader } from './components/detail-header'
 import { PresentersSection } from './components/presenters-section'
@@ -10,6 +9,7 @@ import { ScientificTimeline } from './components/scientific-timeline'
 import { StickySubNav } from './components/sticky-subnav'
 import { TopicAccordion } from './components/topic-accordion'
 import { CountdownTimer } from './components/countdown-timer'
+import { ProgramPreviewCard } from './components/program-preview-card'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
@@ -43,7 +43,7 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
 
   return (
     <div className="min-h-screen bg-background">
-      <StickySubNav conferenceId={conferenceData?.id} />
+      <StickySubNav conferenceId={conferenceData?.id} slug={slug} />
 
       <DetailHeader
         conference={conferenceData}
@@ -73,7 +73,7 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
 
       <PresentersSection presenters={presentersData.presenters} highlightPresenters={[]} />
 
-      <ProgramSection program={conferenceData.program} />
+      <ProgramPreviewCard slug={slug} program={conferenceData.program} />
 
       <SponsorSection sponsors={sponsors} />
     </div>
