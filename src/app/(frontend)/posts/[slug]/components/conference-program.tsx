@@ -133,8 +133,8 @@ function FloatingDayNav({
                   key={value}
                   onClick={() => handleSelect(value)}
                   className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors ${isActive
-                      ? 'bg-accent/10 text-accent'
-                      : 'text-foreground hover:bg-muted/50'
+                    ? 'bg-accent/10 text-accent'
+                    : 'text-foreground hover:bg-muted/50'
                     }`}
                 >
                   <Calendar className="h-3.5 w-3.5 shrink-0 opacity-60" />
@@ -197,7 +197,6 @@ export function ProgramSection({ program = [] }: ProgramSectionProps) {
     })
     .filter(Boolean) as ProgramDay[]
 
-  // Hooks must be called unconditionally — before any early returns
   const [activeTab, setActiveTab] = useState(allDays[0]?.id || '0')
 
   const handleDaySelect = useCallback((value: string) => {
