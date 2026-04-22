@@ -3,14 +3,13 @@ import { Post, UserGroup } from '@/payload-types'
 import { formatDateRange } from '@/utilities/dateUtils'
 
 const ConferenceOverview = ({ post }: { post: Post }) => {
-  const { title, theme, host, venueCity, venueName, contactEmails } = post
+  const { title, theme, host, venueCity, contactEmails } = post
   const data = [
     { label: 'Title', value: title },
     {
       label: 'When',
       value: formatDateRange(post?.startDate, post?.endDate),
     },
-    { label: 'Venue', value: [venueCity, venueName]?.toString()?.split(', ') },
     { label: 'Theme', value: theme },
     { label: 'Host', value: (host as UserGroup)?.name || '-' },
     {

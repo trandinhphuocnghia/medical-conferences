@@ -15,10 +15,7 @@ function isAbstractOpen(deadline?: string | null): boolean {
 
 export function HeroSection({ conference }: HeroSectionProps) {
   const dateRange = formatDateRange(conference?.startDate, conference?.endDate)
-  const location =
-    conference?.venueName && conference?.venueCity
-      ? `${conference.venueName}, ${conference.venueCity}`
-      : (conference?.venueCity ?? null)
+
   const abstractOpen = isAbstractOpen(conference?.abstractSubmissionDeadline as string | null)
 
   return (
@@ -58,12 +55,7 @@ export function HeroSection({ conference }: HeroSectionProps) {
                 <span className="text-sm font-medium">{dateRange}</span>
               </div>
             )}
-            {location && (
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-accent" />
-                <span className="text-sm font-medium">{location}</span>
-              </div>
-            )}
+
           </div>
         )}
 

@@ -19,7 +19,6 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
   const {
     startDate: conferenceStartDate,
     endDate: conferenceEndDate,
-    venueName,
     venueCity,
     venues,
     id,
@@ -75,7 +74,6 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
                   ))
                 ) : (
                   <p className="font-semibold text-foreground">
-                    {venueName}
                     {venueCity && <span className="font-normal opacity-80">, {venueCity}</span>}
                   </p>
                 )}
