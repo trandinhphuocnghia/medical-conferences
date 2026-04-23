@@ -49,7 +49,7 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
   }
 
   return (
-    <section id="topics" className="py-8 sm:py-12 scroll-mt-[132px]">
+    <section id="topics" className="pt-6 sm:pt-10 scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">Scientific Topics</h2>
@@ -65,9 +65,9 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
               value={`topic-${index}`}
               className="border border-border rounded-lg bg-card px-4 sm:px-6 overflow-hidden"
             >
-              <AccordionTrigger className="hover:text-accent py-5 no-underline hover:no-underline">
+              <AccordionTrigger className="hover:text-accent py-3 no-underline hover:no-underline">
                 <div className="text-left pr-4">
-                  <h3 className="font-semibold text-navy text-lg leading-snug">{topic.name}</h3>
+                  <h3 className="font-semibold text-navy leading-snug">{topic.name}</h3>
                   {topic.description && (
                     <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
                       {topic.description}
@@ -75,7 +75,7 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
                   )}
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="pb-6">
+              <AccordionContent className="">
                 <div className="bg-slate-50/50 rounded-xl p-5 sm:p-6 border border-slate-100">
                   <div className="prose prose-slate max-w-none text-sm sm:text-base mb-6">
                     {topic.description && (
@@ -112,9 +112,9 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
             value="topic-other"
             className="border border-border rounded-lg bg-card px-4 sm:px-6 overflow-hidden"
           >
-            <AccordionTrigger className="hover:text-accent py-5 no-underline hover:no-underline">
+            <AccordionTrigger className="hover:text-accent py-3 no-underline hover:no-underline">
               <div className="text-left pr-4">
-                <h3 className="font-semibold text-navy text-lg leading-snug">Topics</h3>
+                <h3 className="font-semibold text-navy leading-snug">Topics</h3>
               </div>
             </AccordionTrigger>
             <AccordionContent className="pb-6">

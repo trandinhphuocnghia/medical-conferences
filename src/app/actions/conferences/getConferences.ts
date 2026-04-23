@@ -40,6 +40,7 @@ export async function getConferences({ search }: { search?: string }) {
         categories: true,
         meta: true,
         startDate: true,
+        venueCity:true
       },
     })
 

@@ -22,9 +22,9 @@ export function ProgramPreviewCard({ slug, program }: ProgramPreviewCardProps) {
     (p.days || []).map((day) =>
       day
         ? {
-            ...day,
-            congressTitle: p.title,
-          }
+          ...day,
+          congressTitle: p.title,
+        }
         : null,
     ),
   ).filter(Boolean) as (NonNullable<NonNullable<Program>[number]['days']>[number] & {
@@ -35,10 +35,10 @@ export function ProgramPreviewCard({ slug, program }: ProgramPreviewCardProps) {
   const dayCount = allDays.length
 
   return (
-    <section id="program" className="py-8 sm:py-12 bg-background scroll-mt-[132px]">
+    <section id="program" className="pt-6 sm:pt-10 bg-background scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 sm:mb-10">
+        <div className="mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-4xl font-bold text-navy mb-2 mt-2">Program</h2>
           <p className="text-muted-foreground text-sm sm:text-base">
             Detailed schedule and venue information for each day
