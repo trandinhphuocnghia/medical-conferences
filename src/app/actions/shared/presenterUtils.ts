@@ -9,6 +9,7 @@ export type PresenterData = {
   bio?: any
   degrees?: string
   registrationType?: 'invited' | 'standard'
+  nationality?: 'vietnamese' | 'international'
   abstracts: {
     id: string | number
     title: string
@@ -32,6 +33,7 @@ export function userToPresenterData(user: User): PresenterData {
     bio: user.bio || undefined,
     degrees: user.degrees || undefined,
     registrationType: user.registrationType || 'standard',
+    nationality: user.nationality || 'international',
     abstracts: [],
   }
 }

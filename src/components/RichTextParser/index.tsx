@@ -129,7 +129,7 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
           case 'table':
             return (
               <div key={i} className="my-6 overflow-x-auto rounded-lg border border-slate-200">
-                <table className="w-full border-collapse text-sm">
+                <table className="min-w-full border-collapse text-sm">
                   <tbody>
                     <Serialize nodes={node.children} />
                   </tbody>
@@ -149,9 +149,8 @@ const Serialize = ({ nodes }: { nodes: Node[] }) => {
                 key={i}
                 colSpan={node.colSpan || 1}
                 rowSpan={node.rowSpan || 1}
-                className={`px-4 py-2.5 text-left border-r border-slate-200 last:border-r-0 ${
-                  node.headerState ? 'bg-slate-50 font-semibold text-slate-800' : 'text-slate-600'
-                }`}
+                className={`px-4 py-2.5 text-left border-r border-slate-200 last:border-r-0 ${node.headerState ? 'bg-slate-50 font-semibold text-slate-800' : 'text-slate-600'
+                  }`}
               >
                 <Serialize nodes={node.children} />
               </CellTag>

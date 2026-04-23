@@ -253,8 +253,19 @@ export interface Post {
    * Primary host of the conference (e.g., Korean Gastric Cancer Association).
    */
   host: number | UserGroup;
-  venueName: string;
-  venueCity: string;
+  venueCity?: string | null;
+  /**
+   * Add one or more venues for this conference.
+   */
+  venues?:
+    | {
+        name: string;
+        city: string;
+        address?: string | null;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).
    */
@@ -327,6 +338,13 @@ export interface Post {
    * Select the sponsors for this conference.
    */
   sponsors?: (number | Sponsor)[] | null;
+  attendeesCount?: number | null;
+  keynoteSpeakersCount?: number | null;
+  /**
+   * Override the automatic "X Days" calculation (e.g., "May 14-16").
+   */
+  durationOverride?: string | null;
+  cmeCredits?: string | null;
   slug: string;
   slugLock?: boolean | null;
   createdBy?: (number | null) | User;
@@ -367,6 +385,7 @@ export interface User {
    * Used to highlight keynote/invited speakers on the conference page.
    */
   registrationType?: ('invited' | 'standard') | null;
+  nationality?: ('vietnamese' | 'international') | null;
   firstName: string;
   lastName: string;
   fullname?: string | null;
@@ -1471,8 +1490,16 @@ export interface PostsSelect<T extends boolean = true> {
   theme?: T;
   active?: T;
   host?: T;
-  venueName?: T;
   venueCity?: T;
+  venues?:
+    | T
+    | {
+        name?: T;
+        city?: T;
+        address?: T;
+        note?: T;
+        id?: T;
+      };
   topics?: T;
   abstractSubmissionDeadline?: T;
   notificationOfAcceptanceDate?: T;
@@ -1519,6 +1546,10 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
       };
   sponsors?: T;
+  attendeesCount?: T;
+  keynoteSpeakersCount?: T;
+  durationOverride?: T;
+  cmeCredits?: T;
   slug?: T;
   slugLock?: T;
   createdBy?: T;
@@ -1599,6 +1630,7 @@ export interface UsersSelect<T extends boolean = true> {
   active?: T;
   source?: T;
   registrationType?: T;
+  nationality?: T;
   firstName?: T;
   lastName?: T;
   fullname?: T;
