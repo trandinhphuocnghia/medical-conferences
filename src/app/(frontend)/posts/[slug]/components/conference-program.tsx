@@ -209,7 +209,7 @@ export function ProgramSection({ program = [] }: ProgramSectionProps) {
 
   return (
     <>
-      <section id="program" className="py-8 sm:py-12 bg-background scroll-mt-[132px]">
+      <section id="program" className="pt-6 sm:pt-10 bg-background scroll-mt-[132px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8 sm:mb-10">

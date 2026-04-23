@@ -95,7 +95,7 @@ export function CountdownTimer({ targetDate, variant = 'full' }: CountdownTimerP
     }
 
     return (
-        <section className="bg-background py-8 sm:py-12 ">
+        <section className="bg-background pt-6 sm:pt-10 ">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="w-full bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl sm:rounded-2xl border border-accent/20 px-4 py-6 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
                     <div className="text-center space-y-6 sm:space-y-8">

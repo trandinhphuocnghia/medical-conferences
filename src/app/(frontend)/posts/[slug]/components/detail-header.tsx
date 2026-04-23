@@ -29,7 +29,7 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
   const endDate = new Date(conferenceEndDate)
 
   return (
-    <section id="overview" className="bg-background py-8 sm:py-12 scroll-mt-[132px]">
+    <section id="overview" className="bg-background pt-6 sm:pt-10 scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Title */}
         <div className="mb-8">
@@ -40,7 +40,7 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
         </div>
 
         {/* Meta Information */}
-        <div className="flex flex-col sm:flex-row sm:items-start gap-8 sm:gap-24 mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-start gap-8 sm:gap-24">
           <div className="flex items-start gap-3">
             <Calendar className="h-5 w-5 text-accent mt-1 shrink-0" />
             <div>
@@ -84,7 +84,7 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
         </div>
 
         {/* Call for Abstract Card */}
-        <div className="bg-primary text-primary-foreground rounded-lg p-6 sm:p-8 mb-8">
+        <div className="bg-primary text-primary-foreground rounded-lg p-6 sm:p-8 mt-6 sm:mt-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold mb-2">Call for Abstracts</h2>

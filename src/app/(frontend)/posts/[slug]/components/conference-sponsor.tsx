@@ -110,7 +110,7 @@ export function SponsorSection({ sponsors = [] }: SponsorSectionProps) {
   const bronzeSponsors = sponsors.filter((s) => s.level === 'bronze')
 
   return (
-    <section id="sponsors" className="py-8 sm:py-12 bg-background">
+    <section id="sponsors" className="py-6 sm:py-10 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-10 sm:mb-12">
@@ -122,7 +122,7 @@ export function SponsorSection({ sponsors = [] }: SponsorSectionProps) {
 
         {/* Diamond Sponsors */}
         {diamondSponsors.length > 0 && (
-          <div className="mb-12 sm:mb-14">
+          <div className="mb-6 sm:mb-8">
             <h3 className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-widest mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600"></span>
               Diamond
@@ -137,7 +137,7 @@ export function SponsorSection({ sponsors = [] }: SponsorSectionProps) {
 
         {/* Gold Sponsors */}
         {goldSponsors.length > 0 && (
-          <div className="mb-12 sm:mb-14">
+          <div className="mb-6 sm:mb-8">
             <h3 className="text-xs sm:text-sm font-semibold text-navy uppercase tracking-widest mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-400 to-amber-600"></span>
               Gold
@@ -152,7 +152,7 @@ export function SponsorSection({ sponsors = [] }: SponsorSectionProps) {
 
         {/* Silver Sponsors */}
         {silverSponsors.length > 0 && (
-          <div className="mb-12 sm:mb-14">
+          <div className="mb-6 sm:mb-8">
             <h3 className="text-xs sm:text-sm font-semibold text-navy uppercase tracking-widest mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-slate-400"></span>
               Silver
