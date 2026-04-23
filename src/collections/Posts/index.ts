@@ -92,17 +92,48 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           label: 'Timing & Content',
           fields: [
-            {
-              name: 'venueName',
-              type: 'text',
-              label: 'Venue Name (e.g., Lotte Hotel Seoul)',
-              required: true,
-            },
+         
             {
               name: 'venueCity',
               type: 'text',
-              label: 'Venue City',
-              required: true,
+              label: 'Venue City (Legacy)',
+            },
+            {
+              name: 'venues',
+              type: 'array',
+              label: 'Venues',
+              admin: {
+                description: 'Add one or more venues for this conference.',
+              },
+              fields: [
+                {
+                  name: 'name',
+                  type: 'text',
+                  label: 'Venue Name',
+                  required: true,
+                  admin: { width: '50%' },
+                },
+                {
+                  name: 'city',
+                  type: 'text',
+                  label: 'City',
+                  required: true,
+                  admin: { width: '50%' },
+                },
+                {
+                  name: 'address',
+                  type: 'text',
+                  label: 'Full Address',
+                },
+                {
+                  name: 'note',
+                  type: 'text',
+                  label: 'Note (e.g., May 14th & 16th)',
+                  admin: {
+                    placeholder: 'May 14th & 16th',
+                  },
+                },
+              ],
             },
 
             {
@@ -359,7 +390,57 @@ export const Posts: CollectionConfig<'posts'> = {
             },
           ],
         },
-        //
+        {
+          label: 'Quick Facts',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'attendeesCount',
+                  type: 'number',
+                  label: 'Expected Attendees',
+                  admin: {
+                    width: '50%',
+                    placeholder: 'e.g., 500',
+                  },
+                },
+                {
+                  name: 'keynoteSpeakersCount',
+                  type: 'number',
+                  label: 'Keynote Speakers',
+                  admin: {
+                    width: '50%',
+                    placeholder: 'e.g., 14',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'durationOverride',
+                  type: 'text',
+                  label: 'Duration Override',
+                  admin: {
+                    width: '50%',
+                    description: 'Override the automatic "X Days" calculation (e.g., "May 14-16").',
+                  },
+                },
+                {
+                  name: 'cmeCredits',
+                  type: 'text',
+                  label: 'CME Credits',
+                  admin: {
+                    width: '50%',
+                    placeholder: 'e.g., 18 Hours',
+                  },
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
     ...slugField(),

@@ -19,12 +19,12 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
   const duration =
     conference.startDate && conference.endDate
       ? Math.round(
-          (new Date(conference.endDate).getTime() - new Date(conference.startDate).getTime()) /
-            (1000 * 60 * 60 * 24),
-        ) + ' Days'
+        (new Date(conference.endDate).getTime() - new Date(conference.startDate).getTime()) /
+        (1000 * 60 * 60 * 24),
+      ) + ' Days'
       : '—'
   return (
-    <section id="message" className="py-12 sm:py-16 bg-background scroll-mt-[132px]">
+    <section id="message" className="pt-6 sm:pt-10 bg-background scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Message from Organizing Committee */}
@@ -171,24 +171,36 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
               <CardContent className="space-y-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Duration</p>
-                  <p className="font-semibold text-foreground">{duration}</p>
+                  <p className="font-semibold text-foreground">
+                    {(conference as any).durationOverride || duration}
+                  </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Expected Attendees</p>
-                  <p className="font-semibold text-foreground">-</p>
-                </div>
+                {(conference as any).attendeesCount && (
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Expected Attendees</p>
+                    <p className="font-semibold text-foreground">
+                      {(conference as any).attendeesCount}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Scientific Sessions</p>
-                  <p className="font-semibold text-foreground">{conference.topics?.length}</p>
+                  <p className="font-semibold text-foreground">{conference.topics?.length || 0}</p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Keynote Speakers</p>
-                  <p className="font-semibold text-foreground">-</p>
-                </div>
-                {/* <div>
-                  <p className="text-sm text-muted-foreground mb-1">CME Credits</p>
-                  <p className="font-semibold text-accent"></p>
-                </div> */}
+                {(conference as any).keynoteSpeakersCount && (
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Keynote Speakers</p>
+                    <p className="font-semibold text-foreground">
+                      {(conference as any).keynoteSpeakersCount}
+                    </p>
+                  </div>
+                )}
+                {(conference as any).cmeCredits && (
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">CME Credits</p>
+                    <p className="font-semibold text-accent">{(conference as any).cmeCredits}</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

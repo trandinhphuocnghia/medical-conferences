@@ -11,7 +11,7 @@ interface LogisticsBentoProps {
 }
 
 export function LogisticsBento({ conference, venueAddress, floorPlanUrl }: LogisticsBentoProps) {
-  const { venueName, venueCity, contactEmails, contactPhones } = conference
+  const { venueCity, contactEmails, contactPhones } = conference
 
   // Extract email strings from the contactEmails array
   const emailList = contactEmails.map((item) => item.email)
@@ -69,9 +69,7 @@ export function LogisticsBento({ conference, venueAddress, floorPlanUrl }: Logis
             {/* Venue Info */}
             <div className="space-y-3 sm:space-y-4">
               <div>
-                <h3 className="text-base sm:text-xl font-semibold text-[#0F172A] mb-1">
-                  {venueName}
-                </h3>
+
                 <div className="flex items-center gap-2 text-slate-600 text-sm">
                   <MapPin className="h-4 w-4 text-[#06B6D4] shrink-0" />
                   <span>{venueCity}</span>

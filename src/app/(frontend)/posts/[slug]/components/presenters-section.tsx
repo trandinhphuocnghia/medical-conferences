@@ -1,6 +1,7 @@
 'use client'
 
-import { PresenterData } from '@/app/actions/abstracts/getConferencePresenters'
+import { PresenterData } from '@/app/actions/shared/presenterUtils'
+import { SpeakerCarousel } from './speaker-carousel'
 import { RichTextParser } from '@/components/RichTextParser'
 import { Building2, User } from 'lucide-react'
 import NextImage from 'next/image'
@@ -23,9 +24,14 @@ export function PresentersSection({
 
   if ((!presenters || presenters.length === 0) && highlightPresenters.length === 0) return null
 
-  const keynoteSpeakers = highlightPresenters
-  const invitedSpeakers = presenters.filter((p) => p.registrationType === 'invited')
-  const generalPresenters = presenters.filter((p) => p.registrationType !== 'invited')
+  const internationalSpeakers = [
+    ...highlightPresenters.filter((p) => p.nationality === 'international'),
+    ...presenters.filter((p) => p.nationality === 'international')
+  ]
+  const vietnameseSpeakers = [
+    ...highlightPresenters.filter((p) => p.nationality === 'vietnamese'),
+    ...presenters.filter((p) => p.nationality === 'vietnamese')
+  ]
 
   const handlePresenterClick = (presenter: PresenterData) => {
     setSelectedPresenter(presenter)
@@ -34,9 +40,9 @@ export function PresentersSection({
 
   return (
     <>
-      <section id="speakers" className="py-8 sm:py-12 bg-slate-50/50 scroll-mt-[132px]">
+      <section id="speakers" className="pt-6 sm:pt-10 bg-slate-50/50 scroll-mt-[132px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
+          <div className="mb-6">
             <h2 className="text-3xl sm:text-4xl font-bold text-navy mb-4">
               Featured & Distinguished Speakers
             </h2>
@@ -46,51 +52,31 @@ export function PresentersSection({
             </p>
           </div>
 
-          {/* Keynote & Highlight Speakers */}
-          {keynoteSpeakers.length > 0 && (
-            <div className="mb-16">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                {keynoteSpeakers.map((presenter) => (
-                  <PresenterCard
-                    key={presenter.id}
-                    presenter={presenter}
-                    compact
-                    onClick={() => handlePresenterClick(presenter)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Invited Speakers */}
-          {invitedSpeakers.length > 0 && (
-            <div className="mb-16">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8">
-                {invitedSpeakers.map((presenter) => (
-                  <PresenterCard
-                    key={presenter.id}
-                    presenter={presenter}
-                    compact
-                    onClick={() => handlePresenterClick(presenter)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Accepted Presenters */}
-          {generalPresenters.length > 0 && (
+          {/* International Speakers */}
+          {internationalSpeakers.length > 0 && (
             <div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-3 sm:gap-4">
-                {generalPresenters.map((presenter) => (
-                  <PresenterCard
-                    key={presenter.id}
-                    presenter={presenter}
-                    compact
-                    onClick={() => handlePresenterClick(presenter)}
-                  />
-                ))}
-              </div>
+              <h3 className="text-2xl font-bold text-navy border-b-2 border-accent/20 pb-3 flex items-center gap-3">
+                <span className="w-2 h-8 bg-accent rounded-full inline-block" />
+                International moderators and speakers
+              </h3>
+              <SpeakerCarousel
+                speakers={internationalSpeakers}
+                onPresenterClick={handlePresenterClick}
+              />
+            </div>
+          )}
+
+          {/* Vietnamese Speakers & Moderators */}
+          {vietnameseSpeakers.length > 0 && (
+            <div>
+              <h3 className="text-2xl font-bold text-navy border-b-2 border-accent/20 pb-3 flex items-center gap-3">
+                <span className="w-2 h-8 bg-accent rounded-full inline-block" />
+                Vietnamese moderators and speakers
+              </h3>
+              <SpeakerCarousel
+                speakers={vietnameseSpeakers}
+                onPresenterClick={handlePresenterClick}
+              />
             </div>
           )}
         </div>
@@ -105,47 +91,47 @@ export function PresentersSection({
   )
 }
 
-interface PresenterCardProps {
+export interface PresenterCardProps {
   presenter: PresenterData
   featured?: boolean
   compact?: boolean
   onClick: () => void
 }
 
-function PresenterCard({
+export function PresenterCard({
   presenter,
   featured = false,
   compact = false,
   onClick,
 }: PresenterCardProps) {
+
+
   if (compact) {
     return (
       <button
         onClick={onClick}
-        className="group cursor-pointer relative flex flex-col transition-all duration-300 overflow-hidden"
+        className="group cursor-pointer relative flex flex-col h-full w-full  rounded-xl overflow-hidden hover:border-accent/30 hover:shadow-lg transition-all duration-300"
       >
-        {/* Image Container */}
-        <div className="relative rounded-t-lg overflow-hidden aspect-[3/4] group-hover:shadow-md transition-shadow bg-slate-100">
+        {/* Image Container: Forcing a square aspect ratio creates alignment */}
+        <div className="relative w-full aspect-[3/4] overflow-hidden bg-slate-100 shrink-0">
           {presenter.avatarUrl ? (
-            <div className="h-full w-full">
-              <NextImage
-                src={presenter.avatarUrl}
-                alt={presenter.name}
-                fill
-                className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                unoptimized
-              />
-            </div>
+            <NextImage
+              src={presenter.avatarUrl}
+              alt={presenter.name}
+              fill
+              className="object-cover object-center w-full h-full transition-transform duration-500 group-hover:scale-105"
+              unoptimized
+            />
           ) : (
-            <div className="h-full w-full bg-slate-50 flex items-center justify-center text-muted-foreground/30">
-              <User className="h-24 w-24" />
+            <div className="h-full w-full flex items-center justify-center text-slate-300">
+              <User className="h-12 w-12" />
             </div>
           )}
         </div>
 
-        {/* Info Container */}
-        <div className="p-1 flex-1 flex flex-col justify-start text-left">
-          <h4 className="text-sm sm:text-base font-bold text-navy leading-tight group-hover:text-accent transition-colors mb-1.5">
+        {/* Info Container: Added padding and flex-1 to stretch the card */}
+        <div className="p-3 flex-1 flex flex-col justify-start text-left">
+          <h4 className="text-sm font-bold text-navy leading-tight group-hover:text-accent transition-colors line-clamp-2">
             {presenter.name}
           </h4>
         </div>
@@ -153,12 +139,13 @@ function PresenterCard({
     )
   }
 
+
   return (
     <button
       onClick={onClick}
       className={`group relative rounded-2xl border transition-all duration-300 text-left w-full hover:scale-105 active:scale-100 ${featured
-          ? 'bg-white border-accent/20 shadow-lg shadow-accent/10 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/15'
-          : 'bg-white/60 border-border hover:border-accent/30 hover:shadow-lg hover:bg-white'
+        ? 'bg-white border-accent/20 shadow-lg shadow-accent/10 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/15'
+        : 'bg-white/60 border-border hover:border-accent/30 hover:shadow-lg hover:bg-white'
         }`}
     >
       <div className="p-5 sm:p-6">
