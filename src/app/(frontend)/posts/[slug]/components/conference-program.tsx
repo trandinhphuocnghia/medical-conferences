@@ -209,7 +209,7 @@ export function ProgramSection({ program = [] }: ProgramSectionProps) {
 
   return (
     <>
-      <section id="program" className="pt-6 sm:pt-10 bg-background scroll-mt-[132px]">
+      <section id="program" className="py-6 sm:py-10 bg-background scroll-mt-[132px]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8 sm:mb-10">
@@ -222,7 +222,7 @@ export function ProgramSection({ program = [] }: ProgramSectionProps) {
           {/* Tabs for Days */}
           {allDays.length > 1 ? (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full gap-2 bg-transparent grid-cols-1 md:grid-cols-3 border border-border rounded-lg p-1 h-auto mb-6">
+              <TabsList className="grid w-full gap-2 bg-transparent grid-cols-1 md:grid-cols-4 border border-border rounded-lg p-1 h-auto mb-6">
                 {allDays.map((day, index) => (
                   <TabsTrigger
                     key={day.id || index}
