@@ -105,8 +105,7 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
                 </div>
               </AccordionContent>
             </AccordionItem>
-          ))
-          }
+          ))}
 
           {/* Other Topic Option */}
           <AccordionItem
@@ -142,8 +141,8 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
               </div>
             </AccordionContent>
           </AccordionItem>
-        </Accordion >
-      </div >
-    </section >
+        </Accordion>
+      </div>
+    </section>
   )
 }
