@@ -391,6 +391,47 @@ export const Posts: CollectionConfig<'posts'> = {
           ],
         },
         {
+          label: 'Information',
+          fields: [
+            {
+              name: 'informationSections',
+              type: 'array',
+              label: 'Information Sections',
+              admin: {
+                initCollapsed: true,
+                description:
+                  'Add content sections (e.g., For Participants, For Speakers, Accommodation, Transportation).',
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                  label: 'Section Title',
+                  admin: { placeholder: 'e.g., For Participants' },
+                },
+                {
+                  name: 'description',
+                  type: 'richText',
+                  required: true,
+                  editor: bioLexical,
+                  label: 'Content',
+                },
+                {
+                  name: 'attachments',
+                  type: 'relationship',
+                  relationTo: 'files',
+                  hasMany: true,
+                  label: 'Attachments (Documents)',
+                  admin: {
+                    description: 'Optional. Attach PDF, DOC, PPTX files for download.',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Quick Facts',
           fields: [
             {

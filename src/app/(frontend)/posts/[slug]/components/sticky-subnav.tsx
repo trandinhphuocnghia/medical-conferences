@@ -41,6 +41,7 @@ export function StickySubNav({ conferenceId, slug }: StickySubNavProps) {
       label: 'Registration',
       href: `/registration?conference=${conferenceId}`,
     },
+    { label: 'Information', href: `${conferenceBasePath}/information` },
     { label: 'Sponsors', href: `${conferenceBasePath}#sponsors` },
   ]
 
