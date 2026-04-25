@@ -24,6 +24,8 @@ export const Files: CollectionConfig = {
       'application/pdf',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+      'application/vnd.ms-powerpoint', // .ppt
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
     ],
     bulkUpload: true,
     crop: true,
