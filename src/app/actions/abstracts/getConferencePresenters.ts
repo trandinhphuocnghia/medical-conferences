@@ -44,12 +44,12 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
       })
     }
   
-    // Sort by registrationType (invited first) then createdAt
-    const sortedPresenters = Array.from(presenterMap.values()).sort((a, b) => {
-      if (a.registrationType === 'invited' && b.registrationType !== 'invited') return -1
-      if (a.registrationType !== 'invited' && b.registrationType === 'invited') return 1
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    })
+    // Filter for ONLY Invited Speakers, then sort by createdAt
+    const sortedPresenters = Array.from(presenterMap.values())
+      .filter((p) => p.registrationType === 'invited')
+      .sort((a, b) => {
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      })
 
     return {
       success: true,
