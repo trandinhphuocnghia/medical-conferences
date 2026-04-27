@@ -1,5 +1,6 @@
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
+import { getConferencePresenters } from '@/app/actions/abstracts/getConferencePresenters'
 import type { Post, Sponsor, Topic } from '@/payload-types'
 import { SponsorSection } from './components/conference-sponsor'
 import { DetailHeader } from './components/detail-header'
@@ -10,6 +11,7 @@ import { StickySubNav } from './components/sticky-subnav'
 import { TopicAccordion } from './components/topic-accordion'
 import { CountdownTimer } from './components/countdown-timer'
 import { ProgramPreviewCard } from './components/program-preview-card'
+import RoboticPosterSection from './components/hero-section'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
@@ -36,14 +38,22 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
   const sponsors =
     conferenceData.sponsors?.filter((s): s is Sponsor => typeof s === 'object' && s !== null) || []
 
-  const [presentersData] = await Promise.all([
-    //getConferencePresenters(conferenceData.id), // This was commented out, so the import is unused.
+  const [presentersData, highlightData] = await Promise.all([
+    getConferencePresenters(conferenceData.id),
     getHighlightPresenters(conferenceData.id),
   ])
 
+  const isSubmissionOpen =
+    conferenceData.abstractSubmissionDeadline &&
+    new Date() < new Date(conferenceData.abstractSubmissionDeadline)
+
   return (
     <div className="min-h-screen bg-background">
-      <StickySubNav conferenceId={conferenceData?.id} slug={slug} />
+      <StickySubNav
+        conferenceId={conferenceData?.id}
+        slug={slug}
+        isSubmissionOpen={!!isSubmissionOpen}
+      />
 
       <DetailHeader
         conference={conferenceData}
@@ -51,8 +61,12 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         cmeCredits={0} //TODO
       />
 
-      <CountdownTimer targetDate={conferenceData.startDate} />
+      <RoboticPosterSection
+        presenters={highlightData.presenters}
+        programAgenda={conferenceData.programAgenda}
+      />
 
+      <CountdownTimer targetDate={conferenceData.startDate} />
 
       <MessageSection conference={conferenceData} />
 
@@ -68,7 +82,13 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         previousNotificationDate={conferenceData.previousNotificationDate}
       />
 
-      {topics.length > 0 && <TopicAccordion conferenceId={conferenceData.id} topics={topics} />}
+      {topics.length > 0 && (
+        <TopicAccordion
+          conferenceId={conferenceData.id}
+          topics={topics}
+          isSubmissionOpen={!!isSubmissionOpen}
+        />
+      )}
 
       <ProgramPreviewCard slug={slug} program={conferenceData.program} />
 

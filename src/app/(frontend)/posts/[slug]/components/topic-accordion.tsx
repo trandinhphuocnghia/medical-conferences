@@ -16,9 +16,10 @@ import { useCallback } from 'react'
 interface TopicAccordionProps {
   topics: Topic[]
   conferenceId: number
+  isSubmissionOpen?: boolean
 }
 
-export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
+export function TopicAccordion({ topics, conferenceId, isSubmissionOpen }: TopicAccordionProps) {
   const router = useRouter()
 
   const onSubmitAbstract = useCallback(
@@ -90,18 +91,20 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
                       </p>
                     )}
                   </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-200">
-                    <p className="text-xs sm:text-sm text-slate-500">
-                      Interested in presenting your research on this topic?
-                    </p>
-                    <Button
-                      onClick={() => onSubmitAbstract(topic.id)}
-                      className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 w-full sm:w-auto"
-                    >
-                      <Send className="h-4 w-4" />
-                      Submit Abstract
-                    </Button>
-                  </div>
+                  {isSubmissionOpen && (
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                      <p className="text-xs sm:text-sm text-slate-500">
+                        Interested in presenting your research on this topic?
+                      </p>
+                      <Button
+                        onClick={() => onSubmitAbstract(topic.id)}
+                        className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 w-full sm:w-auto"
+                      >
+                        <Send className="h-4 w-4" />
+                        Submit Abstract
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -126,18 +129,20 @@ export function TopicAccordion({ topics, conferenceId }: TopicAccordionProps) {
                     details in the submission form.
                   </p>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-200">
-                  <p className="text-xs sm:text-sm text-slate-500">
-                    Have a unique research topic to share?
-                  </p>
-                  <Button
-                    onClick={() => onSubmitAbstract('other')}
-                    className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 w-full sm:w-auto"
-                  >
-                    <Send className="h-4 w-4" />
-                    Submit Other Topic
-                  </Button>
-                </div>
+                {isSubmissionOpen && (
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                    <p className="text-xs sm:text-sm text-slate-500">
+                      Have a unique research topic to share?
+                    </p>
+                    <Button
+                      onClick={() => onSubmitAbstract('other')}
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white gap-2 w-full sm:w-auto"
+                    >
+                      <Send className="h-4 w-4" />
+                      Submit Other Topic
+                    </Button>
+                  </div>
+                )}
               </div>
             </AccordionContent>
           </AccordionItem>

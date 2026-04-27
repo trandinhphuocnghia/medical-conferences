@@ -2,20 +2,21 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { usePathname } from 'next/navigation'
+//import { usePathname } from 'next/navigation'
 
 interface StickySubNavProps {
   conferenceId: number
   slug: string
+  isSubmissionOpen?: boolean
 }
 
-export function StickySubNav({ conferenceId, slug }: StickySubNavProps) {
+export function StickySubNav({ conferenceId, slug, isSubmissionOpen }: StickySubNavProps) {
   const [isSticky, setIsSticky] = useState(false)
-  const pathname = usePathname()
+  //const pathname = usePathname()
 
   // Determine if we're on a sub-page (e.g. /posts/my-conference/program)
   const conferenceBasePath = `/posts/${slug}`
-  const isSubPage = pathname !== conferenceBasePath
+  // const isSubPage = pathname !== conferenceBasePath
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,22 +34,24 @@ export function StickySubNav({ conferenceId, slug }: StickySubNavProps) {
     { label: 'Topics', href: `${conferenceBasePath}#topics` },
     { label: 'Program', href: `${conferenceBasePath}/program` },
     { label: 'Speakers', href: `${conferenceBasePath}#speakers` },
-    {
-      label: 'Call for Abstract',
-      href: `/submit-abstract?conference=${conferenceId}`,
-    },
+    isSubmissionOpen
+      ? {
+        label: 'Call for Abstract',
+        href: `/submit-abstract?conference=${conferenceId}`,
+      }
+      : null,
     {
       label: 'Registration',
       href: `/registration?conference=${conferenceId}`,
     },
     { label: 'Information', href: `${conferenceBasePath}/information` },
     { label: 'Sponsors', href: `${conferenceBasePath}#sponsors` },
-  ]
+  ].filter(Boolean) as { label: string; href: string }[]
 
   return (
     <nav
       className={`transition-all duration-300 ${isSticky
-        ? 'fixed top-16 left-0 right-0 z-40 bg-card/80 backdrop-blur-md border-b border-border shadow-sm'
+        ? 'fixed top-16 left-0 right-0 z-100 bg-card/80 backdrop-blur-md border-b border-border shadow-sm'
         : 'relative bg-card border-b border-border'
         }`}
     >
