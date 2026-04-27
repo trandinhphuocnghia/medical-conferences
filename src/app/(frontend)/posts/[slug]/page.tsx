@@ -1,5 +1,6 @@
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
+import { getConferencePresenters } from '@/app/actions/abstracts/getConferencePresenters'
 import type { Post, Sponsor, Topic } from '@/payload-types'
 import { SponsorSection } from './components/conference-sponsor'
 import { DetailHeader } from './components/detail-header'
@@ -37,8 +38,8 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
   const sponsors =
     conferenceData.sponsors?.filter((s): s is Sponsor => typeof s === 'object' && s !== null) || []
 
-  const [presentersData] = await Promise.all([
-    //getConferencePresenters(conferenceData.id), // This was commented out, so the import is unused.
+  const [presentersData, highlightData] = await Promise.all([
+    getConferencePresenters(conferenceData.id),
     getHighlightPresenters(conferenceData.id),
   ])
 
@@ -60,7 +61,10 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         cmeCredits={0} //TODO
       />
 
-      <RoboticPosterSection presenters={presentersData.presenters} />
+      <RoboticPosterSection
+        presenters={highlightData.presenters}
+        programAgenda={conferenceData.programAgenda}
+      />
 
       <CountdownTimer targetDate={conferenceData.startDate} />
 
