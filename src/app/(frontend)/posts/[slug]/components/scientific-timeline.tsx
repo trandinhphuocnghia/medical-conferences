@@ -80,7 +80,7 @@ export function ScientificTimeline({
   const isPast = (dateStr: string) => new Date(dateStr) < new Date()
 
   return (
-    <section id="timeline" className="pt-6 sm:pt-10 scroll-mt-[132px]">
+    <section id="timeline" className="py-8 sm:py-12 scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <span className="font-mono text-[10px] sm:text-xs tracking-widest text-accent uppercase font-semibold">
