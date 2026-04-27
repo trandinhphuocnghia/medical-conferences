@@ -40,7 +40,7 @@ const RoboticPosterSection = ({ presenters = [], programAgenda = [] }: HeroSecti
         <div className="relative h-[50vh] w-full lg:absolute lg:inset-0 lg:h-full z-10">
           <div className="container mx-auto h-full relative">
             {/* Stomach glow */}
-            <div className="absolute left-1/2 top-1/2 lg:left-[20%] lg:top-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 lg:h-96 lg:w-96 stomach-glow animate-pulse" />
+            <div className="absolute left-1/2 top-1/2 lg:left-[20%] lg:top-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 lg:h-96 lg:w-96 stomach-glow animate-pulse" />
 
             {/* Robot image */}
             <div

@@ -35,8 +35,7 @@ export function TypewriterTitle() {
 
   return (
     <h1 className="mb-6 relative text-4xl font-black leading-none text-cyan sm:text-5xl lg:text-6xl tracking-tighter min-h-[80px] sm:min-h-[96px] lg:min-h-[120px]">
-      <div className="absolute left-1/2 top-1/2 lg:left-[20%] lg:top-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 lg:h-96 lg:w-96 stomach-glow animate-pulse" />
-      
+      <div className="absolute left-1/2 top-1/2 lg:left-[20%] lg:top-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 lg:h-96 lg:w-96 stomach-glow animate-pulse" />
       {/* Line 1 */}
       <span>
         {text1}
@@ -48,7 +47,7 @@ export function TypewriterTitle() {
         )}
       </span>
       <br />
-      
+
       {/* Line 2 */}
       <span className="text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">
         {text2}
@@ -58,7 +57,10 @@ export function TypewriterTitle() {
             style={{ animationDuration: '0.8s' }}
           />
         )}
+
       </span>
+      <div className="absolute left-1/2 top-1/2 lg:right-[20%] lg:top-1/2 lg:left-auto translate-x-1/2 -translate-y-1/2 h-80 w-80 lg:h-96 lg:w-96 stomach-glow animate-pulse" />
+
     </h1>
   )
 }
