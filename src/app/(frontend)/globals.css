@@ -144,3 +144,125 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes subtle-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-15px) scale(1.03); }
+  }
+
+  @keyframes scan {
+    0% { transform: translateY(-100vh); opacity: 0; }
+    50% { opacity: 0.3; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+
+  .animate-subtle-float {
+    animation: subtle-float 8s ease-in-out infinite;
+  }
+
+  .animate-scan {
+    animation: scan 5s linear infinite;
+  }
+
+  .text-shadow-glow {
+    text-shadow: 0 0 15px oklch(0.65 0.18 195 / 0.6);
+  }
+}
+
+@layer utilities {
+  @keyframes subtle-drift {
+    0% { transform: scale(1) translateX(0); }
+    100% { transform: scale(1.05) translateX(10px); }
+  }
+
+  .animate-subtle-drift {
+    animation: subtle-drift 20s linear infinite alternate;
+  }
+
+  .text-clinical {
+    letter-spacing: -0.02em;
+    @apply text-navy font-extrabold;
+  }
+}
+
+@layer utilities {
+  /* Hiệu ứng trôi nhẹ nhàng nhưng sắc nét hơn */
+  @keyframes tech-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(1deg); }
+  }
+
+  .animate-tech-float {
+    animation: tech-float 7s ease-in-out infinite;
+  }
+
+  /* Tạo quầng sáng (glow) tập trung vào Robot */
+  .drop-shadow-cyan {
+    filter: drop-shadow(0 0 15px oklch(0.65 0.18 195 / 0.3));
+  }
+}
+
+@layer utilities {
+  /* 1. Tạo quầng sáng Dạ dày (Internal Glow) */
+  .stomach-internal-glow {
+    /* Màu Cyan rực rỡ, blur cực lớn */
+    box-shadow: 0 0 150px 70px oklch(0.65 0.18 195 / 0.5);
+  }
+
+  /* 2. Hiệu ứng lưới grid y tế mờ ảo của Poster */
+  .medical-grid-overlay {
+    background-image: radial-gradient(oklch(0.65 0.18 195 / 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+}
+
+@layer utilities {
+  /* Mask cho Desktop: Mờ dần sang phải */
+  .mask-desktop {
+    mask-image: radial-gradient(circle at 40% 50%, black 40%, transparent 90%);
+    -webkit-mask-image: radial-gradient(circle at 40% 50%, black 40%, transparent 90%);
+  }
+
+  /* Mask cho Mobile: Mờ dần xuống dưới */
+  .mask-mobile {
+    mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at 50% 40%, black 30%, transparent 80%);
+  }
+
+  .stomach-glow {
+    filter: blur(80px);
+    background: radial-gradient(circle, oklch(0.65 0.18 195 / 0.4) 0%, transparent 70%);
+  }
+
+  /* Hexagonal clip path for avatars */
+  .hex-clip {
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  }
+
+  /* Infinite horizontal marquee scroll */
+  @keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    animation: marquee-scroll var(--marquee-duration, 30s) linear infinite;
+  }
+
+  .animate-marquee:hover,
+  .group:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+
+  /* SVG laser line pulsing dash */
+  @keyframes laser-dash {
+    0% { stroke-dashoffset: 200; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  .laser-dash {
+    stroke-dasharray: 8 12;
+    animation: laser-dash 1.5s linear infinite;
+  }
+}

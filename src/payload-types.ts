@@ -270,6 +270,25 @@ export interface Post {
    * Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).
    */
   topics?: (number | Topic)[] | null;
+  /**
+   * Select the doctors who should explicitly appear on the Hero Section poster (dock). Note: You can only select users who are part of this conference's Host Organization.
+   */
+  scientificBoard?: (number | User)[] | null;
+  /**
+   * Add the main sessions representing the event agenda shown on the top poster.
+   */
+  programAgenda?:
+    | {
+        title: string;
+        speakerName?: string | null;
+        /**
+         * Styles this row as a broadcast or special group session.
+         */
+        isHighlight?: boolean | null;
+        organization?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   abstractSubmissionDeadline: string;
   notificationOfAcceptanceDate: string;
   abstractDeadlineExtended?: boolean | null;
@@ -447,6 +466,10 @@ export interface User {
    * Select medical topics you are interested in.
    */
   interests?: (number | Topic)[] | null;
+  /**
+   * Used to sort this user in highlight lists (lower numbers appear first). Defaults to 0.
+   */
+  sortOrder?: number | null;
   updatedAt: string;
   createdAt: string;
   resetPasswordToken?: string | null;
@@ -1529,6 +1552,16 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
       };
   topics?: T;
+  scientificBoard?: T;
+  programAgenda?:
+    | T
+    | {
+        title?: T;
+        speakerName?: T;
+        isHighlight?: T;
+        organization?: T;
+        id?: T;
+      };
   abstractSubmissionDeadline?: T;
   notificationOfAcceptanceDate?: T;
   abstractDeadlineExtended?: T;
@@ -1680,6 +1713,7 @@ export interface UsersSelect<T extends boolean = true> {
   avatar?: T;
   bio?: T;
   interests?: T;
+  sortOrder?: T;
   updatedAt?: T;
   createdAt?: T;
   resetPasswordToken?: T;

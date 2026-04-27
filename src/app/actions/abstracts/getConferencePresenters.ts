@@ -19,58 +19,36 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
 }> {
   try {
     const payload = await getPayload({ config: configPromise })
+   
 
-    const { docs: abstracts } = await payload.find({
-      collection: 'abstracts',
-      where: {
-        conference: {
-          equals: conferenceId,
-        },
-        status: {
-          equals: 'verified',
-        },
-      },
-      depth: 2, // Populate submitter (User) and topic
-      limit: 100,
+    // Also fetch the conference host group to include all members as Invited Speakers
+    const conference = await payload.findByID({
+      collection: 'posts',
+      id: conferenceId,
+      depth: 3, // Populate host(1), users(2), and their avatars(3)
     })
 
     const presenterMap = new Map<string | number, PresenterData>()
 
-    abstracts.forEach((abs: Abstract) => {
-      let presenterEntry: PresenterData
+    // Inject User Group Members into the Presenter list first
+    if (conference?.host && typeof conference.host === 'object') {
+      const hostGroup = conference.host as { users?: any[] }
+      const groupUsers = (hostGroup.users || []) as User[]
 
-      if (abs.submitter && typeof abs.submitter === 'object') {
-        presenterEntry = userToPresenterData(abs.submitter as User)
-      } else {
-        // Anonymous submitter
-        presenterEntry = {
-          id: `anon-${abs.submitterEmail || abs.id}`,
-          name: abs.submitterName || 'Anonymous',
-          email: abs.submitterEmail || undefined,
-          organization: abs.submitterOrganization || undefined,
-          abstracts: [],
+      groupUsers.forEach((user) => {
+        if (!user || user.role === 'admin') return // Exclude admins!
+        const presenterData = userToPresenterData(user)
+        if (!presenterMap.has(presenterData.id)) {
+          presenterMap.set(presenterData.id, presenterData)
         }
-      }
-
-      const topicName =
-        abs.topic && typeof abs.topic === 'object' ? (abs.topic as Topic).name : abs.otherTopic
-
-      if (!presenterMap.has(presenterEntry.id)) {
-        presenterMap.set(presenterEntry.id, presenterEntry)
-      }
-
-      presenterMap.get(presenterEntry.id)!.abstracts.push({
-        id: abs.id as string | number,
-        title: abs.title,
-        topicName: topicName as string | undefined,
       })
-    })
-
-    // Sort by registrationType (invited first) then name
+    }
+  
+    // Sort by registrationType (invited first) then createdAt
     const sortedPresenters = Array.from(presenterMap.values()).sort((a, b) => {
       if (a.registrationType === 'invited' && b.registrationType !== 'invited') return -1
       if (a.registrationType !== 'invited' && b.registrationType === 'invited') return 1
-      return a.name.localeCompare(b.name)
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     })
 
     return {

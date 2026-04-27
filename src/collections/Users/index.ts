@@ -298,6 +298,16 @@ export const Users: CollectionConfig = {
                 description: 'Select medical topics you are interested in.',
               },
             },
+            {
+              name: 'sortOrder',
+              type: 'number',
+              label: 'Display Sort Order',
+              defaultValue: 0,
+              admin: {
+                position: 'sidebar',
+                description: 'Used to sort this user in highlight lists (lower numbers appear first). Defaults to 0.',
+              },
+            },
           ],
         },
       ],

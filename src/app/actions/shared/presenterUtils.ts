@@ -15,6 +15,7 @@ export type PresenterData = {
     title: string
     topicName?: string
   }[]
+  createdAt: string
 }
 
 /**
@@ -35,6 +36,7 @@ export function userToPresenterData(user: User): PresenterData {
     registrationType: user.registrationType || 'standard',
     nationality: user.nationality || 'international',
     abstracts: [],
+    createdAt: user.createdAt,
   }
 }
 
