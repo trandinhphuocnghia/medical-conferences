@@ -81,44 +81,59 @@ const RoboticPosterSection = ({ presenters = [] }: HeroSectionProps) => {
                 </div>
               </div>
 
-              <ul className="mx-auto text-slate-300 text-sm leading-relaxed lg:mx-0 lg:text-base space-y-2.5 text-center lg:text-left w-full">
-                <li className="flex flex-col">
-                  <span className="font-semibold text-white">ESD for Early Gastric Cancer</span>
-                  <span className="text-cyan text-xs uppercase tracking-wider font-medium">Dr. Le Quang Nhan</span>
-                </li>
-
-                <li className="flex flex-col">
-                  <span className="font-semibold text-white">Laparoscopic Proximal Gastrectomy</span>
-                  <span className="text-cyan text-xs uppercase tracking-wider font-medium">Dr. Vo Duy Long</span>
-                </li>
-
-                <li className="bg-white/5 border-l-2 border-cyan/50 p-2.5 rounded-r-lg text-xs text-slate-300 italic text-left max-w-[80%] mx-auto lg:mx-0 lg:max-w-full">
-                  <span className="block font-medium text-white not-italic mb-0.5">Broadcast from FV Hospital</span>
-                  Organized by University Medical Center HCMC & FV Hospital
-                </li>
-
-                <li className="flex flex-col">
-                  <span className="font-semibold text-white">Robotic Total Gastrectomy</span>
-                  <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Ichiro Uyama</span>
-                </li>
-
-                <li className="flex flex-col">
-                  <span className="font-semibold text-white">Robotic Distal Gastrectomy</span>
-                  <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Koichi Suda</span>
-                </li>
-
-                <li className="flex flex-col">
-                  <span className="font-semibold text-white">Laparoscopic Distal Gastrectomy</span>
-                  <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Noriyuki Inaki</span>
-                </li>
-              </ul>
-
+              {/**SCIENTIFIC BOARD */}
+              <div className="w-full -mx-4 sm:mx-0 pt-4">
+                <ScientificBoard presenters={presenters} />
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
+      {/**PROGRAM */}
+      <div className="relative z-40 w-full border-t border-cyan/10 bg-gradient-to-t from-[#010816] via-[#010816]/95 to-transparent pt-6 pb-12 sm:pt-8 sm:pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+          <div className="flex items-center gap-3 w-full max-w-lg mb-6">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
+            <span className="text-[9px] sm:text-[10px] font-black tracking-[0.35em] uppercase text-cyan/60 whitespace-nowrap">
+              Program Details
+            </span>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
+          </div>
 
-      <ScientificBoard presenters={presenters} />
+          <ul className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 text-slate-300 text-sm leading-relaxed lg:text-base text-left">
+            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
+              <span className="font-semibold text-white mb-1">ESD for Early Gastric Cancer</span>
+              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Dr. Le Quang Nhan</span>
+            </li>
+
+            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
+              <span className="font-semibold text-white mb-1">Laparoscopic Proximal Gastrectomy</span>
+              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Dr. Vo Duy Long</span>
+            </li>
+
+            <li className="md:col-span-2 bg-gradient-to-r from-cyan/10 to-transparent border-l-2 border-cyan/50 p-4 rounded-r-lg text-xs text-slate-300 italic flex flex-col justify-center">
+              <span className="block font-medium text-white not-italic text-sm">Broadcast from FV Hospital</span>
+              <span className="mt-1">Organized by University Medical Center HCMC & FV Hospital</span>
+            </li>
+
+            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
+              <span className="font-semibold text-white mb-1">Robotic Total Gastrectomy</span>
+              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Ichiro Uyama</span>
+            </li>
+
+            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
+              <span className="font-semibold text-white mb-1">Robotic Distal Gastrectomy</span>
+              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Koichi Suda</span>
+            </li>
+
+            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors md:col-span-2 lg:col-span-1">
+              <span className="font-semibold text-white mb-1">Laparoscopic Distal Gastrectomy</span>
+              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Noriyuki Inaki</span>
+            </li>
+          </ul>
+        </div>
+      </div>
     </section>
   )
 }

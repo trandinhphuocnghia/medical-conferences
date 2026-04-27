@@ -159,8 +159,16 @@ export function ScientificBoard({ presenters }: ScientificBoardProps) {
   const internationalPresenters = presenters.filter((p) => p.nationality === 'international')
   const vietnamesePresenters = presenters.filter((p) => p.nationality === 'vietnamese')
 
-  // Robot arm visual target (fixed point in the upper-left area of the section)
-  const laserTarget = { x: typeof window !== 'undefined' ? window.innerWidth * 0.25 : 300, y: 200 }
+  // Dynamically target the stomach glow based on breakpoint (mobile vs desktop)
+  const laserTarget =
+    typeof window !== 'undefined'
+      ? {
+        // lg breakpoint is 1024px. Robot is centered on mobile, 20% from left on desktop.
+        x: window.innerWidth < 1024 ? window.innerWidth * 0.5 : window.innerWidth * 0.2,
+        // Robot takes top 50vh on mobile (so center is ~30vh). On desktop it's vertically centered.
+        y: window.innerWidth < 1024 ? window.innerHeight * 0.3 : window.innerHeight * 0.5,
+      }
+      : { x: 300, y: 300 }
 
   const handleHover = useCallback((presenter: PresenterData, el: HTMLDivElement) => {
     const rect = el.getBoundingClientRect()
@@ -188,7 +196,7 @@ export function ScientificBoard({ presenters }: ScientificBoardProps) {
       <div
         ref={boardRef}
         className={cn(
-          "relative z-40 w-full border-t border-cyan/10 bg-gradient-to-t from-[#010816] via-[#010816]/95 to-transparent pt-6 pb-6 sm:pt-8 sm:pb-8",
+          "relative z-40 w-full pb-4  to-transparent ",
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -235,9 +243,9 @@ export function ScientificBoard({ presenters }: ScientificBoardProps) {
 
               {/* Mobile View */}
               <div className={cn(
-                  "lg:hidden overflow-x-auto snap-x snap-mandatory scrollbar-none pb-2",
-                  internationalPresenters.length <= 5 && "flex justify-center"
-                )}>
+                "lg:hidden overflow-x-auto snap-x snap-mandatory scrollbar-none pb-2",
+                internationalPresenters.length <= 5 && "flex justify-center"
+              )}>
                 <div className="flex items-center gap-4 w-max px-4">
                   {internationalPresenters.map((presenter) => (
                     <div key={presenter.id} className="snap-center">
@@ -296,9 +304,9 @@ export function ScientificBoard({ presenters }: ScientificBoardProps) {
 
               {/* Mobile View */}
               <div className={cn(
-                  "lg:hidden overflow-x-auto snap-x snap-mandatory scrollbar-none pb-2",
-                  vietnamesePresenters.length <= 5 && "flex justify-center"
-                )}>
+                "lg:hidden overflow-x-auto snap-x snap-mandatory scrollbar-none pb-2",
+                vietnamesePresenters.length <= 5 && "flex justify-center"
+              )}>
                 <div className="flex items-center gap-4 w-max px-4">
                   {vietnamesePresenters.map((presenter) => (
                     <div key={presenter.id} className="snap-center">
