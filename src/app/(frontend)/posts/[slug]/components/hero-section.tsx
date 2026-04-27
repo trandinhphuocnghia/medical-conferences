@@ -6,9 +6,16 @@ import Image from 'next/image'
 
 interface HeroSectionProps {
   presenters?: PresenterData[]
+  programAgenda?: Array<{
+    id?: string | null
+    title: string
+    speakerName?: string | null
+    isHighlight?: boolean | null
+    organization?: string | null
+  }> | null
 }
 
-const RoboticPosterSection = ({ presenters = [] }: HeroSectionProps) => {
+const RoboticPosterSection = ({ presenters = [], programAgenda = [] }: HeroSectionProps) => {
   return (
     <section className="relative mt-6 lg:mt-10 min-h-screen w-full overflow-hidden bg-[#010816] flex flex-col">
 
@@ -19,7 +26,7 @@ const RoboticPosterSection = ({ presenters = [] }: HeroSectionProps) => {
             alt='benhviendaihocyduoc-logo'
             width={400}
             height={100}
-            src={'/assets/img/benhviendaihocyduoc.webp'}
+            src={'/api/media/file/benhviendaihocyduoc.png'}
             className="w-40 h-auto sm:w-56 lg:w-72 object-contain"
             priority
           />
@@ -40,7 +47,7 @@ const RoboticPosterSection = ({ presenters = [] }: HeroSectionProps) => {
               className="absolute inset-0 bg-contain bg-no-repeat lg:opacity-40 bg-center lg:bg-left-center
                 mask-mobile lg:mask-desktop transition-all duration-1000 transform hover:scale-105"
               style={{
-                backgroundImage: `url('/assets/img/robot 3.png')`,
+                backgroundImage: `url('/api/media/file/robot_3.png')`,
                 filter: 'brightness(1.1) contrast(1.05)',
               }}
             />
@@ -89,7 +96,7 @@ const RoboticPosterSection = ({ presenters = [] }: HeroSectionProps) => {
           </div>
         </div>
       </div>
-      
+
       {/**PROGRAM */}
       <div className="relative z-40 w-full border-t border-cyan/10 bg-gradient-to-t from-[#010816] via-[#010816]/95 to-transparent pt-6 pb-12 sm:pt-8 sm:pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
@@ -101,37 +108,29 @@ const RoboticPosterSection = ({ presenters = [] }: HeroSectionProps) => {
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan/20 to-transparent" />
           </div>
 
-          <ul className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 text-slate-300 text-sm leading-relaxed lg:text-base text-left">
-            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
-              <span className="font-semibold text-white mb-1">ESD for Early Gastric Cancer</span>
-              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Dr. Le Quang Nhan</span>
-            </li>
+          {programAgenda && programAgenda.length > 0 && (
+            <ul className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 text-slate-300 text-sm leading-relaxed lg:text-base text-left">
+              {programAgenda.map((item, index) => {
+                if (item.isHighlight) {
+                  return (
+                    <li key={item.id || index} className="md:col-span-2 bg-gradient-to-r from-cyan/10 to-transparent border-l-2 border-cyan/50 p-4 rounded-r-lg text-xs text-slate-300 italic flex flex-col justify-center">
+                      <span className="block font-medium text-white not-italic text-sm">{item.title}</span>
+                      {item.organization && <span className="mt-1">{item.organization}</span>}
+                    </li>
+                  )
+                }
 
-            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
-              <span className="font-semibold text-white mb-1">Laparoscopic Proximal Gastrectomy</span>
-              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Dr. Vo Duy Long</span>
-            </li>
-
-            <li className="md:col-span-2 bg-gradient-to-r from-cyan/10 to-transparent border-l-2 border-cyan/50 p-4 rounded-r-lg text-xs text-slate-300 italic flex flex-col justify-center">
-              <span className="block font-medium text-white not-italic text-sm">Broadcast from FV Hospital</span>
-              <span className="mt-1">Organized by University Medical Center HCMC & FV Hospital</span>
-            </li>
-
-            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
-              <span className="font-semibold text-white mb-1">Robotic Total Gastrectomy</span>
-              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Ichiro Uyama</span>
-            </li>
-
-            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
-              <span className="font-semibold text-white mb-1">Robotic Distal Gastrectomy</span>
-              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Koichi Suda</span>
-            </li>
-
-            <li className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors md:col-span-2 lg:col-span-1">
-              <span className="font-semibold text-white mb-1">Laparoscopic Distal Gastrectomy</span>
-              <span className="text-cyan text-xs uppercase tracking-wider font-medium">Proctor: Prof. Noriyuki Inaki</span>
-            </li>
-          </ul>
+                return (
+                  <li key={item.id || index} className="flex flex-col bg-white/5 p-4 rounded-lg border border-cyan/10 hover:border-cyan/30 transition-colors">
+                    <span className="font-semibold text-white mb-1">{item.title}</span>
+                    {item.speakerName && (
+                      <span className="text-cyan text-xs uppercase tracking-wider font-medium">{item.speakerName}</span>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          )}
         </div>
       </div>
     </section>

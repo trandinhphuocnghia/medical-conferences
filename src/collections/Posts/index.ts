@@ -150,6 +150,100 @@ export const Posts: CollectionConfig<'posts'> = {
           ],
         },
         {
+          label: 'Faculty & Program',
+          fields: [
+            {
+              name: 'scientificBoard',
+              label: 'Scientific Board (Poster Faculty)',
+              type: 'relationship',
+              relationTo: 'users',
+              hasMany: true,
+              admin: {
+                description: 'Select the doctors who should explicitly appear on the Hero Section poster (dock). Note: You can only select users who are part of this conference\'s Host Organization.',
+              },
+              filterOptions: async ({ req, data }) => {
+                if (data?.host) {
+                  try {
+                    // Fetch the host group to get its users
+                    const group = await req.payload.findByID({
+                      collection: 'user-groups',
+                      id: typeof data.host === 'object' ? data.host.id : data.host,
+                      depth: 0,
+                    })
+
+                    if (group && group.users && group.users.length > 0) {
+                      return {
+                        id: {
+                          in: group.users.map((u: any) => (typeof u === 'object' ? u.id : u)),
+                        },
+                      }
+                    }
+                    
+                    // If host has no users, return a condition that matches nothing
+                    return { id: { equals: 0 } }
+                  } catch (err) {
+                    console.error('Error fetching host group in filterOptions:', err)
+                  }
+                }
+                return true
+              },
+            },
+            {
+              name: 'programAgenda',
+              type: 'array',
+              label: 'Program Highlight (Hero Section)',
+              admin: {
+                description: 'Add the main sessions representing the event agenda shown on the top poster.',
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  label: 'Session Title',
+                  required: true,
+                  admin: {
+                    placeholder: 'e.g. ESD for Early Gastric Cancer',
+                    width: '60%',
+                  },
+                },
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'speakerName',
+                      type: 'text',
+                      label: 'Speaker Name & Title',
+                      admin: {
+                        placeholder: 'e.g. Dr. Le Quang Nhan',
+                        width: '50%',
+                      },
+                    },
+                    {
+                      name: 'isHighlight',
+                      type: 'checkbox',
+                      label: 'Is Broadcast/Highlight?',
+                      defaultValue: false,
+                      admin: {
+                        width: '50%',
+                        description: 'Styles this row as a broadcast or special group session.',
+                      },
+                    },
+                  ],
+                },
+                {
+                  name: 'organization',
+                  type: 'text',
+                  label: 'Organization / Hospital Note',
+                  admin: {
+                    condition: (_, siblingData) => Boolean(siblingData?.isHighlight),
+                    placeholder: 'Organized by University Medical Center HCMC & FV Hospital',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Schedule',
           fields: [
             // 1. Abstract Submission Deadline (First Event)

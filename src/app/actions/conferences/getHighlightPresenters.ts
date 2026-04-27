@@ -19,17 +19,22 @@ export async function getHighlightPresenters(conferenceId: number): Promise<{
       depth: 3,
     })
 
-    if (!conference || !conference.host) {
+    if (!conference || !conference.scientificBoard) {
       return { success: true, presenters: [] }
     }
 
-    const hostGroup = conference.host as UserGroup
-    const groupUsers = (hostGroup.users || []) as User[]
+    const scientificBoardUsers = (conference.scientificBoard || []) as User[]
 
-    // Highlight presenters: admin-created, non-staff, sorted by creation date (FIFO)
-    const highlightPresenters = groupUsers
-      .filter((user): user is User => !!user && isHighlightPresenter(user))
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+    // Highlight presenters: Explicitly designated doctors on the Scientific Board tab
+    const highlightPresenters = scientificBoardUsers
+      .filter((user): user is User => !!user)
+      // Sort by the `sortOrder` field first, then by creation date
+      .sort((a, b) => {
+        const orderA = a.sortOrder ?? 0
+        const orderB = b.sortOrder ?? 0
+        if (orderA !== orderB) return orderA - orderB
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      })
       .map(userToPresenterData)
 
     // TODO: Type 2 Highlight Presenters (Users with approved abstracts)
