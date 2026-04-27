@@ -203,7 +203,7 @@ export function ScientificBoard({ presenters }: ScientificBoardProps) {
           {/* International Faculty */}
           {internationalPresenters.length > 0 && (
             <div className="mb-6">
-              <SectionLabel label="International Faculty" />
+              <SectionLabel label="INTERNATIONAL PROCTORS" />
 
               {/* Desktop View */}
               <div
@@ -264,7 +264,7 @@ export function ScientificBoard({ presenters }: ScientificBoardProps) {
           {/* Vietnamese Faculty */}
           {vietnamesePresenters.length > 0 && (
             <div>
-              <SectionLabel label="Vietnamese Faculty" />
+              <SectionLabel label="VIETNAMESE FACULTY" />
 
               {/* Desktop View */}
               <div
