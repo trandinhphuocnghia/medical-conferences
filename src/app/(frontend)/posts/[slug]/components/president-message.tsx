@@ -24,7 +24,7 @@ export function MessageSection({ conference, resident: member }: MessageSectionP
       ) + ' Days'
       : '—'
   return (
-    <section id="message" className="pt-6 sm:pt-10 bg-background scroll-mt-[132px]">
+    <section id="message" className="py-12 sm:py-16 bg-background scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Message from Organizing Committee */}

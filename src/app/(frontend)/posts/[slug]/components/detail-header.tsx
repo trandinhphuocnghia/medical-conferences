@@ -28,6 +28,11 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
   const startDate = new Date(conferenceStartDate)
   const endDate = new Date(conferenceEndDate)
 
+  const abstractDeadline = conference.abstractSubmissionDeadline
+    ? new Date(conference.abstractSubmissionDeadline)
+    : null
+  const isSubmissionOpen = abstractDeadline && new Date() < abstractDeadline
+
   return (
     <section id="overview" className="bg-background pt-6 sm:pt-10 scroll-mt-[132px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -84,27 +89,28 @@ export function DetailHeader({ conference }: DetailHeaderProps) {
         </div>
 
         {/* Call for Abstract Card */}
-        <div className="bg-primary text-primary-foreground rounded-lg p-6 sm:p-8 mt-6 sm:mt-10">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Call for Abstracts</h2>
-              <p className="text-sm sm:text-base opacity-90">
-                Submit your research and present at the conference
-              </p>
-              <Badge className="mt-3 bg-accent text-accent-foreground">
-                Deadline:
-                {formatDate(new Date(conference?.abstractSubmissionDeadline || new Date()))}
-              </Badge>
+        {isSubmissionOpen && (
+          <div className="bg-primary text-primary-foreground rounded-lg p-6 sm:p-8 mt-6 sm:mt-10">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold mb-2">Call for Abstracts</h2>
+                <p className="text-sm sm:text-base opacity-90">
+                  Submit your research and present at the conference
+                </p>
+                <Badge className="mt-3 bg-accent text-accent-foreground">
+                  Deadline: {formatDate(abstractDeadline!)}
+                </Badge>
+              </div>
+              <Button
+                onClick={() => router.push(`/submit-abstract?conference=${id}`)}
+                size="lg"
+                className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto"
+              >
+                Submit Abstract
+              </Button>
             </div>
-            <Button
-              onClick={() => router.push(`/submit-abstract?conference=${id}`)}
-              size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto"
-            >
-              Submit Abstract
-            </Button>
           </div>
-        </div>
+        )}
       </div>
     </section>
   )

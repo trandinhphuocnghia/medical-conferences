@@ -10,6 +10,7 @@ import { StickySubNav } from './components/sticky-subnav'
 import { TopicAccordion } from './components/topic-accordion'
 import { CountdownTimer } from './components/countdown-timer'
 import { ProgramPreviewCard } from './components/program-preview-card'
+import RoboticPosterSection from './components/hero-section'
 
 const getTopics = (conference: Post): Topic[] => {
   if (!conference.topics) return []
@@ -41,9 +42,17 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
     getHighlightPresenters(conferenceData.id),
   ])
 
+  const isSubmissionOpen =
+    conferenceData.abstractSubmissionDeadline &&
+    new Date() < new Date(conferenceData.abstractSubmissionDeadline)
+
   return (
     <div className="min-h-screen bg-background">
-      <StickySubNav conferenceId={conferenceData?.id} slug={slug} />
+      <StickySubNav
+        conferenceId={conferenceData?.id}
+        slug={slug}
+        isSubmissionOpen={!!isSubmissionOpen}
+      />
 
       <DetailHeader
         conference={conferenceData}
@@ -51,8 +60,9 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         cmeCredits={0} //TODO
       />
 
-      <CountdownTimer targetDate={conferenceData.startDate} />
+      <RoboticPosterSection presenters={presentersData.presenters} />
 
+      <CountdownTimer targetDate={conferenceData.startDate} />
 
       <MessageSection conference={conferenceData} />
 
@@ -68,7 +78,13 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
         previousNotificationDate={conferenceData.previousNotificationDate}
       />
 
-      {topics.length > 0 && <TopicAccordion conferenceId={conferenceData.id} topics={topics} />}
+      {topics.length > 0 && (
+        <TopicAccordion
+          conferenceId={conferenceData.id}
+          topics={topics}
+          isSubmissionOpen={!!isSubmissionOpen}
+        />
+      )}
 
       <ProgramPreviewCard slug={slug} program={conferenceData.program} />
 
