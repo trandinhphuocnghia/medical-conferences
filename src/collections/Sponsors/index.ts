@@ -46,6 +46,14 @@ export const Sponsors: CollectionConfig = {
           label: 'Bronze',
           value: 'bronze',
         },
+        {
+          label: 'Co-Sponsor',
+          value: 'co-sponsor',
+        },
+        {
+          label: 'Other Sponsor',
+          value: 'other-sponsor',
+        },
       ],
       required: true,
     },
