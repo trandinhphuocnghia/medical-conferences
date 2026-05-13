@@ -1,7 +1,11 @@
+import type { Metadata } from 'next'
+import { cache } from 'react'
+
 import { getConferenceBySlug } from '@/app/actions/conferences/getConferenceBySlug'
 import { getHighlightPresenters } from '@/app/actions/conferences/getHighlightPresenters'
 import { getConferencePresenters } from '@/app/actions/abstracts/getConferencePresenters'
 import type { Post, Sponsor, Topic } from '@/payload-types'
+import { generateMeta } from '@/utilities/generateMeta'
 import { SponsorSection } from './components/conference-sponsor'
 import { DetailHeader } from './components/detail-header'
 import { PresentersSection } from './components/presenters-section'
@@ -24,13 +28,37 @@ type Args = {
   }>
 }
 
+const queryConferenceBySlug = cache(async (slug: string) => {
+  const res = await getConferenceBySlug({ slug })
+  return res?.docs?.[0] || null
+})
+
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  try {
+    const { slug = '' } = await paramsPromise
+    const doc = await queryConferenceBySlug(slug)
+
+    return generateMeta({
+      doc: {
+        meta: {
+          title: doc?.title,
+        }
+      }
+    })
+  } catch (error) {
+    console.error('Error generating metadata:', error)
+    return {
+      title: 'HIGCF',
+      description: '',
+    }
+  }
+}
+
 //[NEED REVIEW] [CLAUDE]: This component is in use on develop,
 //TODO: when the claude is working again should review the code.
 export default async function ConferenceDetailPage({ params: paramsPromise }: Args) {
   const { slug = '' } = await paramsPromise
-
-  const posts = await getConferenceBySlug({ slug })
-  const conferenceData = posts?.docs?.[0]
+  const conferenceData = await queryConferenceBySlug(slug)
 
   if (!conferenceData) return null
 

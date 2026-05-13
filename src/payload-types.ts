@@ -596,7 +596,7 @@ export interface Sponsor {
   id: number;
   title: string;
   logo: number | Media;
-  level: 'diamond' | 'gold' | 'silver' | 'bronze';
+  level: 'diamond' | 'gold' | 'silver' | 'bronze' | 'co-sponsor' | 'other-sponsor';
   url?: string | null;
   updatedAt: string;
   createdAt: string;

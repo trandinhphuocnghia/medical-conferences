@@ -45,6 +45,6 @@ export const Media: CollectionConfig = {
         // height is auto-calculated if omitted to maintain aspect ratio
       },
     ],
-    mimeTypes: ['image/jpeg', 'image/png'],
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
   },
 }

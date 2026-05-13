@@ -15,29 +15,43 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
       container: 'col-span-1',
       imageSize: 'h-16 sm:h-20',
       padding: 'p-4 sm:p-6',
-      border: 'border-accent/30 bg-gradient-to-br from-accent/5 to-primary/5',
+      border: 'border-accent/30 bg-card',
       shadow: 'shadow-sm hover:shadow-md shadow-accent/10',
     },
     gold: {
       container: 'col-span-1',
       imageSize: 'h-14 sm:h-16',
       padding: 'p-3 sm:p-4',
-      border: 'border-accent/20 bg-accent/5',
+      border: 'border-accent/20 bg-card',
       shadow: 'shadow-sm hover:shadow-md',
     },
     silver: {
       container: 'col-span-1',
       imageSize: 'h-12 sm:h-14',
       padding: 'p-2 sm:p-3',
-      border: 'border-border bg-card/60',
+      border: 'border-border bg-card',
       shadow: 'hover:shadow-sm',
     },
     bronze: {
       container: 'col-span-1',
       imageSize: 'h-10 sm:h-12',
       padding: 'p-2',
-      border: 'border-border/60 bg-card/40',
+      border: 'border-border/60 bg-card',
       shadow: 'hover:opacity-80',
+    },
+    'co-sponsor': {
+      container: 'col-span-1',
+      imageSize: 'h-12 sm:h-14',
+      padding: 'p-3 sm:p-4',
+      border: 'border-border bg-card',
+      shadow: 'shadow-sm hover:shadow-md',
+    },
+    'other-sponsor': {
+      container: 'col-span-1',
+      imageSize: 'h-10 sm:h-12',
+      padding: 'p-2 sm:p-3',
+      border: 'border-border/60 bg-card',
+      shadow: 'hover:shadow-sm',
     },
   }
 
@@ -83,7 +97,7 @@ function SponsorCard({ sponsor }: { sponsor: Sponsor }) {
         )}
       </div>
 
-      {(sponsor.level === 'silver' || sponsor.level === 'bronze') && (
+      {(sponsor.level === 'silver' || sponsor.level === 'bronze' || sponsor.level === 'co-sponsor' || sponsor.level === 'other-sponsor') && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors duration-300 rounded-xl">
           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center gap-1.5">
             {sponsor.url && (
@@ -108,6 +122,8 @@ export function SponsorSection({ sponsors = [] }: SponsorSectionProps) {
   const goldSponsors = sponsors.filter((s) => s.level === 'gold')
   const silverSponsors = sponsors.filter((s) => s.level === 'silver')
   const bronzeSponsors = sponsors.filter((s) => s.level === 'bronze')
+  const coSponsors = sponsors.filter((s) => s.level === 'co-sponsor')
+  const otherSponsors = sponsors.filter((s) => s.level === 'other-sponsor')
 
   return (
     <section id="sponsors" className="py-6 sm:py-10 bg-background">
@@ -167,13 +183,43 @@ export function SponsorSection({ sponsors = [] }: SponsorSectionProps) {
 
         {/* Bronze Sponsors */}
         {bronzeSponsors.length > 0 && (
-          <div>
+          <div className="mb-6 sm:mb-8">
             <h3 className="text-xs sm:text-sm font-semibold text-navy uppercase tracking-widest mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-amber-900"></span>
               Bronze
             </h3>
             <div className="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-10 gap-2 sm:gap-3">
               {bronzeSponsors.map((sponsor) => (
+                <SponsorCard key={sponsor.id} sponsor={sponsor} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Co-Sponsors */}
+        {coSponsors.length > 0 && (
+          <div className="mb-6 sm:mb-8">
+            <h3 className="text-xs sm:text-sm font-semibold text-navy uppercase tracking-widest mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+              Co-Sponsors
+            </h3>
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+              {coSponsors.map((sponsor) => (
+                <SponsorCard key={sponsor.id} sponsor={sponsor} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Other Sponsors */}
+        {otherSponsors.length > 0 && (
+          <div>
+            <h3 className="text-xs sm:text-sm font-semibold text-navy uppercase tracking-widest mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-gray-400"></span>
+              Other Sponsors
+            </h3>
+            <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
+              {otherSponsors.map((sponsor) => (
                 <SponsorCard key={sponsor.id} sponsor={sponsor} />
               ))}
             </div>
