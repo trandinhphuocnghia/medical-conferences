@@ -21,7 +21,11 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
   tomorrow.setDate(tomorrow.getDate() + 1)
   tomorrow.setHours(0, 0, 0, 0)
 
-  if (start < tomorrow) {
+  // Only enforce "future date" rule when the date was actually changed
+  const startDateChanged = data?.startDate && data.startDate !== originalDoc?.startDate
+  const endDateChanged = data?.endDate && data.endDate !== originalDoc?.endDate
+
+  if (startDateChanged && start < tomorrow) {
     throw new ValidationError({
       collection: 'posts',
       errors: [
@@ -33,7 +37,7 @@ export const beforeValidateDate: CollectionBeforeValidateHook<Post> = ({
     })
   }
 
-  if (end < tomorrow) {
+  if (endDateChanged && end < tomorrow) {
     throw new ValidationError({
       collection: 'posts',
       errors: [
