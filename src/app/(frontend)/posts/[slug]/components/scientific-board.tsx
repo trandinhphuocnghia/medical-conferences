@@ -185,9 +185,6 @@ export function ScientificBoard({ presenters }: ScientificBoardProps) {
 
   if (presenters.length === 0) return null
 
-  // Calculate marquee duration based on number of items (more items = longer scroll)
-  const marqueeDuration = Math.max(20, vietnamesePresenters.length * 4)
-
   return (
     <>
       <LaserLine from={laserFrom} to={laserTarget} />

@@ -1,6 +1,6 @@
 'use server'
 
-import type { Abstract, Topic, User } from '@/payload-types'
+import type { User } from '@/payload-types'
 import configPromise from '@/payload.config'
 import { getPayload } from 'payload'
 import { type PresenterData, userToPresenterData } from '../shared/presenterUtils'
