@@ -40,7 +40,7 @@ const AssociationsDropdown = () => {
         <span>{t('associations', 'Associations')}</span>
         <ChevronDown className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
       </button>
-      <div className="absolute left-0 top-full mt-1 w-80 rounded-md border border-border bg-background p-2 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+      <div className="absolute z-100 left-0 top-full mt-1 w-80 rounded-md border border-border bg-background p-2 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
         <div className="flex flex-col gap-1">
           {ASSOCIATIONS.map((item) => (
             <Link
@@ -167,9 +167,8 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
                 >
                   <span>{t('associations', 'Associations')}</span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      mobileAssociationsOpen ? 'rotate-180' : ''
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-200 ${mobileAssociationsOpen ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
                 {mobileAssociationsOpen && (
