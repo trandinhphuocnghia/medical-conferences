@@ -9,6 +9,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
+import { Courses } from './collections/Courses'
 import { MailLogs } from './collections/EmailLogs'
 import { Files } from './collections/Files'
 import { Likes } from './collections/Likes'
@@ -134,6 +135,7 @@ export default buildConfig({
     Seats,
     Reservations,
     Sponsors,
+    Courses,
     MailLogs,
   ],
   cors: [

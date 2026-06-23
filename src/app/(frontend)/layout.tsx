@@ -1,10 +1,7 @@
 import type { Metadata } from 'next'
-
 import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import React from 'react'
-
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
@@ -12,17 +9,27 @@ import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { UserStoreInitializer } from '@/components/UserStoreInitializer'
 import { getCurrentUser } from '@/hooks/getCurrentUser'
-
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { Toaster } from 'sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+})
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(inter.variable, jetbrainsMono.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
       </head>
