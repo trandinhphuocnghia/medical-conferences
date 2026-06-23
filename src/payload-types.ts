@@ -84,6 +84,7 @@ export interface Config {
     seats: Seat;
     reservations: Reservation;
     sponsors: Sponsor;
+    courses: Course;
     'mail-logs': MailLog;
     redirects: Redirect;
     forms: Form;
@@ -116,6 +117,7 @@ export interface Config {
     seats: SeatsSelect<false> | SeatsSelect<true>;
     reservations: ReservationsSelect<false> | ReservationsSelect<true>;
     sponsors: SponsorsSelect<false> | SponsorsSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
     'mail-logs': MailLogsSelect<false> | MailLogsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -1123,6 +1125,203 @@ export interface Reservation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  /**
+   * Official name of the course (e.g., "Advanced Laparoscopic Surgery").
+   */
+  title: string;
+  /**
+   * Set to true when the course is publicly visible.
+   */
+  active: boolean;
+  /**
+   * The organization responsible for this course. Instructors will be scoped to members of this group.
+   */
+  managing_group: number | UserGroup;
+  /**
+   * "Fixed" courses have a predefined schedule & curriculum. "On-Demand" courses are custom-tailored.
+   */
+  course_type: 'fixed' | 'on_demand';
+  /**
+   * Course fee in Vietnamese Dong. Required for fixed curriculum courses.
+   */
+  base_tuition_fee?: number | null;
+  /**
+   * Who is this course designed for? (e.g., Gastroenterologists).
+   */
+  target_audience?: string | null;
+  /**
+   * Detailed learning outcomes participants can expect.
+   */
+  objectives?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * External link for course registration.
+   */
+  registration_url: string;
+  /**
+   * Minimum enrollment to run a batch.
+   */
+  min_students?: number | null;
+  /**
+   * Maximum capacity per batch.
+   */
+  max_students?: number | null;
+  /**
+   * List of specific scheduled runs/batches for this course.
+   */
+  schedules?:
+    | {
+        batch_name: string;
+        start_date: string;
+        end_date: string;
+        /**
+         * Optional override of the base tuition fee for this specific batch.
+         */
+        tuition_fee_override?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Define the course modules and CME hours in order.
+   */
+  curriculum?:
+    | {
+        module_title: string;
+        description?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        /**
+         * Lectures and presentations.
+         */
+        theory_hours?: number | null;
+        /**
+         * Dry lab/wet lab hands-on sessions.
+         */
+        practice_lab_hours?: number | null;
+        /**
+         * Live patient/hospital observation.
+         */
+        practice_clinical_hours?: number | null;
+        /**
+         * Select instructors for this module. Only members of the Managing Organization are shown.
+         */
+        instructors?: (number | User)[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  logistics_info?: {
+    /**
+     * Criteria required to receive a completion certificate or CME credits.
+     */
+    certificate_requirements?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Bank details for registration fee payments.
+     */
+    bank_transfer_details?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Contact coordinates for the course secretariat (phone, email, office).
+     */
+    contact_info?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  /**
+   * Describe the bespoke training program.
+   */
+  custom_training_content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  slug: string;
+  slugLock?: boolean | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "mail-logs".
  */
 export interface MailLog {
@@ -1347,6 +1546,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'sponsors';
         value: number | Sponsor;
+      } | null)
+    | ({
+        relationTo: 'courses';
+        value: number | Course;
       } | null)
     | ({
         relationTo: 'mail-logs';
@@ -1902,6 +2105,57 @@ export interface SponsorsSelect<T extends boolean = true> {
   url?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  active?: T;
+  managing_group?: T;
+  course_type?: T;
+  base_tuition_fee?: T;
+  target_audience?: T;
+  objectives?: T;
+  registration_url?: T;
+  min_students?: T;
+  max_students?: T;
+  schedules?:
+    | T
+    | {
+        batch_name?: T;
+        start_date?: T;
+        end_date?: T;
+        tuition_fee_override?: T;
+        id?: T;
+      };
+  curriculum?:
+    | T
+    | {
+        module_title?: T;
+        description?: T;
+        theory_hours?: T;
+        practice_lab_hours?: T;
+        practice_clinical_hours?: T;
+        instructors?: T;
+        id?: T;
+      };
+  logistics_info?:
+    | T
+    | {
+        certificate_requirements?: T;
+        bank_transfer_details?: T;
+        contact_info?: T;
+      };
+  custom_training_content?: T;
+  slug?: T;
+  slugLock?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
