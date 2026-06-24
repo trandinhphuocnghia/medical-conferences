@@ -17,7 +17,7 @@ const useTranslation = () => {
 const PRIMARY_NAV_ITEMS = [
   { key: 'home', label: 'Home', href: '/' },
   { key: 'conference', label: 'Conference', href: '/posts' },
-  { key: 'trainingCourse', label: 'Training Course', href: '#' },
+  { key: 'trainingCourse', label: 'Training Course', href: '/courses' },
   { key: 'research', label: 'Research', href: '#' },
 ] as const
 
