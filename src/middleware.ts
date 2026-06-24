@@ -147,14 +147,12 @@ export const config = {
   matcher: [
     /*
      * Match all request paths EXCEPT:
-     * - _next/static  — compiled static assets
-     * - _next/image   — Next.js image optimisation endpoint
-     * - favicon.ico   — browser favicon requests
+     * - api/health      - Bypass for Railway Health Check
+     * - _next/static    - compiled static assets
+     * - _next/image     - Next.js image optimization endpoint
+     * - favicon.ico     - browser favicon requests
      * - Any path ending in a file extension (e.g. .png, .svg, .woff2)
-     *
-     * The api routes are intentionally included so that Payload REST calls
-     * made server-to-server during SSR are also guarded in development.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.\\w+$).*)',
+    '/((?!api/health|_next/static|_next/image|favicon.ico|.*\\.\\w+$).*)',
   ],
-}
+};
