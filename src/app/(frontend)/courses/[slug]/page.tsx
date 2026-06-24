@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import type { PaginatedDocs } from 'payload'
 
 import { getServerSideURL } from '@/utilities/getURL'
+import { getInternalAPIHeaders } from '@/utilities/getInternalAPIHeaders'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { CourseDetailView } from './components/CourseDetailView'
 
@@ -20,6 +21,7 @@ async function getCourseBySlug(slug: string): Promise<Course | null> {
     const url = `${serverUrl}/api/courses?where[slug][equals]=${slug}&depth=3`
 
     const response = await fetch(url, {
+      headers: getInternalAPIHeaders(),
       next: { revalidate: 3600 },
     })
 

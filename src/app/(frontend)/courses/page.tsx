@@ -3,6 +3,7 @@ import type { Course } from '@/payload-types'
 import { cache } from 'react'
 
 import { getServerSideURL } from '@/utilities/getURL'
+import { getInternalAPIHeaders } from '@/utilities/getInternalAPIHeaders'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { CoursesArchive } from './components/courses-archive'
 
@@ -21,6 +22,7 @@ const getCourses = cache(async (): Promise<Course[]> => {
     const url = `${serverUrl}/api/courses?where[active][equals]=true&limit=100&depth=1`
 
     const res = await fetch(url, {
+      headers: getInternalAPIHeaders(),
       next: { revalidate: 3600 },
     })
 
