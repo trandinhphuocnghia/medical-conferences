@@ -1,3 +1,21 @@
+/**
+ * ============================================================
+ * EXPERIMENTAL — PHASE 1 FEATURE
+ * ============================================================
+ * This file adds HTTP Basic Authentication to protect the
+ * development environment from accidental public access and
+ * search engine indexing.
+ *
+ * STATUS:   Experimental. Subject to change or removal if this
+ *           approach does not fit the team's workflow.
+ *
+ * REMOVAL:  This feature is fully self-contained. If it is no
+ *           longer needed, delete this file entirely. No other
+ *           file in the codebase depends on the Basic Auth
+ *           logic added here.
+ * ============================================================
+ */
+
 import { jwtVerify } from 'jose'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
@@ -24,7 +42,59 @@ async function getJwtSecret(): Promise<Uint8Array> {
   return _jwtSecret
 }
 
+// ── [EXPERIMENTAL] Basic Auth gate ─────────────────────────────────────────
+// Only active when APP_ENV === 'development'.
+// Reads credentials from DEV_USER and DEV_PASSWORD environment variables.
+// Returns a 401 response that triggers the browser's native login popup when
+// credentials are missing or incorrect.
+function applyBasicAuth(request: NextRequest): NextResponse | null {
+  // Guard: only protect development deployments
+  if (process.env.APP_ENV !== 'development') return null
+
+  const devUser = process.env.DEV_USER ?? ''
+  const devPassword = process.env.DEV_PASSWORD ?? ''
+
+  // Read the Authorization header sent by the browser
+  const authHeader = request.headers.get('authorization') ?? ''
+
+  if (authHeader.startsWith('Basic ')) {
+    try {
+      // Decode base64 "username:password"
+      const base64Credentials = authHeader.slice('Basic '.length)
+      const decoded = atob(base64Credentials)
+      const colonIndex = decoded.indexOf(':')
+
+      if (colonIndex !== -1) {
+        const submittedUser = decoded.slice(0, colonIndex)
+        const submittedPassword = decoded.slice(colonIndex + 1)
+
+        if (submittedUser === devUser && submittedPassword === devPassword) {
+          // Credentials are valid — allow the request through
+          return null
+        }
+      }
+    } catch {
+      // Malformed base64 — fall through to 401
+    }
+  }
+
+  // Missing or invalid credentials — prompt the browser login popup
+  return new NextResponse('Unauthorized', {
+    status: 401,
+    headers: {
+      'WWW-Authenticate': 'Basic realm="Development Environment", charset="UTF-8"',
+    },
+  })
+}
+
 export async function middleware(request: NextRequest) {
+  // ── [EXPERIMENTAL] Development Basic Auth ──────────────────────────────
+  // This block is the only place Basic Auth logic lives.
+  // Removing the `applyBasicAuth` call (and the function above) is sufficient
+  // to disable this feature completely.
+  const basicAuthResponse = applyBasicAuth(request)
+  if (basicAuthResponse) return basicAuthResponse
+
   const { pathname } = request.nextUrl
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-pathname', pathname + request.nextUrl.search)
@@ -76,12 +146,15 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * Match all request paths EXCEPT:
+     * - _next/static  — compiled static assets
+     * - _next/image   — Next.js image optimisation endpoint
+     * - favicon.ico   — browser favicon requests
+     * - Any path ending in a file extension (e.g. .png, .svg, .woff2)
+     *
+     * The api routes are intentionally included so that Payload REST calls
+     * made server-to-server during SSR are also guarded in development.
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\.\w+$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.\\w+$).*)',
   ],
 }
