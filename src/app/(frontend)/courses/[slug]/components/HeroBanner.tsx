@@ -1,11 +1,12 @@
 import type { Course } from '@/payload-types'
+import { FileDown } from 'lucide-react'
 import { formatVND } from '@/helpers'
 import { CourseRegisterButton } from '@/components/common/course-register-button'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type HeroBannerProps = Pick<
   Course,
-  'title' | 'target_audience' | 'base_tuition_fee' | 'registration_url'
+  'title' | 'target_audience' | 'base_tuition_fee' | 'registration_url' | 'prospectus'
 > & {
   badgeLabel?: string
   tuitionFeeLabel?: string
@@ -19,11 +20,18 @@ export function HeroBanner({
   target_audience,
   base_tuition_fee,
   registration_url,
+  prospectus,
   badgeLabel = 'Medical Training Course',
   tuitionFeeLabel = 'Tuition Fee',
   tuitionFeeSuffix = '/ course',
   ctaLabel = 'Register Now',
 }: HeroBannerProps) {
+  // Resolve prospectus media/file URL from Payload CMS relation
+  const prospectusUrl =
+    prospectus && typeof prospectus === 'object' && 'url' in prospectus
+      ? prospectus.url
+      : null
+
   return (
     <section
       aria-labelledby="hero-course-title"
@@ -96,14 +104,29 @@ export function HeroBanner({
             </div>
           )}
 
-          {registration_url && (
-            <CourseRegisterButton
-              id="hero-cta-register"
-              href={registration_url}
-              ctaLabel={ctaLabel}
-              className="mt-2"
-            />
-          )}
+          {/* ── CTA buttons container ─────────────────────────────────── */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2 w-full sm:w-auto">
+            {registration_url && (
+              <CourseRegisterButton
+                id="hero-cta-register"
+                href={registration_url}
+                ctaLabel={ctaLabel}
+              />
+            )}
+
+            {prospectusUrl && (
+              <a
+                href={prospectusUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="inline-flex items-center justify-center gap-2.5 rounded-lg border border-primary px-8 py-4 text-base font-semibold text-primary hover:bg-primary/5 transition-all duration-200 ease-out hover:-translate-y-1 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 w-full sm:w-auto"
+              >
+                <FileDown className="h-5 w-5 stroke-[2.5]" aria-hidden="true" />
+                <span>Download Brochure (PDF)</span>
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </section>

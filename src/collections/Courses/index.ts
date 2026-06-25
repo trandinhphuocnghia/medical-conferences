@@ -172,6 +172,16 @@ export const Courses: CollectionConfig = {
                 placeholder: 'https://example.com/register',
               },
             },
+            {
+              name: 'prospectus',
+              type: 'upload',
+              relationTo: 'files',
+              label: 'Tài liệu khóa học / Brochure (PDF)',
+              admin: {
+                description: 'Tải lên file PDF giới thiệu chi tiết chương trình học.',
+              },
+              
+            },
           ],
         },
 

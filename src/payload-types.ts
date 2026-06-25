@@ -1176,6 +1176,10 @@ export interface Course {
    */
   registration_url: string;
   /**
+   * Tải lên file PDF giới thiệu chi tiết chương trình học.
+   */
+  prospectus?: (number | null) | File;
+  /**
    * Minimum enrollment to run a batch.
    */
   min_students?: number | null;
@@ -2119,6 +2123,7 @@ export interface CoursesSelect<T extends boolean = true> {
   target_audience?: T;
   objectives?: T;
   registration_url?: T;
+  prospectus?: T;
   min_students?: T;
   max_students?: T;
   schedules?:
