@@ -25,11 +25,18 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
   const user = await getCurrentUser()
 
   return (
-    <html className={cn(inter.variable, jetbrainsMono.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(inter.variable, jetbrainsMono.variable)} lang={locale} suppressHydrationWarning>
       <head>
         <InitTheme />
       </head>

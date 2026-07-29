@@ -16,10 +16,10 @@ const PAGE_DESCRIPTION =
 // ── Data Fetching (ISR — 1 hour) ──────────────────────────────────────────────
 // NOTE: searchParams are intentionally NOT read here. All filtering is handled
 // client-side inside <CoursesArchive> to preserve ISR across all URL variations.
-const getCourses = cache(async (): Promise<Course[]> => {
+const getCourses = cache(async (locale: string): Promise<Course[]> => {
   try {
     const serverUrl = getServerSideURL()
-    const url = `${serverUrl}/api/courses?where[active][equals]=true&limit=100&depth=1`
+    const url = `${serverUrl}/api/courses?where[active][equals]=true&limit=100&depth=1&locale=${locale}`
 
     const res = await fetch(url, {
       headers: getInternalAPIHeaders(),
@@ -38,10 +38,15 @@ const getCourses = cache(async (): Promise<Course[]> => {
   }
 })
 
-// ── SEO Metadata ──────────────────────────────────────────────────────────────
-export async function generateMetadata(): Promise<Metadata> {
+// ── SEO Metadata ────────────────────────────────────────────────────────────────
+type MetadataArgs = {
+  params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: MetadataArgs): Promise<Metadata> {
+  const { locale } = await params
   const serverUrl = getServerSideURL()
-  const canonicalUrl = `${serverUrl}/courses`
+  const canonicalUrl = `${serverUrl}/${locale}/courses`
 
   return {
     title: PAGE_TITLE,
@@ -59,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // ── JSON-LD Builder ───────────────────────────────────────────────────────────
-function buildItemListJsonLd(courses: Course[]) {
+function buildItemListJsonLd(courses: Course[], locale: string) {
   const serverUrl = getServerSideURL()
 
   return {
@@ -74,16 +79,21 @@ function buildItemListJsonLd(courses: Course[]) {
       item: {
         '@type': 'Course',
         name: course.title,
-        url: `${serverUrl}/courses/${course.slug}`,
+        url: `${serverUrl}/${locale}/courses/${course.slug}`,
       },
     })),
   }
 }
 
 // ── Page Component ────────────────────────────────────────────────────────────
-export default async function CoursesPage() {
-  const courses = await getCourses()
-  const jsonLd = buildItemListJsonLd(courses)
+type PageArgs = {
+  params: Promise<{ locale: string }>
+}
+
+export default async function CoursesPage({ params }: PageArgs) {
+  const { locale } = await params
+  const courses = await getCourses(locale)
+  const jsonLd = buildItemListJsonLd(courses, locale)
 
   return (
     <>
