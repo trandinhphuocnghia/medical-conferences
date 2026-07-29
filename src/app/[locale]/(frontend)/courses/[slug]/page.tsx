@@ -15,10 +15,10 @@ const DEFAULT_DESCRIPTION =
   'Chương trình đào tạo y khoa chất lượng cao tại Bệnh viện Đại học Y Dược TPHCM.'
 
 // ── Data Fetching (ISR — 1 hour) ──────────────────────────────────────────────
-async function getCourseBySlug(slug: string): Promise<Course | null> {
+async function getCourseBySlug(slug: string, locale: string): Promise<Course | null> {
   try {
     const serverUrl = getServerSideURL()
-    const url = `${serverUrl}/api/courses?where[slug][equals]=${slug}&depth=4`
+    const url = `${serverUrl}/api/courses?where[slug][equals]=${slug}&depth=4&locale=${locale}`
 
     const response = await fetch(url, {
       headers: getInternalAPIHeaders(),
@@ -38,17 +38,18 @@ async function getCourseBySlug(slug: string): Promise<Course | null> {
 }
 
 // Deduplicate requests within the same render pass
+// Cache key is unique per (slug, locale) — React cache() deduplicates by args.
 const queryCourseBySlug = cache(getCourseBySlug)
 
 // ── Route Types ───────────────────────────────────────────────────────────────
 type Args = {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
 }
 
 // ── Dynamic Metadata ──────────────────────────────────────────────────────────
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug } = await paramsPromise
-  const course = await queryCourseBySlug(slug)
+  const { slug, locale } = await paramsPromise
+  const course = await queryCourseBySlug(slug, locale)
 
   if (!course) {
     return {
@@ -65,7 +66,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     : DEFAULT_DESCRIPTION
 
   const serverUrl = getServerSideURL()
-  const url = `${serverUrl}/courses/${course.slug}`
+  const url = `${serverUrl}/${locale}/courses/${course.slug}`
 
   return {
     title,
@@ -82,8 +83,8 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   }
 }
 
-// ── JSON-LD Structured Data ───────────────────────────────────────────────────
-function buildCourseJsonLd(course: Course) {
+// ── JSON-LD Structured Data ─────────────────────────────────────────────────────────────
+function buildCourseJsonLd(course: Course, locale: string) {
   const serverUrl = getServerSideURL()
   const description = course.target_audience || DEFAULT_DESCRIPTION
 
@@ -92,7 +93,7 @@ function buildCourseJsonLd(course: Course) {
     '@type': 'Course',
     name: course.title,
     description,
-    url: `${serverUrl}/courses/${course.slug}`,
+    url: `${serverUrl}/${locale}/courses/${course.slug}`,
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -124,14 +125,14 @@ function buildCourseJsonLd(course: Course) {
   return jsonLd
 }
 
-// ── Page Component ────────────────────────────────────────────────────────────
+// ── Page Component ───────────────────────────────────────────────────────────────
 export default async function CourseDetailPage({ params: paramsPromise }: Args) {
-  const { slug } = await paramsPromise
-  const course = await queryCourseBySlug(slug)
+  const { slug, locale } = await paramsPromise
+  const course = await queryCourseBySlug(slug, locale)
 
   if (!course) notFound()
 
-  const jsonLd = buildCourseJsonLd(course)
+  const jsonLd = buildCourseJsonLd(course, locale)
 
   return (
     <>

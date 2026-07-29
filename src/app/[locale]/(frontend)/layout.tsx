@@ -13,6 +13,8 @@ import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { Toaster } from 'sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, setRequestLocale } from 'next-intl/server'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -25,24 +27,38 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  
+  // Statically propagate the locale to next-intl for Server Components
+  setRequestLocale(locale)
+
   const user = await getCurrentUser()
+  const messages = await getMessages()
 
   return (
-    <html className={cn(inter.variable, jetbrainsMono.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(inter.variable, jetbrainsMono.variable)} lang={locale} suppressHydrationWarning>
       <head>
         <InitTheme />
       </head>
       <body className="flex flex-col min-h-screen">
-        <Providers>
-          <UserStoreInitializer user={user} />
-          <Header />
-          <Toaster />
-          <main className="flex-1 pt-16">
-            <TooltipProvider delayDuration={100}>{children}</TooltipProvider>
-          </main>
-          <Footer />
-        </Providers>
+        <NextIntlClientProvider messages={messages}>
+          <Providers>
+            <UserStoreInitializer user={user} />
+            <Header />
+            <Toaster />
+            <main className="flex-1 pt-16">
+              <TooltipProvider delayDuration={100}>{children}</TooltipProvider>
+            </main>
+            <Footer />
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

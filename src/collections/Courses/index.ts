@@ -58,6 +58,7 @@ export const Courses: CollectionConfig = {
       admin: {
         description: 'Official name of the course (e.g., "Advanced Laparoscopic Surgery").',
       },
+      localized:true,
     },
 
     {

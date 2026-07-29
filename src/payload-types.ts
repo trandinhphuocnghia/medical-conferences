@@ -85,6 +85,7 @@ export interface Config {
     reservations: Reservation;
     sponsors: Sponsor;
     courses: Course;
+    'course-applications': CourseApplication;
     'mail-logs': MailLog;
     redirects: Redirect;
     forms: Form;
@@ -118,6 +119,7 @@ export interface Config {
     reservations: ReservationsSelect<false> | ReservationsSelect<true>;
     sponsors: SponsorsSelect<false> | SponsorsSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    'course-applications': CourseApplicationsSelect<false> | CourseApplicationsSelect<true>;
     'mail-logs': MailLogsSelect<false> | MailLogsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -138,7 +140,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
-  locale: null;
+  locale: 'vi' | 'en';
   user: User & {
     collection: 'users';
   };
@@ -1325,6 +1327,68 @@ export interface Course {
   deletedAt?: string | null;
 }
 /**
+ * Manages public course registration applications submitted via the website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-applications".
+ */
+export interface CourseApplication {
+  id: number;
+  /**
+   * The training course this application is submitted for.
+   */
+  course: number | Course;
+  /**
+   * Link to an existing platform account if the applicant is a registered user.
+   */
+  user?: (number | null) | User;
+  /**
+   * Current processing status of this application.
+   */
+  status: 'pending' | 'contacted' | 'confirmed' | 'rejected';
+  first_name: string;
+  last_name: string;
+  date_of_birth: string;
+  email: string;
+  phone: string;
+  /**
+   * e.g. Gastroenterology, General Surgery.
+   */
+  specialization: string;
+  has_organization?: boolean | null;
+  /**
+   * Name of the affiliated hospital or institution.
+   */
+  organization?: string | null;
+  /**
+   * Select the program type the applicant is applying for.
+   */
+  enrollment_type: 'short_course' | 'postgraduate';
+  /**
+   * e.g. "3 days", "1 week".
+   */
+  preferred_duration?: string | null;
+  /**
+   * Describe the specific clinical skills or topics the applicant wants to focus on.
+   */
+  preferred_content?: string | null;
+  preferred_start_date?: string | null;
+  preferred_end_date?: string | null;
+  /**
+   * Current academic or training level of the applicant.
+   */
+  academic_level?: ('master' | 'resident' | 'phd') | null;
+  /**
+   * Check if the applicant has passed the required entrance examination.
+   */
+  entrance_exam_passed?: boolean | null;
+  research_start_month?: string | null;
+  research_end_month?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "mail-logs".
  */
@@ -1554,6 +1618,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'courses';
         value: number | Course;
+      } | null)
+    | ({
+        relationTo: 'course-applications';
+        value: number | CourseApplication;
       } | null)
     | ({
         relationTo: 'mail-logs';
@@ -2158,6 +2226,35 @@ export interface CoursesSelect<T extends boolean = true> {
   slugLock?: T;
   createdBy?: T;
   updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-applications_select".
+ */
+export interface CourseApplicationsSelect<T extends boolean = true> {
+  course?: T;
+  user?: T;
+  status?: T;
+  first_name?: T;
+  last_name?: T;
+  date_of_birth?: T;
+  email?: T;
+  phone?: T;
+  specialization?: T;
+  has_organization?: T;
+  organization?: T;
+  enrollment_type?: T;
+  preferred_duration?: T;
+  preferred_content?: T;
+  preferred_start_date?: T;
+  preferred_end_date?: T;
+  academic_level?: T;
+  entrance_exam_passed?: T;
+  research_start_month?: T;
+  research_end_month?: T;
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
