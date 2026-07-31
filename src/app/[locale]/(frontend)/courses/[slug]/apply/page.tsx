@@ -18,7 +18,7 @@ const DEFAULT_DESCRIPTION =
 async function getCourseBySlug(slug: string, locale: string): Promise<Course | null> {
   try {
     const serverUrl = getServerSideURL()
-    const url = `${serverUrl}/api/courses?where[slug][equals]=${slug}&depth=1&locale=${locale}`
+    const url = `${serverUrl}/api/courses?where[slug][equals]=${slug}&depth=2&locale=${locale}`
 
     const response = await fetch(url, {
       headers: getInternalAPIHeaders(),

@@ -1402,6 +1402,8 @@ export interface MailLog {
   lastError?: string | null;
   sentAt?: string | null;
   abstractId?: (number | null) | Abstract;
+  source?: ('abstract' | 'course-application' | 'system') | null;
+  courseApplicationId?: (number | null) | CourseApplication;
   updatedAt: string;
   createdAt: string;
 }
@@ -2272,6 +2274,8 @@ export interface MailLogsSelect<T extends boolean = true> {
   lastError?: T;
   sentAt?: T;
   abstractId?: T;
+  source?: T;
+  courseApplicationId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

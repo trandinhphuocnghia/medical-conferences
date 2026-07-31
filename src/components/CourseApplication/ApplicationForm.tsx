@@ -155,7 +155,7 @@ export function ApplicationForm({ courseId, courseTitle }: ApplicationFormProps)
       {/* Step progress tracker */}
       <ProgressTracker currentStep={currentStep} totalSteps={TOTAL_STEPS} steps={steps} />
 
-      <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
+      <form noValidate>
 
         {/* ── Honeypot — visually hidden, aria-hidden, no tabstop ── */}
         {/*    Bots auto-fill all inputs; humans never see or touch this field. */}
@@ -214,7 +214,8 @@ export function ApplicationForm({ courseId, courseTitle }: ApplicationFormProps)
           ) : (
             <button
               id="course-application-submit-btn"
-              type="submit"
+              type="button"
+              onClick={form.handleSubmit(onSubmit)}
               disabled={isPending}
               className="ml-auto flex items-center gap-2 rounded bg-navy px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-navy-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
