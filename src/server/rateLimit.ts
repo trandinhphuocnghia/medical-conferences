@@ -28,3 +28,13 @@ export const uploadLimiter = redis
       prefix: 'ratelimit:upload',
     })
   : null
+
+/** Course application submissions: 10 requests per 1 hour per IP */
+export const courseApplicationLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(10, '1 h'),
+      analytics: true,
+      prefix: 'ratelimit:course-application',
+    })
+  : null

@@ -1,6 +1,7 @@
 import { CollectionBeforeValidateHook, CollectionConfig, ValidationError } from 'payload'
 
 import { adminOnly, adminOrModifier, anyone } from '@/access/collectionAccess'
+import { sendCourseApplicationConfirmation } from './hooks/sendConfirmationEmail'
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * Duplicate-application guard
@@ -97,6 +98,7 @@ export const CourseApplications: CollectionConfig = {
   /* ── Lifecycle Hooks ─────────────────────────────────────────────────── */
   hooks: {
     beforeValidate: [preventDuplicateApplication],
+    afterChange: [sendCourseApplicationConfirmation],
   },
 
   /* ── Timestamps & Trash ──────────────────────────────────────────────── */
@@ -215,7 +217,7 @@ export const CourseApplications: CollectionConfig = {
               name: 'specialization',
               type: 'text',
               label: 'Medical Specialization',
-              required: true,
+              required: false,
               admin: {
                 description: 'e.g. Gastroenterology, General Surgery.',
               },

@@ -154,22 +154,6 @@ export function StepPersonalInfo({ form }: StepPersonalInfoProps) {
         </div>
       </div>
 
-      {/* ── Specialization (full width) ───────────────────────────────────── */}
-      <div className="flex flex-col gap-1.5">
-        <FieldLabel htmlFor="specialization" required>
-          {t('fields.specialization')}
-        </FieldLabel>
-        <Input
-          id="specialization"
-          type="text"
-          placeholder={t('fields.specializationPlaceholder')}
-          aria-required="true"
-          aria-describedby={errors.specialization ? 'specialization_error' : undefined}
-          {...register('specialization')}
-        />
-        <FieldError message={errors.specialization?.message} />
-      </div>
-
       {/* ── Has Organisation — Checkbox ───────────────────────────────────── */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-3">

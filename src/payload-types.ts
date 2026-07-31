@@ -1354,7 +1354,7 @@ export interface CourseApplication {
   /**
    * e.g. Gastroenterology, General Surgery.
    */
-  specialization: string;
+  specialization?: string | null;
   has_organization?: boolean | null;
   /**
    * Name of the affiliated hospital or institution.

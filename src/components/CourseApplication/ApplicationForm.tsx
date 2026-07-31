@@ -1,10 +1,14 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useTranslations } from 'next-intl'
-import { useMemo, useRef, useState } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
+import { useMemo, useRef, useState, useTransition } from 'react'
 import { useForm, type Path } from 'react-hook-form'
 
+import { createCourseApplicationPublic } from '@/app/actions/course-applications/createCourseApplicationPublic'
+import { Spinner } from '@/components/ui/spinner'
+import { toastError } from '@/utilities/toast'
 import {
   createApplicationFormSchema,
   STEP_1_FIELDS,
@@ -20,16 +24,46 @@ import { StepCourseDetails } from './StepCourseDetails'
 const TOTAL_STEPS = 2
 
 /* ─────────────────────────────────────────────────────────────────────────────
+ * Constants
+ * ──────────────────────────────────────────────────────────────────────────── */
+const DRAFT_STORAGE_KEY = 'courseApplicationDraft'
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Props
+ * ──────────────────────────────────────────────────────────────────────────── */
+interface ApplicationFormProps {
+  /** Payload document ID for the course being applied to.
+   *  Required — the page-level guard (course_type === 'on_demand' && active)
+   *  ensures this is always a valid Payload document ID before rendering.
+   */
+  courseId: number
+  /** Human-readable course title — displayed in the form heading. */
+  courseTitle?: string
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
  * ApplicationForm
  * ──────────────────────────────────────────────────────────────────────────── */
-export function ApplicationForm() {
+export function ApplicationForm({ courseId, courseTitle }: ApplicationFormProps) {
   const t = useTranslations('CourseApplication')
+  const locale = useLocale()
+  const router = useRouter()
+
+  // ── Pending state (useTransition for server action) ────────────────────────
+  const [isPending, startTransition] = useTransition()
 
   // ── Step state ─────────────────────────────────────────────────────────────
   const [currentStep, setCurrentStep] = useState(1)
 
   // ── Scroll anchor — smooth-scrolls to the top of the card on step change ──
   const formContainerRef = useRef<HTMLDivElement>(null)
+
+  // ── Security: mount timestamp for bot speed check ─────────────────────────
+  // Captured once at component mount — submitted alongside form data.
+  const mountTime = useRef<number>(Date.now())
+
+  // ── Security: honeypot ref (uncontrolled — keeps it out of RHF state) ─────
+  const honeypotRef = useRef<HTMLInputElement>(null)
 
   // ── Build schema with translated messages ─────────────────────────────────
   // Rebuilt whenever `t` changes (i.e. on locale switch) so error messages
@@ -82,8 +116,28 @@ export function ApplicationForm() {
 
   // ── Submit ─────────────────────────────────────────────────────────────────
   const onSubmit = (values: ApplicationFormValues) => {
-    // TODO: wire to a Next.js Server Action
-    console.log('[ApplicationForm] submitted:', values)
+    startTransition(async () => {
+      const result = await createCourseApplicationPublic({
+        ...values,
+        course: courseId,
+        _hp: honeypotRef.current?.value ?? '',
+        _t: mountTime.current,
+      })
+
+      if (result.success) {
+        // Clear any persisted draft from sessionStorage
+        try {
+          sessionStorage.removeItem(DRAFT_STORAGE_KEY)
+        } catch {
+          // sessionStorage may be unavailable (private browsing, etc.) — ignore
+        }
+
+        // Redirect to locale-aware thank-you page
+        router.push(`/${locale}/courses/thank-you`)
+      } else {
+        toastError({ message: result.error })
+      }
+    })
   }
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -94,12 +148,28 @@ export function ApplicationForm() {
     >
       {/* Title */}
       <h1 className="text-clinical mb-2 text-2xl">{t('title')}</h1>
+      {courseTitle && (
+        <p className="text-muted-foreground text-sm mb-4">{courseTitle}</p>
+      )}
 
       {/* Step progress tracker */}
       <ProgressTracker currentStep={currentStep} totalSteps={TOTAL_STEPS} steps={steps} />
 
       <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        {/* ── Step 1: Personal Information placeholder ── */}
+
+        {/* ── Honeypot — visually hidden, aria-hidden, no tabstop ── */}
+        {/*    Bots auto-fill all inputs; humans never see or touch this field. */}
+        <input
+          ref={honeypotRef}
+          name="_hp"
+          type="text"
+          className="absolute -left-[9999px] -top-[9999px]"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+        />
+
+        {/* ── Step 1: Personal Information ── */}
         {currentStep === 1 && (
           <section aria-labelledby="step1-heading">
             <h2 id="step1-heading" className="text-clinical mb-6 text-lg">
@@ -109,7 +179,7 @@ export function ApplicationForm() {
           </section>
         )}
 
-        {/* ── Step 2: Enrollment Details placeholder ── */}
+        {/* ── Step 2: Enrollment Details ── */}
         {currentStep === 2 && (
           <section aria-labelledby="step2-heading">
             <h2 id="step2-heading" className="text-clinical mb-6 text-lg">
@@ -125,7 +195,8 @@ export function ApplicationForm() {
             <button
               type="button"
               onClick={handleBack}
-              className="rounded border border-border px-4 py-2 text-sm text-muted-foreground hover:bg-muted transition-colors"
+              disabled={isPending}
+              className="rounded border border-border px-4 py-2 text-sm text-muted-foreground hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t('nav.back')}
             </button>
@@ -135,15 +206,19 @@ export function ApplicationForm() {
             <button
               type="button"
               onClick={handleNext}
-              className="ml-auto rounded bg-navy px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-navy-light transition-colors"
+              disabled={isPending}
+              className="ml-auto rounded bg-navy px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-navy-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t('nav.next')}
             </button>
           ) : (
             <button
+              id="course-application-submit-btn"
               type="submit"
-              className="ml-auto rounded bg-navy px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-navy-light transition-colors"
+              disabled={isPending}
+              className="ml-auto flex items-center gap-2 rounded bg-navy px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-navy-light transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
+              {isPending && <Spinner className="size-4" />}
               {t('nav.submit')}
             </button>
           )}
