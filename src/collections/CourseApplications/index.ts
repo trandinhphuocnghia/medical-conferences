@@ -215,7 +215,7 @@ export const CourseApplications: CollectionConfig = {
               name: 'specialization',
               type: 'text',
               label: 'Medical Specialization',
-              required: true,
+              required: false,
               admin: {
                 description: 'e.g. Gastroenterology, General Surgery.',
               },

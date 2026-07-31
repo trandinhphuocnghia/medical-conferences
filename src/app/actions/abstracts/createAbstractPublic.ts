@@ -33,8 +33,13 @@ export async function createAbstractPublic(data: PublicAbstractData) {
 
     if (submissionLimiter) {
       const headersList = await getHeaders()
-      const forwardedFor = headersList.get('x-forwarded-for')
-      const ip = forwardedFor ? forwardedFor.split(',')[0] : '127.0.0.1'
+
+      // IP extraction: follow Cloudflare → Nginx/Vercel → standard proxy → fallback
+      const ip =
+        headersList.get('cf-connecting-ip') ??
+        headersList.get('x-real-ip') ??
+        headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+        '127.0.0.1'
 
       const { success, reset } = await submissionLimiter.limit(`abstract:${ip}`)
 

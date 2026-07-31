@@ -28,7 +28,7 @@ const personalInfoShape = z.object({
   first_name:       z.string().min(1).max(100),
   last_name:        z.string().min(1).max(100),
   date_of_birth:    z.string().min(1),
-  specialization:   z.string().min(1).max(200),
+  specialization:   z.string().max(200).optional(),
   email:            z.string().email(),
   phone:            z.string().min(7).max(20).regex(/^[+]?[\d\s\-()]+$/),
   has_organization: z.boolean().default(false),
@@ -85,9 +85,9 @@ export function createPersonalInfoShape(t: SchemaTranslator) {
       .min(1, t('validation.dateOfBirthRequired')),
 
     specialization: z
-      .string({ required_error: t('validation.specializationRequired') })
-      .min(1, t('validation.specializationRequired'))
-      .max(200, t('validation.specializationMax')),
+      .string()
+      .max(200, t('validation.specializationMax'))
+      .optional(),
 
     email: z
       .string({ required_error: t('validation.emailRequired') })
@@ -224,7 +224,6 @@ export const STEP_1_FIELDS: string[] = [
   'first_name',
   'last_name',
   'date_of_birth',
-  'specialization',
   'email',
   'phone',
   'has_organization',
