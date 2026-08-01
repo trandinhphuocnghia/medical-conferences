@@ -9,7 +9,8 @@
     "nav": {
       "next": "Next",
       "back": "Back",
-      "submit": "Submit Application"
+      "submit": "Submit Application",
+      "clearForm": "Clear form"
     },
     "fields": {
       "firstName": "First Name",
@@ -70,6 +71,13 @@
       "academicLevelRequired": "Academic level is required for postgraduate applications.",
       "academicLevelInvalid": "Please select a valid academic level.",
       "endMonthAfterStart": "End month must be after start month."
+    },
+    "thankYou": {
+      "heading": "Application Submitted!",
+      "withData": "Thank you, {firstName}. Your application has been received. We will respond via {email} as soon as possible.",
+      "withoutData": "Thank you. Your application has been received. We will be in touch soon.",
+      "backToHome": "Back to Home",
+      "browseCourses": "Browse Courses"
     }
   }
 }

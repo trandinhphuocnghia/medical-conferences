@@ -117,27 +117,39 @@ export async function createCourseApplicationPublic(
     const enrollmentFields =
       enrollment_type === 'short_course'
         ? {
-            preferred_duration:   (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_duration   ?? undefined,
-            preferred_content:    (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_content    ?? undefined,
-            preferred_start_date: (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_start_date ?? undefined,
-            preferred_end_date:   (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_end_date   ?? undefined,
-          }
+          preferred_duration: (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_duration ?? undefined,
+          preferred_content: (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_content ?? undefined,
+          preferred_start_date: (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_start_date ?? undefined,
+          preferred_end_date: (formValues as Extract<typeof formValues, { enrollment_type: 'short_course' }>).preferred_end_date ?? undefined,
+        }
         : {
-            academic_level:       (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).academic_level,
-            entrance_exam_passed: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).entrance_exam_passed ?? false,
-            research_start_month: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_start_month ?? undefined,
-            research_end_month:   (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_end_month   ?? undefined,
-          }
+          academic_level: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).academic_level,
+          entrance_exam_passed: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).entrance_exam_passed ?? false,
+          research_start_month: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_start_month ?? undefined,
+          research_end_month: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_end_month ?? undefined,
+        }
 
     // Sanitize: HTML inputs send "" for empty optional fields (e.g. date pickers
     // left blank). PostgreSQL timestamp columns reject "", so convert to undefined
     // which Payload maps to NULL. Required fields are already validated by Zod
     // before reaching this point and will never be empty strings here.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const sanitize = (obj: Record<string, any>) =>
-      Object.fromEntries(
-        Object.entries(obj).map(([key, value]) => [key, value === '' ? undefined : value]),
+    const sanitize = (data: Record<string, any>) => {
+      const monthFields = ['research_start_month', 'research_end_month']
+
+      return Object.fromEntries(
+        Object.entries(data).map(([key, value]) => {
+          if (value === '') return [key, undefined]
+
+          // "2026-01" → "2026-01-01T00:00:00.000Z"
+          if (monthFields.includes(key) && typeof value === 'string' && /^\d{4}-\d{2}$/.test(value)) {
+            return [key, `${value}-01T00:00:00.000Z`]
+          }
+
+          return [key, value]
+        })
       )
+    }
 
     await payload.create({
       collection: 'course-applications',
@@ -147,14 +159,31 @@ export async function createCourseApplicationPublic(
     })
 
     return { success: true }
-  } catch (error) {
-    // Duplicate-application guard throws a Payload ValidationError with a
-    // user-readable message — surface it directly to the form.
+  } catch (error: unknown) {
+    console.error('[createCourseApplicationPublic] Error:', error)
+
+    // Tier 1 — Payload ValidationError (e.g. our duplicate-application hook).
+    // Extract the first field-level message when available; fall back to the
+    // top-level message so the form always gets something actionable.
     if (error instanceof ValidationError) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const msg = (error as any).data?.[0]?.message || error.message || 'Validation failed.'
+      return { success: false, error: msg }
+    }
+
+    // Tier 2 — Payload operational errors (field validation, access control, etc.)
+    // These are intentionally safe to surface to the client.
+    if (
+      error instanceof Error &&
+      'isOperational' in error &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (error as any).isOperational === true
+    ) {
       return { success: false, error: error.message }
     }
 
-    console.error('[createCourseApplicationPublic] Unexpected error:', error)
-    return { success: false, error: 'An unexpected error occurred.' }
+    // Tier 3 — System / infrastructure errors (DB connection, unexpected crashes).
+    // Never expose internal details to the client.
+    return { success: false, error: 'Submission failed. Please try again.' }
   }
 }
