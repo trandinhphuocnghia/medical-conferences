@@ -9,7 +9,8 @@
     "nav": {
       "next": "Tiếp Theo",
       "back": "Quay Lại",
-      "submit": "Nộp Đơn Đăng Ký"
+      "submit": "Nộp Đơn Đăng Ký",
+      "clearForm": "Xóa bản nháp"
     },
     "fields": {
       "firstName": "Tên",
@@ -70,6 +71,13 @@
       "academicLevelRequired": "Vui lòng chọn trình độ học vấn.",
       "academicLevelInvalid": "Trình độ học vấn không hợp lệ.",
       "endMonthAfterStart": "Tháng kết thúc phải sau tháng bắt đầu."
+    },
+    "thankYou": {
+      "heading": "Đơn Đăng Ký Đã Được Gửi!",
+      "withData": "Cảm ơn bạn, {firstName}. Đơn đăng ký của bạn đã được tiếp nhận. Chúng tôi sẽ phản hồi qua địa chỉ {email} trong thời gian sớm nhất.",
+      "withoutData": "Cảm ơn bạn. Đơn đăng ký của bạn đã được tiếp nhận. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
+      "backToHome": "Về Trang Chủ",
+      "browseCourses": "Xem Các Khóa Học"
     }
   }
 }
