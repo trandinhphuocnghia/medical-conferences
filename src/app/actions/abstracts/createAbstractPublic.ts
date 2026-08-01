@@ -41,12 +41,20 @@ export async function createAbstractPublic(data: PublicAbstractData) {
         headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ??
         '127.0.0.1'
 
-      const { success, reset } = await submissionLimiter.limit(`abstract:${ip}`)
+      try {
+        const { success, reset } = await submissionLimiter.limit(`abstract:${ip}`)
 
-      if (!success) {
+        if (!success) {
+          return {
+            success: false,
+            error: `Too many requests. Please try again after ${Math.ceil((reset - Date.now()) / 1000 / 60)} minutes.`,
+          }
+        }
+      } catch (error) {
+        console.error('[Abstract] Rate-limit service unavailable:', error)
         return {
           success: false,
-          error: `Too many requests. Please try again after ${Math.ceil((reset - Date.now()) / 1000 / 60)} minutes.`,
+          error: 'Service temporarily unavailable. Please try again later.',
         }
       }
     }

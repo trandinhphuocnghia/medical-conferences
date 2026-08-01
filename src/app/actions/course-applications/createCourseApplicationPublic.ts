@@ -65,13 +65,21 @@ export async function createCourseApplicationPublic(
       headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ??
       '127.0.0.1'
 
-    const { success, reset } = await courseApplicationLimiter.limit(`course-application:${ip}`)
+    try {
+      const { success, reset } = await courseApplicationLimiter.limit(`course-application:${ip}`)
 
-    if (!success) {
-      const minutesLeft = Math.ceil((reset - Date.now()) / 1000 / 60)
+      if (!success) {
+        const minutesLeft = Math.ceil((reset - Date.now()) / 1000 / 60)
+        return {
+          success: false,
+          error: `Too many requests. Please try again after ${minutesLeft} minute${minutesLeft === 1 ? '' : 's'}.`,
+        }
+      }
+    } catch (error) {
+      console.error('[CourseApplication] Rate-limit service unavailable:', error)
       return {
         success: false,
-        error: `Too many requests. Please try again after ${minutesLeft} minute${minutesLeft === 1 ? '' : 's'}.`,
+        error: 'Service temporarily unavailable. Please try again later.',
       }
     }
   }
@@ -121,11 +129,21 @@ export async function createCourseApplicationPublic(
             research_end_month:   (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_end_month   ?? undefined,
           }
 
+    // Sanitize: HTML inputs send "" for empty optional fields (e.g. date pickers
+    // left blank). PostgreSQL timestamp columns reject "", so convert to undefined
+    // which Payload maps to NULL. Required fields are already validated by Zod
+    // before reaching this point and will never be empty strings here.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sanitize = (obj: Record<string, any>) =>
+      Object.fromEntries(
+        Object.entries(obj).map(([key, value]) => [key, value === '' ? undefined : value]),
+      )
+
     await payload.create({
       collection: 'course-applications',
       overrideAccess: true, // public submission — bypass access control
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      data: { ...commonFields, ...enrollmentFields } as any,
+      data: sanitize({ ...commonFields, ...enrollmentFields }) as any,
     })
 
     return { success: true }

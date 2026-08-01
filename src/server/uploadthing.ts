@@ -32,13 +32,22 @@ export const publicFileRouter = {
 
       // ── 3. Rate limiting ────────────────────────────────────────────────────
       if (uploadLimiter) {
-        const { success, remaining, reset } = await uploadLimiter.limit(ip)
+        try {
+          const { success, remaining, reset } = await uploadLimiter.limit(ip)
 
-        if (!success) {
-          const retryAfterSeconds = Math.ceil((reset - Date.now()) / 1000)
-          throw new UploadThingError(
-            `Rate limit exceeded. You can upload again in ${retryAfterSeconds}s. (${remaining} remaining)`,
-          )
+          if (!success) {
+            const retryAfterSeconds = Math.ceil((reset - Date.now()) / 1000)
+            throw new UploadThingError(
+              `Rate limit exceeded. You can upload again in ${retryAfterSeconds}s. (${remaining} remaining)`,
+            )
+          }
+        } catch (error) {
+          // Re-throw UploadThingError as-is (that's the rate-limit rejection above)
+          if (error instanceof UploadThingError) throw error
+
+          // Redis/Upstash outage — log and block (fail-closed)
+          console.error('[Upload] Rate-limit service unavailable:', error)
+          throw new UploadThingError('Service temporarily unavailable. Please try again later.')
         }
       }
 
