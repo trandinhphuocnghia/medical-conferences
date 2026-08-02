@@ -1174,9 +1174,9 @@ export interface Course {
     [k: string]: unknown;
   } | null;
   /**
-   * External link for course registration.
+   * External link for course registration. Required for fixed courses.
    */
-  registration_url: string;
+  registration_url?: string | null;
   /**
    * Tải lên file PDF giới thiệu chi tiết chương trình học.
    */

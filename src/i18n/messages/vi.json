@@ -79,5 +79,25 @@
       "backToHome": "Về Trang Chủ",
       "browseCourses": "Xem Các Khóa Học"
     }
+  },
+  "CourseDetail": {
+    "ctaRegisterExternal": "Đăng Ký (Liên Kết Ngoài)",
+    "ctaApplyToAttend": "Nộp Đơn Đăng Ký",
+    "badgeLabel": "Khóa Đào Tạo Y Khoa",
+    "tuitionFeeLabel": "Học Phí",
+    "tuitionFeeSuffix": "/ khóa học",
+    "contactForPricing": "Liên hệ để biết học phí",
+    "downloadBrochure": "Tải Tài Liệu (PDF)"
+  },
+  "header": {
+    "home": "Trang chủ",
+    "conference": "Hội nghị",
+    "trainingCourse": "Đào tạo",
+    "research": "Nghiên cứu",
+    "associations": "Hiệp hội",
+    "ourAssociations": "Hiệp hội của chúng tôi",
+    "ourPartners": "Đối tác của chúng tôi",
+    "contactUs": "Liên hệ",
+    "signIn": "Đăng nhập"
   }
 }

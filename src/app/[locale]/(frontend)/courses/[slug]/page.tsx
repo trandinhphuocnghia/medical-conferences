@@ -144,7 +144,7 @@ export default async function CourseDetailPage({ params: paramsPromise }: Args) 
         }}
       />
 
-      <CourseDetailView course={course} />
+      <CourseDetailView course={course} slug={slug} locale={locale} />
     </>
   )
 }

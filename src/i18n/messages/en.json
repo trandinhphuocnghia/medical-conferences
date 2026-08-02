@@ -79,5 +79,25 @@
       "backToHome": "Back to Home",
       "browseCourses": "Browse Courses"
     }
+  },
+  "CourseDetail": {
+    "ctaRegisterExternal": "Register (External)",
+    "ctaApplyToAttend": "Apply to Attend",
+    "badgeLabel": "Medical Training Course",
+    "tuitionFeeLabel": "Tuition Fee",
+    "tuitionFeeSuffix": "/ course",
+    "contactForPricing": "Contact for pricing",
+    "downloadBrochure": "Download Brochure (PDF)"
+  },
+  "header": {
+    "home": "Home",
+    "conference": "Conference",
+    "trainingCourse": "Training Course",
+    "research": "Research",
+    "associations": "Associations",
+    "ourAssociations": "Our Associations",
+    "ourPartners": "Our Partners",
+    "contactUs": "Contact Us",
+    "signIn": "Sign In"
   }
 }

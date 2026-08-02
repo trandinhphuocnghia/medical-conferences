@@ -107,6 +107,7 @@ export const Courses: CollectionConfig = {
       name: 'base_tuition_fee',
       type: 'number',
       label: 'Base Tuition Fee (VND)',
+      required: false,
       min: 0,
       admin: {
         condition: (data) => data?.course_type === 'fixed',
@@ -158,18 +159,33 @@ export const Courses: CollectionConfig = {
               name: 'registration_url',
               type: 'text',
               label: 'Registration URL',
-              required: true,
-              validate: (value: string | null | undefined) => {
-                if (!value) return 'Registration URL is required.'
-                try {
-                  new URL(value)
-                  return true
-                } catch {
-                  return 'Please enter a valid URL (e.g., https://example.com/register).'
+              required: false,
+              validate: (
+                value: string | null | undefined,
+                { data }: { data: Record<string, any> },
+              ) => {
+                if (data?.course_type === 'fixed') {
+                  if (!value || value.trim() === '') {
+                    return 'Registration URL is required for fixed courses.'
+                  }
+                  try {
+                    new URL(value)
+                  } catch {
+                    return 'Please enter a valid URL (e.g., https://example.com/register).'
+                  }
+                } else if (value && value.trim() !== '') {
+                  // If a value IS provided for non-fixed courses, still validate format
+                  try {
+                    new URL(value)
+                  } catch {
+                    return 'Please enter a valid URL (e.g., https://example.com/register).'
+                  }
                 }
+                return true
               },
               admin: {
-                description: 'External link for course registration.',
+                condition: (data) => data?.course_type === 'fixed',
+                description: 'External link for course registration. Required for fixed courses.',
                 placeholder: 'https://example.com/register',
               },
             },

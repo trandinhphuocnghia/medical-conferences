@@ -1,17 +1,22 @@
 import type { Course } from '@/payload-types'
 import { FileDown } from 'lucide-react'
+import Link from 'next/link'
 import { formatVND } from '@/helpers'
 import { CourseRegisterButton } from '@/components/common/course-register-button'
 
 // ── Types ──────────────────────────────────────────────────────────────────────
-type HeroBannerProps = Pick<
-  Course,
-  'title' | 'target_audience' | 'base_tuition_fee' | 'registration_url' | 'prospectus'
-> & {
+type HeroBannerProps = Pick<Course, 'title' | 'target_audience' | 'prospectus'> & {
+  /** Nullable: null means the price is hidden / replaced by "Contact for pricing" */
+  base_tuition_fee?: number | null
+  /** The CTA destination URL (internal route or external registration link) */
+  ctaHref: string
+  /** When true, renders an <a> with target="_blank"; otherwise a Next.js <Link> */
+  ctaIsExternal: boolean
+  /** Button label text */
+  ctaLabel: string
   badgeLabel?: string
   tuitionFeeLabel?: string
   tuitionFeeSuffix?: string
-  ctaLabel?: string
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -19,13 +24,19 @@ export function HeroBanner({
   title,
   target_audience,
   base_tuition_fee,
-  registration_url,
   prospectus,
+  ctaHref,
+  ctaIsExternal,
+  ctaLabel,
   badgeLabel = 'Medical Training Course',
   tuitionFeeLabel = 'Tuition Fee',
   tuitionFeeSuffix = '/ course',
-  ctaLabel = 'Register Now',
-}: HeroBannerProps) {
+  contactForPricing = 'Contact for pricing',
+  downloadBrochure = 'Download Brochure (PDF)',
+}: HeroBannerProps & {
+  contactForPricing?: string
+  downloadBrochure?: string
+}) {
   // Resolve prospectus media/file URL from Payload CMS relation
   const prospectusUrl =
     prospectus && typeof prospectus === 'object' && 'url' in prospectus
@@ -87,7 +98,7 @@ export function HeroBanner({
           <div className="h-px w-16 bg-accent/40" />
 
           {/* ── Pricing Highlight ─────────────────────────────────────── */}
-          {base_tuition_fee != null && (
+          {base_tuition_fee != null ? (
             <div className="flex flex-col gap-1">
               <span className="text-meta uppercase tracking-widest">
                 {tuitionFeeLabel}
@@ -102,16 +113,35 @@ export function HeroBanner({
                 <span className="text-meta">{tuitionFeeSuffix}</span>
               </div>
             </div>
+          ) : (
+            // on_demand courses: pricing is discussed after application
+            <div className="flex flex-col gap-1">
+              <span className="text-meta uppercase tracking-widest">
+                {tuitionFeeLabel}
+              </span>
+              <span className="text-muted-foreground text-sm">
+                {contactForPricing}
+              </span>
+            </div>
           )}
 
           {/* ── CTA buttons container ─────────────────────────────────── */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-2 w-full sm:w-auto">
-            {registration_url && (
+            {/* Primary CTA — external <a> for fixed courses, Next.js Link for on_demand */}
+            {ctaIsExternal ? (
               <CourseRegisterButton
                 id="hero-cta-register"
-                href={registration_url}
+                href={ctaHref}
                 ctaLabel={ctaLabel}
               />
+            ) : (
+              <Link
+                id="hero-cta-apply"
+                href={ctaHref}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-lg bg-primary px-8 py-4 text-base font-semibold text-primary-foreground transition-all duration-200 ease-out hover:-translate-y-1 hover:opacity-90 active:translate-y-0 active:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                {ctaLabel}
+              </Link>
             )}
 
             {prospectusUrl && (
@@ -123,7 +153,7 @@ export function HeroBanner({
                 className="inline-flex items-center justify-center gap-2.5 rounded-lg border border-primary px-8 py-4 text-base font-semibold text-primary hover:bg-primary/5 transition-all duration-200 ease-out hover:-translate-y-1 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 w-full sm:w-auto"
               >
                 <FileDown className="h-5 w-5 stroke-[2.5]" aria-hidden="true" />
-                <span>Download Brochure (PDF)</span>
+                <span>{downloadBrochure}</span>
               </a>
             )}
           </div>
@@ -132,4 +162,3 @@ export function HeroBanner({
     </section>
   )
 }
-
