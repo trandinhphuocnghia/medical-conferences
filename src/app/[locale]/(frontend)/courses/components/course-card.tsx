@@ -19,8 +19,8 @@ export interface CourseCardData {
 
 // ── Badge colour map per course type ─────────────────────────────────────────
 const courseTypeBadge: Record<Course['course_type'], { bg: string; text: string; label: string }> = {
-  fixed: { bg: 'bg-[#06B6D4]/10', text: 'text-[#06B6D4]', label: 'Fixed Course' },
-  on_demand: { bg: 'bg-violet-50', text: 'text-violet-700', label: 'On-Demand' },
+  fixed: { bg: 'bg-[#06B6D4]/10', text: 'text-[#06B6D4]', label: 'Scheduled Course' },
+  on_demand: { bg: 'bg-violet-50', text: 'text-violet-700', label: 'On-demand Course' },
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────

@@ -22,7 +22,7 @@ type CoursesArchiveProps = {
 }
 
 // ── Filter options ────────────────────────────────────────────────────────────
-const COURSE_TYPE_OPTIONS = ['All Types', 'Fixed Course', 'On-Demand']
+const COURSE_TYPE_OPTIONS = ['All Types', 'Scheduled Course', 'On-demand Course']
 const TARGET_AUDIENCE_OPTIONS = [
   'All Audiences',
   'Surgeons',
@@ -165,8 +165,8 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
       // Course type filter
       if (filters.courseType !== 'All Types') {
         const typeMap: Record<string, Course['course_type']> = {
-          'Fixed Course': 'fixed',
-          'On-Demand': 'on_demand',
+          'Scheduled Course': 'fixed',
+          'On-demand Course': 'on_demand',
         }
         if (course.course_type !== typeMap[filters.courseType]) return false
       }

@@ -93,13 +93,13 @@ export const Courses: CollectionConfig = {
       required: true,
       defaultValue: 'fixed',
       options: [
-        { label: 'Fixed Curriculum', value: 'fixed' },
-        { label: 'On-Demand / Custom', value: 'on_demand' },
+        { label: 'Scheduled Course', value: 'fixed' },
+        { label: 'On-demand Course', value: 'on_demand' },
       ],
       admin: {
         position: 'sidebar',
         description:
-          '"Fixed" courses have a predefined schedule & curriculum. "On-Demand" courses are custom-tailored.',
+          '"Scheduled" courses have a predefined schedule & curriculum. "On-Demand" courses are custom-tailored.',
       },
     },
 

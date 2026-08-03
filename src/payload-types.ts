@@ -1144,7 +1144,7 @@ export interface Course {
    */
   managing_group: number | UserGroup;
   /**
-   * "Fixed" courses have a predefined schedule & curriculum. "On-Demand" courses are custom-tailored.
+   * "Scheduled" courses have a predefined schedule & curriculum. "On-Demand" courses are custom-tailored.
    */
   course_type: 'fixed' | 'on_demand';
   /**
@@ -1375,9 +1375,26 @@ export interface CourseApplication {
   preferred_start_date?: string | null;
   preferred_end_date?: string | null;
   /**
-   * Current academic or training level of the applicant.
+   * Current academic or research level of the applicant.
    */
   academic_level?: ('master' | 'resident' | 'phd') | null;
+  /**
+   * Select all that apply.
+   */
+  research_experience?:
+    | (
+        | 'no_experience'
+        | 'undergraduate_thesis'
+        | 'domestic_publication'
+        | 'international_publication'
+        | 'rct_experience'
+        | 'other'
+      )[]
+    | null;
+  /**
+   * Please describe your research experience.
+   */
+  research_experience_other?: string | null;
   /**
    * Check if the applicant has passed the required entrance examination.
    */
@@ -2254,6 +2271,8 @@ export interface CourseApplicationsSelect<T extends boolean = true> {
   preferred_start_date?: T;
   preferred_end_date?: T;
   academic_level?: T;
+  research_experience?: T;
+  research_experience_other?: T;
   entrance_exam_passed?: T;
   research_start_month?: T;
   research_end_month?: T;

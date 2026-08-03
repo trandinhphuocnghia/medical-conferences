@@ -255,6 +255,84 @@ export function StepCourseDetails({ form }: StepCourseDetailsProps) {
             <FieldError message={branchErrors.academic_level?.message} />
           </div>
 
+          {/* Research Experience — Checkbox Group */}
+          <div className="flex flex-col gap-2">
+            <FieldLabel htmlFor="research_experience" required>
+              {t('fields.researchExperience')}
+            </FieldLabel>
+            <div className="flex flex-col gap-2">
+              {(
+                [
+                  'no_experience',
+                  'undergraduate_thesis',
+                  'domestic_publication',
+                  'international_publication',
+                  'rct_experience',
+                  'other',
+                ] as const
+              ).map((val) => {
+                const selected: string[] =
+                  (watch('research_experience' as keyof ApplicationFormValues) as string[] | undefined) ?? []
+                const isChecked = selected.includes(val)
+                return (
+                  <div key={val} className="flex items-start gap-3">
+                    <Checkbox
+                      id={`research_experience_${val}`}
+                      checked={isChecked}
+                      onCheckedChange={(checked) => {
+                        const next = checked
+                          ? [...selected, val]
+                          : selected.filter((v) => v !== val)
+                        setValue(
+                          'research_experience' as keyof ApplicationFormValues,
+                          next as any,
+                          { shouldValidate: true },
+                        )
+                      }}
+                      className="mt-0.5 shrink-0"
+                    />
+                    <Label
+                      htmlFor={`research_experience_${val}`}
+                      className="text-sm font-medium text-foreground cursor-pointer leading-snug"
+                    >
+                      {t(`researchOptions.${val}`)}
+                    </Label>
+                  </div>
+                )
+              })}
+            </div>
+            <FieldError message={(branchErrors as any).research_experience?.message} />
+          </div>
+
+          {/* research_experience_other — conditional slide-down */}
+          {(() => {
+            const selected: string[] =
+              (watch('research_experience' as keyof ApplicationFormValues) as string[] | undefined) ?? []
+            const showOther = isPostgraduate && selected.includes('other')
+            return (
+              <div
+                className={[
+                  'overflow-hidden transition-all duration-300',
+                  showOther ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0',
+                ].join(' ')}
+                aria-hidden={!showOther}
+              >
+                <div className="flex flex-col gap-1.5 pt-1">
+                  <FieldLabel htmlFor="research_experience_other" required>
+                    {t('fields.researchExperienceOther')}
+                  </FieldLabel>
+                  <Input
+                    id="research_experience_other"
+                    type="text"
+                    placeholder={t('fields.researchExperienceOtherPlaceholder')}
+                    {...register('research_experience_other' as keyof ApplicationFormValues)}
+                  />
+                  <FieldError message={(branchErrors as any).research_experience_other?.message} />
+                </div>
+              </div>
+            )
+          })()}
+
           {/* Entrance Exam Passed — Checkbox */}
           <div className="flex items-center gap-3">
             <Checkbox
