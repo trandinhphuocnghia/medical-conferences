@@ -1,6 +1,7 @@
 'use client'
 
 import { BookOpen } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import type { CourseCardData } from './course-card'
 import { CourseCard } from './course-card'
 
@@ -10,6 +11,8 @@ interface CourseGridProps {
 }
 
 export function CourseGrid({ courses, isLoading }: CourseGridProps) {
+  const t = useTranslations('courses')
+
   // Skeleton loading state — same skeleton shape as ConferenceGrid
   if (isLoading) {
     return (
@@ -48,8 +51,8 @@ export function CourseGrid({ courses, isLoading }: CourseGridProps) {
         <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] mb-4">
           <BookOpen className="h-8 w-8 text-[#0F172A]/30" />
         </div>
-        <h3 className="text-lg font-semibold text-[#0F172A]/70 mb-1">No courses found</h3>
-        <p className="text-sm text-[#0F172A]/50">Try adjusting your filters or search query</p>
+        <h3 className="text-lg font-semibold text-[#0F172A]/70 mb-1">{t('results.noCourses')}</h3>
+        <p className="text-sm text-[#0F172A]/50">{t('results.tryAdjusting')}</p>
       </div>
     )
   }

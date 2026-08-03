@@ -112,5 +112,42 @@
     "ourPartners": "Our Partners",
     "contactUs": "Contact Us",
     "signIn": "Sign In"
+  },
+  "courses": {
+    "badge": {
+      "scheduled": "Scheduled Course",
+      "onDemand": "On-demand Course"
+    },
+    "filter": {
+      "allTypes": "All Types",
+      "scheduled": "Scheduled Course",
+      "onDemand": "On-demand Course",
+      "allAudiences": "All Audiences",
+      "surgeons": "Surgeons",
+      "residents": "Residents",
+      "medicalStudents": "Medical Students",
+      "nurses": "Nurses",
+      "researchers": "Researchers",
+      "allStatuses": "Any Status",
+      "active": "Active",
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "typeLabel": "Course Type",
+      "audienceLabel": "Target Audience",
+      "statusLabel": "Status",
+      "filters": "Filters",
+      "clearAll": "Clear all"
+    },
+    "results": {
+      "showing": "Showing",
+      "courses": "courses",
+      "noCourses": "No courses found",
+      "tryAdjusting": "Try adjusting your filters or search query",
+      "liveAvailability": "Live availability",
+      "backToHome": "Back to Home",
+      "title": "Explore Medical Training Courses",
+      "description": "Browse our certified clinical training programs and hands-on workshops",
+      "searchPlaceholder": "Search courses, topics..."
+    }
   }
 }

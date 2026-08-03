@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useMemo, useState } from 'react'
 import { Command, Search } from 'lucide-react'
 import { ChevronDown, Filter } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import type { Course } from '@/payload-types'
 import type { CourseCardData } from './course-card'
 import { CourseGrid } from './course-grid'
@@ -21,18 +22,10 @@ type CoursesArchiveProps = {
   initialCourses: Course[]
 }
 
-// ── Filter options ────────────────────────────────────────────────────────────
-const COURSE_TYPE_OPTIONS = ['All Types', 'Scheduled Course', 'On-demand Course']
-const TARGET_AUDIENCE_OPTIONS = [
-  'All Audiences',
-  'Surgeons',
-  'Gastroenterologists',
-  'Cardiologists',
-  'General Practitioners',
-  'Nurses',
-  'Medical Students',
-]
-const STATUS_OPTIONS = ['Any Status', 'Active', 'Upcoming', 'Completed']
+interface FilterOption {
+  value: string
+  label: string
+}
 
 // ── Mapper — Course → CourseCardData ─────────────────────────────────────────
 function mapCourse(course: Course): CourseCardData {
@@ -60,7 +53,7 @@ interface FilterDropdownProps {
   icon: React.ReactNode
   label: string
   value: string
-  options: string[]
+  options: FilterOption[]
   isOpen: boolean
   onToggle: () => void
   onChange: (value: string) => void
@@ -75,7 +68,8 @@ function FilterDropdown({
   onToggle,
   onChange,
 }: FilterDropdownProps) {
-  const isDefault = value === options[0]
+  const selectedOption = options.find((opt) => opt.value === value) ?? options[0]
+  const isDefault = value === 'all' || value === options[0].value
 
   return (
     <div className="relative">
@@ -92,7 +86,7 @@ function FilterDropdown({
       >
         {icon}
         <span className="hidden sm:inline">{label}:</span>
-        <span className="font-medium">{value}</span>
+        <span className="font-medium">{selectedOption.label}</span>
         <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
@@ -102,18 +96,18 @@ function FilterDropdown({
           <div className="absolute top-full left-0 mt-2 z-999999 min-w-[200px] rounded-xl border border-[#E2E8F0] bg-white shadow-lg overflow-hidden">
             {options.map((option) => (
               <button
-                key={option}
-                onClick={() => onChange(option)}
+                key={option.value}
+                onClick={() => onChange(option.value)}
                 className={`
                   w-full px-4 py-2.5 text-left text-sm transition-colors
                   ${
-                    option === value
+                    option.value === value
                       ? 'bg-[#06B6D4]/10 text-[#06B6D4] font-medium'
                       : 'text-[#0F172A]/70 hover:bg-[#F8FAFC]'
                   }
                 `}
               >
-                {option}
+                {option.label}
               </button>
             ))}
           </div>
@@ -125,13 +119,46 @@ function FilterDropdown({
 
 // ── Main Archive Component ────────────────────────────────────────────────────
 export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
+  const t = useTranslations('courses')
+
+  const COURSE_TYPE_OPTIONS: FilterOption[] = useMemo(
+    () => [
+      { value: 'all', label: t('filter.allTypes') },
+      { value: 'fixed', label: t('filter.scheduled') },
+      { value: 'on_demand', label: t('filter.onDemand') },
+    ],
+    [t],
+  )
+
+  const TARGET_AUDIENCE_OPTIONS: FilterOption[] = useMemo(
+    () => [
+      { value: 'all', label: t('filter.allAudiences') },
+      { value: 'surgeons', label: t('filter.surgeons') },
+      { value: 'residents', label: t('filter.residents') },
+      { value: 'medical_students', label: t('filter.medicalStudents') },
+      { value: 'nurses', label: t('filter.nurses') },
+      { value: 'researchers', label: t('filter.researchers') },
+    ],
+    [t],
+  )
+
+  const STATUS_OPTIONS: FilterOption[] = useMemo(
+    () => [
+      { value: 'all', label: t('filter.allStatuses') },
+      { value: 'active', label: t('filter.active') },
+      { value: 'upcoming', label: t('filter.upcoming') },
+      { value: 'completed', label: t('filter.completed') },
+    ],
+    [t],
+  )
+
   const [searchQuery, setSearchQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [filters, setFilters] = useState<Filters>({
-    courseType: 'All Types',
-    targetAudience: 'All Audiences',
-    status: 'Any Status',
+    courseType: 'all',
+    targetAudience: 'all',
+    status: 'all',
   })
 
   // Map raw Payload docs to UI data
@@ -142,12 +169,12 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
   }
 
   const hasActiveFilters =
-    filters.courseType !== 'All Types' ||
-    filters.targetAudience !== 'All Audiences' ||
-    filters.status !== 'Any Status'
+    filters.courseType !== 'all' ||
+    filters.targetAudience !== 'all' ||
+    filters.status !== 'all'
 
   const clearFilters = () => {
-    setFilters({ courseType: 'All Types', targetAudience: 'All Audiences', status: 'Any Status' })
+    setFilters({ courseType: 'all', targetAudience: 'all', status: 'all' })
   }
 
   // Client-side filtering
@@ -163,29 +190,23 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
       }
 
       // Course type filter
-      if (filters.courseType !== 'All Types') {
-        const typeMap: Record<string, Course['course_type']> = {
-          'Scheduled Course': 'fixed',
-          'On-demand Course': 'on_demand',
-        }
-        if (course.course_type !== typeMap[filters.courseType]) return false
+      if (filters.courseType !== 'all') {
+        if (course.course_type !== filters.courseType) return false
       }
 
-      // Target audience filter (loose match on the text field)
-      if (filters.targetAudience !== 'All Audiences') {
-        if (
-          !course.target_audience
-            ?.toLowerCase()
-            .includes(filters.targetAudience.toLowerCase())
-        )
-          return false
+      // Target audience filter
+      if (filters.targetAudience !== 'all') {
+        const audience = (course.target_audience ?? '').toLowerCase()
+        const val = filters.targetAudience.toLowerCase()
+        const valSpace = val.replace(/_/g, ' ')
+        if (!audience.includes(val) && !audience.includes(valSpace)) return false
       }
 
       // Status filter — based on whether there is an upcoming batch
-      if (filters.status !== 'Any Status') {
+      if (filters.status !== 'all') {
         const hasUpcoming = course.nextBatchDate != null
-        if (filters.status === 'Upcoming' && !hasUpcoming) return false
-        if (filters.status === 'Completed' && hasUpcoming) return false
+        if (filters.status === 'upcoming' && !hasUpcoming) return false
+        if (filters.status === 'completed' && hasUpcoming) return false
       }
 
       return true
@@ -203,7 +224,7 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
               className="flex items-center gap-2 text-[#0F172A]/60 hover:text-[#06B6D4] transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span className="text-sm font-medium">Back to Home</span>
+              <span className="text-sm font-medium">{t('results.backToHome')}</span>
             </Link>
 
             <div className="flex items-center gap-2">
@@ -215,7 +236,7 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
 
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs text-[#0F172A]/50">
-                {filteredCourses.length} courses
+                {filteredCourses.length} {t('results.courses')}
               </span>
             </div>
           </div>
@@ -232,10 +253,10 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                   <h1 className="text-3xl font-semibold tracking-tight text-[#0F172A] text-balance">
-                    Explore Medical Training Courses
+                    {t('results.title')}
                   </h1>
                   <p className="text-[#0F172A]/60 text-lg">
-                    Browse our certified clinical training programs and hands-on workshops
+                    {t('results.description')}
                   </p>
                 </div>
 
@@ -256,7 +277,7 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
                     <input
                       id="course-search"
                       type="text"
-                      placeholder="Search courses, topics..."
+                      placeholder={t('results.searchPlaceholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onFocus={() => setIsFocused(true)}
@@ -279,13 +300,13 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               <div className="flex items-center gap-2 text-[#0F172A]/60">
                 <Filter className="h-4 w-4" />
-                <span className="text-sm font-medium">Filters</span>
+                <span className="text-sm font-medium">{t('filter.filters')}</span>
               </div>
 
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 flex-1">
                 <FilterDropdown
                   icon={<BookOpen className="h-4 w-4" />}
-                  label="Course Type"
+                  label={t('filter.typeLabel')}
                   value={filters.courseType}
                   options={COURSE_TYPE_OPTIONS}
                   isOpen={openDropdown === 'courseType'}
@@ -300,7 +321,7 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
 
                 <FilterDropdown
                   icon={<GraduationCap className="h-4 w-4" />}
-                  label="Target Audience"
+                  label={t('filter.audienceLabel')}
                   value={filters.targetAudience}
                   options={TARGET_AUDIENCE_OPTIONS}
                   isOpen={openDropdown === 'targetAudience'}
@@ -315,7 +336,7 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
 
                 <FilterDropdown
                   icon={<SlidersHorizontal className="h-4 w-4" />}
-                  label="Status"
+                  label={t('filter.statusLabel')}
                   value={filters.status}
                   options={STATUS_OPTIONS}
                   isOpen={openDropdown === 'status'}
@@ -335,7 +356,7 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
                   className="flex items-center gap-1.5 text-sm text-[#0F172A]/60 hover:text-[#06B6D4] transition-colors"
                 >
                   <X className="h-4 w-4" />
-                  Clear all
+                  {t('filter.clearAll')}
                 </button>
               )}
             </div>
@@ -344,13 +365,13 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
           {/* ── Results count ─────────────────────────────────────────── */}
           <div className="flex items-center justify-between">
             <p className="text-sm text-[#0F172A]/60">
-              Showing{' '}
+              {t('results.showing')}{' '}
               <span className="font-semibold text-[#0F172A]">{filteredCourses.length}</span>{' '}
-              courses
+              {t('results.courses')}
             </p>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs text-[#0F172A]/50">Live availability</span>
+              <span className="text-xs text-[#0F172A]/50">{t('results.liveAvailability')}</span>
             </div>
           </div>
 

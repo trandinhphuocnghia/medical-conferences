@@ -2,6 +2,7 @@
 
 import { Calendar, Coins } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import type { Course } from '@/payload-types'
 import { formatVND } from '@/helpers'
 import { formatDate } from '@/utilities/dateUtils'
@@ -18,13 +19,14 @@ export interface CourseCardData {
 }
 
 // ── Badge colour map per course type ─────────────────────────────────────────
-const courseTypeBadge: Record<Course['course_type'], { bg: string; text: string; label: string }> = {
-  fixed: { bg: 'bg-[#06B6D4]/10', text: 'text-[#06B6D4]', label: 'Scheduled Course' },
-  on_demand: { bg: 'bg-violet-50', text: 'text-violet-700', label: 'On-demand Course' },
+const courseTypeBadge: Record<Course['course_type'], { bg: string; text: string; labelKey: 'badge.scheduled' | 'badge.onDemand' }> = {
+  fixed: { bg: 'bg-[#06B6D4]/10', text: 'text-[#06B6D4]', labelKey: 'badge.scheduled' },
+  on_demand: { bg: 'bg-violet-50', text: 'text-violet-700', labelKey: 'badge.onDemand' },
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export function CourseCard({ course }: { course: CourseCardData }) {
+  const t = useTranslations('courses')
   const badge = courseTypeBadge[course.course_type] ?? courseTypeBadge.fixed
 
   return (
@@ -65,11 +67,11 @@ export function CourseCard({ course }: { course: CourseCardData }) {
           <div className="flex items-start justify-between gap-3">
             <span
               className={`
-                inline-flex px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wide
+                inline-flex px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wide whitespace-nowrap
                 ${badge.bg} ${badge.text}
               `}
             >
-              {badge.label}
+              {t(badge.labelKey)}
             </span>
           </div>
 
@@ -110,8 +112,8 @@ export function CourseCard({ course }: { course: CourseCardData }) {
             <span className="text-xs text-[#0F172A]/50 truncate max-w-[70%]">
               {course.target_audience ?? 'Medical professionals'}
             </span>
-            <span className="font-mono text-[10px] text-[#0F172A]/40 uppercase tracking-wider">
-              {course.course_type === 'fixed' ? 'Fixed' : 'On-Demand'}
+            <span className="font-mono text-[10px] text-[#0F172A]/40 uppercase tracking-wider whitespace-nowrap">
+              {t(badge.labelKey)}
             </span>
           </div>
         </div>

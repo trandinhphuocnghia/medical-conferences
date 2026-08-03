@@ -112,5 +112,42 @@
     "ourPartners": "Đối tác của chúng tôi",
     "contactUs": "Liên hệ",
     "signIn": "Đăng nhập"
+  },
+  "courses": {
+    "badge": {
+      "scheduled": "Khoá học theo lịch",
+      "onDemand": "Khoá đăng ký theo nhu cầu"
+    },
+    "filter": {
+      "allTypes": "Tất cả loại hình",
+      "scheduled": "Khoá học theo lịch",
+      "onDemand": "Khoá đăng ký theo nhu cầu",
+      "allAudiences": "Tất cả đối tượng",
+      "surgeons": "Phẫu thuật viên",
+      "residents": "Bác sĩ nội trú",
+      "medicalStudents": "Sinh viên Y",
+      "nurses": "Điều dưỡng",
+      "researchers": "Nghiên cứu sinh",
+      "allStatuses": "Tất cả trạng thái",
+      "active": "Đang diễn ra",
+      "upcoming": "Sắp khai giảng",
+      "completed": "Đã hoàn thành",
+      "typeLabel": "Loại hình khoá học",
+      "audienceLabel": "Đối tượng học viên",
+      "statusLabel": "Trạng thái",
+      "filters": "Bộ lọc",
+      "clearAll": "Xoá bộ lọc"
+    },
+    "results": {
+      "showing": "Hiển thị",
+      "courses": "khoá học",
+      "noCourses": "Không tìm thấy khoá học nào",
+      "tryAdjusting": "Thử điều chỉnh bộ lọc hoặc từ khoá tìm kiếm",
+      "liveAvailability": "Cập nhật trực tiếp",
+      "backToHome": "Về Trang Chủ",
+      "title": "Khám Phá Các Khóa Đào Tạo Y Khoa",
+      "description": "Duyệt qua các chương trình đào tạo lâm sàng được chứng nhận và các buổi hội thảo thực hành",
+      "searchPlaceholder": "Tìm kiếm khóa học, chủ đề..."
+    }
   }
 }
