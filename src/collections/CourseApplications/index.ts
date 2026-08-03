@@ -332,7 +332,7 @@ export const CourseApplications: CollectionConfig = {
             {
               name: 'academic_level',
               type: 'select',
-              label: 'Research Level',
+              label: 'Academic Level',
               options: [
                 { label: "Master's Student", value: 'master' },
                 { label: 'Resident / Clinical Fellow', value: 'resident' },
@@ -340,7 +340,7 @@ export const CourseApplications: CollectionConfig = {
               ],
               validate: (value: string | null | undefined, { data }: { data: Record<string, any> }) => {
                 if (data?.enrollment_type === 'postgraduate' && !value) {
-                  return 'Research level is required for postgraduate applications.'
+                  return 'Academic level is required for postgraduate applications.'
                 }
                 return true
               },
