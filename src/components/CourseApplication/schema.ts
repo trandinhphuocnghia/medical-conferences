@@ -43,12 +43,23 @@ const shortCourseShape = z.object({
   preferred_end_date:   z.string().optional(),
 })
 
+const RESEARCH_EXPERIENCE_VALUES = [
+  'no_experience',
+  'undergraduate_thesis',
+  'domestic_publication',
+  'international_publication',
+  'rct_experience',
+  'other',
+] as const
+
 const postgraduateShape = z.object({
-  enrollment_type:    z.literal('postgraduate'),
-  academic_level:     z.enum(['master', 'resident', 'phd']),
-  entrance_exam_passed: z.boolean().default(false),
-  research_start_month: z.string().optional(),
-  research_end_month:   z.string().optional(),
+  enrollment_type:           z.literal('postgraduate'),
+  academic_level:            z.enum(['master', 'resident', 'phd']),
+  research_experience:       z.array(z.enum(RESEARCH_EXPERIENCE_VALUES)).optional(),
+  research_experience_other: z.string().max(500).optional(),
+  entrance_exam_passed:      z.boolean().default(false),
+  research_start_month:      z.string().optional(),
+  research_end_month:        z.string().optional(),
 })
 
 // ── Static discriminated union (type inference only) ──────────────────────────
@@ -164,6 +175,15 @@ export function createPostgraduateShape(t: SchemaTranslator) {
       invalid_type_error: t('validation.academicLevelInvalid'),
     }),
 
+    research_experience: z
+      .array(z.enum(RESEARCH_EXPERIENCE_VALUES))
+      .optional(),
+
+    research_experience_other: z
+      .string()
+      .max(500)
+      .optional(),
+
     entrance_exam_passed: z.boolean().default(false),
 
     research_start_month: z.string().optional(),
@@ -204,14 +224,38 @@ export function createApplicationFormSchema(t: SchemaTranslator) {
     ])
     .superRefine((data, ctx) => {
       // Cross-field: organization is required when has_organization is true.
-      // Must live here (on the union) so it runs against the fully merged shape
-      // — it would be unreachable inside createPersonalInfoShape because that
-      // shape is consumed by .merge() before the union is constructed.
       if (data.has_organization && (!data.organization || data.organization.trim().length === 0)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: t('validation.organizationRequired'),
           path: ['organization'],
+        })
+      }
+
+      // Cross-field: research_experience is required for postgraduate.
+      if (
+        data.enrollment_type === 'postgraduate' &&
+        (!('research_experience' in data) ||
+          !(data as any).research_experience ||
+          (data as any).research_experience.length === 0)
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('validation.researchExperienceRequired'),
+          path: ['research_experience'],
+        })
+      }
+
+      // Cross-field: research_experience_other required when 'other' is selected.
+      if (
+        data.enrollment_type === 'postgraduate' &&
+        (data as any).research_experience?.includes('other') &&
+        !(data as any).research_experience_other?.trim()
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t('validation.researchExperienceOtherRequired'),
+          path: ['research_experience_other'],
         })
       }
     })

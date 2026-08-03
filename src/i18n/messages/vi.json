@@ -29,23 +29,34 @@
       "organizationPlaceholder": "Ví dụ: Bệnh viện Đại học Y Dược TPHCM",
       "enrollmentType": "Loại Hình Đăng Ký",
       "enrollmentTypeShortCourse": "Khóa Học Ngắn Hạn",
-      "enrollmentTypeShortCourseDesc": "Chương trình đào tạo tập trung, thường kéo dài từ vài ngày đến vài tuần",
+      "enrollmentTypeShortCourseDesc": "Chương trình đào tạo ngắn hạn",
       "enrollmentTypePostgraduate": "Chương Trình Sau Đại Học",
-      "enrollmentTypePostgraduateDesc": "Đăng ký đề tài sau đại học về thực quản dạ dày",
+      "enrollmentTypePostgraduateDesc": "Đăng ký đề tài sau đại học / nghiên cứu sinh",
       "preferredDuration": "Thời Lượng Mong Muốn",
       "preferredDurationPlaceholder": "Ví dụ: 3 ngày, 2 tuần",
       "preferredContent": "Nội Dung Khóa Học Mong Muốn",
       "preferredContentPlaceholder": "Mô tả các chủ đề hoặc kỹ năng bạn muốn học",
       "preferredStartDate": "Ngày Bắt Đầu Mong Muốn",
       "preferredEndDate": "Ngày Kết Thúc Mong Muốn",
-      "academicLevel": "Trình Độ Học Vấn",
+      "academicLevel": "Trình độ đề tài",
       "academicLevelPlaceholder": "Chọn trình độ của bạn",
-      "academicLevelMaster": "Học Viên Cao Học",
-      "academicLevelResident": "Bác Sĩ Nội Trú",
-      "academicLevelPhd": "Nghiên Cứu Sinh",
+      "academicLevelMaster": "Thạc sĩ",
+      "academicLevelResident": "Bác sĩ nội trú",
+      "academicLevelPhd": "Nghiên cứu sinh",
       "entranceExamPassed": "Tôi đã vượt qua kỳ thi tuyển sinh",
+      "researchExperience": "Kinh nghiệm nghiên cứu",
+      "researchExperienceOther": "Vui lòng mô tả cụ thể",
+      "researchExperienceOtherPlaceholder": "Mô tả kinh nghiệm nghiên cứu của bạn",
       "researchStartMonth": "Tháng Bắt Đầu Nghiên Cứu",
       "researchEndMonth": "Tháng Kết Thúc Nghiên Cứu"
+    },
+    "researchOptions": {
+      "no_experience": "Chưa từng làm nghiên cứu",
+      "undergraduate_thesis": "Từng làm đề tài tốt nghiệp đại học",
+      "domestic_publication": "Từng làm đề tài đăng báo trong nước",
+      "international_publication": "Từng làm nghiên cứu đăng báo quốc tế",
+      "rct_experience": "Có kinh nghiệm làm RCT",
+      "other": "Khác"
     },
     "validation": {
       "firstNameRequired": "Vui lòng nhập tên.",
@@ -68,9 +79,11 @@
       "durationMax": "Thời lượng không được vượt quá 100 ký tự.",
       "contentMax": "Nội dung mong muốn không được vượt quá 1000 ký tự.",
       "endDateAfterStart": "Ngày kết thúc phải sau ngày bắt đầu.",
-      "academicLevelRequired": "Vui lòng chọn trình độ học vấn.",
+      "academicLevelRequired": "Vui lòng chọn trình độ đề tài.",
       "academicLevelInvalid": "Trình độ học vấn không hợp lệ.",
-      "endMonthAfterStart": "Tháng kết thúc phải sau tháng bắt đầu."
+      "endMonthAfterStart": "Tháng kết thúc phải sau tháng bắt đầu.",
+      "researchExperienceRequired": "Vui lòng chọn ít nhất một mục.",
+      "researchExperienceOtherRequired": "Vui lòng mô tả kinh nghiệm nghiên cứu."
     },
     "thankYou": {
       "heading": "Đơn Đăng Ký Đã Được Gửi!",
@@ -99,5 +112,42 @@
     "ourPartners": "Đối tác của chúng tôi",
     "contactUs": "Liên hệ",
     "signIn": "Đăng nhập"
+  },
+  "courses": {
+    "badge": {
+      "scheduled": "Khoá học theo lịch",
+      "onDemand": "Khoá đăng ký theo nhu cầu"
+    },
+    "filter": {
+      "allTypes": "Tất cả loại hình",
+      "scheduled": "Khoá học theo lịch",
+      "onDemand": "Khoá đăng ký theo nhu cầu",
+      "allAudiences": "Tất cả đối tượng",
+      "surgeons": "Phẫu thuật viên",
+      "residents": "Bác sĩ nội trú",
+      "medicalStudents": "Sinh viên Y",
+      "nurses": "Điều dưỡng",
+      "researchers": "Nghiên cứu sinh",
+      "allStatuses": "Tất cả trạng thái",
+      "active": "Đang diễn ra",
+      "upcoming": "Sắp khai giảng",
+      "completed": "Đã hoàn thành",
+      "typeLabel": "Loại hình khoá học",
+      "audienceLabel": "Đối tượng học viên",
+      "statusLabel": "Trạng thái",
+      "filters": "Bộ lọc",
+      "clearAll": "Xoá bộ lọc"
+    },
+    "results": {
+      "showing": "Hiển thị",
+      "courses": "khoá học",
+      "noCourses": "Không tìm thấy khoá học nào",
+      "tryAdjusting": "Thử điều chỉnh bộ lọc hoặc từ khoá tìm kiếm",
+      "liveAvailability": "Cập nhật trực tiếp",
+      "backToHome": "Về Trang Chủ",
+      "title": "Khám Phá Các Khóa Đào Tạo Y Khoa",
+      "description": "Duyệt qua các chương trình đào tạo lâm sàng được chứng nhận và các buổi hội thảo thực hành",
+      "searchPlaceholder": "Tìm kiếm khóa học, chủ đề..."
+    }
   }
 }

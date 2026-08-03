@@ -93,6 +93,9 @@ export const CourseApplications: CollectionConfig = {
     useAsTitle: 'email',
     defaultColumns: ['email', 'course', 'enrollment_type', 'status', 'createdAt'],
     description: 'Manages public course registration applications submitted via the website.',
+    components: {
+      beforeList: ['@/components/admin/ExportCourseApplicationsButton#ExportCourseApplicationsButton'],
+    },
   },
 
   /* ── Lifecycle Hooks ─────────────────────────────────────────────────── */
@@ -329,21 +332,67 @@ export const CourseApplications: CollectionConfig = {
             {
               name: 'academic_level',
               type: 'select',
-              label: 'Academic Level',
+              label: 'Research Level',
               options: [
                 { label: "Master's Student", value: 'master' },
                 { label: 'Resident / Clinical Fellow', value: 'resident' },
-                { label: 'PhD Candidate', value: 'phd' },
+                { label: 'PhD', value: 'phd' },
               ],
               validate: (value: string | null | undefined, { data }: { data: Record<string, any> }) => {
                 if (data?.enrollment_type === 'postgraduate' && !value) {
-                  return 'Academic level is required for postgraduate applications.'
+                  return 'Research level is required for postgraduate applications.'
                 }
                 return true
               },
               admin: {
                 condition: (data) => data?.enrollment_type === 'postgraduate',
-                description: 'Current academic or training level of the applicant.',
+                description: 'Current academic or research level of the applicant.',
+              },
+            },
+            {
+              name: 'research_experience',
+              type: 'select',
+              hasMany: true,
+              label: 'Research Experience',
+              required: false,
+              options: [
+                { label: 'No prior research experience', value: 'no_experience' },
+                { label: 'Completed an undergraduate thesis', value: 'undergraduate_thesis' },
+                { label: 'Conducted research published in domestic journals', value: 'domestic_publication' },
+                { label: 'Conducted research published in international journals', value: 'international_publication' },
+                { label: 'Experience conducting randomized controlled trials (RCTs)', value: 'rct_experience' },
+                { label: 'Other', value: 'other' },
+              ],
+              validate: (value: string[] | null | undefined, { data }: { data: Record<string, any> }) => {
+                if (data?.enrollment_type === 'postgraduate' && (!value || value.length === 0)) {
+                  return 'Research experience is required for postgraduate applications.'
+                }
+                return true
+              },
+              admin: {
+                condition: (data) => data?.enrollment_type === 'postgraduate',
+                description: 'Select all that apply.',
+              },
+            },
+
+            {
+              name: 'research_experience_other',
+              type: 'text',
+              label: 'Other Research Experience',
+              required: false,
+              validate: (value: string | null | undefined, { data }: { data: Record<string, any> }) => {
+                if (
+                  data?.enrollment_type === 'postgraduate' &&
+                  data?.research_experience?.includes('other') &&
+                  !value?.trim()
+                ) {
+                  return 'Please specify your research experience.'
+                }
+                return true
+              },
+              admin: {
+                condition: (data) => data?.research_experience?.includes('other'),
+                description: 'Please describe your research experience.',
               },
             },
 
