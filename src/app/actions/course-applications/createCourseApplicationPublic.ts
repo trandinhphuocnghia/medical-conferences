@@ -124,6 +124,10 @@ export async function createCourseApplicationPublic(
         }
         : {
           academic_level: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).academic_level,
+          research_experience: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_experience ?? undefined,
+          research_experience_other: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_experience?.includes('other')
+            ? ((formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_experience_other ?? undefined)
+            : undefined,
           entrance_exam_passed: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).entrance_exam_passed ?? false,
           research_start_month: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_start_month ?? undefined,
           research_end_month: (formValues as Extract<typeof formValues, { enrollment_type: 'postgraduate' }>).research_end_month ?? undefined,
@@ -150,6 +154,7 @@ export async function createCourseApplicationPublic(
         })
       )
     }
+
 
     await payload.create({
       collection: 'course-applications',

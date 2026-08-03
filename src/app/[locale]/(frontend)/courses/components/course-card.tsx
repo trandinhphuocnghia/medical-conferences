@@ -89,8 +89,8 @@ export function CourseCard({ course }: { course: CourseCardData }) {
               </div>
               <span className="font-mono text-sm text-[#0F172A]/70">
                 {course.nextBatchDisplay
-                  ? `Next Batch: ${course.nextBatchDisplay}`
-                  : 'Schedule: TBD'}
+                  ? t('card.nextBatch', { date: course.nextBatchDisplay })
+                  : t('card.scheduleTBD')}
               </span>
             </div>
 
@@ -100,18 +100,15 @@ export function CourseCard({ course }: { course: CourseCardData }) {
                 <Coins className="h-4 w-4 text-[#0F172A]/60" />
               </div>
               <span className="text-sm text-[#0F172A]/70">
-                {course.base_tuition_fee != null
-                  ? `Tuition: ${formatVND(course.base_tuition_fee)}`
-                  : 'Tuition: Contact us'}
+                {course.base_tuition_fee != null && course.course_type !== "on_demand"
+                  ? t('card.tuition', { fee: formatVND(course.base_tuition_fee) })
+                  : t('card.contactForPricing')}
               </span>
             </div>
           </div>
 
           {/* Footer */}
           <div className="flex items-center justify-between pt-4 border-t border-[#E2E8F0]">
-            <span className="text-xs text-[#0F172A]/50 truncate max-w-[70%]">
-              {course.target_audience ?? 'Medical professionals'}
-            </span>
             <span className="font-mono text-[10px] text-[#0F172A]/40 uppercase tracking-wider whitespace-nowrap">
               {t(badge.labelKey)}
             </span>

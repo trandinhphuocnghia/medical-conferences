@@ -148,6 +148,13 @@
       "title": "Khám Phá Các Khóa Đào Tạo Y Khoa",
       "description": "Duyệt qua các chương trình đào tạo lâm sàng được chứng nhận và các buổi hội thảo thực hành",
       "searchPlaceholder": "Tìm kiếm khóa học, chủ đề..."
+    },
+    "card": {
+      "nextBatch": "Khai giảng: {date}",
+      "scheduleTBD": "Lịch học: Cập nhật sau",
+      "tuition": "Học phí: {fee}",
+      "contactForPricing": "Học phí: Liên hệ",
+      "defaultAudience": "Cán bộ y tế"
     }
   }
 }

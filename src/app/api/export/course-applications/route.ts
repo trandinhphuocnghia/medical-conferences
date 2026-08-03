@@ -31,12 +31,12 @@ const academicLevelMap: Record<string, string> = {
 }
 
 const researchExpMap: Record<string, string> = {
-  no_experience: 'Chưa từng',
-  undergraduate_thesis: 'Đề tài tốt nghiệp ĐH',
-  domestic_publication: 'Đăng báo trong nước',
-  international_publication: 'Đăng báo quốc tế',
-  rct_experience: 'Kinh nghiệm RCT',
-  other: 'Khác',
+  no_experience: "Chưa từng làm nghiên cứu",
+  undergraduate_thesis: "Từng làm đề tài tốt nghiệp đại học",
+  domestic_publication: "Từng làm đề tài đăng báo trong nước",
+  international_publication: "Từng làm nghiên cứu đăng báo quốc tế",
+  rct_experience: "Có kinh nghiệm làm RCT",
+  other: "Khác"
 }
 
 // ── Date helpers ──────────────────────────────────────────────────────────────
@@ -120,7 +120,7 @@ export async function GET(req: NextRequest) {
     })
 
     const TOTAL_COLS = 18 // A through R
-    const COL_IDS = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R']
+    const COL_IDS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R']
 
     // Set column widths
     const colWidths = [20, 16, 16, 14, 28, 16, 28, 18, 14, 14, 18, 40, 28, 18, 14, 36, 36, 28]
@@ -139,7 +139,7 @@ export async function GET(req: NextRequest) {
     // ── Row 2: Export date (merged, italic) ───────────────────────────────────
     sheet.mergeCells(`A2:R2`)
     const today = new Date()
-    const dateStr = `${String(today.getDate()).padStart(2,'0')}/${String(today.getMonth()+1).padStart(2,'0')}/${today.getFullYear()}`
+    const dateStr = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`
     const dateCell = sheet.getCell('A2')
     dateCell.value = `Ngày xuất: ${dateStr}`
     dateCell.font = { italic: true, size: 11, name: 'Arial', color: { argb: 'FF555555' } }
@@ -200,8 +200,8 @@ export async function GET(req: NextRequest) {
     }
 
     // ── Rows 5+: Data ─────────────────────────────────────────────────────────
-    const LIGHT_BG  = 'FFF0F4F8' // even rows
-    const WHITE_BG  = 'FFFFFFFF' // odd rows
+    const LIGHT_BG = 'FFF0F4F8' // even rows
+    const WHITE_BG = 'FFFFFFFF' // odd rows
 
     applications.forEach((doc: any, idx) => {
       const rowNum = HEADER_ROW + 1 + idx
@@ -278,7 +278,7 @@ export async function GET(req: NextRequest) {
 
     // ── Build filename ────────────────────────────────────────────────────────
     const safeTitle = sanitizeFilename(course.title)
-    const fileDate = `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`
+    const fileDate = `${String(today.getDate()).padStart(2, '0')}-${String(today.getMonth() + 1).padStart(2, '0')}-${today.getFullYear()}`
     const filename = `${safeTitle}_danh-sach-dang-ky_${fileDate}.xlsx`
 
     return new NextResponse(buffer, {

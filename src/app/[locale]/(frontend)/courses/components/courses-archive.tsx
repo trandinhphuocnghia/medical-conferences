@@ -72,7 +72,7 @@ function FilterDropdown({
   const isDefault = value === 'all' || value === options[0].value
 
   return (
-    <div className="relative">
+    <div className={`relative ${isOpen ? 'z-30' : ''}`}>
       <button
         onClick={onToggle}
         className={`
@@ -92,8 +92,8 @@ function FilterDropdown({
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-99999" onClick={onToggle} />
-          <div className="absolute top-full left-0 mt-2 z-999999 min-w-[200px] rounded-xl border border-[#E2E8F0] bg-white shadow-lg overflow-hidden">
+          <div className="fixed inset-0 z-[90]" onClick={onToggle} />
+          <div className="absolute top-full left-0 mt-2 z-[100] min-w-[200px] rounded-xl border border-[#E2E8F0] bg-white shadow-lg overflow-hidden">
             {options.map((option) => (
               <button
                 key={option.value}
@@ -296,7 +296,7 @@ export function CoursesArchive({ initialCourses }: CoursesArchiveProps) {
           </div>
 
           {/* ── Filter Bar — same pill-shaped panel as FilterBar ─────────── */}
-          <div className="rounded-xl border border-[#E2E8F0] bg-white/70 backdrop-blur-xl p-4 shadow-sm">
+          <div className="relative z-20 rounded-xl border border-[#E2E8F0] bg-white/70 backdrop-blur-xl p-4 shadow-sm">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               <div className="flex items-center gap-2 text-[#0F172A]/60">
                 <Filter className="h-4 w-4" />

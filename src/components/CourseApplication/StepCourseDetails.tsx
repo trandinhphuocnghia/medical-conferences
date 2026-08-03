@@ -288,6 +288,13 @@ export function StepCourseDetails({ form }: StepCourseDetailsProps) {
                           next as any,
                           { shouldValidate: true },
                         )
+                        if (val === 'other' && !checked) {
+                          setValue(
+                            'research_experience_other' as keyof ApplicationFormValues,
+                            undefined as any,
+                            { shouldValidate: true },
+                          )
+                        }
                       }}
                       className="mt-0.5 shrink-0"
                     />

@@ -148,6 +148,13 @@
       "title": "Explore Medical Training Courses",
       "description": "Browse our certified clinical training programs and hands-on workshops",
       "searchPlaceholder": "Search courses, topics..."
+    },
+    "card": {
+      "nextBatch": "Next Batch: {date}",
+      "scheduleTBD": "Schedule: TBD",
+      "tuition": "Tuition: {fee}",
+      "contactForPricing": "Tuition: Contact us",
+      "defaultAudience": "Medical professionals"
     }
   }
 }
