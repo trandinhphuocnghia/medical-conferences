@@ -1,9 +1,9 @@
 'use server'
 
-import type { User, UserGroup } from '@/payload-types'
+import type { User } from '@/payload-types'
 import configPromise from '@/payload.config'
 import { getPayload } from 'payload'
-import { isHighlightPresenter, PresenterData, userToPresenterData } from '../shared/presenterUtils'
+import { PresenterData, userToPresenterData } from '../shared/presenterUtils'
 
 export async function getHighlightPresenters(conferenceId: number): Promise<{
   success: boolean

@@ -51,7 +51,7 @@ export function StickySubNav({ conferenceId, slug, isSubmissionOpen }: StickySub
   return (
     <nav
       className={`transition-all duration-300 ${isSticky
-        ? 'fixed top-16 left-0 right-0 z-100 bg-card/80 backdrop-blur-md border-b border-border shadow-sm'
+        ? 'fixed top-16 left-0 right-0 z-80 bg-card/80 backdrop-blur-md border-b border-border shadow-sm'
         : 'relative bg-card border-b border-border'
         }`}
     >

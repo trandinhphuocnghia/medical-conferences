@@ -11,7 +11,7 @@ export const MailLogs: CollectionConfig = {
   admin: {
     useAsTitle: 'subject',
     group: 'System',
-    defaultColumns: ['to', 'status', 'retryCount', 'createdAt', 'abstractId'],
+    defaultColumns: ['to', 'source', 'status', 'retryCount', 'createdAt', 'abstractId', 'courseApplicationId'],
     components: {
       //   beforeList: [ProcessLogsButton as any as CustomComponent], //<- NOTE: comment out before generate:importmap.
     },
@@ -39,6 +39,30 @@ export const MailLogs: CollectionConfig = {
       name: 'abstractId',
       type: 'relationship',
       relationTo: 'abstracts',
+    },
+    // ── Source tag — set once at creation, immutable thereafter ───────────────
+    {
+      name: 'source',
+      type: 'select',
+      options: [
+        { label: 'Abstract', value: 'abstract' },
+        { label: 'Course Application', value: 'course-application' },
+        { label: 'System', value: 'system' },
+      ],
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+      access: {
+        // Prevent any API caller from mutating the source after creation
+        update: () => false,
+      },
+    },
+    {
+      name: 'courseApplicationId',
+      type: 'relationship',
+      relationTo: 'course-applications',
+      admin: { position: 'sidebar' },
     },
   ],
 }

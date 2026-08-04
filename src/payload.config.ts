@@ -9,6 +9,8 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { Abstracts } from './collections/Abstracts'
 import { Categories } from './collections/Categories'
 import { Comments } from './collections/Comments'
+import { Courses } from './collections/Courses'
+import { CourseApplications } from './collections/CourseApplications'
 import { MailLogs } from './collections/EmailLogs'
 import { Files } from './collections/Files'
 import { Likes } from './collections/Likes'
@@ -134,6 +136,8 @@ export default buildConfig({
     Seats,
     Reservations,
     Sponsors,
+    Courses,
+    CourseApplications,
     MailLogs,
   ],
   cors: [
@@ -169,4 +173,9 @@ export default buildConfig({
     disablePlaygroundInProduction: true,
   },
   email: resendAdapter,
+  localization: {
+    locales: ['vi', 'en'],
+    defaultLocale: 'vi',
+    fallback: true,
+  },
 })

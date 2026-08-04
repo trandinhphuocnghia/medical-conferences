@@ -33,19 +33,32 @@ export async function createAbstractPublic(data: PublicAbstractData) {
 
     if (submissionLimiter) {
       const headersList = await getHeaders()
-      const forwardedFor = headersList.get('x-forwarded-for')
-      const ip = forwardedFor ? forwardedFor.split(',')[0] : '127.0.0.1'
 
-      const { success, reset } = await submissionLimiter.limit(`abstract:${ip}`)
+      // IP extraction: follow Cloudflare → Nginx/Vercel → standard proxy → fallback
+      const ip =
+        headersList.get('cf-connecting-ip') ??
+        headersList.get('x-real-ip') ??
+        headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+        '127.0.0.1'
 
-      if (!success) {
+      try {
+        const { success, reset } = await submissionLimiter.limit(`abstract:${ip}`)
+
+        if (!success) {
+          return {
+            success: false,
+            error: `Too many requests. Please try again after ${Math.ceil((reset - Date.now()) / 1000 / 60)} minutes.`,
+          }
+        }
+      } catch (error) {
+        console.error('[Abstract] Rate-limit service unavailable:', error)
         return {
           success: false,
-          error: `Too many requests. Please try again after ${Math.ceil((reset - Date.now()) / 1000 / 60)} minutes.`,
+          error: 'Service temporarily unavailable. Please try again later.',
         }
       }
     }
-    
+
     const payload = await getPayload({ config: configPromise })
 
     const { publicFileIds, otherTopic, ...rest } = data

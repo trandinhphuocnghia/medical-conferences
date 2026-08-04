@@ -920,22 +920,6 @@ function ReviewRow({ label, value }: { label: string; value: string }) {
   )
 }
 
-function NavRow({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: '2rem',
-        gap: '0.75rem',
-      }}
-    >
-      {children}
-    </div>
-  )
-}
-
 function OptionCard({
   children,
   selected,

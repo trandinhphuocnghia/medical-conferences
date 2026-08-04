@@ -1,0 +1,160 @@
+{
+  "CourseApplication": {
+    "title": "Course Registration",
+    "steps": {
+      "personalInfo": "Personal Information",
+      "enrollmentDetails": "Enrollment Details",
+      "progressLabel": "Application form progress"
+    },
+    "nav": {
+      "next": "Next",
+      "back": "Back",
+      "submit": "Submit Application",
+      "clearForm": "Clear form"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "firstNamePlaceholder": "e.g. John",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "e.g. Smith",
+      "dateOfBirth": "Date of Birth",
+      "email": "Email Address",
+      "emailPlaceholder": "e.g. john@example.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "e.g. +84 901 234 567",
+      "specialization": "Specialization",
+      "specializationPlaceholder": "e.g. Cardiology, Internal Medicine",
+      "hasOrganization": "I am affiliated with a hospital or institution",
+      "organization": "Hospital / Institution Name",
+      "organizationPlaceholder": "e.g. University Medical Center",
+      "enrollmentType": "Enrollment Type",
+      "enrollmentTypeShortCourse": "Short Course",
+      "enrollmentTypeShortCourseDesc": "Focused training program, typically days to weeks",
+      "enrollmentTypePostgraduate": "Postgraduate Program",
+      "enrollmentTypePostgraduateDesc": "Registration for postgraduate research topics",
+      "preferredDuration": "Preferred Duration",
+      "preferredDurationPlaceholder": "e.g. 3 days, 2 weeks",
+      "preferredContent": "Preferred Course Content",
+      "preferredContentPlaceholder": "Describe the topics or skills you wish to focus on",
+      "preferredStartDate": "Preferred Start Date",
+      "preferredEndDate": "Preferred End Date",
+      "academicLevel": "Academic Level",
+      "academicLevelPlaceholder": "Select your level",
+      "academicLevelMaster": "Master’s Student",
+      "academicLevelResident": "Resident / Clinical Fellow",
+      "academicLevelPhd": "PhD",
+      "entranceExamPassed": "I have passed the entrance examination",
+      "researchExperience": "Research Experience",
+      "researchExperienceOther": "Please specify",
+      "researchExperienceOtherPlaceholder": "Describe your research experience",
+      "researchStartMonth": "Research Period Start",
+      "researchEndMonth": "Research Period End"
+    },
+    "researchOptions": {
+      "no_experience": "No prior research experience",
+      "undergraduate_thesis": "Completed an undergraduate thesis",
+      "domestic_publication": "Research published in domestic journals",
+      "international_publication": "Research published in international journals",
+      "rct_experience": "Experience conducting RCTs",
+      "other": "Other"
+    },
+    "validation": {
+      "firstNameRequired": "First name is required.",
+      "firstNameMax": "First name must be at most 100 characters.",
+      "lastNameRequired": "Last name is required.",
+      "lastNameMax": "Last name must be at most 100 characters.",
+      "dateOfBirthRequired": "Date of birth is required.",
+      "specializationMax": "Specialization must be at most 200 characters.",
+      "specializationRequired": "Specialization is required.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "phoneRequired": "Phone number is required.",
+      "phoneMin": "Phone number must be at least 7 characters.",
+      "phoneMax": "Phone number must be at most 20 characters.",
+      "phoneInvalid": "Phone number may only contain digits, spaces, +, -, and parentheses.",
+      "organizationMax": "Organization name must be at most 255 characters.",
+      "organizationRequired": "Organization name is required when affiliated with an institution.",
+      "enrollmentTypeRequired": "Please select an enrollment type.",
+      "enrollmentTypeInvalid": "Please select a valid enrollment type.",
+      "durationMax": "Duration must be at most 100 characters.",
+      "contentMax": "Preferred content must be at most 1000 characters.",
+      "endDateAfterStart": "End date must be after start date.",
+      "academicLevelRequired": "Academic level is required for postgraduate applications.",
+      "academicLevelInvalid": "Please select a valid academic level.",
+      "endMonthAfterStart": "End month must be after start month.",
+      "researchExperienceRequired": "Please select at least one option.",
+      "researchExperienceOtherRequired": "Please specify your research experience."
+    },
+    "thankYou": {
+      "heading": "Application Submitted!",
+      "withData": "Thank you, {firstName}. Your application has been received. We will respond via {email} as soon as possible.",
+      "withoutData": "Thank you. Your application has been received. We will be in touch soon.",
+      "backToHome": "Back to Home",
+      "browseCourses": "Browse Courses"
+    }
+  },
+  "CourseDetail": {
+    "ctaRegisterExternal": "Register (External)",
+    "ctaApplyToAttend": "Apply to Attend",
+    "badgeLabel": "Medical Training Course",
+    "tuitionFeeLabel": "Tuition Fee",
+    "tuitionFeeSuffix": "/ course",
+    "contactForPricing": "Contact for pricing",
+    "downloadBrochure": "Download Brochure (PDF)"
+  },
+  "header": {
+    "home": "Home",
+    "conference": "Conference",
+    "trainingCourse": "Training Course",
+    "research": "Research",
+    "associations": "Associations",
+    "ourAssociations": "Our Associations",
+    "ourPartners": "Our Partners",
+    "contactUs": "Contact Us",
+    "signIn": "Sign In"
+  },
+  "courses": {
+    "badge": {
+      "scheduled": "Scheduled Course",
+      "onDemand": "On-demand Course"
+    },
+    "filter": {
+      "allTypes": "All Types",
+      "scheduled": "Scheduled Course",
+      "onDemand": "On-demand Course",
+      "allAudiences": "All Audiences",
+      "surgeons": "Surgeons",
+      "residents": "Residents",
+      "medicalStudents": "Medical Students",
+      "nurses": "Nurses",
+      "researchers": "Researchers",
+      "allStatuses": "Any Status",
+      "active": "Active",
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "typeLabel": "Course Type",
+      "audienceLabel": "Target Audience",
+      "statusLabel": "Status",
+      "filters": "Filters",
+      "clearAll": "Clear all"
+    },
+    "results": {
+      "showing": "Showing",
+      "courses": "courses",
+      "noCourses": "No courses found",
+      "tryAdjusting": "Try adjusting your filters or search query",
+      "liveAvailability": "Live availability",
+      "backToHome": "Back to Home",
+      "title": "Explore Medical Training Courses",
+      "description": "Browse our certified clinical training programs and hands-on workshops",
+      "searchPlaceholder": "Search courses, topics..."
+    },
+    "card": {
+      "nextBatch": "Next Batch: {date}",
+      "scheduleTBD": "Schedule: TBD",
+      "tuition": "Tuition: {fee}",
+      "contactForPricing": "Tuition: Contact us",
+      "defaultAudience": "Medical professionals"
+    }
+  }
+}

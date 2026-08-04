@@ -1,0 +1,160 @@
+{
+  "CourseApplication": {
+    "title": "Đăng Ký Khóa Học",
+    "steps": {
+      "personalInfo": "Thông Tin Cá Nhân",
+      "enrollmentDetails": "Chi Tiết Đăng Ký",
+      "progressLabel": "Tiến trình điền đơn đăng ký"
+    },
+    "nav": {
+      "next": "Tiếp Theo",
+      "back": "Quay Lại",
+      "submit": "Nộp Đơn Đăng Ký",
+      "clearForm": "Xóa bản nháp"
+    },
+    "fields": {
+      "firstName": "Tên",
+      "firstNamePlaceholder": "Ví dụ: Nguyễn Văn A",
+      "lastName": "Họ",
+      "lastNamePlaceholder": "Ví dụ: Trần",
+      "dateOfBirth": "Ngày Sinh",
+      "email": "Địa Chỉ Email",
+      "emailPlaceholder": "Ví dụ: bsnguyenvana@example.com",
+      "phone": "Số Điện Thoại",
+      "phonePlaceholder": "Ví dụ: 0901 234 567",
+      "specialization": "Chuyên Ngành",
+      "specializationPlaceholder": "Ví dụ: Tim mạch, Nội khoa",
+      "hasOrganization": "Tôi đang công tác tại bệnh viện / đơn vị y tế",
+      "organization": "Tên Bệnh Viện / Đơn Vị",
+      "organizationPlaceholder": "Ví dụ: Bệnh viện Đại học Y Dược TPHCM",
+      "enrollmentType": "Loại Hình Đăng Ký",
+      "enrollmentTypeShortCourse": "Khóa Học Ngắn Hạn",
+      "enrollmentTypeShortCourseDesc": "Chương trình đào tạo ngắn hạn",
+      "enrollmentTypePostgraduate": "Chương Trình Sau Đại Học",
+      "enrollmentTypePostgraduateDesc": "Đăng ký đề tài sau đại học / nghiên cứu sinh",
+      "preferredDuration": "Thời Lượng Mong Muốn",
+      "preferredDurationPlaceholder": "Ví dụ: 3 ngày, 2 tuần",
+      "preferredContent": "Nội Dung Khóa Học Mong Muốn",
+      "preferredContentPlaceholder": "Mô tả các chủ đề hoặc kỹ năng bạn muốn học",
+      "preferredStartDate": "Ngày Bắt Đầu Mong Muốn",
+      "preferredEndDate": "Ngày Kết Thúc Mong Muốn",
+      "academicLevel": "Trình độ đề tài",
+      "academicLevelPlaceholder": "Chọn trình độ của bạn",
+      "academicLevelMaster": "Thạc sĩ",
+      "academicLevelResident": "Bác sĩ nội trú",
+      "academicLevelPhd": "Nghiên cứu sinh",
+      "entranceExamPassed": "Tôi đã vượt qua kỳ thi tuyển sinh",
+      "researchExperience": "Kinh nghiệm nghiên cứu",
+      "researchExperienceOther": "Vui lòng mô tả cụ thể",
+      "researchExperienceOtherPlaceholder": "Mô tả kinh nghiệm nghiên cứu của bạn",
+      "researchStartMonth": "Tháng Bắt Đầu Nghiên Cứu",
+      "researchEndMonth": "Tháng Kết Thúc Nghiên Cứu"
+    },
+    "researchOptions": {
+      "no_experience": "Chưa từng làm nghiên cứu",
+      "undergraduate_thesis": "Từng làm đề tài tốt nghiệp đại học",
+      "domestic_publication": "Từng làm đề tài đăng báo trong nước",
+      "international_publication": "Từng làm nghiên cứu đăng báo quốc tế",
+      "rct_experience": "Có kinh nghiệm làm RCT",
+      "other": "Khác"
+    },
+    "validation": {
+      "firstNameRequired": "Vui lòng nhập tên.",
+      "firstNameMax": "Tên không được vượt quá 100 ký tự.",
+      "lastNameRequired": "Vui lòng nhập họ.",
+      "lastNameMax": "Họ không được vượt quá 100 ký tự.",
+      "dateOfBirthRequired": "Vui lòng nhập ngày sinh.",
+      "specializationMax": "Chuyên ngành không được vượt quá 200 ký tự.",
+      "specializationRequired": "Vui lòng nhập chuyên ngành.",
+      "emailRequired": "Vui lòng nhập địa chỉ email.",
+      "emailInvalid": "Địa chỉ email không hợp lệ.",
+      "phoneRequired": "Vui lòng nhập số điện thoại.",
+      "phoneMin": "Số điện thoại phải có ít nhất 7 ký tự.",
+      "phoneMax": "Số điện thoại không được vượt quá 20 ký tự.",
+      "phoneInvalid": "Số điện thoại chỉ được chứa chữ số, dấu cách, +, - và dấu ngoặc.",
+      "organizationMax": "Tên đơn vị không được vượt quá 255 ký tự.",
+      "organizationRequired": "Vui lòng nhập tên đơn vị/bệnh viện công tác.",
+      "enrollmentTypeRequired": "Vui lòng chọn loại hình đăng ký.",
+      "enrollmentTypeInvalid": "Loại hình đăng ký không hợp lệ.",
+      "durationMax": "Thời lượng không được vượt quá 100 ký tự.",
+      "contentMax": "Nội dung mong muốn không được vượt quá 1000 ký tự.",
+      "endDateAfterStart": "Ngày kết thúc phải sau ngày bắt đầu.",
+      "academicLevelRequired": "Vui lòng chọn trình độ đề tài.",
+      "academicLevelInvalid": "Trình độ học vấn không hợp lệ.",
+      "endMonthAfterStart": "Tháng kết thúc phải sau tháng bắt đầu.",
+      "researchExperienceRequired": "Vui lòng chọn ít nhất một mục.",
+      "researchExperienceOtherRequired": "Vui lòng mô tả kinh nghiệm nghiên cứu."
+    },
+    "thankYou": {
+      "heading": "Đơn Đăng Ký Đã Được Gửi!",
+      "withData": "Cảm ơn bạn, {firstName}. Đơn đăng ký của bạn đã được tiếp nhận. Chúng tôi sẽ phản hồi qua địa chỉ {email} trong thời gian sớm nhất.",
+      "withoutData": "Cảm ơn bạn. Đơn đăng ký của bạn đã được tiếp nhận. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.",
+      "backToHome": "Về Trang Chủ",
+      "browseCourses": "Xem Các Khóa Học"
+    }
+  },
+  "CourseDetail": {
+    "ctaRegisterExternal": "Đăng Ký (Liên Kết Ngoài)",
+    "ctaApplyToAttend": "Nộp Đơn Đăng Ký",
+    "badgeLabel": "Khóa Đào Tạo Y Khoa",
+    "tuitionFeeLabel": "Học Phí",
+    "tuitionFeeSuffix": "/ khóa học",
+    "contactForPricing": "Liên hệ để biết học phí",
+    "downloadBrochure": "Tải Tài Liệu (PDF)"
+  },
+  "header": {
+    "home": "Trang chủ",
+    "conference": "Hội nghị",
+    "trainingCourse": "Đào tạo",
+    "research": "Nghiên cứu",
+    "associations": "Hiệp hội",
+    "ourAssociations": "Hiệp hội của chúng tôi",
+    "ourPartners": "Đối tác của chúng tôi",
+    "contactUs": "Liên hệ",
+    "signIn": "Đăng nhập"
+  },
+  "courses": {
+    "badge": {
+      "scheduled": "Khoá học theo lịch",
+      "onDemand": "Khoá đăng ký theo nhu cầu"
+    },
+    "filter": {
+      "allTypes": "Tất cả loại hình",
+      "scheduled": "Khoá học theo lịch",
+      "onDemand": "Khoá đăng ký theo nhu cầu",
+      "allAudiences": "Tất cả đối tượng",
+      "surgeons": "Phẫu thuật viên",
+      "residents": "Bác sĩ nội trú",
+      "medicalStudents": "Sinh viên Y",
+      "nurses": "Điều dưỡng",
+      "researchers": "Nghiên cứu sinh",
+      "allStatuses": "Tất cả trạng thái",
+      "active": "Đang diễn ra",
+      "upcoming": "Sắp khai giảng",
+      "completed": "Đã hoàn thành",
+      "typeLabel": "Loại hình khoá học",
+      "audienceLabel": "Đối tượng học viên",
+      "statusLabel": "Trạng thái",
+      "filters": "Bộ lọc",
+      "clearAll": "Xoá bộ lọc"
+    },
+    "results": {
+      "showing": "Hiển thị",
+      "courses": "khoá học",
+      "noCourses": "Không tìm thấy khoá học nào",
+      "tryAdjusting": "Thử điều chỉnh bộ lọc hoặc từ khoá tìm kiếm",
+      "liveAvailability": "Cập nhật trực tiếp",
+      "backToHome": "Về Trang Chủ",
+      "title": "Khám Phá Các Khóa Đào Tạo Y Khoa",
+      "description": "Duyệt qua các chương trình đào tạo lâm sàng được chứng nhận và các buổi hội thảo thực hành",
+      "searchPlaceholder": "Tìm kiếm khóa học, chủ đề..."
+    },
+    "card": {
+      "nextBatch": "Khai giảng: {date}",
+      "scheduleTBD": "Lịch học: Cập nhật sau",
+      "tuition": "Học phí: {fee}",
+      "contactForPricing": "Học phí: Liên hệ",
+      "defaultAudience": "Cán bộ y tế"
+    }
+  }
+}

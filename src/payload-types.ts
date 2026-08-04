@@ -84,6 +84,8 @@ export interface Config {
     seats: Seat;
     reservations: Reservation;
     sponsors: Sponsor;
+    courses: Course;
+    'course-applications': CourseApplication;
     'mail-logs': MailLog;
     redirects: Redirect;
     forms: Form;
@@ -116,6 +118,8 @@ export interface Config {
     seats: SeatsSelect<false> | SeatsSelect<true>;
     reservations: ReservationsSelect<false> | ReservationsSelect<true>;
     sponsors: SponsorsSelect<false> | SponsorsSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
+    'course-applications': CourseApplicationsSelect<false> | CourseApplicationsSelect<true>;
     'mail-logs': MailLogsSelect<false> | MailLogsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -136,7 +140,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
-  locale: null;
+  locale: 'vi' | 'en';
   user: User & {
     collection: 'users';
   };
@@ -194,29 +198,29 @@ export interface Page {
       [k: string]: unknown;
     } | null;
     links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: number | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
+    | {
+      link: {
+        type?: ('reference' | 'custom') | null;
+        newTab?: boolean | null;
+        reference?:
+        | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+        | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+        url?: string | null;
+        label: string;
+        /**
+         * Choose how the link should be rendered.
+         */
+        appearance?: ('default' | 'outline') | null;
+      };
+      id?: string | null;
+    }[]
+    | null;
     media?: (number | null) | Media;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock)[];
@@ -258,14 +262,14 @@ export interface Post {
    * Add one or more venues for this conference.
    */
   venues?:
-    | {
-        name: string;
-        city: string;
-        address?: string | null;
-        note?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  | {
+    name: string;
+    city: string;
+    address?: string | null;
+    note?: string | null;
+    id?: string | null;
+  }[]
+  | null;
   /**
    * Select the primary categories for abstracts and sessions (e.g., Surgical Oncology).
    */
@@ -278,17 +282,17 @@ export interface Post {
    * Add the main sessions representing the event agenda shown on the top poster.
    */
   programAgenda?:
-    | {
-        title: string;
-        speakerName?: string | null;
-        /**
-         * Styles this row as a broadcast or special group session.
-         */
-        isHighlight?: boolean | null;
-        organization?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  | {
+    title: string;
+    speakerName?: string | null;
+    /**
+     * Styles this row as a broadcast or special group session.
+     */
+    isHighlight?: boolean | null;
+    organization?: string | null;
+    id?: string | null;
+  }[]
+  | null;
   abstractSubmissionDeadline: string;
   notificationOfAcceptanceDate: string;
   abstractDeadlineExtended?: boolean | null;
@@ -325,34 +329,34 @@ export interface Post {
     description?: string | null;
   };
   program?:
+  | {
+    title: string;
+    days?:
     | {
-        title: string;
-        days?:
-          | {
-              title?: string | null;
-              date: string;
-              venue?: string | null;
-              content?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: any;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
+      title?: string | null;
+      date: string;
+      venue?: string | null;
+      content?: {
+        root: {
+          type: string;
+          children: {
+            type: any;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      id?: string | null;
+    }[]
     | null;
+    id?: string | null;
+  }[]
+  | null;
   /**
    * Select the sponsors for this conference.
    */
@@ -361,30 +365,30 @@ export interface Post {
    * Add content sections (e.g., For Participants, For Speakers, Accommodation, Transportation).
    */
   informationSections?:
-    | {
-        title: string;
-        description: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
+  | {
+    title: string;
+    description: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
           [k: string]: unknown;
-        };
-        /**
-         * Optional. Attach PDF, DOC, PPTX files for download.
-         */
-        attachments?: (number | File)[] | null;
-        id?: string | null;
-      }[]
-    | null;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    /**
+     * Optional. Attach PDF, DOC, PPTX files for download.
+     */
+    attachments?: (number | File)[] | null;
+    id?: string | null;
+  }[]
+  | null;
   attendeesCount?: number | null;
   keynoteSpeakersCount?: number | null;
   /**
@@ -479,12 +483,12 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
+  | {
+    id: string;
+    createdAt?: string | null;
+    expiresAt: string;
+  }[]
+  | null;
   password?: string | null;
 }
 /**
@@ -641,29 +645,29 @@ export interface CallToActionBlock {
     [k: string]: unknown;
   } | null;
   links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+  | {
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+      | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+      | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+    id?: string | null;
+  }[]
+  | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
@@ -674,46 +678,46 @@ export interface CallToActionBlock {
  */
 export interface ContentBlock {
   columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
+  | {
+    size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+    richText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
           [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    enableLink?: boolean | null;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+      | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+      | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline') | null;
+    };
+    id?: string | null;
+  }[]
+  | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'content';
@@ -762,132 +766,132 @@ export interface Form {
   id: number;
   title: string;
   fields?:
-    | (
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            defaultValue?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'checkbox';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'country';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'email';
-          }
-        | {
-            message?: {
-              root: {
-                type: string;
-                children: {
-                  type: any;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'message';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: number | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'number';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: string | null;
-            placeholder?: string | null;
-            options?:
-              | {
-                  label: string;
-                  value: string;
-                  id?: string | null;
-                }[]
-              | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'select';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: string | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'text';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: string | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'textarea';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            required?: boolean | null;
-            defaultValue?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'date';
-          }
-        | {
-            name: string;
-            label?: string | null;
-            width?: number | null;
-            defaultValue?: string | null;
-            options?:
-              | {
-                  label: string;
-                  value: string;
-                  id?: string | null;
-                }[]
-              | null;
-            required?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'radio';
-          }
-      )[]
-    | null;
+  | (
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      required?: boolean | null;
+      defaultValue?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'checkbox';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      required?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'country';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      required?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'email';
+    }
+    | {
+      message?: {
+        root: {
+          type: string;
+          children: {
+            type: any;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'message';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      defaultValue?: number | null;
+      required?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'number';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      defaultValue?: string | null;
+      placeholder?: string | null;
+      options?:
+      | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+      | null;
+      required?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'select';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      defaultValue?: string | null;
+      required?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'text';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      defaultValue?: string | null;
+      required?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'textarea';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      required?: boolean | null;
+      defaultValue?: string | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'date';
+    }
+    | {
+      name: string;
+      label?: string | null;
+      width?: number | null;
+      defaultValue?: string | null;
+      options?:
+      | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+      | null;
+      required?: boolean | null;
+      id?: string | null;
+      blockName?: string | null;
+      blockType: 'radio';
+    }
+  )[]
+  | null;
   submitButtonLabel?: string | null;
   /**
    * Choose whether to display an on-page message or redirect to a different page after they submit the form.
@@ -915,34 +919,34 @@ export interface Form {
    * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
    */
   emails?:
-    | {
-        emailTo?: string | null;
-        cc?: string | null;
-        bcc?: string | null;
-        replyTo?: string | null;
-        emailFrom?: string | null;
-        subject: string;
-        /**
-         * Enter the message that should be sent in this email.
-         */
-        message?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
+  | {
+    emailTo?: string | null;
+    cc?: string | null;
+    bcc?: string | null;
+    replyTo?: string | null;
+    emailFrom?: string | null;
+    subject: string;
+    /**
+     * Enter the message that should be sent in this email.
+     */
+    message?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
           [k: string]: unknown;
-        } | null;
-        id?: string | null;
-      }[]
-    | null;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    id?: string | null;
+  }[]
+  | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -987,11 +991,11 @@ export interface Abstract {
    * Add up to 5 keywords for indexing.
    */
   keywords?:
-    | {
-        word?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  | {
+    word?: string | null;
+    id?: string | null;
+  }[]
+  | null;
   /**
    * Files uploaded client-side via Uploadthing. Each file is tracked separately in the public-files collection.
    */
@@ -1123,6 +1127,286 @@ export interface Reservation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  /**
+   * Official name of the course (e.g., "Advanced Laparoscopic Surgery").
+   */
+  title: string;
+  /**
+   * Set to true when the course is publicly visible.
+   */
+  active: boolean;
+  /**
+   * The organization responsible for this course. Instructors will be scoped to members of this group.
+   */
+  managing_group: number | UserGroup;
+  /**
+   * "Scheduled" courses have a predefined schedule & curriculum. "On-Demand" courses are custom-tailored.
+   */
+  course_type: 'fixed' | 'on_demand';
+  /**
+   * Course fee in Vietnamese Dong. Required for fixed curriculum courses.
+   */
+  base_tuition_fee?: number | null;
+  /**
+   * Who is this course designed for? (e.g., Gastroenterologists).
+   */
+  target_audience?: string | null;
+  /**
+   * Detailed learning outcomes participants can expect.
+   */
+  objectives?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * External link for course registration. Required for fixed courses.
+   */
+  registration_url?: string | null;
+  /**
+   * Tải lên file PDF giới thiệu chi tiết chương trình học.
+   */
+  prospectus?: (number | null) | File;
+  /**
+   * Minimum enrollment to run a batch.
+   */
+  min_students?: number | null;
+  /**
+   * Maximum capacity per batch.
+   */
+  max_students?: number | null;
+  /**
+   * List of specific scheduled runs/batches for this course.
+   */
+  schedules?:
+  | {
+    batch_name: string;
+    start_date: string;
+    end_date: string;
+    /**
+     * Optional override of the base tuition fee for this specific batch.
+     */
+    tuition_fee_override?: number | null;
+    id?: string | null;
+  }[]
+  | null;
+  /**
+   * Define the course modules and CME hours in order.
+   */
+  curriculum?:
+  | {
+    module_title: string;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Lectures and presentations.
+     */
+    theory_hours?: number | null;
+    /**
+     * Dry lab/wet lab hands-on sessions.
+     */
+    practice_lab_hours?: number | null;
+    /**
+     * Live patient/hospital observation.
+     */
+    practice_clinical_hours?: number | null;
+    /**
+     * Select instructors for this module. Only members of the Managing Organization are shown.
+     */
+    instructors?: (number | User)[] | null;
+    id?: string | null;
+  }[]
+  | null;
+  logistics_info?: {
+    /**
+     * Criteria required to receive a completion certificate or CME credits.
+     */
+    certificate_requirements?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Bank details for registration fee payments.
+     */
+    bank_transfer_details?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Contact coordinates for the course secretariat (phone, email, office).
+     */
+    contact_info?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  /**
+   * Describe the bespoke training program.
+   */
+  custom_training_content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  slug: string;
+  slugLock?: boolean | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
+ * Manages public course registration applications submitted via the website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-applications".
+ */
+export interface CourseApplication {
+  id: number;
+  /**
+   * The training course this application is submitted for.
+   */
+  course: number | Course;
+  /**
+   * Link to an existing platform account if the applicant is a registered user.
+   */
+  user?: (number | null) | User;
+  /**
+   * Current processing status of this application.
+   */
+  status: 'pending' | 'contacted' | 'confirmed' | 'rejected';
+  first_name: string;
+  last_name: string;
+  date_of_birth: string;
+  email: string;
+  phone: string;
+  /**
+   * e.g. Gastroenterology, General Surgery.
+   */
+  specialization?: string | null;
+  has_organization?: boolean | null;
+  /**
+   * Name of the affiliated hospital or institution.
+   */
+  organization?: string | null;
+  /**
+   * Select the program type the applicant is applying for.
+   */
+  enrollment_type: 'short_course' | 'postgraduate';
+  /**
+   * e.g. "3 days", "1 week".
+   */
+  preferred_duration?: string | null;
+  /**
+   * Describe the specific clinical skills or topics the applicant wants to focus on.
+   */
+  preferred_content?: string | null;
+  preferred_start_date?: string | null;
+  preferred_end_date?: string | null;
+  /**
+   * Current academic or research level of the applicant.
+   */
+  academic_level?: ('master' | 'resident' | 'phd') | null;
+  /**
+   * Select all that apply.
+   */
+  research_experience?:
+  | (
+    | 'no_experience'
+    | 'undergraduate_thesis'
+    | 'domestic_publication'
+    | 'international_publication'
+    | 'rct_experience'
+    | 'other'
+  )[]
+  | null;
+  /**
+   * Please describe your research experience.
+   */
+  research_experience_other?: string | null;
+  /**
+   * Check if the applicant has passed the required entrance examination.
+   */
+  entrance_exam_passed?: boolean | null;
+  research_start_month?: string | null;
+  research_end_month?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "mail-logs".
  */
 export interface MailLog {
@@ -1135,6 +1419,8 @@ export interface MailLog {
   lastError?: string | null;
   sentAt?: string | null;
   abstractId?: (number | null) | Abstract;
+  source?: ('abstract' | 'course-application' | 'system') | null;
+  courseApplicationId?: (number | null) | CourseApplication;
   updatedAt: string;
   createdAt: string;
 }
@@ -1151,14 +1437,14 @@ export interface Redirect {
   to?: {
     type?: ('reference' | 'custom') | null;
     reference?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    | ({
+      relationTo: 'pages';
+      value: number | Page;
+    } | null)
+    | ({
+      relationTo: 'posts';
+      value: number | Post;
+    } | null);
     url?: string | null;
   };
   updatedAt: string;
@@ -1172,12 +1458,12 @@ export interface FormSubmission {
   id: number;
   form: number | Form;
   submissionData?:
-    | {
-        field: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
+  | {
+    field: string;
+    value: string;
+    id?: string | null;
+  }[]
+  | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1191,23 +1477,23 @@ export interface PayloadJob {
    * Input data provided to the job
    */
   input?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  | {
+    [k: string]: unknown;
+  }
+  | unknown[]
+  | string
+  | number
+  | boolean
+  | null;
   taskStatus?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  | {
+    [k: string]: unknown;
+  }
+  | unknown[]
+  | string
+  | number
+  | boolean
+  | null;
   completedAt?: string | null;
   totalTried?: number | null;
   /**
@@ -1218,54 +1504,54 @@ export interface PayloadJob {
    * If hasError is true, this is the error that caused it
    */
   error?:
+  | {
+    [k: string]: unknown;
+  }
+  | unknown[]
+  | string
+  | number
+  | boolean
+  | null;
+  /**
+   * Task execution log
+   */
+  log?:
+  | {
+    executedAt: string;
+    completedAt: string;
+    taskSlug: 'inline' | 'schedulePublish';
+    taskID: string;
+    input?:
     | {
-        [k: string]: unknown;
-      }
+      [k: string]: unknown;
+    }
     | unknown[]
     | string
     | number
     | boolean
     | null;
-  /**
-   * Task execution log
-   */
-  log?:
+    output?:
     | {
-        executedAt: string;
-        completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
-        taskID: string;
-        input?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        output?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        state: 'failed' | 'succeeded';
-        error?:
-          | {
-              [k: string]: unknown;
-            }
-          | unknown[]
-          | string
-          | number
-          | boolean
-          | null;
-        id?: string | null;
-      }[]
+      [k: string]: unknown;
+    }
+    | unknown[]
+    | string
+    | number
+    | boolean
     | null;
+    state: 'failed' | 'succeeded';
+    error?:
+    | {
+      [k: string]: unknown;
+    }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+    id?: string | null;
+  }[]
+  | null;
   taskSlug?: ('inline' | 'schedulePublish') | null;
   queue?: string | null;
   waitUntil?: string | null;
@@ -1280,94 +1566,102 @@ export interface PayloadJob {
 export interface PayloadLockedDocument {
   id: number;
   document?:
-    | ({
-        relationTo: 'pages';
-        value: number | Page;
-      } | null)
-    | ({
-        relationTo: 'posts';
-        value: number | Post;
-      } | null)
-    | ({
-        relationTo: 'topics';
-        value: number | Topic;
-      } | null)
-    | ({
-        relationTo: 'categories';
-        value: number | Category;
-      } | null)
-    | ({
-        relationTo: 'abstracts';
-        value: number | Abstract;
-      } | null)
-    | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
-        relationTo: 'user-groups';
-        value: number | UserGroup;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'files';
-        value: number | File;
-      } | null)
-    | ({
-        relationTo: 'public-files';
-        value: number | PublicFile;
-      } | null)
-    | ({
-        relationTo: 'registrations';
-        value: number | Registration;
-      } | null)
-    | ({
-        relationTo: 'likes';
-        value: number | Like;
-      } | null)
-    | ({
-        relationTo: 'comments';
-        value: number | Comment;
-      } | null)
-    | ({
-        relationTo: 'rooms';
-        value: number | Room;
-      } | null)
-    | ({
-        relationTo: 'seats';
-        value: number | Seat;
-      } | null)
-    | ({
-        relationTo: 'reservations';
-        value: number | Reservation;
-      } | null)
-    | ({
-        relationTo: 'sponsors';
-        value: number | Sponsor;
-      } | null)
-    | ({
-        relationTo: 'mail-logs';
-        value: number | MailLog;
-      } | null)
-    | ({
-        relationTo: 'redirects';
-        value: number | Redirect;
-      } | null)
-    | ({
-        relationTo: 'forms';
-        value: number | Form;
-      } | null)
-    | ({
-        relationTo: 'form-submissions';
-        value: number | FormSubmission;
-      } | null)
-    | ({
-        relationTo: 'payload-jobs';
-        value: number | PayloadJob;
-      } | null);
+  | ({
+    relationTo: 'pages';
+    value: number | Page;
+  } | null)
+  | ({
+    relationTo: 'posts';
+    value: number | Post;
+  } | null)
+  | ({
+    relationTo: 'topics';
+    value: number | Topic;
+  } | null)
+  | ({
+    relationTo: 'categories';
+    value: number | Category;
+  } | null)
+  | ({
+    relationTo: 'abstracts';
+    value: number | Abstract;
+  } | null)
+  | ({
+    relationTo: 'users';
+    value: number | User;
+  } | null)
+  | ({
+    relationTo: 'user-groups';
+    value: number | UserGroup;
+  } | null)
+  | ({
+    relationTo: 'media';
+    value: number | Media;
+  } | null)
+  | ({
+    relationTo: 'files';
+    value: number | File;
+  } | null)
+  | ({
+    relationTo: 'public-files';
+    value: number | PublicFile;
+  } | null)
+  | ({
+    relationTo: 'registrations';
+    value: number | Registration;
+  } | null)
+  | ({
+    relationTo: 'likes';
+    value: number | Like;
+  } | null)
+  | ({
+    relationTo: 'comments';
+    value: number | Comment;
+  } | null)
+  | ({
+    relationTo: 'rooms';
+    value: number | Room;
+  } | null)
+  | ({
+    relationTo: 'seats';
+    value: number | Seat;
+  } | null)
+  | ({
+    relationTo: 'reservations';
+    value: number | Reservation;
+  } | null)
+  | ({
+    relationTo: 'sponsors';
+    value: number | Sponsor;
+  } | null)
+  | ({
+    relationTo: 'courses';
+    value: number | Course;
+  } | null)
+  | ({
+    relationTo: 'course-applications';
+    value: number | CourseApplication;
+  } | null)
+  | ({
+    relationTo: 'mail-logs';
+    value: number | MailLog;
+  } | null)
+  | ({
+    relationTo: 'redirects';
+    value: number | Redirect;
+  } | null)
+  | ({
+    relationTo: 'forms';
+    value: number | Form;
+  } | null)
+  | ({
+    relationTo: 'form-submissions';
+    value: number | FormSubmission;
+  } | null)
+  | ({
+    relationTo: 'payload-jobs';
+    value: number | PayloadJob;
+  } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
@@ -1388,14 +1682,14 @@ export interface PayloadPreference {
   };
   key?: string | null;
   value?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  | {
+    [k: string]: unknown;
+  }
+  | unknown[]
+  | string
+  | number
+  | boolean
+  | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1417,42 +1711,42 @@ export interface PayloadMigration {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   hero?:
+  | T
+  | {
+    type?: T;
+    richText?: T;
+    links?:
     | T
     | {
+      link?:
+      | T
+      | {
         type?: T;
-        richText?: T;
-        links?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                    appearance?: T;
-                  };
-              id?: T;
-            };
-        media?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
       };
+      id?: T;
+    };
+    media?: T;
+  };
   layout?:
-    | T
-    | {
-        cta?: T | CallToActionBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
-        formBlock?: T | FormBlockSelect<T>;
-      };
+  | T
+  | {
+    cta?: T | CallToActionBlockSelect<T>;
+    content?: T | ContentBlockSelect<T>;
+    mediaBlock?: T | MediaBlockSelect<T>;
+    formBlock?: T | FormBlockSelect<T>;
+  };
   meta?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        description?: T;
-      };
+  | T
+  | {
+    title?: T;
+    image?: T;
+    description?: T;
+  };
   publishedAt?: T;
   slug?: T;
   slugLock?: T;
@@ -1469,20 +1763,20 @@ export interface PagesSelect<T extends boolean = true> {
 export interface CallToActionBlockSelect<T extends boolean = true> {
   richText?: T;
   links?:
+  | T
+  | {
+    link?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
+      type?: T;
+      newTab?: T;
+      reference?: T;
+      url?: T;
+      label?: T;
+      appearance?: T;
+    };
+    id?: T;
+  };
   id?: T;
   blockName?: T;
 }
@@ -1492,23 +1786,23 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
  */
 export interface ContentBlockSelect<T extends boolean = true> {
   columns?:
+  | T
+  | {
+    size?: T;
+    richText?: T;
+    enableLink?: T;
+    link?:
     | T
     | {
-        size?: T;
-        richText?: T;
-        enableLink?: T;
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
+      type?: T;
+      newTab?: T;
+      reference?: T;
+      url?: T;
+      label?: T;
+      appearance?: T;
+    };
+    id?: T;
+  };
   id?: T;
   blockName?: T;
 }
@@ -1543,25 +1837,25 @@ export interface PostsSelect<T extends boolean = true> {
   host?: T;
   venueCity?: T;
   venues?:
-    | T
-    | {
-        name?: T;
-        city?: T;
-        address?: T;
-        note?: T;
-        id?: T;
-      };
+  | T
+  | {
+    name?: T;
+    city?: T;
+    address?: T;
+    note?: T;
+    id?: T;
+  };
   topics?: T;
   scientificBoard?: T;
   programAgenda?:
-    | T
-    | {
-        title?: T;
-        speakerName?: T;
-        isHighlight?: T;
-        organization?: T;
-        id?: T;
-      };
+  | T
+  | {
+    title?: T;
+    speakerName?: T;
+    isHighlight?: T;
+    organization?: T;
+    id?: T;
+  };
   abstractSubmissionDeadline?: T;
   notificationOfAcceptanceDate?: T;
   abstractDeadlineExtended?: T;
@@ -1572,49 +1866,49 @@ export interface PostsSelect<T extends boolean = true> {
   startDate?: T;
   endDate?: T;
   contactEmails?:
-    | T
-    | {
-        email?: T;
-        id?: T;
-      };
+  | T
+  | {
+    email?: T;
+    id?: T;
+  };
   contactPhones?:
-    | T
-    | {
-        phone?: T;
-        id?: T;
-      };
+  | T
+  | {
+    phone?: T;
+    id?: T;
+  };
   meta?:
-    | T
-    | {
-        relatedConferences?: T;
-        title?: T;
-        image?: T;
-        description?: T;
-      };
+  | T
+  | {
+    relatedConferences?: T;
+    title?: T;
+    image?: T;
+    description?: T;
+  };
   program?:
+  | T
+  | {
+    title?: T;
+    days?:
     | T
     | {
-        title?: T;
-        days?:
-          | T
-          | {
-              title?: T;
-              date?: T;
-              venue?: T;
-              content?: T;
-              id?: T;
-            };
-        id?: T;
-      };
+      title?: T;
+      date?: T;
+      venue?: T;
+      content?: T;
+      id?: T;
+    };
+    id?: T;
+  };
   sponsors?: T;
   informationSections?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        attachments?: T;
-        id?: T;
-      };
+  | T
+  | {
+    title?: T;
+    description?: T;
+    attachments?: T;
+    id?: T;
+  };
   attendeesCount?: T;
   keynoteSpeakersCount?: T;
   durationOverride?: T;
@@ -1677,11 +1971,11 @@ export interface AbstractsSelect<T extends boolean = true> {
   results?: T;
   conclusion?: T;
   keywords?:
-    | T
-    | {
-        word?: T;
-        id?: T;
-      };
+  | T
+  | {
+    word?: T;
+    id?: T;
+  };
   files?: T;
   submitter?: T;
   status?: T;
@@ -1723,12 +2017,12 @@ export interface UsersSelect<T extends boolean = true> {
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+  | T
+  | {
+    id?: T;
+    createdAt?: T;
+    expiresAt?: T;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1764,31 +2058,31 @@ export interface MediaSelect<T extends boolean = true> {
   focalX?: T;
   focalY?: T;
   sizes?:
+  | T
+  | {
+    thumbnail?:
     | T
     | {
-        thumbnail?:
-          | T
-          | {
-              _key?: T;
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        preview?:
-          | T
-          | {
-              _key?: T;
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
+      _key?: T;
+      url?: T;
+      width?: T;
+      height?: T;
+      mimeType?: T;
+      filesize?: T;
+      filename?: T;
+    };
+    preview?:
+    | T
+    | {
+      _key?: T;
+      url?: T;
+      width?: T;
+      height?: T;
+      mimeType?: T;
+      filesize?: T;
+      filename?: T;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1905,6 +2199,89 @@ export interface SponsorsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  active?: T;
+  managing_group?: T;
+  course_type?: T;
+  base_tuition_fee?: T;
+  target_audience?: T;
+  objectives?: T;
+  registration_url?: T;
+  prospectus?: T;
+  min_students?: T;
+  max_students?: T;
+  schedules?:
+  | T
+  | {
+    batch_name?: T;
+    start_date?: T;
+    end_date?: T;
+    tuition_fee_override?: T;
+    id?: T;
+  };
+  curriculum?:
+  | T
+  | {
+    module_title?: T;
+    description?: T;
+    theory_hours?: T;
+    practice_lab_hours?: T;
+    practice_clinical_hours?: T;
+    instructors?: T;
+    id?: T;
+  };
+  logistics_info?:
+  | T
+  | {
+    certificate_requirements?: T;
+    bank_transfer_details?: T;
+    contact_info?: T;
+  };
+  custom_training_content?: T;
+  slug?: T;
+  slugLock?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "course-applications_select".
+ */
+export interface CourseApplicationsSelect<T extends boolean = true> {
+  course?: T;
+  user?: T;
+  status?: T;
+  first_name?: T;
+  last_name?: T;
+  date_of_birth?: T;
+  email?: T;
+  phone?: T;
+  specialization?: T;
+  has_organization?: T;
+  organization?: T;
+  enrollment_type?: T;
+  preferred_duration?: T;
+  preferred_content?: T;
+  preferred_start_date?: T;
+  preferred_end_date?: T;
+  academic_level?: T;
+  research_experience?: T;
+  research_experience_other?: T;
+  entrance_exam_passed?: T;
+  research_start_month?: T;
+  research_end_month?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "mail-logs_select".
  */
 export interface MailLogsSelect<T extends boolean = true> {
@@ -1916,6 +2293,8 @@ export interface MailLogsSelect<T extends boolean = true> {
   lastError?: T;
   sentAt?: T;
   abstractId?: T;
+  source?: T;
+  courseApplicationId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1926,12 +2305,12 @@ export interface MailLogsSelect<T extends boolean = true> {
 export interface RedirectsSelect<T extends boolean = true> {
   from?: T;
   to?:
-    | T
-    | {
-        type?: T;
-        reference?: T;
-        url?: T;
-      };
+  | T
+  | {
+    type?: T;
+    reference?: T;
+    url?: T;
+  };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1942,148 +2321,148 @@ export interface RedirectsSelect<T extends boolean = true> {
 export interface FormsSelect<T extends boolean = true> {
   title?: T;
   fields?:
+  | T
+  | {
+    checkbox?:
     | T
     | {
-        checkbox?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              defaultValue?: T;
-              id?: T;
-              blockName?: T;
-            };
-        country?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        email?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        message?:
-          | T
-          | {
-              message?: T;
-              id?: T;
-              blockName?: T;
-            };
-        number?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        select?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              placeholder?: T;
-              options?:
-                | T
-                | {
-                    label?: T;
-                    value?: T;
-                    id?: T;
-                  };
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        text?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        textarea?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
-        date?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              required?: T;
-              defaultValue?: T;
-              id?: T;
-              blockName?: T;
-            };
-        radio?:
-          | T
-          | {
-              name?: T;
-              label?: T;
-              width?: T;
-              defaultValue?: T;
-              options?:
-                | T
-                | {
-                    label?: T;
-                    value?: T;
-                    id?: T;
-                  };
-              required?: T;
-              id?: T;
-              blockName?: T;
-            };
+      name?: T;
+      label?: T;
+      width?: T;
+      required?: T;
+      defaultValue?: T;
+      id?: T;
+      blockName?: T;
+    };
+    country?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      required?: T;
+      id?: T;
+      blockName?: T;
+    };
+    email?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      required?: T;
+      id?: T;
+      blockName?: T;
+    };
+    message?:
+    | T
+    | {
+      message?: T;
+      id?: T;
+      blockName?: T;
+    };
+    number?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      defaultValue?: T;
+      required?: T;
+      id?: T;
+      blockName?: T;
+    };
+    select?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      defaultValue?: T;
+      placeholder?: T;
+      options?:
+      | T
+      | {
+        label?: T;
+        value?: T;
+        id?: T;
       };
+      required?: T;
+      id?: T;
+      blockName?: T;
+    };
+    text?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      defaultValue?: T;
+      required?: T;
+      id?: T;
+      blockName?: T;
+    };
+    textarea?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      defaultValue?: T;
+      required?: T;
+      id?: T;
+      blockName?: T;
+    };
+    date?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      required?: T;
+      defaultValue?: T;
+      id?: T;
+      blockName?: T;
+    };
+    radio?:
+    | T
+    | {
+      name?: T;
+      label?: T;
+      width?: T;
+      defaultValue?: T;
+      options?:
+      | T
+      | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+      required?: T;
+      id?: T;
+      blockName?: T;
+    };
+  };
   submitButtonLabel?: T;
   confirmationType?: T;
   confirmationMessage?: T;
   redirect?:
-    | T
-    | {
-        url?: T;
-      };
+  | T
+  | {
+    url?: T;
+  };
   emails?:
-    | T
-    | {
-        emailTo?: T;
-        cc?: T;
-        bcc?: T;
-        replyTo?: T;
-        emailFrom?: T;
-        subject?: T;
-        message?: T;
-        id?: T;
-      };
+  | T
+  | {
+    emailTo?: T;
+    cc?: T;
+    bcc?: T;
+    replyTo?: T;
+    emailFrom?: T;
+    subject?: T;
+    message?: T;
+    id?: T;
+  };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2094,12 +2473,12 @@ export interface FormsSelect<T extends boolean = true> {
 export interface FormSubmissionsSelect<T extends boolean = true> {
   form?: T;
   submissionData?:
-    | T
-    | {
-        field?: T;
-        value?: T;
-        id?: T;
-      };
+  | T
+  | {
+    field?: T;
+    value?: T;
+    id?: T;
+  };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2115,18 +2494,18 @@ export interface PayloadJobsSelect<T extends boolean = true> {
   hasError?: T;
   error?: T;
   log?:
-    | T
-    | {
-        executedAt?: T;
-        completedAt?: T;
-        taskSlug?: T;
-        taskID?: T;
-        input?: T;
-        output?: T;
-        state?: T;
-        error?: T;
-        id?: T;
-      };
+  | T
+  | {
+    executedAt?: T;
+    completedAt?: T;
+    taskSlug?: T;
+    taskID?: T;
+    input?: T;
+    output?: T;
+    state?: T;
+    error?: T;
+    id?: T;
+  };
   taskSlug?: T;
   queue?: T;
   waitUntil?: T;
@@ -2173,25 +2552,25 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Header {
   id: number;
   navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
+  | {
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+      | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+      | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null);
+      url?: string | null;
+      label: string;
+    };
+    id?: string | null;
+  }[]
+  | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2202,25 +2581,25 @@ export interface Header {
 export interface Footer {
   id: number;
   navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: number | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: number | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
-        id?: string | null;
-      }[]
-    | null;
+  | {
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+      | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+      | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null);
+      url?: string | null;
+      label: string;
+    };
+    id?: string | null;
+  }[]
+  | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2230,19 +2609,19 @@ export interface Footer {
  */
 export interface HeaderSelect<T extends boolean = true> {
   navItems?:
+  | T
+  | {
+    link?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
+      type?: T;
+      newTab?: T;
+      reference?: T;
+      url?: T;
+      label?: T;
+    };
+    id?: T;
+  };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2253,19 +2632,19 @@ export interface HeaderSelect<T extends boolean = true> {
  */
 export interface FooterSelect<T extends boolean = true> {
   navItems?:
+  | T
+  | {
+    link?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-            };
-        id?: T;
-      };
+      type?: T;
+      newTab?: T;
+      reference?: T;
+      url?: T;
+      label?: T;
+    };
+    id?: T;
+  };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2279,14 +2658,14 @@ export interface TaskSchedulePublish {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
     doc?:
-      | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null);
+    | ({
+      relationTo: 'pages';
+      value: number | Page;
+    } | null)
+    | ({
+      relationTo: 'posts';
+      value: number | Post;
+    } | null);
     global?: string | null;
     user?: (number | null) | User;
   };
@@ -2338,5 +2717,5 @@ export interface Auth {
 
 
 declare module 'payload' {
-  export interface GeneratedTypes extends Config {}
+  export interface GeneratedTypes extends Config { }
 }
