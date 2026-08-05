@@ -155,6 +155,9 @@
       "tuition": "Học phí: {fee}",
       "contactForPricing": "Học phí: Liên hệ",
       "defaultAudience": "Cán bộ y tế"
+    },
+    "customTraining": {
+      "title": "Thông tin chương trình"
     }
   }
 }

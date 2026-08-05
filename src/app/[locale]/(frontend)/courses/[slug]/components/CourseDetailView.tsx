@@ -4,6 +4,7 @@ import { HeroBanner } from './HeroBanner'
 import { CourseSchedules } from './CourseSchedules'
 import { CurriculumAccordion } from './CurriculumAccordion'
 import { LogisticsPaymentSection } from './LogisticsPaymentSection'
+import { CustomTrainingContent } from '../../components/CustomTrainingContent'
 
 type CourseDetailViewProps = {
   course: Course
@@ -44,6 +45,11 @@ export function CourseDetailView({ course, slug, locale }: CourseDetailViewProps
           <CourseSchedules schedules={course.schedules} />
           <CurriculumAccordion curriculum={course.curriculum} />
         </div>
+      )}
+
+      {/* Custom Training Content — on-demand courses only */}
+      {course.course_type === 'on_demand' && (
+        <CustomTrainingContent content={course.custom_training_content} />
       )}
 
       {/* Logistics & Payment — bottom-of-funnel section */}

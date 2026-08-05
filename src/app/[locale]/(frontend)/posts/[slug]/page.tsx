@@ -75,12 +75,19 @@ export default async function ConferenceDetailPage({ params: paramsPromise }: Ar
     conferenceData.abstractSubmissionDeadline &&
     new Date() < new Date(conferenceData.abstractSubmissionDeadline)
 
+  // Show Registration link only while the conference hasn't ended yet.
+  // If endDate is missing we treat registration as open (defensive default).
+  const isRegistrationOpen =
+    !conferenceData.endDate ||
+    new Date() <= new Date(conferenceData.endDate)
+
   return (
     <div className="min-h-screen bg-background">
       <StickySubNav
         conferenceId={conferenceData?.id}
         slug={slug}
         isSubmissionOpen={!!isSubmissionOpen}
+        isRegistrationOpen={!!isRegistrationOpen}
       />
 
       <DetailHeader
