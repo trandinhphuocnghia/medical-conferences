@@ -58,7 +58,7 @@ export const Courses: CollectionConfig = {
       admin: {
         description: 'Official name of the course (e.g., "Advanced Laparoscopic Surgery").',
       },
-      localized:true,
+      localized: true,
     },
 
     {
@@ -197,7 +197,6 @@ export const Courses: CollectionConfig = {
               admin: {
                 description: 'Tải lên file PDF giới thiệu chi tiết chương trình học.',
               },
-              
             },
           ],
         },
@@ -468,6 +467,7 @@ export const Courses: CollectionConfig = {
               admin: {
                 description: 'Describe the bespoke training program.',
               },
+              localized: true,
             },
           ],
         },
