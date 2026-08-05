@@ -197,7 +197,6 @@ export const Courses: CollectionConfig = {
               admin: {
                 description: 'Tải lên file PDF giới thiệu chi tiết chương trình học.',
               },
-
             },
           ],
         },

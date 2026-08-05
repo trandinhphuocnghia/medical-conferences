@@ -174,8 +174,8 @@ export default buildConfig({
   },
   email: resendAdapter,
   localization: {
-  locales: ['vi', 'en'],
-  defaultLocale: 'vi',
-  fallback: true, 
-},
+    locales: ['vi', 'en'],
+    defaultLocale: 'vi',
+    fallback: true,
+  },
 })
