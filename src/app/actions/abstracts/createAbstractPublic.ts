@@ -58,7 +58,7 @@ export async function createAbstractPublic(data: PublicAbstractData) {
         }
       }
     }
-    
+
     const payload = await getPayload({ config: configPromise })
 
     const { publicFileIds, otherTopic, ...rest } = data
