@@ -155,6 +155,9 @@
       "tuition": "Tuition: {fee}",
       "contactForPricing": "Tuition: Contact us",
       "defaultAudience": "Medical professionals"
+    },
+    "customTraining": {
+      "title": "Program Details"
     }
   }
 }

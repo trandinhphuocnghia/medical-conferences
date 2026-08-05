@@ -8,9 +8,10 @@ interface StickySubNavProps {
   conferenceId: number
   slug: string
   isSubmissionOpen?: boolean
+  isRegistrationOpen?: boolean
 }
 
-export function StickySubNav({ conferenceId, slug, isSubmissionOpen }: StickySubNavProps) {
+export function StickySubNav({ conferenceId, slug, isSubmissionOpen, isRegistrationOpen }: StickySubNavProps) {
   const [isSticky, setIsSticky] = useState(false)
   //const pathname = usePathname()
 
@@ -40,10 +41,12 @@ export function StickySubNav({ conferenceId, slug, isSubmissionOpen }: StickySub
         href: `/submit-abstract?conference=${conferenceId}`,
       }
       : null,
-    {
-      label: 'Registration',
-      href: `/registration?conference=${conferenceId}`,
-    },
+    isRegistrationOpen
+      ? {
+        label: 'Registration',
+        href: `/registration?conference=${conferenceId}`,
+      }
+      : null,
     { label: 'Information', href: `${conferenceBasePath}/information` },
     { label: 'Sponsors', href: `${conferenceBasePath}#sponsors` },
   ].filter(Boolean) as { label: string; href: string }[]
