@@ -29,7 +29,7 @@ import { NextResponse } from 'next/server'
 // ── next-intl routing middleware ────────────────────────────────────────────
 const intlMiddleware = createMiddleware({
   locales: ['vi', 'en'],
-  defaultLocale: 'en',
+  defaultLocale: 'vi',
 })
 
 // ── JWT secret ─────────────────────────────────────────────────────────────
