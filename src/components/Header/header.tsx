@@ -7,7 +7,7 @@ import { ChevronDown, Menu, X } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Logo } from '../Logo/Logo'
 
 const PRIMARY_NAV_ITEMS = [
@@ -106,10 +106,27 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
   const { user } = useUserStore((state) => state)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mobileAssociationsOpen, setMobileAssociationsOpen] = useState(false)
+  const [isLocalhost, setIsLocalhost] = useState(false)
   const t = useTranslations('header')
   const locale = useLocale()
 
-  const isDev = process.env.NODE_ENV !== 'production'
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname
+      const isProdDomain = hostname.includes('higcf.org')
+      const isDevHost =
+        !isProdDomain &&
+        (hostname === 'localhost' ||
+          hostname === '127.0.0.1' ||
+          hostname.includes('development') ||
+          hostname.includes('railway.app') ||
+          process.env.NODE_ENV !== 'production')
+
+      setIsLocalhost(isDevHost)
+    }
+  }, [])
+
+  const isDev = isLocalhost
 
   const getHref = (href: string) => {
     if (href === '#') return '#'
