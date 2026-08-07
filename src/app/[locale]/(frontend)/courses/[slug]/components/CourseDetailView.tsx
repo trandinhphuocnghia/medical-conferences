@@ -42,8 +42,16 @@ export function CourseDetailView({ course, slug, locale }: CourseDetailViewProps
 
       {course.course_type === 'fixed' && (
         <div className="mt-16 md:mt-20 flex flex-col gap-0">
-          <CourseSchedules schedules={course.schedules} />
-          <CurriculumAccordion curriculum={course.curriculum} />
+          <CourseSchedules
+            schedules={course.schedules}
+            titleLabel={t('schedulesTitle')}
+            tuitionOverrideLabel={t('specialTuitionFee')}
+            locale={locale}
+          />
+          <CurriculumAccordion
+            curriculum={course.curriculum}
+            titleLabel={t('curriculumTitle')}
+          />
         </div>
       )}
 
@@ -55,6 +63,9 @@ export function CourseDetailView({ course, slug, locale }: CourseDetailViewProps
       {/* Logistics & Payment — bottom-of-funnel section */}
       <LogisticsPaymentSection
         logistics_info={course.logistics_info}
+        sectionLabel={t('logisticsTitle')}
+        certificateCardLabel={t('certificateTitle')}
+        contactCardLabel={t('contactTitle')}
       />
     </div>
   )

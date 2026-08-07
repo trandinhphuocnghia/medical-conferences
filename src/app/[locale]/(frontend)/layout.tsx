@@ -35,7 +35,7 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  
+
   // Statically propagate the locale to next-intl for Server Components
   setRequestLocale(locale)
 
@@ -48,7 +48,7 @@ export default async function RootLayout({
         <InitTheme />
       </head>
       <body className="flex flex-col min-h-screen">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider key={locale} messages={messages}>
           <Providers>
             <UserStoreInitializer user={user} />
             <Header />

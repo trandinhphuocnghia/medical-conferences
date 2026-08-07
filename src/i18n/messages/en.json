@@ -100,7 +100,18 @@
     "tuitionFeeLabel": "Tuition Fee",
     "tuitionFeeSuffix": "/ course",
     "contactForPricing": "Contact for pricing",
-    "downloadBrochure": "Download Brochure (PDF)"
+    "downloadBrochure": "Download Brochure (PDF)",
+    "schedulesTitle": "Upcoming Batches & Schedules",
+    "specialTuitionFee": "Special Tuition Fee",
+    "curriculumTitle": "Curriculum",
+    "hoursLabel": "Hours",
+    "theoryHours": "Theory",
+    "practiceLabHours": "Practice Lab",
+    "practiceClinicalHours": "Clinical Practice",
+    "instructorsLabel": "Instructors",
+    "logisticsTitle": "Logistics & Registration Info",
+    "certificateTitle": "Certificate & Requirements",
+    "contactTitle": "Contact Information"
   },
   "header": {
     "home": "Home",

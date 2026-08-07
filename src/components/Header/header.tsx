@@ -27,7 +27,7 @@ const ASSOCIATIONS = [
   { key: 'vlass', label: 'VLASS', href: '#' },
 ] as const
 
-function LanguageSwitcher() {
+function LanguageSwitcher({ isDev }: { isDev?: boolean }) {
   const currentLocale = useLocale()
   const pathname = usePathname()
   const router = useRouter()
@@ -43,30 +43,28 @@ function LanguageSwitcher() {
       newPathname = `/${newLocale}${pathname.startsWith('/') ? '' : '/'}${pathname}`
     }
     router.push(newPathname)
+    router.refresh()
   }
+
+  const activeClass = isDev ? 'font-semibold text-white' : 'font-semibold text-foreground'
+  const inactiveClass = isDev
+    ? 'text-white/70 hover:text-white transition-colors cursor-pointer'
+    : 'text-muted-foreground hover:text-foreground transition-colors cursor-pointer'
 
   return (
     <div className="flex items-center text-sm">
       <button
         type="button"
         onClick={() => switchLocale('en')}
-        className={
-          currentLocale === 'en'
-            ? 'font-semibold text-foreground'
-            : 'text-muted-foreground hover:text-foreground transition-colors cursor-pointer'
-        }
+        className={currentLocale === 'en' ? activeClass : inactiveClass}
       >
         EN
       </button>
-      <span className="text-border mx-1.5">|</span>
+      <span className={isDev ? 'text-white/50 mx-1.5' : 'text-border mx-1.5'}>|</span>
       <button
         type="button"
         onClick={() => switchLocale('vi')}
-        className={
-          currentLocale === 'vi'
-            ? 'font-semibold text-foreground'
-            : 'text-muted-foreground hover:text-foreground transition-colors cursor-pointer'
-        }
+        className={currentLocale === 'vi' ? activeClass : inactiveClass}
       >
         VI
       </button>
@@ -74,12 +72,15 @@ function LanguageSwitcher() {
   )
 }
 
-const AssociationsDropdown = () => {
+const AssociationsDropdown = ({ isDev }: { isDev?: boolean }) => {
   const t = useTranslations('header')
 
   return (
     <div className="relative group py-2">
-      <button className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors focus:outline-none cursor-pointer">
+      <button
+        className={`flex items-center text-sm font-medium transition-colors focus:outline-none cursor-pointer ${isDev ? 'text-white/90 hover:text-white' : 'text-muted-foreground hover:text-foreground'
+          }`}
+      >
         <span>{t('associations')}</span>
         <ChevronDown className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
       </button>
@@ -107,6 +108,8 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
   const t = useTranslations('header')
   const locale = useLocale()
 
+  const isDev = process.env.NODE_ENV !== 'production'
+
   const getHref = (href: string) => {
     if (href === '#') return '#'
     if (href.startsWith('/#')) return `/${locale}${href.substring(1)}`
@@ -115,15 +118,28 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-100 bg-background/80 backdrop-blur-md border-b border-border">
+      <header
+        className={`fixed top-0 left-0 right-0 z-100 backdrop-blur-md border-b transition-colors ${isDev
+            ? 'bg-red-600/95 border-red-700 text-white'
+            : 'bg-background/80 border-border'
+          }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href={`/${locale}`} className="flex items-center gap-2 p-1 focus:outline-none">
               <Logo className="h-10 w-auto" />
-              <span className="font-bold text-xl tracking-tight text-foreground uppercase">
+              <span
+                className={`font-bold text-xl tracking-tight uppercase ${isDev ? 'text-white' : 'text-foreground'
+                  }`}
+              >
                 HIGCF
               </span>
+              {isDev && (
+                <span className="ml-1 rounded bg-white px-2 py-0.5 text-xs font-extrabold text-red-600 shadow-sm uppercase tracking-wider">
+                  DEV ENV
+                </span>
+              )}
             </Link>
 
             {/* Desktop Navigation (lg breakpoints) */}
@@ -132,18 +148,26 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
                 <Link
                   key={item.key}
                   href={getHref(item.href)}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  className={
+                    isDev
+                      ? 'text-sm font-medium text-white/90 hover:text-white transition-colors py-2'
+                      : 'text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2'
+                  }
                 >
                   {t(item.key)}
                 </Link>
               ))}
 
               {/* Associations Dropdown */}
-              <AssociationsDropdown />
+              <AssociationsDropdown isDev={isDev} />
 
               <Link
                 href={getHref('/#contact')}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                className={
+                  isDev
+                    ? 'text-sm font-medium text-white/90 hover:text-white transition-colors py-2'
+                    : 'text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2'
+                }
               >
                 {t('contactUs')}
               </Link>
@@ -151,13 +175,17 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
 
             {/* CTA / User Menu / Language Switcher (lg breakpoints) */}
             <div className="hidden lg:flex items-center gap-4">
-              <LanguageSwitcher />
+              <LanguageSwitcher isDev={isDev} />
               {user ? (
                 <UserMenu />
               ) : (
                 <Link
                   href={getHref('/signin')}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className={
+                    isDev
+                      ? 'text-sm font-medium text-white/90 hover:text-white transition-colors'
+                      : 'text-sm font-medium text-muted-foreground hover:text-foreground transition-colors'
+                  }
                 >
                   {t('signIn')}
                 </Link>
