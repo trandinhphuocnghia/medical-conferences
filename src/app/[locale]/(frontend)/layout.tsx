@@ -35,7 +35,7 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  
+
   // Statically propagate the locale to next-intl for Server Components
   setRequestLocale(locale)
 

@@ -78,9 +78,8 @@ const AssociationsDropdown = ({ isDev }: { isDev?: boolean }) => {
   return (
     <div className="relative group py-2">
       <button
-        className={`flex items-center text-sm font-medium transition-colors focus:outline-none cursor-pointer ${
-          isDev ? 'text-white/90 hover:text-white' : 'text-muted-foreground hover:text-foreground'
-        }`}
+        className={`flex items-center text-sm font-medium transition-colors focus:outline-none cursor-pointer ${isDev ? 'text-white/90 hover:text-white' : 'text-muted-foreground hover:text-foreground'
+          }`}
       >
         <span>{t('associations')}</span>
         <ChevronDown className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" />
@@ -120,11 +119,10 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-100 backdrop-blur-md border-b transition-colors ${
-          isDev
+        className={`fixed top-0 left-0 right-0 z-100 backdrop-blur-md border-b transition-colors ${isDev
             ? 'bg-red-600/95 border-red-700 text-white'
             : 'bg-background/80 border-border'
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -132,9 +130,8 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
             <Link href={`/${locale}`} className="flex items-center gap-2 p-1 focus:outline-none">
               <Logo className="h-10 w-auto" />
               <span
-                className={`font-bold text-xl tracking-tight uppercase ${
-                  isDev ? 'text-white' : 'text-foreground'
-                }`}
+                className={`font-bold text-xl tracking-tight uppercase ${isDev ? 'text-white' : 'text-foreground'
+                  }`}
               >
                 HIGCF
               </span>
@@ -249,9 +246,8 @@ export const HeaderClient = ({ data: _data }: { data: Header }) => {
                 >
                   <span>{t('associations')}</span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      mobileAssociationsOpen ? 'rotate-180' : ''
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-200 ${mobileAssociationsOpen ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
                 {mobileAssociationsOpen && (

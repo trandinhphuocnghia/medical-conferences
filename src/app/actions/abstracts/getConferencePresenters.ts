@@ -19,7 +19,7 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
 }> {
   try {
     const payload = await getPayload({ config: configPromise })
-   
+
 
     // Also fetch the conference host group to include all members as Invited Speakers
     const conference = await payload.findByID({
@@ -43,7 +43,7 @@ export async function getConferencePresenters(conferenceId: number): Promise<{
         }
       })
     }
-  
+
     // Filter for ONLY Invited Speakers, then sort by createdAt
     const sortedPresenters = Array.from(presenterMap.values())
       .filter((p) => p.registrationType === 'invited')
