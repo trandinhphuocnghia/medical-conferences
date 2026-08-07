@@ -1,6 +1,7 @@
 'use client'
 
 import type { Course, User } from '@/payload-types'
+import { useTranslations } from 'next-intl'
 import {
   Accordion,
   AccordionContent,
@@ -22,21 +23,14 @@ function isUser(instructor: number | User): instructor is User {
   return typeof instructor === 'object' && instructor !== null
 }
 
-type HourEntry = { label: string; value: number; icon: string }
-
-function buildHours(module: CurriculumModule): HourEntry[] {
-  return [
-    { label: 'Theory', value: module.theory_hours ?? 0, icon: '📖' },
-    { label: 'Practice Lab', value: module.practice_lab_hours ?? 0, icon: '🔬' },
-    { label: 'Clinical Practice', value: module.practice_clinical_hours ?? 0, icon: '🏥' },
-  ].filter((h) => h.value > 0)
-}
-
 // ── Component ─────────────────────────────────────────────────────────────────
 export function CurriculumAccordion({
   curriculum,
-  titleLabel = 'Curriculum',
+  titleLabel,
 }: CurriculumAccordionProps) {
+  const t = useTranslations('CourseDetail')
+  const sectionTitle = titleLabel || t('curriculumTitle')
+
   if (!curriculum || curriculum.length === 0) return null
 
   return (
@@ -50,7 +44,7 @@ export function CurriculumAccordion({
           {/* ── Section Header ─────────────────────────────────────────── */}
           <div>
             <h2 id="curriculum-section-title" className="text-h2 text-clinical">
-              {titleLabel}
+              {sectionTitle}
             </h2>
             <div className="mt-2 h-1 w-12 bg-accent rounded-full" />
           </div>
@@ -58,7 +52,11 @@ export function CurriculumAccordion({
           {/* ── Accordion List ─────────────────────────────────────────── */}
           <Accordion type="multiple" className="flex flex-col gap-2">
             {curriculum.map((module, index) => {
-              const hours = buildHours(module)
+              const hours = [
+                { label: t('theoryHours'), value: module.theory_hours ?? 0, icon: '📖' },
+                { label: t('practiceLabHours'), value: module.practice_lab_hours ?? 0, icon: '🔬' },
+                { label: t('practiceClinicalHours'), value: module.practice_clinical_hours ?? 0, icon: '🏥' },
+              ].filter((h) => h.value > 0)
               const instructors = (module.instructors ?? []).filter(isUser)
               const key = module.id ?? `module-${index}`
 
@@ -107,7 +105,7 @@ export function CurriculumAccordion({
                       {hours.length > 0 && (
                         <div className="flex flex-col gap-1.5">
                           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                            Hours
+                            {t('hoursLabel')}
                           </p>
                           <div className="flex flex-wrap gap-3">
                             {hours.map((h) => (
@@ -130,7 +128,7 @@ export function CurriculumAccordion({
                       {instructors.length > 0 && (
                         <div className="flex flex-col gap-1.5">
                           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
-                            Instructors
+                            {t('instructorsLabel')}
                           </p>
                           <ul className="flex flex-col gap-1.5" role="list">
                             {instructors.map((user) => (

@@ -1,6 +1,7 @@
 import type { CourseApplication, Course } from '@/payload-types'
 import { courseApplicationConfirmationMail } from '@/services/email/mail-templates/course-application-confirmation'
-import { enqueueEmailJob } from '@/services/email/qstash'
+import { courseApplicationTeamNotificationMail } from '@/services/email/mail-templates/course-application-team-notification'
+import { enqueueEmailJob, enqueueNotificationJob } from '@/services/email/qstash'
 import { CollectionAfterChangeHook } from 'payload'
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -14,6 +15,8 @@ import { CollectionAfterChangeHook } from 'payload'
  *   3. Build the confirmation email HTML.
  *   4. Write a 'pending' mail-log record for audit trail + cron fallback.
  *   5. Enqueue the job to QStash → triggers /api/email/worker.
+ *   6. Enqueue direct team notification to QStash → triggers /api/email/notify
+ *      if notification_emails configured (fire & forget, no mail-log).
  *
  * Email failure must NOT block the form submission — all errors are caught
  * and logged; nothing is re-thrown.
@@ -24,21 +27,22 @@ export const sendCourseApplicationConfirmation: CollectionAfterChangeHook<Course
     if (operation !== 'create') return data
 
     try {
-      // ── 2. Resolve the course title ────────────────────────────────────────
+      // ── 2. Resolve the course document ──────────────────────────────────────
       // `doc.course` may be a populated Course object (depth > 0) or a bare ID.
-      let courseTitle = 'the course'
+      let courseDoc: Course | null = null
 
       if (typeof doc.course === 'object' && doc.course !== null) {
-        courseTitle = (doc.course as Course).title ?? courseTitle
+        courseDoc = doc.course as Course
       } else if (typeof doc.course === 'number') {
-        const course = await req.payload.findByID({
+        courseDoc = await req.payload.findByID({
           collection: 'courses',
           id: doc.course,
           locale: 'en',
           depth: 0,
         })
-        courseTitle = course?.title ?? courseTitle
       }
+
+      const courseTitle = courseDoc?.title ?? 'the course'
 
       // ── 3. Build the email ─────────────────────────────────────────────────
       const subject = `Course Application Received — ${courseTitle}`
@@ -70,6 +74,38 @@ export const sendCourseApplicationConfirmation: CollectionAfterChangeHook<Course
         req.payload.logger.error(
           { err, mailLogId: mailLog.id },
           '[sendCourseApplicationConfirmation] Failed to enqueue QStash job. Mail-log preserved for cron fallback.',
+        )
+      }
+
+      // ── 6. Team notification (fire-and-forget, no mail-log, no retry) ───
+      try {
+        if (courseDoc) {
+          const notificationEmails = (courseDoc.notification_emails ?? [])
+            .map((item) => item.email?.trim())
+            .filter((email): email is string => Boolean(email))
+
+          if (notificationEmails.length > 0) {
+            const to = notificationEmails[0]
+            const cc =
+              notificationEmails.length > 1
+                ? notificationEmails.slice(1).join(',')
+                : undefined
+
+            const teamSubject = `New Course Application — ${courseTitle}`
+            const teamHtml = courseApplicationTeamNotificationMail(doc, courseTitle)
+
+            await enqueueNotificationJob({
+              to,
+              cc,
+              subject: teamSubject,
+              html: teamHtml,
+            })
+          }
+        }
+      } catch (teamNotificationError) {
+        console.warn(
+          '[CourseApplication] Team notification failed:',
+          teamNotificationError,
         )
       }
     } catch (err) {
