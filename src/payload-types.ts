@@ -1182,6 +1182,15 @@ export interface Course {
    */
   prospectus?: (number | null) | File;
   /**
+   * Email addresses to notify when a new application is submitted. First email = TO, rest = CC.
+   */
+  notification_emails?:
+    | {
+        email: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
    * Minimum enrollment to run a batch.
    */
   min_students?: number | null;
@@ -2211,6 +2220,12 @@ export interface CoursesSelect<T extends boolean = true> {
   objectives?: T;
   registration_url?: T;
   prospectus?: T;
+  notification_emails?:
+    | T
+    | {
+        email?: T;
+        id?: T;
+      };
   min_students?: T;
   max_students?: T;
   schedules?:

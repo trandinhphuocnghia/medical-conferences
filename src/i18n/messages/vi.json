@@ -100,7 +100,18 @@
     "tuitionFeeLabel": "Học Phí",
     "tuitionFeeSuffix": "/ khóa học",
     "contactForPricing": "Liên hệ để biết học phí",
-    "downloadBrochure": "Tải Tài Liệu (PDF)"
+    "downloadBrochure": "Tải Tài Liệu (PDF)",
+    "schedulesTitle": "Lịch Khai Giảng & Các Lớp",
+    "specialTuitionFee": "Học Phí Ưu Đãi",
+    "curriculumTitle": "Chương Trình Đào Tạo",
+    "hoursLabel": "Thời Lượng Học",
+    "theoryHours": "Lý thuyết",
+    "practiceLabHours": "Thực hành Lab",
+    "practiceClinicalHours": "Thực hành Lâm sàng",
+    "instructorsLabel": "Giảng Viên",
+    "logisticsTitle": "Thông Tin Nhập Học & Đăng Ký",
+    "certificateTitle": "Điều Kiện Cấp Chứng Chỉ",
+    "contactTitle": "Thông Tin Liên Hệ"
   },
   "header": {
     "home": "Trang chủ",

@@ -36,3 +36,27 @@ export async function enqueueEmailJob(mailLogId: number): Promise<void> {
     retries: 3,
   })
 }
+
+export interface NotificationEmailPayload {
+  to: string
+  cc?: string
+  subject: string
+  html: string
+}
+
+/**
+ * Publishes a direct notification email job to QStash.
+ * The endpoint at /api/email/notify will be triggered (fire and forget, no mail-log, retries: 0).
+ */
+export async function enqueueNotificationJob(payload: NotificationEmailPayload): Promise<void> {
+  const client = getQStashClient()
+  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL
+
+  if (!baseUrl) throw new Error('NEXT_PUBLIC_SERVER_URL is not set.')
+
+  await client.publishJSON({
+    url: `${baseUrl}/api/email/notify`,
+    body: payload,
+    retries: 0,
+  })
+}

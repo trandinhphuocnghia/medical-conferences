@@ -48,7 +48,7 @@ export default async function RootLayout({
         <InitTheme />
       </head>
       <body className="flex flex-col min-h-screen">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider key={locale} messages={messages}>
           <Providers>
             <UserStoreInitializer user={user} />
             <Header />

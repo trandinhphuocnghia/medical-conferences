@@ -197,7 +197,25 @@ export const Courses: CollectionConfig = {
               admin: {
                 description: 'Tải lên file PDF giới thiệu chi tiết chương trình học.',
               },
-
+            },
+            {
+              name: 'notification_emails',
+              type: 'array',
+              label: 'Notification Emails',
+              maxRows: 5,
+              admin: {
+                description:
+                  'Email addresses to notify when a new application is submitted. First email = TO, rest = CC.',
+                condition: (data) => data?.course_type === 'on_demand',
+              },
+              fields: [
+                {
+                  name: 'email',
+                  type: 'email',
+                  required: true,
+                  label: 'Email Address',
+                },
+              ],
             },
           ],
         },
